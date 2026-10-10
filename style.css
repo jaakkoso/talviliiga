@@ -246,3 +246,6 @@ body:not(.ref) .tables{grid-template-columns:minmax(0,1fr)}
 .g-multi{display:grid;gap:6px;min-width:0}
 .g-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .g-line .rl{margin-left:4px}
+
+/* Tallennustila tummassa yläpalkissa: riittävä kontrasti */
+.top .sync{color:#d9d4c6}.top .sync.ok{color:#8fdca6}.top .sync.bad{color:#f5b66e}

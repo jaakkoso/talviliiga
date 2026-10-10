@@ -73,6 +73,35 @@ Julkisen sivun alalaidassa on linkit tuomari- ja kenttänäkymiin (PIN-suojattuj
 - [ ] Turnausaamuna: *Tiedosto → Tee kopio* varmuuskopioksi
 - [ ] Koodipäivitysten jälkeen nosta HTML-tiedostojen `?v=`-numeroa, jotta puhelimet hakevat uudet tiedostot
 
+## Kehityssuunnitelma (Talviliigan 2026 jälkeen)
+
+Kaikki uudet ominaisuudet tehdään valinnaisiksi Asetukset-välilehdeltä, jotta vanhat turnaukset toimivat sellaisenaan.
+
+**1. Tarvitaan melkein joka turnauksessa**
+- Pelikello: *Aloita ottelu*, jaksot (`jaksot`, `jakson_kesto`, `puoliaika`), automaattinen lisäaika (30+2'), *Ottelu päättyi*. Ilman kelloa toimii aikataulun mukaan kuten nyt.
+- Pelikellon korjaus: "peli alkoi X min sitten" / kellonaika; maaliminuutit lasketaan uudelleen. Ylläpito voi korjata.
+- Jatko- ja sijoitusottelut: "Lohko A 1. – Lohko B 2.", joukkueet täyttyvät automaattisesti.
+- Rankkarikilpailu: potkut vuorotellen (onnistui/ohi, valinnainen numero), tulos "2–2 (rp. 4–3)", pisteytys asetuksella.
+- Jatkoaika pudotuspeleihin.
+- Luovutus yhdellä napilla (esim. 3–0).
+- Pistesäännöt ja tasapisteiden ratkaisujärjestys asetuksiksi.
+- Kokoonpanot: joukkueen pelaajanumerot ottelukohtaisesti, maalivahti ja kapteeni, joukkueenjohtaja vahvistaa ennen ottelua (joukkuekohtainen PIN), muokattavissa aloitukseen asti, sen jälkeen lukittu (ylläpito voi avata). Tuomari ja kenttävastaava näkevät vahvistetun kokoonpanon. Vain numerot, ei nimiä.
+
+**2. Hyödyllisiä**
+- Tiedotebanneri julkiselle sivulle ylläpidosta.
+- Kortit, jäähyt ja aikalisät (asetuksella; julkinen näkyvyys erikseen valittavissa).
+- Kuulutus suoraan vahvistetusta tuloksesta soundboardiin.
+- Tapahtumaloki ylläpidolle (kuka kirjasi mitä ja milloin).
+- Tulostettavat ottelupöytäkirjat paperivarmistukseksi.
+
+**3. Myöhemmin**
+- Arkisto aiemmista turnauksista samassa osoitteessa.
+- Useampi turnaus tai ikäluokka samana päivänä.
+- Otteluohjelman tuonti Excelistä.
+- Useampi ylläpitäjä omilla PIN-koodeillaan.
+
+**Ei oletuksena:** maalipörssi ja pelaajakohtaiset tilastot (yksilöiden korostus ja henkilötiedot juniorien kohdalla).
+
 ## Tietoturva lyhyesti
 - PIN-koodit tarkistetaan palvelimella. Selaimen koodista niitä ei voi lukea.
 - 25 väärää PIN-yritystä 10 minuutissa lukitsee kirjautumiset 5 minuutiksi, ja ylläpitäjä saa sähköpostin.

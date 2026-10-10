@@ -123,7 +123,7 @@ function render() {
   const clk = clock(), { matches, goals } = S.data, slots = slotsOf(matches);
   document.getElementById('upd').innerHTML = S.offline ? 'Ei yhteyttä' : S.updated ? `Päivitetty ${fmtTime(S.updated.getHours() * 60 + S.updated.getMinutes())}` : '';
   let h = '';
-  if (clk.demo) { const hs = CONFIG.SHEET_ID ? '#harjoitus' : ''; h += `<p class="demo">${CONFIG.SHEET_ID ? 'Harjoitustila (esimerkkidata, ei vaikuta oikeisiin tuloksiin)' : 'Esikatselu'}, kello ${fmtTime(clk.min)} · <button class="lnk" data-reset>Nollaa</button> · <a href="kentta.html${hs}">Kenttävastaava</a> · <a href="tuomari.html${hs}">Tuomari</a> · <a href="yllapito.html${hs}">Ylläpito</a></p>`; }
+  if (clk.demo) { const hs = CONFIG.SHEET_ID ? '#harjoitus' : ''; h += `<p class="demo">${CONFIG.SHEET_ID ? 'Harjoitustila (esimerkkidata, ei vaikuta oikeisiin tuloksiin)' : 'Esikatselu'}, kello ${fmtTime(clk.min)} · <button class="lnk" data-reset>Aloita alusta</button> · <a href="kentta.html${hs}">Kenttävastaava</a> · <a href="tuomari.html${hs}">Tuomari</a>${CONFIG.SHEET_ID ? '' : ` · <a href="yllapito.html">Ylläpito</a>`}</p>`; }
   h += nowCard(slots, clk, goals);
   h += controls(slots, clk);
   h += (EVENT.showTable && S.tab === 'sarjat') ? tables(matches) : program(slots, clk, goals);
