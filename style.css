@@ -1,0 +1,248 @@
+/* Tulospalvelu – oletusilme musta ja kulta; pohja- ja korostusvärin voi vaihtaa Asetukset-välilehdeltä. Aina vaalea tila.  Sama ilme kuin julisteissa, lapuissa ja kuulutussivulla. */
+:root{
+  --bg:#f5f3ec; --surface:#ffffff; --surface2:#efece2; --ink:#211e1e; --muted:#5b5650; --line:#e2ddcc;
+  --gold:#bdb03a; --gold-ink:#211e1e; --head:#211e1e; --head-ink:#ffffff;
+  --live:#17804a; --live-bg:#dff3e7; --warn:#8a5a00; --warn-bg:#fbefd2; --danger:#c0392b;
+  --chip-ink:#161414;
+  --display:"Saira Condensed","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+ 
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.d{font-family:var(--display);font-weight:800;letter-spacing:.01em}
+.num{font-variant-numeric:tabular-nums}
+
+/* Yläpalkki */
+.top{background:var(--head);color:var(--head-ink);padding-top:env(safe-area-inset-top,0px)}
+.top-in{max-width:1180px;margin:0 auto;padding:14px 16px 16px;display:flex;align-items:center;gap:14px}
+.top img{width:56px;height:56px;flex:none}
+.top .t{flex:1;min-width:0}
+.top .eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.16em;font-size:.78rem;color:var(--gold);text-transform:uppercase}
+.top h1{font-family:var(--display);font-weight:800;font-size:2rem;line-height:.95;margin:2px 0 2px;text-transform:uppercase}
+.top .sub{font-size:.85rem;opacity:.85}
+.top .upd{font-size:.72rem;opacity:.7;text-align:right;white-space:nowrap}
+
+.wrap{max-width:1180px;margin:0 auto;padding-inline:16px;padding-block:16px 48px;display:grid;gap:16px}
+
+.banner{border-radius:12px;padding:10px 14px;font-size:.88rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--warn-bg);color:var(--warn)}
+.banner button{background:transparent;border:1.5px solid currentColor;border-radius:999px;padding:3px 10px;font-weight:600;font-size:.8rem}
+
+/* Joukkuesirut */
+.chip{display:inline-flex;align-items:center;justify-content:center;min-width:3.6em;padding:2px 9px;border-radius:7px;font-family:var(--display);font-weight:800;font-size:1.15rem;line-height:1.15;color:var(--chip-ink);letter-spacing:.02em}
+/* Joukkueiden värit tulevat Joukkueet-välilehdeltä (inline-tyylit). */
+
+/* Kortit ja osiot */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 10px}
+.sec-h h2{font-family:var(--display);font-weight:800;text-transform:uppercase;letter-spacing:.05em;font-size:1.2rem;margin:0}
+.sec-h small{color:var(--muted);font-size:.8rem}
+
+/* Hero: seuraavaksi + maalit */
+.hero{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px}
+@media (max-width:760px){.hero{grid-template-columns:minmax(0,1fr)}}
+.next{background:var(--head);color:var(--head-ink);border-radius:18px;padding:16px;display:grid;gap:12px;border:0}
+.next .lab{font-family:var(--display);font-weight:600;letter-spacing:.14em;font-size:.8rem;color:var(--gold);text-transform:uppercase}
+.next .pair{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.next .pair .chip{font-size:1.7rem}
+.next .vs{opacity:.7;font-family:var(--display);font-weight:600}
+.next .cd{font-family:var(--display);font-weight:800;font-size:2.4rem;line-height:1;color:var(--gold)}
+.next .cd small{font-size:1rem;color:var(--head-ink);opacity:.8;font-weight:600;margin-left:6px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.field{background:rgba(255,255,255,.07);border-radius:12px;padding:10px 12px;display:grid;gap:2px}
+.field .fl{font-size:.75rem;opacity:.75;text-transform:uppercase;letter-spacing:.08em}
+.field .fs{font-family:var(--display);font-weight:800;font-size:1.6rem;line-height:1}
+.stat{display:grid;align-content:center;gap:4px;text-align:center}
+.stat .big{font-family:var(--display);font-weight:800;font-size:4.2rem;line-height:.9;font-variant-numeric:tabular-nums}
+.stat .lbl{font-weight:700}
+.stat .sm{color:var(--muted);font-size:.85rem}
+.bar{height:8px;border-radius:99px;background:var(--surface2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:99px}
+
+/* Oma joukkue */
+.picker{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.picker .lbl{font-weight:700;margin-right:4px}
+.pick{border:2px solid transparent;border-radius:9px;padding:0;background:none}
+.pick .chip{opacity:.55}
+.pick[aria-pressed="true"]{border-color:var(--ink)}
+.pick[aria-pressed="true"] .chip{opacity:1}
+.mine-list{display:grid;gap:6px;margin-top:12px}
+
+/* Välilehdet */
+.tabs{display:flex;gap:6px;background:var(--surface2);padding:4px;border-radius:12px;width:max-content;max-width:100%;overflow-x:auto}
+.tabs button{border:0;background:transparent;border-radius:9px;padding:8px 16px;font-weight:700;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* Ohjelma */
+.slots{display:grid;gap:8px}
+.slot{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.slot.mine{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.slot-h{display:flex;align-items:center;gap:10px;padding:10px 12px;flex-wrap:wrap}
+.slot-h .tm{font-family:var(--display);font-weight:800;font-size:1.5rem;min-width:3.2em;font-variant-numeric:tabular-nums}
+.slot-h .tm small{display:block;font-size:.75rem;font-weight:600;color:var(--muted);margin-top:-3px}
+.slot-h .teams{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.rows{border-top:1px solid var(--line)}
+.mrow .pill{justify-self:start}
+.mrc{display:grid;grid-template-columns:3.2em auto minmax(0,1fr);gap:8px;align-items:center}
+.mrc .pls{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end}
+.mrow{display:grid;grid-template-columns:5.5em auto minmax(0,1fr) auto;align-items:center;gap:10px;padding:8px 12px;border:0;background:none;width:100%;text-align:left}
+.mrow+.mrow{border-top:1px dashed var(--line)}
+.mrow .ser{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.mrow .ser span{display:block;font-weight:500;text-transform:none;letter-spacing:0}
+.score{font-family:var(--display);font-weight:800;font-size:1.6rem;font-variant-numeric:tabular-nums;min-width:3em;text-align:center}
+.score.pending{color:var(--muted);font-size:1.1rem}
+.pill{font-size:.72rem;font-weight:700;border-radius:999px;padding:3px 9px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;background:var(--surface2);color:var(--muted)}
+.pill.live{background:var(--live-bg);color:var(--live)}
+.pill.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:5px;vertical-align:1px}
+.pill.done{background:var(--ink);color:var(--surface)}
+.pill.wait{background:var(--warn-bg);color:var(--warn)}
+.break{border-radius:12px;padding:10px 14px;background:var(--surface2);font-weight:700;display:flex;gap:10px;align-items:center}
+.break .d{font-size:1.2rem}
+
+.detail{padding:4px 12px 12px;display:grid;gap:8px}
+.goals{display:flex;flex-wrap:wrap;gap:6px}
+.goal{font-size:.85rem;background:var(--surface2);border-radius:8px;padding:3px 8px;font-variant-numeric:tabular-nums}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;background:var(--ink);color:var(--surface)}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* Sarjataulukot */
+.tables{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:900px){.tables{grid-template-columns:minmax(0,1fr)}}
+.tbl-wrap{overflow-x:auto}
+table.st{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+table.st th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700;text-align:center;padding:6px 4px;border-bottom:2px solid var(--ink)}
+table.st th:first-child,table.st th:nth-child(2){text-align:left}
+table.st td{text-align:center;padding:8px 4px;border-bottom:1px solid var(--line)}
+table.st td:first-child{width:1.8em;color:var(--muted);font-weight:700;text-align:left}
+table.st td:nth-child(2){text-align:left}
+table.st td:last-child{font-family:var(--display);font-weight:800;font-size:1.2rem}
+table.st tr.mine td{background:var(--surface2)}
+.note{color:var(--muted);font-size:.8rem;margin:8px 0 0}
+
+/* Jaa-kuva */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.75);display:grid;place-items:center;padding:16px}
+.overlay .box{background:var(--surface);border-radius:16px;padding:14px;max-width:420px;width:100%;display:grid;gap:10px}
+.overlay img{width:100%;border-radius:10px}
+
+footer{color:var(--muted);font-size:.78rem;text-align:center;padding:0 16px 32px}
+footer a{color:inherit}
+
+/* Tuomarinäkymä */
+.ref .wrap{max-width:640px}
+.pin{display:grid;gap:12px;text-align:center;padding:24px 16px}
+.pin input{font-family:var(--display);font-weight:800;font-size:2.4rem;text-align:center;letter-spacing:.4em;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--surface);width:100%;max-width:260px;margin:0 auto}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:700}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.rm{display:grid;grid-template-columns:4em minmax(0,1fr) auto;gap:10px;align-items:center;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);width:100%;text-align:left}
+.rm.now{border-color:var(--live);box-shadow:0 0 0 1px var(--live)}
+.rm .tm{font-family:var(--display);font-weight:800;font-size:1.4rem}
+.rm .who{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rm .sub2{font-size:.78rem;color:var(--muted);margin-top:3px}
+.board{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;text-align:center}
+.board .chip{font-size:1.8rem;width:100%}
+.board .sc{font-family:var(--display);font-weight:800;font-size:4rem;line-height:1;font-variant-numeric:tabular-nums}
+.addg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.addg button{border:0;border-radius:14px;padding:18px 8px;font-family:var(--display);font-weight:800;font-size:1.5rem}
+.glist{display:grid;gap:6px}
+.gi{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:var(--surface2)}
+.gi .m{font-family:var(--display);font-weight:800;font-size:1.2rem;min-width:2.6em;font-variant-numeric:tabular-nums}
+.gi .x{margin-left:auto;background:none;border:0;color:var(--danger);font-weight:700;padding:4px 8px}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--surface);border-radius:20px 20px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.25);padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:12px;max-width:640px;margin:0 auto}
+.sheet h3{margin:0;font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase}
+.frm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.frm label{display:grid;gap:4px;font-weight:700;font-size:.85rem}
+.frm input{font-family:var(--display);font-weight:800;font-size:2rem;text-align:center;padding:8px;border-radius:12px;border:2px solid var(--line);background:var(--bg);width:100%}
+.step{display:flex;gap:6px}
+.step button{flex:1;border:1.5px solid var(--line);background:var(--surface2);border-radius:10px;padding:6px;font-weight:800;font-size:1.1rem}
+.sync{font-size:.82rem;color:var(--muted);display:flex;gap:6px;align-items:center}
+.sync.bad{color:var(--warn)}
+.sync.ok{color:var(--live)}
+.confirm{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.adj{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}
+.adj .step button{font-size:1.4rem}
+.adj .v{font-family:var(--display);font-weight:800;font-size:2.6rem;text-align:center;min-width:2.2em;font-variant-numeric:tabular-nums}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:999px;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+@media (prefers-reduced-motion:no-preference){.pill.live::before{animation:blink 1.2s ease-in-out infinite}@keyframes blink{50%{opacity:.25}}}
+
+/* ===== Julkinen sivu: rauhallinen asettelu ===== */
+body:not(.ref) .wrap{max-width:760px;gap:14px}
+.demo{margin:0;font-size:.8rem;color:var(--muted)}
+.demo a,.lnk{color:inherit;font-weight:700;background:none;border:0;padding:0;text-decoration:underline;font-size:inherit}
+.now{background:var(--head);color:var(--head-ink);border-radius:16px;padding:16px;display:flex;gap:16px;align-items:flex-start;justify-content:space-between}
+.now-main{display:grid;gap:8px;min-width:0}
+.now-lab{font-family:var(--display);font-weight:600;letter-spacing:.14em;font-size:.78rem;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.now-pair{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.now-pair .chip{font-size:1.5rem}
+.now-when{font-weight:700}
+.now-fields{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;opacity:.85}
+.now-fields b{font-size:1.15rem;margin-left:4px;opacity:1}
+.now-after{text-align:right;display:grid;gap:2px;flex:none;padding-left:14px;border-left:1px solid rgba(255,255,255,.15);max-width:40%}
+.now-after .al{font-size:.72rem;opacity:.7;text-transform:uppercase;letter-spacing:.08em}
+.now-after .at-t{font-size:1.9rem;color:var(--gold);line-height:1}
+.now-after .at{font-size:.85rem;font-weight:600}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--live)}
+.now .dot{background:#4ade80}
+.vs{color:var(--muted);font-size:.85rem}
+.now .vs{color:rgba(255,255,255,.6)}
+.ctrl{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.sel{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem}
+.sel select{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 10px;font-weight:600}
+.mine-next{margin:0;font-size:.92rem}
+.prog{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.prog li+li{border-top:1px solid var(--line)}
+.g-row{display:grid;grid-template-columns:3.4em minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;padding:12px 14px;border:0;background:none;text-align:left}
+.g.mine .g-row{background:var(--surface2)}
+.g-t{font-size:1.25rem}
+.g.done .g-t{color:var(--muted)}
+.g-p{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+.g-p .chip{font-size:1.05rem;min-width:3.2em}
+.g-r{display:grid;gap:2px;justify-items:end}
+.r{display:flex;align-items:baseline;gap:8px}
+.rl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.r b{font-size:1.2rem;min-width:2.4em;text-align:right}
+.state{font-size:.75rem;color:var(--muted);font-weight:600;display:inline-flex;align-items:center;gap:5px;margin-left:4px}
+.state.live{color:var(--live)}
+.brk{padding:8px 14px;font-size:.82rem;color:var(--muted);background:var(--surface2);text-align:center}
+.g-d{padding:0 14px 12px 4.7em;display:grid;gap:8px}
+.dl{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;font-size:.88rem}
+.muted{color:var(--muted)}
+.h2{font-family:var(--display);font-weight:800;text-transform:uppercase;font-size:1.15rem;margin:0 0 8px;letter-spacing:.04em}
+.h2 small{font-family:var(--body);text-transform:none;font-weight:500;color:var(--muted);font-size:.8rem;letter-spacing:0;margin-left:6px}
+body:not(.ref) .tables{grid-template-columns:minmax(0,1fr)}
+@media (prefers-reduced-motion:no-preference){.dot{animation:blink 1.2s ease-in-out infinite}}
+/* Kapeat puhelimet: "Sen jälkeen" kortin alle */
+@media (max-width:400px){
+  .now{flex-direction:column;gap:12px}
+  .now-after{text-align:left;border-left:0;border-top:1px solid rgba(255,255,255,.15);padding:10px 0 0;max-width:none;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+}
+
+.adjm{color:var(--danger);font-weight:800;margin-left:3px}
+.adjl{margin:4px 0 0;padding-left:18px}
+
+/* Ruudukon lapset eivät saa venyttää sivua leveämmäksi kuin näyttö */
+.wrap>*{min-width:0}
+.tabs button{padding:8px 12px}
+.wrap{grid-template-columns:minmax(0,1fr)}
+.board .chip{min-width:0;font-size:clamp(1.2rem,6vw,1.8rem)}
+.board .sc{font-size:clamp(2.6rem,13vw,4rem)}
+.gi{flex-wrap:wrap}
+.top h1{font-size:clamp(1.35rem,7vw,2rem)}
+.top .upd{white-space:normal;max-width:7.5em;flex:none}
+.top .t{min-width:0}
+/* Eri ottelupareja samaan aikaan */
+.now-list{display:grid;gap:8px}
+.now-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.now-row .chip{font-size:1.15rem}
+.now-meta{font-size:.85rem;opacity:.85}
+.now-meta b{font-size:1.1rem;margin-left:4px}
+.g-multi{display:grid;gap:6px;min-width:0}
+.g-line{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.g-line .rl{margin-left:4px}
