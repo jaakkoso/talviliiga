@@ -266,3 +266,21 @@ body:not(.ref) .tables{grid-template-columns:minmax(0,1fr)}
 .kv-privacy{text-align:center;margin:0}
 .kuvalink{text-align:center;margin:4px 0 18px}
 .kuvalink a{display:inline-block;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;text-decoration:none}
+.kuvalink{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.kuvalink button{font:inherit;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer}
+.kuvalink button[hidden]{display:none}
+.cafe{gap:6px}
+.cafe-h{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:800;font-size:2rem;line-height:1;text-transform:uppercase;display:flex;flex-direction:column;gap:2px}
+.cafe-h span{font-family:Figtree,system-ui,sans-serif;font-weight:600;font-size:.85rem;text-transform:none;color:var(--muted)}
+.cafe-g{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:.85rem;color:var(--muted);margin-top:8px}
+.cafe-l{list-style:none;margin:0;padding:0}
+.cafe-l li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dotted var(--line);font-weight:600}
+.cafe-l b{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.cafe-pay{margin:10px 0 4px;background:var(--surface2);border-radius:12px;padding:10px 12px;font-weight:600;display:flex;flex-direction:column}
+.cafe-pay b{font-family:"Saira Condensed","Arial Narrow",sans-serif;font-size:1.6rem;line-height:1.1}
+.cafe-pay span{font-size:.8rem;color:var(--muted);font-weight:500}
+/* Joukkueiden logot nimilapuissa (asetus nayta_logot) */
+.chip.has-logo{gap:.3em;padding-left:4px;justify-content:flex-start}
+.chip .lg{width:1.35em;height:1.35em;flex:none;object-fit:contain}
+.chip.plain{background:none;color:inherit;box-shadow:none;padding:2px 0;min-width:0;gap:.35em}
+.chip.plain .lg{width:1.5em;height:1.5em}

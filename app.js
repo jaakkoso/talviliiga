@@ -16,8 +16,23 @@ async function refresh() {
     if (!Store.demo) ls.set('tulospalvelu-cache', S.data);
   } catch (e) { S.offline = true; }
   render();
+  const cb = document.getElementById('cafeBtn'); if (cb) cb.hidden = !(EVENT.cafe && EVENT.cafe.length);
   return !S.offline;
 }
+
+/* Kahvion hinnasto: ryhmittäin, hinnat euroina, MobilePay-numero jos asetettu */
+function cafeDialog() {
+  const groups = [];
+  for (const it of EVENT.cafe || []) { let g = groups.find(x => x.name === it.group); if (!g) groups.push(g = { name: it.group, items: [] }); g.items.push(it); }
+  const price = p => /^\d+([.,]\d+)?$/.test(p) ? p.replace('.', ',') + ' €' : esc(p);
+  const list = groups.map(g => `${g.name ? `<div class="cafe-g">${esc(g.name)}</div>` : ''}<ul class="cafe-l">${g.items.map(i => `<li><span>${esc(i.name)}</span><b>${price(i.price)}</b></li>`).join('')}</ul>`).join('');
+  const pay = EVENT.mobilepay ? `<div class="cafe-pay">MobilePay <b>#${esc(EVENT.mobilepay.replace(/^#/, ''))}</b>${EVENT.payee ? `<span>${esc(EVENT.payee)}</span>` : ''}</div>` : '';
+  const ov = document.createElement('div'); ov.className = 'overlay';
+  ov.innerHTML = `<div class="box cafe" role="dialog" aria-label="Kahvio"><div class="cafe-h">Kahvio${EVENT.cafeText ? `<span>${esc(EVENT.cafeText)}</span>` : ''}</div>${list}${pay}<button class="btn ghost" data-close>Sulje</button></div>`;
+  ov.addEventListener('click', e => { if (e.target === ov || e.target.closest('[data-close]')) ov.remove(); });
+  document.body.append(ov);
+}
+document.getElementById('cafeBtn')?.addEventListener('click', cafeDialog);
 
 const slotState = (s, clk) => { const ks = s.ms.map(m => status(m, clk).k); return ks.includes('live') ? 'live' : ks.every(k => k === 'done' || k === 'cancel') ? 'done' : ks.includes('wait') ? 'wait' : 'up'; };
 const scoreTxt = (m, clk, goals) => { const st = status(m, clk); if (st.k === 'cancel') return 'peruttu'; const sc = score(m, goals, st); return sc ? sc.join('–') : '–'; };

@@ -21,6 +21,7 @@ Ilman asetuksia sivut käynnistyvät **demotilassa** (esimerkkiturnaus, simuloit
 | **Ottelut** | id, sarja, alku (14.35), kenttä, koti, vieras, koti_maalit, vieras_maalit, tila (`peruttu`) |
 | **Maalit** | kirjaukset (sovellus täyttää) |
 | **Korjaukset** | sarjataulukon käsikorjaukset (sovellus täyttää) |
+| **Kahvio** | ryhmä, tuote, hinta (valinnainen; jos välilehteä ei ole, kahvionappia ei näytetä). Asetuksissa kahvio_teksti, kahvio_mobilepay, kahvio_saaja |
 
 Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä voi olla kuinka monta tahansa, ja samaan aikaan voi pelata eri ottelupareja.
 

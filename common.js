@@ -15,7 +15,12 @@ const DEMO_EVENT = {
   settings: {
     nimi: 'Talviliiga', alaotsikko: 'P12 · Kilpa & Haaste', paikka: 'Wallsport, Seinäjoki', paiva: '2026-10-24',
     ottelun_kesto: '30', nayta_sarjataulukko: 'kyllä', nayta_pelinumerot: 'ei', tauko_teksti: 'kahvio aulassa', jarjestaja: 'SJK',
+    kahvio_teksti: 'Aulassa koko pelipäivän', kahvio_mobilepay: '87065', kahvio_saaja: 'SJK-juniorit ry, P2015-joukkue',
   },
+  cafe: [
+    { 'ryhmä': 'Juomat', tuote: 'Kahvi', hinta: '2' }, { 'ryhmä': 'Juomat', tuote: 'Pillimehu', hinta: '1' }, { 'ryhmä': 'Juomat', tuote: 'Kivennäisvesi', hinta: '2' }, { 'ryhmä': 'Juomat', tuote: 'Limsa', hinta: '3' },
+    { 'ryhmä': 'Syötävää', tuote: 'Mokkapala', hinta: '2' }, { 'ryhmä': 'Syötävää', tuote: 'Ruisleipä / sämpylä', hinta: '2' }, { 'ryhmä': 'Syötävää', tuote: 'Sipsit', hinta: '3' }, { 'ryhmä': 'Syötävää', tuote: 'Suklaapatukka', hinta: '2' }, { 'ryhmä': 'Syötävää', tuote: 'Karkkipussi', hinta: '3' },
+  ],
   teams: [
     { nimi: 'SJK', tausta: '#bdb03a', teksti: '#161414' },
     { nimi: 'VPS', tausta: '#161414', teksti: '#ffffff', reuna: '#ffffff', reunatyyli: 'raita' },
@@ -80,15 +85,21 @@ function buildEvent(settings, teamRows) {
   for (const r of teamRows || []) {
     const n = String(r.nimi || '').trim(); if (!n) continue;
     teams[n] = { bg: HEX.test(r.tausta || '') ? r.tausta : '#e2ddcc', ink: HEX.test(r.teksti || '') ? r.teksti : '#161414',
-      edge: HEX.test(r.reuna || '') ? r.reuna : '', edgeType: /ala/i.test(r.reunatyyli || '') ? 'ala' : (r.reuna ? 'raita' : '') };
+      edge: HEX.test(r.reuna || '') ? r.reuna : '', edgeType: /ala/i.test(r.reunatyyli || '') ? 'ala' : (r.reuna ? 'raita' : ''),
+      logo: /^[\w\-./]+\.(png|svg|jpe?g|webp)$/i.test(String(r.logo || '').trim()) ? String(r.logo).trim() : '' };
   }
   const date = parseDate(s.paiva);
   return {
     name: s.nimi || 'Turnaus', sub: s.alaotsikko || '', venue: s.paikka || '', date, dateText: fmtDate(date),
     matchMin: toInt(s.ottelun_kesto) || 30, showTable: s.nayta_sarjataulukko == null ? true : yes(s.nayta_sarjataulukko),
     showNumbers: yes(s.nayta_pelinumerot), breakText: s.tauko_teksti || '', organizer: s.jarjestaja || '',
+    mobilepay: s.kahvio_mobilepay || '', payee: s.kahvio_saaja || '', cafeText: s.kahvio_teksti || '', cafe: [], showLogos: yes(s.nayta_logot), logoStyle: /pelk|ilman|plain/i.test(s.logotyyli || '') ? 'plain' : 'color',
     teams, teamNames: Object.keys(teams), raw: s,
   };
+}
+/* Kahvion hinnasto (välilehti Kahvio: ryhmä, tuote, hinta). Tyhjät rivit ohitetaan. */
+function cafeRows(rows) {
+  return (rows || []).filter(r => (r.tuote || '').trim()).map(r => ({ group: (r['ryhmä'] || r.ryhma || '').trim(), name: r.tuote.trim(), price: String(r.hinta || '').trim().replace(/\s*€$/, '') }));
 }
 function teamStyle(t) {
   const c = EVENT.teams[t]; if (!c) return 'background:#e2ddcc;color:#161414';
@@ -97,7 +108,13 @@ function teamStyle(t) {
   if (c.edgeType === 'ala' && c.edge) sh = `;box-shadow:inset 0 -4px 0 ${c.edge}`;
   return `background:${c.bg};color:${c.ink}${sh}`;
 }
-const chip = t => `<span class="chip" style="${teamStyle(t)}">${esc(t)}</span>`;
+/* Logo joukkueen nimen edessä (asetus nayta_logot). Oletuspolku logot/<nimi>.png; puuttuva kuva piilotetaan. */
+function logoSrc(t) { const c = EVENT.teams[t]; return c ? (c.logo || `logot/${t.toLowerCase().replace(/[^a-z0-9åäö-]+/g, '-')}.png`) : ''; }
+const chip = t => {
+  const src = EVENT.showLogos && logoSrc(t);
+  const plain = src && EVENT.logoStyle === 'plain';
+  return `<span class="chip${src ? ' has-logo' : ''}${plain ? ' plain' : ''}"${plain ? '' : ` style="${teamStyle(t)}"`}>${src ? `<img class="lg" src="${esc(src)}" alt="" loading="lazy" onerror="this.remove()">` : ''}${esc(t)}</span>`;
+};
 function applyHeader() {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('evName', EVENT.name); set('evSub', EVENT.sub);
@@ -277,15 +294,15 @@ const Store = {
   },
   /* Asetukset ja joukkueet haetaan harvoin (10 min välein tai pyydettäessä), ottelut ja maalit joka päivityksellä. */
   async loadMeta(force) {
-    if (this.demo) { const d = this.demoData(); EVENT = buildEvent(d.settings, d.teams); applyHeader(); return; }
+    if (this.demo) { const d = this.demoData(); EVENT = buildEvent(d.settings, d.teams); EVENT.cafe = cafeRows(DEMO_EVENT.cafe); applyHeader(); return; }
     if (!force && Date.now() - this._metaAt < 600000) return;
-    const [sr, tr] = await Promise.all([this.gviz('Asetukset'), this.gviz('Joukkueet')]);
+    const [sr, tr, kr] = await Promise.all([this.gviz('Asetukset'), this.gviz('Joukkueet'), this.gviz('Kahvio').catch(() => [])]);
     const settings = {}; for (const r of sr) if (r.avain) settings[r.avain.trim().toLowerCase()] = r.arvo;
-    EVENT = buildEvent(settings, tr); applyHeader();
-    ls.set('tulospalvelu-meta', { settings, teams: tr }); this._metaAt = Date.now();
+    EVENT = buildEvent(settings, tr); EVENT.cafe = cafeRows(kr); applyHeader();
+    ls.set('tulospalvelu-meta', { settings, teams: tr, cafe: kr }); this._metaAt = Date.now();
   },
   async load(forceMeta) {
-    if (this.demo) { this._demo = null; const d = this.demoData(); EVENT = buildEvent(d.settings, d.teams); applyHeader(); return { matches: d.matches.map(m => ({ ...m })), goals: d.goals.slice(), adjust: (d.adjust || []).map(a => ({ ...a })) }; }
+    if (this.demo) { this._demo = null; const d = this.demoData(); EVENT = buildEvent(d.settings, d.teams); EVENT.cafe = cafeRows(DEMO_EVENT.cafe); applyHeader(); return { matches: d.matches.map(m => ({ ...m })), goals: d.goals.slice(), adjust: (d.adjust || []).map(a => ({ ...a })) }; }
     await this.loadMeta(forceMeta);
     const [mr, gr, kr] = await Promise.all([this.gviz('Ottelut'), this.gviz('Maalit').catch(() => []), this.gviz('Korjaukset').catch(() => [])]);
     return { matches: mr.filter(r => r.id).map(rowToMatch), goals: gr.filter(r => r.id && r.ottelu).map(rowToGoal), adjust: kr.filter(r => r.joukkue).map(rowToAdj) };
