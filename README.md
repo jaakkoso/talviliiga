@@ -7,6 +7,7 @@ Junioriturnauksen tulospalvelu, jota voi käyttää uudelleen seuraavissa turnau
 | `…/` | Kaikki | Ohjelma, live-tulokset, sarjataulukot, oman joukkueen suodatus, jaa tulos -kuva |
 | `…/kentta.html` | Kenttävastaavat (PIN 5151) | Maalit reaaliajassa yhdellä napautuksella, numero jälkikäteen |
 | `…/tuomari.html` | Tuomarit (PIN 1515) | Lopputuloksen vahvistus pelin jälkeen, maalit valinnaisesti |
+| `…/kuva.html` | Kaikki | Joukkuekuva turnauskehyksellä somejakoon (kuva käsitellään vain puhelimessa) |
 | `…/yllapito.html` | Ylläpitäjä (ADMIN_PIN) | Tilanne, korjaukset, peruminen, aikataulun siirto, sarjataulukon käsikorjaus, **testaus** |
 
 Ilman asetuksia sivut käynnistyvät **demotilassa** (esimerkkiturnaus, simuloitu kello, tallennukset selaimeen).

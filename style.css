@@ -249,3 +249,20 @@ body:not(.ref) .tables{grid-template-columns:minmax(0,1fr)}
 
 /* Tallennustila tummassa yläpalkissa: riittävä kontrasti */
 .top .sync{color:#d9d4c6}.top .sync.ok{color:#8fdca6}.top .sync.bad{color:#f5b66e}
+
+/* Joukkuekuva */
+.kuva{max-width:560px}
+.kv-step{display:grid;gap:12px}
+.kv-pick{display:block;text-align:center;font-size:1.05rem;padding:14px;cursor:pointer}
+.kv-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.kv-text,.kv-zoom{display:grid;gap:6px;font-weight:600;font-size:.9rem}
+.kv-text input{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-weight:500;background:var(--surface)}
+.kv-zoom input{width:100%;accent-color:var(--gold)}
+.kv-stage{position:relative;border-radius:16px;overflow:hidden;background:var(--head);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.kv-stage canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+.kv-empty{position:absolute;inset:auto 0 42% 0;text-align:center;color:#fff;font-weight:600;padding:0 24px;opacity:.85}
+.kv-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv-actions .btn{padding:13px}
+.kv-privacy{text-align:center;margin:0}
+.kuvalink{text-align:center;margin:4px 0 18px}
+.kuvalink a{display:inline-block;font-weight:700;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 16px;text-decoration:none}
