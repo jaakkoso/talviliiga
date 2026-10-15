@@ -5,7 +5,7 @@ Logokirjasto turnausmateriaaleja varten: Meidän päivä -laput, julisteet ja jo
 | Joukkue | Tiedosto | Koko | Joukkueväri (tausta / teksti) | Lähde |
 |---|---|---|---|---|
 | SJK | `sjk.png` | 512 × 512 | #bdb03a / #161414 | Seuran oma logo, käyttölupa SJK P2015:llä |
-| VPS | `vps.png` | 654 × 654 (valkoinen ulkoreuna kuten seuran omilla sivuilla) | #161414 / #ffffff (valkoinen raita) | [Wikipedia: Vaasan Palloseura](https://en.wikipedia.org/wiki/Vaasan_Palloseura), vektorilogo |
+| VPS | `vps.png` | 629 × 629 (valkoinen ulkoreuna 2,75 % halkaisijasta, kuten seuran omilla sivuilla) | #161414 / #ffffff (valkoinen raita) | [Wikipedia: Vaasan Palloseura](https://en.wikipedia.org/wiki/Vaasan_Palloseura), vektorilogo |
 | WFA (Wasa Fotbollsakademi) | `wfa.png` | 412 × 412 | #f08a24 / #10233f | Jaakon toimittama kuva (15.10.2026) |
 | Jaro (FF Jaro) | `jaro.png` | 595 × 567 | #c8202a / #ffffff | [Wikipedia: FF Jaro](https://en.wikipedia.org/wiki/FF_Jaro), vektorilogo |
 | JJK (JJK Jyväskylä) | `jjk.png` | 600 × 562 | #1f5fae / #ffffff (punainen alareuna) | [Wikipedia: JJK Jyväskylä](https://en.wikipedia.org/wiki/JJK_Jyv%C3%A4skyl%C3%A4), vektorilogo |
