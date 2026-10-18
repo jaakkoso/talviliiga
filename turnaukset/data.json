@@ -1,0 +1,49 @@
+{
+ "updated": "2026-10-18",
+ "events": [
+  {
+   "id": "talviliiga-2026",
+   "name": "Talviliiga P12",
+   "dates": "24.10.2026",
+   "venue": "Wallsport, Seinäjoki",
+   "host": true,
+   "link": "../talviliiga/",
+   "team": "SJK",
+   "format": "Kilpa takakentällä, haaste samaan aikaan etukentällä · 30 min",
+   "matches": [
+    {
+     "date": "2026-10-24",
+     "time": "10.00",
+     "series": "Kilpa & haaste",
+     "home": "SJK",
+     "away": "VPS",
+     "score": null
+    },
+    {
+     "date": "2026-10-24",
+     "time": "11.10",
+     "series": "Kilpa & haaste",
+     "home": "JJK",
+     "away": "SJK",
+     "score": null
+    },
+    {
+     "date": "2026-10-24",
+     "time": "14.00",
+     "series": "Kilpa & haaste",
+     "home": "SJK",
+     "away": "WFA",
+     "score": null
+    },
+    {
+     "date": "2026-10-24",
+     "time": "15.45",
+     "series": "Kilpa & haaste",
+     "home": "SJK",
+     "away": "Jaro",
+     "score": null
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Turnaukset · SJK P2015</title>
+<meta name="description" content="SJK P2015 -joukkueen talven turnaukset ja niiden tulokset.">
+<meta name="theme-color" content="#211e1e">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="../assets/logo-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=20261018b">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="../assets/logo-180.png" alt="SJK-juniorit" width="52" height="52">
+    <div class="t">
+      <a class="back" href="../">← P2015 tulokset</a>
+      <h1>Turnaukset</h1>
+      <div class="sub">Talvikausi 2026–2027</div>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="view"><p class="note">Ladataan…</p></main>
+<footer>Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
+<script src="../assets/matches.js?v=20261018b"></script>
+<script>
+(async () => {
+  const view = document.getElementById('view');
+  let data;
+  try { data = await P15.load('data.json'); }
+  catch (e) { view.innerHTML = '<p class="note">Tietoja ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
+  const events = [...data.events].sort((a, b) => b.matches[0].date.localeCompare(a.matches[0].date));
+  view.innerHTML = events.map(ev => {
+    const played = ev.matches.some(m => m.score);
+    const upcoming = ev.matches.every(m => !m.score);
+    return `<section class="sec">
+      <div class="summary">
+        <div class="sec-head"><h2>${P15.esc(ev.name)}</h2>${ev.link ? `<a class="btn" href="${ev.link}">${ev.host ? 'Turnauksen tulospalvelu' : 'Tulokset'} →</a>` : ''}</div>
+        <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.venue)}${ev.host ? ' · oma turnaus' : ''}</div>
+        ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">${P15.esc(ev.format)}</p>`}
+      </div>
+      ${P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), upcoming)}
+    </section>`;
+  }).join('');
+})();
+</script>
+</body>
+</html>
