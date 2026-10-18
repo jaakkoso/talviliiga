@@ -53,9 +53,6 @@
     .sort((a, b) => a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '')).slice(0, 6);
   $('upcoming').innerHTML = upcoming.length ? upcoming.map(x => P15.matchHTML(x.m, { own: x.own })).join('') : '<p class="note">Ei tulevia otteluita tiedossa.</p>';
 
-  /* --- Sarjataulukot --- */
-  const tbls = [...eer.events.map(ev => ({ ...ev.table, name: `Huuhkajaliiga ${ev.name.toLowerCase()} · ${ev.table.name.toLowerCase()}` })), ...teams.flatMap(t => (t.tables || []).map(x => ({ ...x, name: `${x.name} · ${short(t.name)}` })))];
-  $('tables').innerHTML = tbls.map(x => P15.tableHTML(x)).join('') + `<p class="note">${P15.esc(piiri.noTables || '')}</p>`;
   $('updated').textContent = `Tulokset Palloliiton tulospalvelusta, päivitetty ${piiri.updated.split('-').reverse().map(Number).join('.')}.`;
 
   function drawChart(series) {
