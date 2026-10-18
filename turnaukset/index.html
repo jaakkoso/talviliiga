@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261018h">
+<link rel="stylesheet" href="../assets/site.css?v=20261018j">
 </head>
 <body>
 <header class="top">
@@ -26,7 +26,7 @@
 <script>(function(){var a=document.querySelector(".menu [aria-current]");if(a&&a.offsetLeft+a.offsetWidth>a.parentNode.clientWidth)a.parentNode.scrollLeft=a.offsetLeft-12;})();</script>
 <main class="wrap" id="view"><p class="note">Ladataan…</p></main>
 <footer>Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
-<script src="../assets/matches.js?v=20261018h"></script>
+<script src="../assets/matches.js?v=20261018j"></script>
 <script>
 (async () => {
   const view = document.getElementById('view');
@@ -43,7 +43,7 @@
     return `<div class="eteam">
       <div class="eteam-head"><b>${P15.esc(t.level)}</b>${badge}</div>
       <div class="rec"><span>${P15.esc(t.name)}</span>${s.p ? `<span><b>${s.w}–${s.d}–${s.l}</b> V–T–H</span><span>maalit <b>${s.gf}–${s.ga}</b></span>` : ''}</div>
-      ${[...t.matches].sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || '')).map(m => P15.matchHTML(m, { own: t.name, showSeries: false })).join('')}
+      ${[...t.matches].sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || '')).map(m => P15.matchHTML({ ...m, series: `${ev.name} · ${t.level}` }, { own: t.name, showSeries: false, link: ev.link })).join('')}
     </div>`;
   };
   const evHTML = ev => `<section class="event">

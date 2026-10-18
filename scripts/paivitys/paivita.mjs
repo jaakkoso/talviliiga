@@ -62,6 +62,8 @@ async function paivitaPiirisarjat() {
     try {
       const kaikki = await palloliittoJoukkue(j.id);
       const sarja = kaikki.filter(m => !/HUUHKAJALIIGA/i.test(m.series));
+      // Säilytetään ottelutietojen linkitys (pid) vanhoista otteluista
+      for (const m of sarja) { const v = t.matches.find(x => x.date === m.date && x.home === m.home && x.away === m.away); if (v && v.pid) m.pid = v.pid; }
       if (turvallinen(t.matches, sarja)) t.matches = sarja; else varoita(`${j.nimi}: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty`);
       t._hh = kaikki.filter(m => /HUUHKAJALIIGA/i.test(m.series));
       tila.piirisarjat[j.nimi] = { ottelut: kaikki.length, pelatut: kaikki.filter(m => m.score).length };

@@ -35,13 +35,58 @@ const P15 = (() => {
       ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}${m.note ? `<small class="rp">${esc(m.note)}</small>` : ''}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
       : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : 'tulossa'}</span>`;
     const sub = [opt.showSeries !== false ? m.series : '', opt.showTeam ? (opt.teamLabel || '') : ''].filter(Boolean).join(' · ');
-    return `<div class="match">
-      <div class="date">${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b></div>
-      <div class="tm">${sub ? `<span class="ser">${esc(sub)}</span>` : ''}
+    const mi = REG.push({ m, opt }) - 1;
+    return `<button type="button" class="match" data-mi="${mi}" aria-label="Ottelun tiedot: ${esc(m.home)} – ${esc(m.away)}">
+      <span class="date">${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b></span>
+      <span class="tm">${sub ? `<span class="ser">${esc(sub)}</span>` : ''}
         <span class="${isOwn(m.home) ? 'me' : ''}">${esc(m.home)}</span>
-        <span class="${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span></div>
-      <div class="res">${right}</div></div>`;
+        <span class="${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span></span>
+      <span class="res">${right}</span></button>`;
   }
+
+  /* ---------- Ottelun tiedot -ikkuna ---------- */
+  const REG = [];
+  const BASE = (document.currentScript && document.currentScript.src) || location.href;
+  let DETAILS = null;
+  const loadDetails = () => DETAILS || (DETAILS = fetch(new URL('../piirisarja/ottelut.json', BASE), { cache: 'no-cache' }).then(r => r.ok ? r.json() : {}).catch(() => ({})));
+  function dialogEl() {
+    let dlg = document.getElementById('otteluDlg');
+    if (dlg) return dlg;
+    dlg = document.createElement('dialog'); dlg.id = 'otteluDlg'; dlg.className = 'mdlg';
+    dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('[data-close]')) dlg.close(); });
+    document.body.appendChild(dlg); return dlg;
+  }
+  async function openMatch(mi) {
+    const { m, opt } = REG[mi]; const dlg = dialogEl();
+    const d = parseDate(m.date), det = m.pid ? (await loadDetails())[m.pid] : null;
+    const rs = results(m, opt.own);
+    const verdict = rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
+    const score = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join(' · ') : 'vs';
+    const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
+    let goals = '';
+    if (det && det.goals && det.goals.length) {
+      goals = `<h3>Maalit</h3><ol class="tl">${det.goals.map(g => {
+        const who = g.og ? 'oma maali' : g.no != null ? '#' + g.no : 'maali';
+        return `<li class="${g.side}"><span class="cell">${g.side === 'h' ? `<b>${who}</b><i>${g.min}'</i>` : `<i>${g.min}'</i><b>${who}</b>`}</span></li>`;
+      }).join('')}</ol><p class="tl-note">Maalintekijät pelinumeroina. Nimiä ei näytetä.</p>`;
+    } else if (m.score) goals = `<p class="note">Maalien tarkempia tietoja ei ole saatavilla tästä ottelusta.</p>`;
+    const link = m.pid ? `https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap` : opt.link;
+    dlg.innerHTML = `<div class="mdlg-in">
+      <button type="button" class="mdlg-x" data-close aria-label="Sulje">×</button>
+      <div class="mdlg-ser">${esc(m.series || '')}</div>
+      <div class="mdlg-meta">${meta}</div>
+      <div class="mdlg-score">
+        <span class="t h ${isOwn(m.home) ? 'me' : ''}">${esc(m.home)}</span>
+        <span class="s">${score}</span>
+        <span class="t a ${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>
+      </div>
+      <div class="mdlg-sub">${[det && det.ht ? 'Puoliaika ' + esc(det.ht) : '', m.note ? esc(m.note) : '', verdict].filter(Boolean).join(' · ')}</div>
+      ${goals}
+      ${link ? `<a class="btn" href="${link}" target="_blank" rel="noopener">Lähde ↗</a>` : ''}
+    </div>`;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('.match[data-mi]'); if (b) openMatch(+b.dataset.mi); });
   // items: [{m, opt}] ; ryhmitellään kuukausittain, uusin ensin (tai vanhin ensin, jos asc)
   function listHTML(items, asc) {
     items = [...items].sort((a, b) => asc ? a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '') : b.m.date.localeCompare(a.m.date));
