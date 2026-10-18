@@ -253,3 +253,4 @@ button.match .tm>span{display:block}
 .gl-list .no{font-weight:800}
 .gl-list .st{text-align:right;font-family:var(--display);font-weight:800;font-size:1.05rem}
 .gl-list .no{min-width:3.4em;text-align:right}
+.fact .basis{font-style:normal;font-size:.72rem;color:var(--muted);border-top:1px solid rgba(33,30,30,.08);padding-top:6px;margin-top:4px}

@@ -78,12 +78,13 @@
       for (const g of dt.goals || []) if (g.side === side) { own++; bins[Math.min(6, Math.floor((Math.max(1, g.min) - 1) / 10))]++; if (g.no != null) scorers.add(`${x.own}#${g.no}`); }
     }
     if (withDet.length) {
-      if (htKnown) F.push({ k: 'Käännetyt pelit', v: `${comeback} / ${behind}`, d: `puoliajalla tappiolla ${behind} kertaa, näistä ${comeback} voitoksi · ${htKnown} ottelua, joista puoliaikatulos on tiedossa` });
+      const basis = n => `Vain ${n} ottelusta, lähinnä P12-sarjoista. Muista peleistä tieto puuttuu.`;
+      if (htKnown) F.push({ k: 'Käännetyt pelit', v: `${comeback} / ${behind}`, d: `puoliajalla tappiolla ${behind} kertaa, näistä ${comeback} voitoksi`, n: basis(htKnown) });
       const lab = ['1–10', '11–20', '21–30', '31–40', '41–50', '51–60', '61–70'], mx = Math.max(...bins);
-      F.push({ k: 'Maalit minuuteittain', v: `${lab[bins.indexOf(mx)]}'`, d: `eniten omia maaleja · 10 min jaksot`, spark: bins.map((b, i) => `<span style="height:${mx ? Math.max(6, Math.round(100 * b / mx)) : 6}%" title="${lab[i]}': ${b}"></span>`).join('') });
-      F.push({ k: 'Eri maalintekijöitä', v: scorers.size, d: `pelinumeroa teki maalin · ${own} maalia ${withGoals.length} ottelussa` });
+      F.push({ k: 'Maalit minuuteittain', v: `${lab[bins.indexOf(mx)]}'`, d: `eniten omia maaleja · 10 min jaksot`, n: basis(withGoals.length), spark: bins.map((b, i) => `<span style="height:${mx ? Math.max(6, Math.round(100 * b / mx)) : 6}%" title="${lab[i]}': ${b}"></span>`).join('') });
+      F.push({ k: 'Eri maalintekijöitä', v: scorers.size, d: `pelinumeroa teki maalin, yhteensä ${own} maalia`, n: basis(withGoals.length) });
     }
-    $('facts').innerHTML = F.map(f => `<div class="fact"><small>${P15.esc(f.k)}</small><b>${P15.esc(String(f.v))}</b>${f.spark ? `<div class="spark" aria-hidden="true">${f.spark}</div>` : ''}<span>${P15.esc(f.d)}</span></div>`).join('');
+    $('facts').innerHTML = F.map(f => `<div class="fact"><small>${P15.esc(f.k)}</small><b>${P15.esc(String(f.v))}</b>${f.spark ? `<div class="spark" aria-hidden="true">${f.spark}</div>` : ''}<span>${P15.esc(f.d)}</span>${f.n ? `<em class="basis">${P15.esc(f.n)}</em>` : ''}</div>`).join('');
   } catch (e) { $('facts').innerHTML = ''; }
 
   /* --- Viimeisimmät tulokset ja tulevat pelit --- */
