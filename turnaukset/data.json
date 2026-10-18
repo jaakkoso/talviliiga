@@ -10,38 +10,1144 @@
    "link": "../talviliiga/",
    "team": "SJK",
    "format": "Kilpa takakentällä, haaste samaan aikaan etukentällä · 30 min",
-   "matches": [
+   "teams": [
     {
-     "date": "2026-10-24",
-     "time": "10.00",
-     "series": "Kilpa & haaste",
-     "home": "SJK",
-     "away": "VPS",
-     "score": null
+     "name": "SJK",
+     "label": "SJK",
+     "level": "P12 Kilpa ja Haaste",
+     "matches": [
+      {
+       "date": "2026-10-24",
+       "time": "10.00",
+       "series": "Kilpa & haaste",
+       "home": "SJK",
+       "away": "VPS",
+       "score": null
+      },
+      {
+       "date": "2026-10-24",
+       "time": "11.10",
+       "series": "Kilpa & haaste",
+       "home": "JJK",
+       "away": "SJK",
+       "score": null
+      },
+      {
+       "date": "2026-10-24",
+       "time": "14.00",
+       "series": "Kilpa & haaste",
+       "home": "SJK",
+       "away": "WFA",
+       "score": null
+      },
+      {
+       "date": "2026-10-24",
+       "time": "15.45",
+       "series": "Kilpa & haaste",
+       "home": "SJK",
+       "away": "Jaro",
+       "score": null
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "jjk-mekipa-2026",
+   "name": "JJK Mekipa Cup",
+   "dates": "19.9.2026",
+   "venue": "Huhtahalli, Jyväskylä",
+   "link": "https://www.gameresultsonline.com/jjk/jjk-syysturnaus",
+   "teams": [
+    {
+     "name": "SJK",
+     "label": "Kilpa",
+     "level": "P11 (2015) Kilpa",
+     "matches": [
+      {
+       "date": "2026-09-19",
+       "series": "Kilpa",
+       "home": "JJK",
+       "away": "SJK",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Kilpa",
+       "home": "KuPS musta",
+       "away": "SJK",
+       "score": [
+        [
+         4,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Kilpa",
+       "home": "Ilves keltainen",
+       "away": "SJK",
+       "score": [
+        [
+         4,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Kilpa",
+       "home": "SJK",
+       "away": "HoDy",
+       "score": [
+        [
+         0,
+         4
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Kilpa",
+       "home": "SJK",
+       "away": "Yilves",
+       "score": [
+        [
+         0,
+         3
+        ]
+       ]
+      }
+     ]
     },
     {
-     "date": "2026-10-24",
-     "time": "11.10",
-     "series": "Kilpa & haaste",
-     "home": "JJK",
-     "away": "SJK",
-     "score": null
+     "name": "SJK",
+     "label": "Haaste",
+     "level": "P11 (2015) Haaste",
+     "matches": [
+      {
+       "date": "2026-09-19",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "ViPa",
+       "score": [
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Haaste",
+       "home": "KuPS keltainen",
+       "away": "SJK",
+       "score": [
+        [
+         3,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Haaste",
+       "home": "Fc Lahti/4",
+       "away": "SJK",
+       "score": [
+        [
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "JJK",
+       "score": [
+        [
+         0,
+         7
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-19",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "Yilves/punainen",
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "messucup-2026",
+   "name": "Messu Cup",
+   "dates": "5.9.2026",
+   "venue": "Kauhajoki",
+   "link": "https://messucup.torneopal.fi/",
+   "teams": [
+    {
+     "name": "SJK-j/Kulta",
+     "label": "Kulta",
+     "level": "P11",
+     "trophy": true,
+     "matches": [
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Kulta",
+       "away": "Sporting Kristina",
+       "score": [
+        [
+         4,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "Karhu/sininen",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Kulta",
+       "away": "Jalas",
+       "score": [
+        [
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "VäVi/Sininen",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         2,
+         4
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Kulta",
+       "away": "KuRy",
+       "score": [
+        [
+         1,
+         3
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Oranssi",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         8,
+         3
+        ]
+       ]
+      }
+     ]
     },
     {
-     "date": "2026-10-24",
-     "time": "14.00",
-     "series": "Kilpa & haaste",
-     "home": "SJK",
-     "away": "WFA",
-     "score": null
+     "name": "SJK-j/Musta",
+     "label": "Musta",
+     "level": "P11",
+     "matches": [
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "Sepsi-78/sininen",
+       "away": "SJK-j/Musta",
+       "score": [
+        [
+         0,
+         3
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Musta",
+       "away": "Karhu/valkoinen",
+       "score": [
+        [
+         6,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "VäVi/Valkoinen",
+       "away": "SJK-j/Musta",
+       "score": [
+        [
+         0,
+         4
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Musta",
+       "away": "KuRy",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Musta",
+       "away": "ToVe/2015",
+       "score": [
+        [
+         2,
+         9
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "Jalas",
+       "away": "SJK-j/Musta",
+       "score": [
+        [
+         1,
+         3
+        ]
+       ]
+      }
+     ]
     },
     {
-     "date": "2026-10-24",
-     "time": "15.45",
-     "series": "Kilpa & haaste",
-     "home": "SJK",
-     "away": "Jaro",
-     "score": null
+     "name": "SJK-j/Oranssi",
+     "label": "Oranssi",
+     "level": "P11",
+     "trophy": true,
+     "matches": [
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Oranssi",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         2,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "Sepsi-78/valkoinen",
+       "away": "SJK-j/Oranssi",
+       "score": [
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "ToVe/2015",
+       "away": "SJK-j/Oranssi",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "KuRy",
+       "away": "SJK-j/Oranssi",
+       "score": [
+        [
+         3,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Oranssi",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         8,
+         3
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j/Valkoinen",
+     "label": "Valkoinen",
+     "level": "P11",
+     "matches": [
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Oranssi",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         2,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Valkoinen",
+       "away": "ToVe/2015",
+       "score": [
+        [
+         0,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Valkoinen",
+       "away": "Sepsi-78/valkoinen",
+       "score": [
+        [
+         5,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "Sepsi-78/sininen",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         0,
+         5
+        ]
+       ]
+      },
+      {
+       "date": "2026-09-05",
+       "series": "P11",
+       "home": "SJK-j/Valkoinen",
+       "away": "VäVi/Sininen",
+       "score": [
+        [
+         9,
+         0
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "kapa-kevat-2026",
+   "name": "KäPa Kevätturnaus",
+   "dates": "23.–24.5.2026",
+   "venue": "Käpylä, Helsinki",
+   "link": "https://kapakevat.torneopal.fi/",
+   "teams": [
+    {
+     "name": "SJK-j/ Musta",
+     "label": "Musta",
+     "level": "E11 Kilpa 8v8",
+     "trophy": true,
+     "result": "Sarjan voittaja",
+     "matches": [
+      {
+       "date": "2026-05-23",
+       "series": "Kilpa",
+       "home": "SJK-j/ Musta",
+       "away": "JäPS/Sininen",
+       "score": [
+        [
+         9,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Kilpa",
+       "home": "GrIFK/ Bayern Munchen",
+       "away": "SJK-j/ Musta",
+       "score": [
+        [
+         0,
+         4
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Kilpa",
+       "home": "HJK/Munkka 2015 Sininen",
+       "away": "SJK-j/ Musta",
+       "score": [
+        [
+         1,
+         6
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Kilpa",
+       "home": "TuNL/yj",
+       "away": "SJK-j/ Musta",
+       "score": [
+        [
+         2,
+         2
+        ]
+       ],
+       "note": "rp 1–3"
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Kilpa",
+       "home": "EPS/2",
+       "away": "SJK-j/ Musta",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Kilpa",
+       "home": "SJK-j/ Musta",
+       "away": "IF Gnistan 2",
+       "score": [
+        [
+         5,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j",
+     "label": "SJK-j",
+     "level": "E11 Haaste 8v8",
+     "matches": [
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "Harku United FC",
+       "away": "SJK-j",
+       "score": [
+        [
+         3,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "SJK-j",
+       "away": "TuPS/KP-75 YJ5",
+       "score": [
+        [
+         8,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "Kuopion Elo / Valkoinen",
+       "away": "SJK-j",
+       "score": [
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "SJK-j",
+       "away": "EPS/3",
+       "score": [
+        [
+         1,
+         5
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "SJK-j",
+       "away": "NJS/Sininen",
+       "score": [
+        [
+         3,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "MPS/valkoinen",
+       "away": "SJK-j",
+       "score": [
+        [
+         3,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "SJK-j",
+       "away": "HJK Töölö 2015 sininen",
+       "score": [
+        [
+         4,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j/ Kulta",
+     "label": "Kulta",
+     "level": "E11 Haaste 8v8",
+     "matches": [
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "SJK-j/ Kulta",
+       "away": "ÅIFK Gul",
+       "score": [
+        [
+         7,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "EsPa/2",
+       "away": "SJK-j/ Kulta",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Haaste",
+       "home": "HJK/Kannelmäki 2015 valkoinen",
+       "away": "SJK-j/ Kulta",
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "SJK-j/ Kulta",
+       "away": "FC Lahti/ 1 Valkoinen",
+       "score": [
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "EPS/3",
+       "away": "SJK-j/ Kulta",
+       "score": [
+        [
+         6,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Haaste",
+       "home": "SJK-j/ Kulta",
+       "away": "FC Kirkkonummi/ Black",
+       "score": [
+        [
+         0,
+         2
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j/ Valkoinen",
+     "label": "Valkoinen",
+     "level": "E11 Harraste 8v8",
+     "matches": [
+      {
+       "date": "2026-05-23",
+       "series": "Harraste",
+       "home": "HPS/Valkoinen",
+       "away": "SJK-j/ Valkoinen",
+       "score": [
+        [
+         4,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Harraste",
+       "home": "SJK-j/ Valkoinen",
+       "away": "KäPa/City 2 White",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-23",
+       "series": "Harraste",
+       "home": "SJK-j/ Valkoinen",
+       "away": "EsPa/3",
+       "score": [
+        [
+         1,
+         5
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Harraste",
+       "home": "SJK-j/ Valkoinen",
+       "away": "HJK Töölö 2015 Keltasininen",
+       "score": [
+        [
+         4,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Harraste",
+       "home": "IF Gnistan/sininen",
+       "away": "SJK-j/ Valkoinen",
+       "score": [
+        [
+         1,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-24",
+       "series": "Harraste",
+       "home": "FC Honka/T2015 Pre-akatemia K",
+       "away": "SJK-j/ Valkoinen",
+       "score": [
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vpscup-2026",
+   "name": "VPS Cup",
+   "dates": "2.–3.5.2026",
+   "venue": "Vaasa",
+   "link": "https://vpscup2026.torneopal.fi/",
+   "teams": [
+    {
+     "name": "SJK-j/Musta",
+     "label": "Musta",
+     "level": "U11 (2015) Taso 1",
+     "trophy": true,
+     "matches": [
+      {
+       "date": "2026-05-02",
+       "series": "Taso 1",
+       "home": "SJK-j/Musta",
+       "away": "VIFK",
+       "score": [
+        [
+         5,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 1",
+       "home": "Ilves/keltainen",
+       "away": "SJK-j/Musta",
+       "score": [
+        [
+         0,
+         7
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 1",
+       "home": "SJK-j/Musta",
+       "away": "Ura",
+       "score": [
+        [
+         11,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 1",
+       "home": "SJK-j/Musta",
+       "away": "SIF/SIK",
+       "score": [
+        [
+         4,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 1",
+       "home": "VPS J/Raita",
+       "away": "SJK-j/Musta",
+       "score": [
+        [
+         3,
+         1
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j/Kulta",
+     "label": "Kulta",
+     "level": "U11 (2015) Taso 2",
+     "trophy": true,
+     "matches": [
+      {
+       "date": "2026-05-02",
+       "series": "Taso 2",
+       "home": "SJK-j/Kulta",
+       "away": "I-JBK/randig",
+       "score": [
+        [
+         1,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 2",
+       "home": "KANU",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         1,
+         9
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 2",
+       "home": "SJK-j/Kulta",
+       "away": "bk48 P2015",
+       "score": [
+        [
+         8,
+         4
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 2",
+       "home": "VPS J/Musta",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         3,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 2",
+       "home": "KPV/Valkoinen",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         1,
+         10
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 2",
+       "home": "bk48 P2015",
+       "away": "SJK-j/Kulta",
+       "score": [
+        [
+         0,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 2",
+       "home": "SJK-j/Kulta",
+       "away": "VPS J/Musta",
+       "score": [
+        [
+         1,
+         0
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK-j/Valkoinen",
+     "label": "Valkoinen",
+     "level": "U11 (2015) Taso 3",
+     "matches": [
+      {
+       "date": "2026-05-02",
+       "series": "Taso 3",
+       "home": "Jurva-70/P11",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         7,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 3",
+       "home": "SJK-j/Valkoinen",
+       "away": "SIF/SIK",
+       "score": [
+        [
+         7,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-02",
+       "series": "Taso 3",
+       "home": "VPS J/Keltainen",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         3,
+         3
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 3",
+       "home": "MIF",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         5,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-05-03",
+       "series": "Taso 3",
+       "home": "I-JBK/blå",
+       "away": "SJK-j/Valkoinen",
+       "score": [
+        [
+         4,
+         3
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ilves-paasiainen-2026",
+   "name": "Ilveksen Pääsiäisturnaus",
+   "dates": "3.–4.4.2026",
+   "venue": "Tampere",
+   "link": "https://paasiaisturnaus.torneopal.fi/",
+   "teams": [
+    {
+     "name": "SJK-j",
+     "label": "SJK-j",
+     "level": "P11 Kilpa",
+     "trophy": true,
+     "matches": [
+      {
+       "date": "2026-04-03",
+       "series": "Kilpa",
+       "home": "Ilves/vihreä",
+       "away": "SJK-j",
+       "score": [
+        [
+         6,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-04-03",
+       "series": "Kilpa",
+       "home": "SJK-j",
+       "away": "Ilves T11",
+       "score": [
+        [
+         6,
+         1
+        ]
+       ]
+      },
+      {
+       "date": "2026-04-03",
+       "series": "Kilpa",
+       "home": "SJK-j",
+       "away": "YIlves/punainen",
+       "score": [
+        [
+         3,
+         3
+        ]
+       ]
+      },
+      {
+       "date": "2026-04-04",
+       "series": "Kilpa",
+       "home": "PaRi",
+       "away": "SJK-j",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-04-04",
+       "series": "Kilpa",
+       "home": "SJK-j",
+       "away": "JJK-Sininen",
+       "score": [
+        [
+         6,
+         2
+        ]
+       ]
+      }
+     ]
     }
    ]
   }

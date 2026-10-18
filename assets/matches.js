@@ -32,7 +32,7 @@ const P15 = (() => {
     const d = parseDate(m.date);
     const rs = results(m, opt.own);
     const right = m.score
-      ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
+      ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}${m.note ? `<small class="rp">${esc(m.note)}</small>` : ''}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
       : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : 'tulossa'}</span>`;
     const sub = [opt.showSeries !== false ? m.series : '', opt.showTeam ? (opt.teamLabel || '') : ''].filter(Boolean).join(' · ');
     return `<div class="match">

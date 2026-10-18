@@ -135,3 +135,40 @@ footer{max-width:880px;margin:0 auto;padding-block:0 32px;padding-left:max(16px,
 .menu a{flex:none;color:#e9e5da;text-decoration:none;font:600 .9rem var(--body);padding:11px 9px 10px;border-bottom:3px solid transparent}
 .menu a:hover{color:#fff}
 .menu a[aria-current="page"]{color:#fff;border-bottom-color:var(--gold)}
+
+.match .sc .rp{display:block;font:500 .68rem var(--body);color:var(--muted);text-align:right}
+/* Turnaukset */
+.event{display:grid;gap:12px}
+.event-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.event-head .lvl{font-size:.85rem;color:var(--muted)}
+.event-teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.eteam{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;align-content:start;min-width:0}
+.eteam-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.eteam-head b{font-family:var(--display);font-weight:800;font-size:1.25rem;text-transform:uppercase}
+.eteam-head span{font-size:.78rem;color:var(--muted)}
+.eteam .rec{display:flex;gap:10px;align-items:center;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+.eteam .rec b{color:var(--ink);font-variant-numeric:tabular-nums}
+.medal{display:inline-flex;align-items:center;gap:5px;font:700 .72rem var(--body);letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:#f3ecbf;color:#5c5310}
+.medal svg{width:13px;height:13px}
+.eteam .match{border:0;border-top:1px solid var(--surface2);border-radius:0;padding:8px 2px;grid-template-columns:44px minmax(0,1fr) auto}
+.past-title{margin-top:8px}
+
+/* Lasimainen ilme: läpikuultava, sumennettu pinta, ohut vaalea reuna ja pehmeä varjo */
+:root{--glass:rgba(255,255,255,.58);--glass-strong:rgba(255,255,255,.74);--glass-edge:rgba(255,255,255,.85);--glass-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 10px 30px rgba(33,30,30,.08),0 1px 2px rgba(33,30,30,.06)}
+body{background:
+  radial-gradient(900px 520px at 85% -10%,rgba(189,176,58,.30),transparent 60%),
+  radial-gradient(700px 480px at -10% 30%,rgba(33,30,30,.10),transparent 60%),
+  radial-gradient(800px 600px at 100% 90%,rgba(189,176,58,.16),transparent 60%),
+  var(--bg);background-attachment:fixed}
+.card,.match,.summary,.tbl,.kpi,.chart,.eteam,.kv-step{background:var(--glass);border:1px solid var(--glass-edge);box-shadow:var(--glass-shadow);-webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+.eteam .match{background:transparent;border:0;border-top:1px solid rgba(33,30,30,.07);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.card.next{background:rgba(33,30,30,.86);border-color:rgba(255,255,255,.14);box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 14px 34px rgba(33,30,30,.28)}
+a.card:hover{border-color:#fff;box-shadow:0 1px 0 #fff inset,0 14px 36px rgba(33,30,30,.12)}
+.btn,.tabs button{background:var(--glass-strong);border:1px solid var(--glass-edge);box-shadow:0 1px 0 #fff inset,0 4px 14px rgba(33,30,30,.10);-webkit-backdrop-filter:blur(14px) saturate(160%);backdrop-filter:blur(14px) saturate(160%);color:var(--ink);transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover,.tabs button:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 8px 20px rgba(33,30,30,.14)}
+.tabs button[aria-pressed="true"]{background:rgba(33,30,30,.88);border-color:rgba(255,255,255,.18);color:#fff;box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 6px 16px rgba(33,30,30,.22)}
+.menu{background:rgba(33,30,30,.80);-webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%)}
+.tbl tr.own td{background:rgba(189,176,58,.20)}
+@media (prefers-reduced-motion:reduce){.btn,.tabs button{transition:none}.btn:hover,.tabs button:hover{transform:none}}
+.month .btn+.btn{margin-left:8px}
+.sec{align-content:start}

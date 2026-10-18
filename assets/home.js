@@ -46,9 +46,11 @@
   let rw = 0; addEventListener('resize', () => { const w = $('chart').clientWidth; if (Math.abs(w - rw) > 40) { rw = w; drawChart(series); } });
 
   /* --- Viimeisimmät tulokset ja tulevat ottelut --- */
-  const latest = [...played].sort((a, b) => b.m.date.localeCompare(a.m.date)).slice(0, 6);
-  $('latest').innerHTML = latest.map(x => P15.matchHTML(x.m, { own: x.t.name, showTeam: true, teamLabel: short(x.t.name) })).join('') + `<a class="btn" href="piirisarja/">Kaikki tulokset →</a>`;
-  const upcoming = [...turn.events.flatMap(ev => ev.matches.filter(m => !m.score).map(m => ({ m: { ...m, series: ev.name }, own: ev.team, link: 'turnaukset/' }))),
+  const tourn = turn.events.flatMap(ev => ev.teams.flatMap(t => t.matches.map(m => ({ m: { ...m, series: `${ev.name} · ${t.label}` }, own: t.name }))));
+  const latest = [...played.map(x => ({ m: x.m, own: x.t.name, label: short(x.t.name) })), ...tourn.filter(x => x.m.score).map(x => ({ m: x.m, own: x.own, label: '' }))]
+    .sort((a, b) => b.m.date.localeCompare(a.m.date)).slice(0, 6);
+  $('latest').innerHTML = latest.map(x => P15.matchHTML(x.m, { own: x.own, showTeam: !!x.label, teamLabel: x.label })).join('') + `<a class="btn" href="piirisarja/">Kaikki sarjatulokset →</a><a class="btn" href="turnaukset/">Turnaukset →</a>`;
+  const upcoming = [...tourn.filter(x => !x.m.score),
     ...eer.events.flatMap(ev => ev.matches.filter(m => !m.score).map(m => ({ m: { ...m, series: 'Huuhkajaliiga' }, own: ev.team, link: 'eerikkila/' })))]
     .sort((a, b) => a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '')).slice(0, 6);
   $('upcoming').innerHTML = upcoming.length ? upcoming.map(x => P15.matchHTML(x.m, { own: x.own })).join('') : '<p class="note">Ei tulevia otteluita tiedossa.</p>';
