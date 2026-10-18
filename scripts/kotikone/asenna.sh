@@ -3,6 +3,7 @@
 # Hakee Palloliiton tulokset kahden tunnin välein ja vie ne sivustolle. Aja Päätteessä:
 #   curl -fsSL https://raw.githubusercontent.com/jaakkoso/talviliiga/main/scripts/kotikone/asenna.sh | bash
 set -e
+trap 'echo; echo "VIRHE rivillä $LINENO: $BASH_COMMAND"; echo "Kopioi tämä viesti Claudelle."' ERR
 KANSIO="$HOME/p2015-tulokset"
 REPO="https://github.com/jaakkoso/talviliiga.git"
 NIMI="fi.p2015.tulospaivitys"
@@ -20,15 +21,20 @@ command -v git >/dev/null || { echo "git puuttuu. Aja ensin: xcode-select --inst
 echo "Node: $("$NODE" -v)"
 
 # 2. Sivuston kopio kotikoneelle
-if [ -d "$KANSIO/.git" ]; then git -C "$KANSIO" pull -q --rebase; else git clone -q "$REPO" "$KANSIO"; fi
+echo "[1/4] Sivuston kopio kansioon $KANSIO"
+if [ -d "$KANSIO/.git" ]; then git -C "$KANSIO" pull --rebase; else git clone "$REPO" "$KANSIO"; fi
 git -C "$KANSIO" config credential.helper osxkeychain
 
 # 3. Hakuohjelma ja selain
+echo "[2/4] Hakuohjelman asennus"
 cd "$KANSIO/scripts/paivitys"
-"$NODEBIN/npm" install --no-audit --no-fund --silent
-"$NODEBIN/npx" playwright install chromium
+export PATH="$NODEBIN:$PATH"
+"$NODEBIN/npm" install --no-audit --no-fund
+echo "[3/4] Selaimen asennus (voi kestää pari minuuttia)"
+"$NODEBIN/npx" --yes playwright install chromium
 
 # 4. Oikeus viedä tulokset GitHubiin (tallennetaan macOS:n avainnippuun)
+echo "[4/4] GitHub-yhteys"
 if ! git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1; then
   echo
   echo "Tarvitaan GitHub-avain, jolla tulokset viedään sivustolle:"
