@@ -90,6 +90,12 @@ const P15 = (() => {
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   }
   document.addEventListener('click', e => { const b = e.target.closest('.match[data-mi]'); if (b) openMatch(+b.dataset.mi); });
+  // Yleinen ikkuna muille sisällöille (esim. turnausmitalit)
+  function openDialog(title, body) {
+    const dlg = dialogEl();
+    dlg.innerHTML = `<div class="mdlg-in"><button type="button" class="mdlg-x" data-close aria-label="Sulje">×</button><div class="mdlg-ser">${esc(title)}</div>${body}</div>`;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+  }
   // items: [{m, opt}] ; ryhmitellään kuukausittain, uusin ensin (tai vanhin ensin, jos asc)
   function listHTML(items, asc) {
     items = [...items].sort((a, b) => asc ? a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '') : b.m.date.localeCompare(a.m.date));
@@ -120,5 +126,5 @@ const P15 = (() => {
     </div>`;
   }
   async function load(url) { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status); return r.json(); }
-  return { esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate };
+  return { esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
 })();

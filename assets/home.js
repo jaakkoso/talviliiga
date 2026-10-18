@@ -60,10 +60,19 @@
     F.push({ k: 'Nollapelit', v: games.filter(g => g.g === 0).length, d: `otteluissa ei päästetty yhtään maalia` });
     const pl = turn.events.flatMap(ev => ev.teams.map(t => t.place)).filter(Boolean);
     const med = [1, 2, 3].map(n => pl.filter(p => p.pos === n).length);
-    if (pl.length) F.push({ k: 'Turnausmitalit', v: med.reduce((a, b) => a + b, 0), d: `${med[0]} × kulta · ${med[1]} × hopea · ${med[2]} × pronssi` });
+    if (pl.length) F.push({ k: 'Turnausmitalit', v: med.reduce((a, b) => a + b, 0), d: `${med[0]} × kulta · ${med[1]} × hopea · ${med[2]} × pronssi`, act: 'medals' });
     const places = new Set([...turn.events.filter(ev => ev.teams.some(t => t.matches.some(m => m.score))).map(ev => ev.venue.split(',').pop().trim()), ...(eer.events.some(ev => ev.matches.some(m => m.score)) ? ['Tammela'] : [])]);
     F.push({ k: 'Turnausmatkat', v: places.size, d: [...places].join(', ') });
-    $('facts').innerHTML = F.map(f => `<div class="fact"><small>${P15.esc(f.k)}</small><b>${P15.esc(String(f.v))}</b>${f.spark ? `<div class="spark" aria-hidden="true">${f.spark}</div>` : ''}<span>${P15.esc(f.d)}</span>${f.n ? `<em class="basis">${P15.esc(f.n)}</em>` : ''}</div>`).join('');
+    const medalRows = turn.events.flatMap(ev => ev.teams.filter(t => t.place && t.place.pos <= 3).map(t => ({ ev, t })))
+      .sort((a, b) => a.t.place.pos - b.t.place.pos || (b.ev.teams[0].matches[0]?.date || '').localeCompare(a.ev.teams[0].matches[0]?.date || ''));
+    const MN = { 1: 'Kulta', 2: 'Hopea', 3: 'Pronssi' };
+    const medalsBody = `<div class="medal-list">${medalRows.map(({ ev, t }) => `<div class="medal-row m${t.place.pos}">
+        <span class="mpos">${t.place.pos}.</span>
+        <span class="minfo"><b>${P15.esc(ev.name)}</b><small>${P15.esc(t.level)} · ${P15.esc(ev.dates)} · ${P15.esc(ev.venue)}</small></span>
+        <span class="mname">${MN[t.place.pos]}<small>${t.place.pos}. / ${t.place.of}</small></span>
+      </div>`).join('')}</div><a class="btn" href="turnaukset/">Kaikki turnaukset →</a>`;
+    $('facts').innerHTML = F.map(f => `<${f.act ? 'button type="button" data-act="' + f.act + '"' : 'div'} class="fact${f.act ? ' clickable' : ''}"><small>${P15.esc(f.k)}</small><b>${P15.esc(String(f.v))}</b>${f.spark ? `<div class="spark" aria-hidden="true">${f.spark}</div>` : ''}<span>${P15.esc(f.d)}</span>${f.act ? '<em class="more">Näytä mitalit →</em>' : ''}</${f.act ? 'button' : 'div'}>`).join('');
+    $('facts').addEventListener('click', e => { if (e.target.closest('[data-act="medals"]')) P15.openDialog('Turnausmitalit 2026', medalsBody); });
   } catch (e) { $('facts').innerHTML = ''; }
 
   /* --- Viimeisimmät tulokset ja tulevat pelit --- */
