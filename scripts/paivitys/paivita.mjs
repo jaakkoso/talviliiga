@@ -191,7 +191,7 @@ async function paivitaTurnaukset() {
   for (const tc of cfg.turnaukset) {
     const ev = d.events.find(e => e.id === tc.id);
     if (!ev) { varoita(`Turnaus ${tc.id}: lisää nimi, päivät ja paikka turnaukset/data.json-tiedostoon (tai pyydä Claudea)`); continue; }
-    if (tc.tyyppi === 'oma' || !tc.url) continue;
+    if (tc.tyyppi === 'oma' || !tc.url || tc.valmis) continue;
     try {
       const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : null;
       if (!teams) { varoita(`Turnaus ${tc.id}: tuntematon tyyppi ${tc.tyyppi}`); continue; }

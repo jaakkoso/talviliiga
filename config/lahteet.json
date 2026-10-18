@@ -1,5 +1,5 @@
 {
- "_ohje": "Tulevat turnaukset lisätään 'turnaukset'-listaan: id, nimi, päivät, paikka ja tulossivun osoite. Tyyppi: torneopal, gameresultsonline tai oma. Muut tiedot haetaan automaattisesti.",
+ "_ohje": "Tulevat turnaukset lisätään 'turnaukset'-listaan: id, nimi, päivät, paikka ja tulossivun osoite. Tyyppi: torneopal, gameresultsonline tai oma. Muut tiedot haetaan automaattisesti. Päättyneet turnaukset merkitään \"valmis\": true, jolloin niitä ei enää haeta.",
  "kausi": 2026,
  "piirisarjat": [
   {
@@ -65,31 +65,36 @@
    "id": "jjk-mekipa-2026",
    "tyyppi": "gameresultsonline",
    "url": "https://www.gameresultsonline.com/jjk/jjk-syysturnaus",
-   "paiva": "2026-09-19"
+   "paiva": "2026-09-19",
+   "valmis": true
   },
   {
    "id": "messucup-2026",
    "tyyppi": "torneopal",
    "url": "https://messucup.torneopal.fi/",
-   "suodatin": "P11|2015"
+   "suodatin": "P11|2015",
+   "valmis": true
   },
   {
    "id": "kapa-kevat-2026",
    "tyyppi": "torneopal",
    "url": "https://kapakevat.torneopal.fi/",
-   "suodatin": "P11|E11|2015"
+   "suodatin": "P11|E11|2015",
+   "valmis": true
   },
   {
    "id": "vpscup-2026",
    "tyyppi": "torneopal",
    "url": "https://vpscup2026.torneopal.fi/",
-   "suodatin": "U11|P11|2015"
+   "suodatin": "U11|P11|2015",
+   "valmis": true
   },
   {
    "id": "ilves-paasiainen-2026",
    "tyyppi": "torneopal",
    "url": "https://paasiaisturnaus.torneopal.fi/",
-   "suodatin": "P11|2015"
+   "suodatin": "P11|2015",
+   "valmis": true
   }
  ]
 }
