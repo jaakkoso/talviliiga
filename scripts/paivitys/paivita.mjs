@@ -28,7 +28,15 @@ const sivu = await selain.newPage({ locale: 'en-US', viewport: { width: 1300, he
 sivu.setDefaultTimeout(30000);
 
 /* ---------- Palloliiton tulospalvelu ---------- */
+// Palloliiton sivun taustakutsut (JSON) talteen: luotettavampi lähde kuin sivun teksti
+const restVastaukset = [];
+sivu.on('response', async r => {
+  const u = r.url();
+  if (!/torneopal\.net\/taso\/rest\//.test(u)) return;
+  try { const t = await r.text(); restVastaukset.push({ url: u.replace(/hash=[^&]+/, 'hash=…'), status: r.status(), koko: t.length, alku: t.slice(0, 300) }); } catch { }
+});
 async function palloliittoTeksti(url, odota) {
+  restVastaukset.length = 0;
   await sivu.goto(url, { waitUntil: 'domcontentloaded' });
   try { await sivu.waitForFunction(t => (document.querySelector('main')?.innerText || '').includes(t), odota, { timeout: 20000 }); }
   catch { /* ei otteluita tai hidas sivu: palautetaan mitä on */ }
@@ -39,7 +47,12 @@ const diagnoosi = {};
 async function palloliittoJoukkue(id) {
   const raaka = await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/results`, 'MATCH DETAILS');
   const tulokset = palloliittoOttelut(raaka, cfg.kausi);
-  if (!tulokset.length) diagnoosi[id] = raaka.map(s => s.trim()).filter(Boolean).slice(0, 40).join(' ¦ ').slice(0, 600);
+  if (!tulokset.length) diagnoosi[id] = {
+    url: sivu.url(), otsikko: await sivu.title(),
+    main: await sivu.evaluate(() => !!document.querySelector('main')),
+    teksti: (await sivu.evaluate(() => document.body ? document.body.innerText : '')).replace(/\s+/g, ' ').slice(0, 500),
+    rest: restVastaukset.slice(0, 8)
+  };
   const tulevat = palloliittoOttelut(await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/fixture`, 'MATCH DETAILS'), cfg.kausi).filter(m => !m.score);
   return [...tulokset, ...tulevat];
 }
