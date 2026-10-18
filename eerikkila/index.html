@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261018b">
+<link rel="stylesheet" href="../assets/site.css?v=20261018d">
 </head>
 <body>
 <header class="top">
@@ -28,7 +28,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261018b"></script>
+<script src="../assets/matches.js?v=20261018d"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -45,7 +45,7 @@
         <div class="sec-head"><h2>${P15.esc(ev.title)}</h2>${ev.taso ? `<a class="btn" href="${ev.taso}" target="_blank" rel="noopener">Live Palloliitossa ↗</a>` : ''}</div>
         <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
         ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
-      </div>` + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), upcoming);
+      </div>` + P15.tableHTML(ev.table) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), upcoming);
     P15.store.set('eerikkila-tab', id);
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });

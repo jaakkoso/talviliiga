@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Joukkuekuva · SJK P2015</title>
+<meta name="description" content="Tee joukkuekuvasta somekuva SJK P2015 -kehyksellä. Kuva käsitellään vain puhelimessa.">
+<meta name="theme-color" content="#211e1e">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="../assets/logo-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=20261018d">
+<style>
+.kuva{max-width:560px}
+.kv-step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:12px}
+.kv-pick{display:block;text-align:center;font-weight:700;font-size:1.05rem;padding:14px;border-radius:999px;background:var(--gold);color:var(--ink);cursor:pointer}
+.kv-field{display:grid;gap:6px;font-weight:600;font-size:.9rem}
+.kv-field input,.kv-field select{border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-weight:500;background:var(--surface);color:var(--ink)}
+.kv-zoom input{width:100%;accent-color:var(--gold)}
+.kv-stage{position:relative;border-radius:16px;overflow:hidden;background:var(--head);box-shadow:0 6px 24px rgba(0,0,0,.18)}
+.kv-stage canvas{display:block;width:100%;height:auto;touch-action:none;cursor:grab}
+.kv-empty{position:absolute;inset:auto 0 42% 0;text-align:center;color:#fff;font-weight:600;padding:0 24px;opacity:.85}
+.kv-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv-actions button{font:700 1rem var(--body);padding:13px;border-radius:999px;border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);cursor:pointer}
+.kv-actions button.main{background:var(--gold);border-color:var(--gold)}
+.kv-privacy{text-align:center;margin:0 auto}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="../assets/logo-180.png" alt="SJK-juniorit" width="52" height="52">
+    <div class="t">
+      <a class="back" href="../">← P2015 tulokset</a>
+      <h1>Joukkuekuva</h1>
+      <div class="sub">Oma kuva SJK P2015 -kehyksellä</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap kuva">
+  <section class="kv-step">
+    <label class="kv-pick" for="photo">Valitse tai ota kuva</label>
+    <input id="photo" type="file" accept="image/*" hidden>
+    <nav class="tabs" id="fmt" aria-label="Kuvan muoto">
+      <button type="button" data-fmt="post" aria-pressed="true">Postaus 4:5</button>
+      <button type="button" data-fmt="story" aria-pressed="false">Tarina 9:16</button>
+    </nav>
+    <label class="kv-field" for="team">Joukkue (valinnainen)
+      <select id="team">
+        <option value="">Koko P2015</option>
+        <option value="Kulta">Kulta</option>
+        <option value="Valkoinen">Valkoinen</option>
+        <option value="Oranssi">Oranssi</option>
+        <option value="Musta">Musta</option>
+      </select>
+    </label>
+    <label class="kv-field" for="txt">Oma teksti (valinnainen)
+      <input id="txt" maxlength="32" placeholder="esim. Hieno turnauspäivä!" autocomplete="off">
+    </label>
+    <label class="kv-field" for="place">Paikka ja päivä (valinnainen)
+      <input id="place" maxlength="48" placeholder="esim. Eerikkilä 1.–3.11.2026" autocomplete="off">
+    </label>
+  </section>
+
+  <section class="kv-stage">
+    <canvas id="cv" width="1080" height="1350" aria-label="Esikatselu"></canvas>
+    <div class="kv-empty" id="empty">Valitse kuva, niin kehys tulee sen päälle.</div>
+  </section>
+
+  <section class="kv-step" id="adjust" hidden>
+    <label class="kv-field kv-zoom" for="zoom">Rajaus: siirrä kuvaa sormella, suurenna liukusäätimellä
+      <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+    </label>
+    <div class="kv-actions">
+      <button type="button" class="main" id="share">Jaa kuva</button>
+      <button type="button" id="save">Tallenna kuva</button>
+    </div>
+  </section>
+
+  <p class="note kv-privacy">Kuva käsitellään vain omassa puhelimessasi. Sitä ei lähetetä eikä tallenneta minnekään. Kysythän kuvassa olevien pelaajien huoltajilta luvan ennen julkaisua.</p>
+</main>
+<script src="kuva.js?v=20261018d"></script>
+</body>
+</html>

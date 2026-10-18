@@ -58,6 +58,19 @@ const P15 = (() => {
     get(k, d) { try { const v = localStorage.getItem('p2015:' + k); return v == null ? d : v; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem('p2015:' + k, v); } catch (e) { } },
   };
+  // Sarjataulukko; oma joukkue korostetaan
+  function tableHTML(t, opt = {}) {
+    if (!t || !t.rows || !t.rows.length) return '';
+    const empty = t.rows.every(r => r.o === 0);
+    return `<div class="tbl">
+      <div class="tbl-head"><b>${esc(t.name)}</b>${t.url ? `<a href="${t.url}" target="_blank" rel="noopener">Palloliitto ↗</a>` : ''}</div>
+      <div class="tbl-scroll"><table>
+        <thead><tr><th class="pos">#</th><th class="tn">Joukkue</th><th>O</th><th>V</th><th>T</th><th>H</th><th>Maalit</th><th>ME</th><th>P</th></tr></thead>
+        <tbody>${t.rows.map(r => `<tr class="${isOwn(r.team) ? 'own' : ''}"><td class="pos">${r.pos}</td><td class="tn">${esc(r.team)}</td><td>${r.o}</td><td>${r.v}</td><td>${r.t}</td><td>${r.h}</td><td>${r.gf}–${r.ga}</td><td>${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="pts">${r.p}</td></tr>`).join('')}</tbody>
+      </table></div>
+      ${empty ? '<p class="note">Sarja ei ole vielä alkanut.</p>' : ''}
+    </div>`;
+  }
   async function load(url) { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status); return r.json(); }
-  return { esc, summary, summaryHTML, matchHTML, listHTML, store, load, isOwn };
+  return { esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate };
 })();

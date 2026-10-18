@@ -82,3 +82,48 @@ a.card:hover{border-color:var(--ink)}
 
 .btn{display:inline-block;font-weight:600;font-size:.9rem;border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;text-decoration:none}
 footer{max-width:880px;margin:0 auto;padding-block:0 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-size:.78rem;color:var(--muted)}
+
+/* Sarjataulukot */
+.tbl{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 0 6px;display:grid;gap:6px;min-width:0}
+.tbl-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding-inline:14px}
+.tbl-head b{font-family:var(--display);font-weight:800;font-size:1.15rem;text-transform:uppercase}
+.tbl-head a{font-size:.8rem;color:var(--muted)}
+.tbl-scroll{overflow-x:auto}
+.tbl table{width:100%;border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums}
+.tbl th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:4px 8px;border-bottom:1px solid var(--line)}
+.tbl td{text-align:right;padding:6px 8px;border-bottom:1px solid var(--surface2);white-space:nowrap}
+.tbl .pos{width:2.2em;text-align:right;color:var(--muted)}
+.tbl .tn{text-align:left;width:100%}
+.tbl .pts{font-weight:700}
+.tbl tr.own td{background:#f6f1cf;font-weight:700}
+.tbl tr.own .pos{color:var(--ink)}
+.tbl .note{padding-inline:14px}
+.tables{display:grid;gap:12px}
+
+/* Kausi lukuina */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:2px;min-width:0}
+.kpi b{font-family:var(--display);font-weight:800;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.kpi small{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.kpi span{font-size:.8rem;color:var(--muted)}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.teamtbl td.tn a{color:inherit;text-decoration:none;font-weight:600}
+.teamtbl td.tn small{display:block;font-weight:400;color:var(--muted);font-size:.75rem}
+
+/* Kauden kehitys -kaavio */
+.chart{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:10px;min-width:0;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem}
+.chart .legend span{display:inline-flex;align-items:center;gap:6px}
+.chart .legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.chart .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:8px;padding:8px 10px;font-size:.78rem;line-height:1.4;min-width:150px;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.chart .tip b{display:block;font-size:.8rem;margin-bottom:2px}
+.chart .tip .r{display:flex;justify-content:space-between;gap:12px}
+.chart .tip i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;box-shadow:0 0 0 1.5px #fff}
+
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+@media (max-width:760px){.cols{grid-template-columns:minmax(0,1fr)}}
+.month .btn{justify-self:start;margin-top:4px}
+
+.teamtbl td.tn{white-space:normal;min-width:9em}
+.teamtbl td.tn small{line-height:1.3}

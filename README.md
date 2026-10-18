@@ -4,12 +4,13 @@ Osoite: **https://p2015-tulokset.sjk-juniorit.fi/**
 
 | Polku | Sisältö | Data |
 |---|---|---|
-| `/` | Etusivu: tulevat tapahtumat ja kauden osiot | `index.html` (turnauspäivän automaattinen ohjaus `REDIRECTS`-listassa, ohitus `#koti`) |
+| `/` | Etusivu: tulevat tapahtumat, otteluohjelma, tulokset, kauden tilastot ja kehitys, sarjataulukot | `index.html` (turnauspäivän automaattinen ohjaus `REDIRECTS`-listassa, ohitus `#koti`) |
 | `/talviliiga/` | Talviliiga 24.10.2026, oma tulospalvelusovellus | Google Sheets + Apps Script |
 | `/turnaukset/` | Joukkueen talviturnaukset ja niiden tulokset | `turnaukset/data.json` |
 | `/eerikkila/` | Huuhkajaliiga, kevät ja syksy | `eerikkila/data.json` |
 | `/piirisarja/` | Kesän piirisarjat, kaikki joukkueet | `piirisarja/data.json` |
-| `assets/` | Yhteinen ilme (`site.css`), otteluluettelot (`matches.js`), logot | |
+| `/kuva/` | Joukkuekuva SJK P2015 -kehyksellä (käsitellään vain puhelimessa) | |
+| `assets/` | Yhteinen ilme (`site.css`), otteluluettelot ja taulukot (`matches.js`), etusivun kooste (`home.js`), logot | |
 
 **Uusi oma turnaus:** kopioi `talviliiga/`-kansio uudella nimellä, tee sille oma Google Sheet ja Apps Script ja vaihda `common.js`:n `CONFIG`. Selaimen muisti on kansiokohtainen, joten turnaukset eivät sekoitu keskenään. Lisää turnaus etusivun kortteihin ja `turnaukset/data.json`-tiedostoon.
 

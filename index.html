@@ -20,7 +20,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=20261018b">
+<link rel="stylesheet" href="assets/site.css?v=20261018d">
 </head>
 <body>
 <header class="top">
@@ -55,8 +55,35 @@
     </div>
   </section>
 
+  <div class="cols">
+    <section class="sec" aria-labelledby="h-up">
+      <h2 id="h-up">Otteluohjelma</h2>
+      <div class="month" id="upcoming"><p class="note">Ladataan…</p></div>
+    </section>
+    <section class="sec" aria-labelledby="h-latest">
+      <h2 id="h-latest">Viimeisimmät tulokset</h2>
+      <div class="month" id="latest"><p class="note">Ladataan…</p></div>
+    </section>
+  </div>
+
+  <section class="sec" id="season" aria-labelledby="h-stats">
+    <div class="sec-head"><h2 id="h-stats">Kausi 2026 lukuina</h2><span class="meta">Piirisarjat ja Huuhkajaliiga</span></div>
+    <div class="kpis" id="kpis"></div>
+    <div id="teamtbl"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-trend">
+    <div class="sec-head"><h2 id="h-trend">Kauden kehitys</h2><span class="meta">Maaliero ottelu kerrallaan</span></div>
+    <div class="chart" id="chart"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-tables">
+    <h2 id="h-tables">Sarjataulukot</h2>
+    <div class="tables" id="tables"></div>
+  </section>
+
   <section class="sec" aria-labelledby="h-season">
-    <h2 id="h-season">Kausi</h2>
+    <h2 id="h-season">Osiot</h2>
     <div class="cards">
       <a class="card" href="turnaukset/">
         <span class="k">Talvi</span>
@@ -73,10 +100,17 @@
         <span class="n">Piirisarjat</span>
         <span class="d">Neljä joukkuetta: kulta, valkoinen, oranssi ja musta -15</span>
       </a>
+      <a class="card" href="kuva/">
+        <span class="k">Somekuva</span>
+        <span class="n">Joukkuekuva</span>
+        <span class="d">Oma kuva SJK P2015 -kehyksellä. Kuva pysyy puhelimessasi.</span>
+      </a>
     </div>
   </section>
 </main>
 
-<footer>Tulokset Palloliiton tulospalvelusta ja joukkueen omista turnauksista. Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
+<footer><span id="updated">Tulokset Palloliiton tulospalvelusta.</span> Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
+<script src="assets/matches.js?v=20261018d"></script>
+<script src="assets/home.js?v=20261018d"></script>
 </body>
 </html>

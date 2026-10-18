@@ -273,6 +273,257 @@
       ]
      ]
     }
+   ],
+   "tables": [
+    {
+     "name": "P12 Kolmonen, syksy",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "Virkiä/valkoinen",
+       "o": 11,
+       "v": 9,
+       "t": 0,
+       "h": 2,
+       "gf": 55,
+       "ga": 22,
+       "p": 27
+      },
+      {
+       "pos": 2,
+       "team": "FC KoMu/musta",
+       "o": 11,
+       "v": 8,
+       "t": 0,
+       "h": 3,
+       "gf": 37,
+       "ga": 31,
+       "p": 24
+      },
+      {
+       "pos": 3,
+       "team": "FC Kiisto",
+       "o": 11,
+       "v": 7,
+       "t": 1,
+       "h": 3,
+       "gf": 50,
+       "ga": 25,
+       "p": 22
+      },
+      {
+       "pos": 4,
+       "team": "Jalas/Valkoinen",
+       "o": 11,
+       "v": 6,
+       "t": 3,
+       "h": 2,
+       "gf": 47,
+       "ga": 33,
+       "p": 21
+      },
+      {
+       "pos": 5,
+       "team": "KuKu",
+       "o": 11,
+       "v": 6,
+       "t": 1,
+       "h": 4,
+       "gf": 45,
+       "ga": 42,
+       "p": 19
+      },
+      {
+       "pos": 6,
+       "team": "TePa",
+       "o": 11,
+       "v": 6,
+       "t": 1,
+       "h": 4,
+       "gf": 43,
+       "ga": 30,
+       "p": 19
+      },
+      {
+       "pos": 7,
+       "team": "BK-48 YJ4",
+       "o": 11,
+       "v": 5,
+       "t": 3,
+       "h": 3,
+       "gf": 40,
+       "ga": 26,
+       "p": 18
+      },
+      {
+       "pos": 8,
+       "team": "SJK-j/musta -15",
+       "o": 11,
+       "v": 6,
+       "t": 0,
+       "h": 5,
+       "gf": 62,
+       "ga": 50,
+       "p": 18
+      },
+      {
+       "pos": 9,
+       "team": "Sepsi-78/2",
+       "o": 11,
+       "v": 4,
+       "t": 1,
+       "h": 6,
+       "gf": 43,
+       "ga": 38,
+       "p": 13
+      },
+      {
+       "pos": 10,
+       "team": "IK/Punainen",
+       "o": 11,
+       "v": 1,
+       "t": 2,
+       "h": 8,
+       "gf": 20,
+       "ga": 54,
+       "p": 5
+      },
+      {
+       "pos": 11,
+       "team": "LUJA/Valkoinen",
+       "o": 11,
+       "v": 1,
+       "t": 0,
+       "h": 10,
+       "gf": 22,
+       "ga": 76,
+       "p": 3
+      },
+      {
+       "pos": 12,
+       "team": "APV",
+       "o": 11,
+       "v": 1,
+       "t": 0,
+       "h": 10,
+       "gf": 27,
+       "ga": 64,
+       "p": 3
+      }
+     ]
+    },
+    {
+     "name": "P12 Kakkonen, kevät",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P122!lanjp26/group/2/",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "Sepsi-78",
+       "o": 10,
+       "v": 8,
+       "t": 1,
+       "h": 1,
+       "gf": 47,
+       "ga": 22,
+       "p": 25
+      },
+      {
+       "pos": 2,
+       "team": "KANU/La-Ve YJ",
+       "o": 10,
+       "v": 7,
+       "t": 1,
+       "h": 2,
+       "gf": 38,
+       "ga": 37,
+       "p": 22
+      },
+      {
+       "pos": 3,
+       "team": "Sisu/punainen",
+       "o": 10,
+       "v": 4,
+       "t": 1,
+       "h": 5,
+       "gf": 42,
+       "ga": 31,
+       "p": 13
+      },
+      {
+       "pos": 4,
+       "team": "SJK-j/valkoinen",
+       "o": 10,
+       "v": 4,
+       "t": 1,
+       "h": 5,
+       "gf": 41,
+       "ga": 42,
+       "p": 13
+      },
+      {
+       "pos": 5,
+       "team": "SJK-j/musta -15",
+       "o": 10,
+       "v": 3,
+       "t": 0,
+       "h": 7,
+       "gf": 33,
+       "ga": 42,
+       "p": 9
+      },
+      {
+       "pos": 6,
+       "team": "Virkiä/valkoinen",
+       "o": 10,
+       "v": 2,
+       "t": 0,
+       "h": 8,
+       "gf": 21,
+       "ga": 48,
+       "p": 6
+      }
+     ]
+    },
+    {
+     "name": "P12 Karsinta Ykköseen",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "FC KoMu",
+       "o": 2,
+       "v": 2,
+       "t": 0,
+       "h": 0,
+       "gf": 12,
+       "ga": 3,
+       "p": 6
+      },
+      {
+       "pos": 2,
+       "team": "WFA YJ",
+       "o": 2,
+       "v": 1,
+       "t": 0,
+       "h": 1,
+       "gf": 11,
+       "ga": 7,
+       "p": 3
+      },
+      {
+       "pos": 3,
+       "team": "SJK-j/musta -15",
+       "o": 2,
+       "v": 0,
+       "t": 0,
+       "h": 2,
+       "gf": 3,
+       "ga": 16,
+       "p": 0
+      }
+     ]
+    }
    ]
   },
   {
@@ -521,7 +772,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "tables": []
   },
   {
    "id": "35140758",
@@ -769,7 +1021,8 @@
       ]
      ]
     }
-   ]
+   ],
+   "tables": []
   },
   {
    "id": "35138117",
@@ -1017,7 +1270,9 @@
       ]
      ]
     }
-   ]
+   ],
+   "tables": []
   }
- ]
+ ],
+ "noTables": "P11-tasosarjoista Palloliitto ei julkaise sarjataulukoita."
 }
