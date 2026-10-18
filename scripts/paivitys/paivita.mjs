@@ -22,7 +22,9 @@ const tila = { piirisarjat: {}, huuhkajaliiga: {}, turnaukset: {} };
 const varoita = msg => { varoitukset.push(msg); console.warn('VAROITUS:', msg); };
 
 const selain = await chromium.launch();
-const sivu = await selain.newPage({ locale: 'fi-FI' });
+// Englanninkielinen käyttöliittymä: ottelulistan tunniste on silloin "MATCH DETAILS" (sama kuin testatessa)
+const sivu = await selain.newPage({ locale: 'en-US', viewport: { width: 1300, height: 1000 },
+  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' });
 sivu.setDefaultTimeout(30000);
 
 /* ---------- Palloliiton tulospalvelu ---------- */
@@ -33,8 +35,11 @@ async function palloliittoTeksti(url, odota) {
   await sivu.waitForTimeout(800);
   return (await sivu.evaluate(() => document.querySelector('main')?.innerText || '')).split('\n');
 }
+const diagnoosi = {};
 async function palloliittoJoukkue(id) {
-  const tulokset = palloliittoOttelut(await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/results`, 'MATCH DETAILS'), cfg.kausi);
+  const raaka = await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/results`, 'MATCH DETAILS');
+  const tulokset = palloliittoOttelut(raaka, cfg.kausi);
+  if (!tulokset.length) diagnoosi[id] = raaka.map(s => s.trim()).filter(Boolean).slice(0, 40).join(' ¦ ').slice(0, 600);
   const tulevat = palloliittoOttelut(await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/fixture`, 'MATCH DETAILS'), cfg.kausi).filter(m => !m.score);
   return [...tulokset, ...tulevat];
 }
@@ -99,7 +104,9 @@ async function paivitaHuuhkajaliiga(hh) {
 
 /* ---------- Turnaukset ---------- */
 async function torneopal(url, suodatin) {
-  await sivu.goto(url, { waitUntil: 'domcontentloaded' });
+  // Avataan suoraan palvelimen tuottama seurasivu: turnauksen etusivu voi ohjata uudempaan turnaukseen
+  await sivu.goto('about:blank');
+  await sivu.goto(new URL('/taso/seurat.php', url).href, { waitUntil: 'domcontentloaded' });
   const raaka = await sivu.evaluate(async (suodatin) => {
     const re = new RegExp(suodatin, 'i');
     const base = location.origin + '/taso/seurat.php';
@@ -207,7 +214,7 @@ try {
 } finally { await selain.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
-fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/tila.json'), JSON.stringify({ ...tila, varoitukset }, null, 1) + '\n');
+fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/tila.json'), JSON.stringify({ ...tila, varoitukset, diagnoosi }, null, 1) + '\n');
 if (varoitukset.length) {
   fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/varoitukset.txt'), varoitukset.join('\n') + '\n');
   // Varoitukset eivät kaada ajoa, mutta GitHub näyttää ne ajon yhteenvedossa
