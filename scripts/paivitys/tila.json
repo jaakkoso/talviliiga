@@ -33,32 +33,41 @@
    "taulukko": 0
   }
  },
- "turnaukset": {
-  "jjk-mekipa-2026": {
-   "joukkueet": 2,
-   "ottelut": 10
-  },
-  "messucup-2026": {
-   "joukkueet": 4,
-   "ottelut": 22
-  },
-  "kapa-kevat-2026": {
-   "joukkueet": 4,
-   "ottelut": 25
-  }
- },
+ "turnaukset": {},
  "varoitukset": [
   "SJK-j/musta -15: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
   "SJK-j/kulta: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
   "SJK-j/valkoinen: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
-  "SJK-j/oranssi: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
-  "Turnaus vpscup-2026: page.evaluate: TypeError: Failed to fetch\n    at html (eval at evaluate (:234:30), <anonymous>:4:74)\n    at eval (eval at evaluate (:234:30), <anonymous>:8:76)\n    at async <anonymous>:260:30",
-  "Turnaus ilves-paasiainen-2026: page.goto: Navigation to \"about:blank\" is interrupted by another navigation to \"https://vpscup2026.torneopal.fi/taso/seurat.php\"\nCall log:\n  - navigating to \"about:blank\", waiting until \"load\"\n"
+  "SJK-j/oranssi: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty"
  ],
  "diagnoosi": {
-  "35138117": "",
-  "35138118": "",
-  "35138119": "",
-  "35140758": ""
+  "35138117": {
+   "url": "https://tulospalvelu.palloliitto.fi/team/35138117/results",
+   "otsikko": "Just a moment...",
+   "main": false,
+   "teksti": "tulospalvelu.palloliitto.fi Performing security verification This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot. Ray ID: a4c91140fdd321ab Performance and Security by Cloudflare Privacy",
+   "rest": []
+  },
+  "35138118": {
+   "url": "https://tulospalvelu.palloliitto.fi/team/35138118/results",
+   "otsikko": "Just a moment...",
+   "main": false,
+   "teksti": "tulospalvelu.palloliitto.fi Performing security verification This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot. Ray ID: a4c90d24dd8721ab Performance and Security by Cloudflare Privacy",
+   "rest": []
+  },
+  "35138119": {
+   "url": "https://tulospalvelu.palloliitto.fi/team/35138119/results",
+   "otsikko": "Just a moment...",
+   "main": false,
+   "teksti": "tulospalvelu.palloliitto.fi Performing security verification This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot. Ray ID: a4c90f380c4221ab Performance and Security by Cloudflare Privacy",
+   "rest": []
+  },
+  "35140758": {
+   "url": "https://tulospalvelu.palloliitto.fi/team/35140758/results",
+   "otsikko": "Just a moment...",
+   "main": false,
+   "teksti": "tulospalvelu.palloliitto.fi Performing security verification This website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot. Ray ID: a4c9103c881a21ab Performance and Security by Cloudflare Privacy",
+   "rest": []
+  }
  }
 }
