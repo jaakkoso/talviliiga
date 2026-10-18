@@ -145,7 +145,7 @@ function loginView() {
     <form id="pinForm" style="display:grid;gap:12px"><label for="pinIn" class="note" style="margin:0">PIN-koodi</label>
     <input id="pinIn" inputmode="numeric" autocomplete="one-time-code" maxlength="8" required>
     <button class="btn gold" type="submit">Kirjaudu</button></form>
-    ${Store.demo ? `<p class="note">${CONFIG.SHEET_ID ? 'Harjoitustila' : 'Esikatselu'}: ${MODE === 'tuomari' ? 'tuomarien PIN 1515' : MODE === 'kentta' ? 'kenttävastaavien PIN 5151' : 'mikä tahansa muu PIN kuin 1515 tai 5151'}. Tallennukset jäävät tähän selaimeen.</p>` : ''}</section>`;
+    ${Store.demo ? `<p class="note">${CONFIG.SHEET_ID ? 'Harjoitustila' : 'Esikatselu'}: mikä tahansa PIN-koodi käy. Tallennukset jäävät tähän selaimeen.</p>` : ''}</section>`;
 }
 
 /* ---- TUOMARI: lista ja ottelu ---- */
@@ -201,9 +201,9 @@ function refMatch() {
 
 /* ---- YLLÄPITO: testaus ennen turnausta ---- */
 const MANUAL_TESTS = [
-  'Kenttänäkymä (PIN 5151): + Maali → näkyy julkisella sivulla alle minuutissa',
+  'Kenttänäkymä: + Maali → näkyy julkisella sivulla alle minuutissa',
   'Kenttänäkymä: Kumoa viimeisin maali toimii',
-  'Tuomarinäkymä (PIN 1515): lopputuloksen vahvistus → sarjataulukko päivittyy',
+  'Tuomarinäkymä: lopputuloksen vahvistus → sarjataulukko päivittyy',
   'Lentotila päälle, kirjaa maali, lentotila pois → kirjaus lähtee (yläkulma: Kaikki tallennettu)',
   'Ylläpito: aikataulun siirto +5 min ja takaisin −5 min',
   'Ylläpito: ottelun peruminen ja palautus',
@@ -242,7 +242,7 @@ async function runTest() {
   const step = async (name, fn) => { const r = { name, ok: null, info: '' }; R.testRes.push(r); render(); const t0 = performance.now();
     try { const info = await fn(); r.ok = true; r.info = (info ? info + ' · ' : '') + Math.round(performance.now() - t0) + ' ms'; } catch (e) { r.ok = false; r.info = e.message || String(e); } render(); return r.ok; };
   await step('Tietojen luku taulukosta', async () => { const d = await Store.load(true); R.data = d; return `${d.matches.length} ottelua`; });
-  for (const [pin, role] of [['1515', 'tuomari'], ['5151', 'kentta']]) await step(`PIN ${pin} → ${role === 'kentta' ? 'kenttävastaava' : 'tuomari'}`, async () => { const r = await Store.send({ action: 'check' }, pin); if (r.role !== role) throw new Error('rooli: ' + (r.role || '?')); return 'ok'; });
+  await step('Toimitsijoiden PIN-koodit asetettu', async () => { const r = await Store.send({ action: 'roles' }, R.pin); const miss = [!r.tuomari && 'PIN_TUOMARI', !r.kentta && 'PIN_KENTTA'].filter(Boolean); if (miss.length) throw new Error('puuttuu tai alle 6 numeroa: ' + miss.join(', ')); if (!r.eri) throw new Error('tuomarin ja kenttävastaavan koodi on sama'); return 'ok'; });
   await step('Väärä PIN hylätään', async () => { try { await Store.send({ action: 'check' }, '0000'); } catch (e) { if (e.code === 'pin') return 'hylätty'; throw e; } if (Store.demo) return 'esikatselussa ei tarkisteta'; throw new Error('väärä PIN hyväksyttiin!'); });
   const value = 'testi-' + uid();
   const okW = await step('Tallennus palvelimelle', async () => { await Store.send({ action: 'ping', value }, R.pin); return 'ok'; });
@@ -357,7 +357,7 @@ document.addEventListener('submit', async e => {
   if (e.target.id === 'pinForm') {
     const pin = document.getElementById('pinIn').value.trim(); if (!pin) return;
     try {
-      const r = await Store.send({ action: 'check' }, pin), role = r.role || (r.admin ? 'admin' : 'tuomari');
+      const r = await Store.send({ action: 'check', want: MODE }, pin), role = r.role || (r.admin ? 'admin' : 'tuomari');
       if (role !== 'admin' && role !== MODE) { toast(role === 'tuomari' ? 'Tämä on tuomarien PIN. Avaa tuomarinäkymä.' : role === 'kentta' ? 'Tämä on kenttävastaavien PIN. Avaa kenttänäkymä.' : 'Tämä PIN ei käy tähän näkymään'); return; }
       R.pin = pin; ls.set(PIN_KEY, pin); await loadRoster(); load(); flush(); }
     catch (err) { toast(err.code === 'pin' ? 'Väärä PIN-koodi' : err.code === 'locked' ? 'Liian monta väärää yritystä. Odota 5 minuuttia.' : 'Ei yhteyttä. Yritä uudelleen.'); }

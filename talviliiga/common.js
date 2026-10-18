@@ -15,8 +15,8 @@ const CONFIG = {
 const DEMO_EVENT = {
   settings: {
     nimi: 'Talviliiga', alaotsikko: 'P12 · Kilpa & Haaste', paikka: 'Wallsport, Seinäjoki', paiva: '2026-10-24',
-    ottelun_kesto: '30', nayta_sarjataulukko: 'kyllä', nayta_pelinumerot: 'ei', tauko_teksti: 'kahvio aulassa', jarjestaja: 'SJK',
-    kahvio_teksti: 'Aulassa koko pelipäivän', kahvio_mobilepay: '87065', kahvio_saaja: 'SJK-juniorit ry, P2015-joukkue',
+    ottelun_kesto: '30', nayta_sarjataulukko: 'kyllä', nayta_pelinumerot: 'ei', tauko_teksti: 'kahvio palvelee', jarjestaja: 'SJK',
+    kahvio_teksti: 'Auki koko pelipäivän', kahvio_mobilepay: '87065', kahvio_saaja: 'SJK-juniorit ry, P2015-joukkue',
   },
   cafe: [
     { 'ryhmä': 'Juomat', tuote: 'Kahvi', hinta: '2' }, { 'ryhmä': 'Juomat', tuote: 'Pillimehu', hinta: '1' }, { 'ryhmä': 'Juomat', tuote: 'Kivennäisvesi', hinta: '2' }, { 'ryhmä': 'Juomat', tuote: 'Limsa', hinta: '3' },
@@ -315,8 +315,9 @@ const Store = {
   async send(op, pin) {
     if (this.demo) {
       const d = this.demoData();
-      if (op.action === 'check') { // esikatselu: tuomari 1515, kenttävastaava 5151, muu PIN = ylläpitäjä
-        const role = pin === '1515' ? 'tuomari' : pin === '5151' ? 'kentta' : pin ? 'admin' : '';
+      if (op.action === 'roles') return { ok: true, tuomari: true, kentta: true, eri: true };
+      if (op.action === 'check') { // harjoitus/esikatselu: mikä tahansa PIN kelpaa sen sivun rooliin, jolta kirjaudutaan
+        const role = pin ? (['admin', 'tuomari', 'kentta'].includes(op.want) ? op.want : 'tuomari') : '';
         if (!role) { const e = new Error('pin'); e.code = 'pin'; throw e; }
         return { ok: true, role, admin: role === 'admin' };
       }
