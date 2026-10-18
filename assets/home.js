@@ -67,18 +67,18 @@
     // Ottelutiedoista (Palloliitto): käännetyt pelit, maalien ajoitus ja maalintekijöiden määrä
     const withDet = played.filter(x => x.m.pid && det[x.m.pid] && x.m.score && x.m.score.length === 1);
     const withGoals = withDet.filter(x => (det[x.m.pid].goals || []).length);
-    let comeback = 0; const bins = [0, 0, 0, 0, 0, 0, 0], scorers = new Set(); let own = 0;
+    let comeback = 0, behind = 0, htKnown = 0; const bins = [0, 0, 0, 0, 0, 0, 0], scorers = new Set(); let own = 0;
     for (const x of withDet) {
       const dt = det[x.m.pid], side = x.own === x.m.home ? 'h' : 'a';
       if (dt.ht && x.m.score && x.m.score.length === 1) {
         const [hh, ha] = dt.ht.split('–').map(Number), [fh, fa] = x.m.score[0];
         const htF = side === 'h' ? hh : ha, htA = side === 'h' ? ha : hh, f = side === 'h' ? fh : fa, a = side === 'h' ? fa : fh;
-        if (htF < htA && f > a) comeback++;
+        htKnown++; if (htF < htA) { behind++; if (f > a) comeback++; }
       }
       for (const g of dt.goals || []) if (g.side === side) { own++; bins[Math.min(6, Math.floor((Math.max(1, g.min) - 1) / 10))]++; if (g.no != null) scorers.add(`${x.own}#${g.no}`); }
     }
     if (withDet.length) {
-      F.push({ k: 'Käännetyt pelit', v: comeback, d: 'tappiolla puoliajalla, voitto lopussa' });
+      if (htKnown) F.push({ k: 'Käännetyt pelit', v: `${comeback} / ${behind}`, d: `puoliajalla tappiolla ${behind} kertaa, näistä ${comeback} voitoksi · ${htKnown} ottelua, joista puoliaikatulos on tiedossa` });
       const lab = ['1–10', '11–20', '21–30', '31–40', '41–50', '51–60', '61–70'], mx = Math.max(...bins);
       F.push({ k: 'Maalit minuuteittain', v: `${lab[bins.indexOf(mx)]}'`, d: `eniten omia maaleja · 10 min jaksot`, spark: bins.map((b, i) => `<span style="height:${mx ? Math.max(6, Math.round(100 * b / mx)) : 6}%" title="${lab[i]}': ${b}"></span>`).join('') });
       F.push({ k: 'Eri maalintekijöitä', v: scorers.size, d: `pelinumeroa teki maalin · ${own} maalia ${withGoals.length} ottelussa` });
