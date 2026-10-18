@@ -24,6 +24,8 @@ jobs:
         working-directory: scripts/paivitys
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -52,7 +54,13 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add piirisarja/data.json eerikkila/data.json turnaukset/data.json scripts/paivitys/tila.json
           git commit -m "Tulokset päivitetty automaattisesti $(TZ=Europe/Helsinki date '+%-d.%-m.%Y klo %H.%M')"
-          git push
+          # Jos sivustoon on tehty muutoksia ajon aikana, haetaan ne ensin ja yritetään uudelleen
+          for i in 1 2 3; do
+            if git push; then break; fi
+            echo "Tallennus törmäsi samanaikaiseen muutokseen, yritetään uudelleen ($i)"
+            git pull --rebase -X theirs origin main || { git rebase --abort; git pull --rebase origin main; }
+            sleep 5
+          done
           # GitHub Actionsin omat pushit eivät aina käynnistä sivuston julkaisua, joten pyydetään se erikseen
           gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || echo "Sivuston julkaisupyyntö epäonnistui, julkaisu tapahtuu seuraavan muutoksen yhteydessä."
         env:
