@@ -1,0 +1,58 @@
+{
+ "piirisarjat": {
+  "SJK-j/musta -15": {
+   "ottelut": 0,
+   "pelatut": 0,
+   "taulukot": 3
+  },
+  "SJK-j/kulta": {
+   "ottelut": 0,
+   "pelatut": 0,
+   "taulukot": 0
+  },
+  "SJK-j/valkoinen": {
+   "ottelut": 0,
+   "pelatut": 0,
+   "taulukot": 0
+  },
+  "SJK-j/oranssi": {
+   "ottelut": 0,
+   "pelatut": 0,
+   "taulukot": 0
+  }
+ },
+ "huuhkajaliiga": {
+  "syksy-2026": {
+   "haetut": 0,
+   "pelatut": 0,
+   "taulukko": 0
+  },
+  "kevat-2026": {
+   "haetut": 0,
+   "pelatut": 0,
+   "taulukko": 0
+  }
+ },
+ "turnaukset": {
+  "jjk-mekipa-2026": {
+   "joukkueet": 2,
+   "ottelut": 10
+  },
+  "messucup-2026": {
+   "joukkueet": 4,
+   "ottelut": 22
+  },
+  "kapa-kevat-2026": {
+   "joukkueet": 4,
+   "ottelut": 25
+  }
+ },
+ "varoitukset": [
+  "SJK-j/musta -15: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
+  "SJK-j/kulta: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
+  "SJK-j/valkoinen: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
+  "SJK-j/oranssi: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
+  "Turnaus vpscup-2026: page.evaluate: TypeError: Failed to fetch\n    at html (eval at evaluate (:234:30), <anonymous>:4:74)\n    at eval (eval at evaluate (:234:30), <anonymous>:8:76)\n    at async <anonymous>:260:30",
+  "Turnaus ilves-paasiainen-2026: page.goto: Navigation to \"https://paasiaisturnaus.torneopal.fi/\" is interrupted by another navigation to \"https://vpscup2026.torneopal.fi/\"\nCall log:\n  - navigating to \"https://paasiaisturnaus.torneopal.fi/\", waiting until \"domcontentloaded\"\n"
+ ]
+}
