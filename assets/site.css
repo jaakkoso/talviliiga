@@ -242,3 +242,14 @@ button.match .tm>span{display:block}
 .tl li.a .cell{grid-column:2;padding-left:14px}
 .tl .cell i{font-style:normal;color:var(--muted);min-width:2.2em}
 .tl li.h .cell i{text-align:right}
+
+/* Maalit: yksi rivi = minuutti, joukkue, numero, tilanne */
+.gl-list{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.gl-list li{display:grid;grid-template-columns:3em minmax(0,1fr) auto 3.2em;gap:10px;align-items:center;padding:7px 10px;border-radius:8px;font-variant-numeric:tabular-nums;font-size:.95rem}
+.gl-list li:nth-child(odd){background:rgba(33,30,30,.04)}
+.gl-list .mn{font-weight:700}
+.gl-list .tm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--muted)}
+.gl-list li.me .tm{color:var(--ink);font-weight:600}
+.gl-list .no{font-weight:800}
+.gl-list .st{text-align:right;font-family:var(--display);font-weight:800;font-size:1.05rem}
+.gl-list .no{min-width:3.4em;text-align:right}

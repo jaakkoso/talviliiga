@@ -65,9 +65,12 @@ const P15 = (() => {
     const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
     let goals = '';
     if (det && det.goals && det.goals.length) {
-      goals = `<h3>Maalit</h3><ol class="tl">${det.goals.map(g => {
-        const who = g.og ? 'oma maali' : g.no != null ? '#' + g.no : 'maali';
-        return `<li class="${g.side}"><span class="cell">${g.side === 'h' ? `<b>${who}</b><i>${g.min}'</i>` : `<i>${g.min}'</i><b>${who}</b>`}</span></li>`;
+      let h = 0, a = 0;
+      goals = `<h3>Maalit</h3><ol class="gl-list">${det.goals.map(g => {
+        if (g.side === 'h') h++; else a++;
+        const team = g.side === 'h' ? m.home : m.away;
+        const who = g.og ? 'oma maali' : g.no != null ? '#' + g.no : '–';
+        return `<li class="${isOwn(team) ? 'me' : ''}"><span class="mn">${g.min}'</span><span class="tm">${isOwn(team) ? 'SJK' : esc(team)}</span><span class="no">${who}</span><span class="st">${h}–${a}</span></li>`;
       }).join('')}</ol><p class="tl-note">Maalintekijät pelinumeroina. Nimiä ei näytetä.</p>`;
     } else if (m.score) goals = `<p class="note">Maalien tarkempia tietoja ei ole saatavilla tästä ottelusta.</p>`;
     const link = m.pid ? `https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap` : opt.link;
