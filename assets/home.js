@@ -79,7 +79,6 @@
     }
     if (withDet.length) {
       const basis = n => `Vain ${n} ottelusta, lähinnä P12-sarjoista. Muista peleistä tieto puuttuu.`;
-      if (htKnown) F.push({ k: 'Käännetyt pelit', v: `${comeback} / ${behind}`, d: `puoliajalla tappiolla ${behind} kertaa, näistä ${comeback} voitoksi`, n: basis(htKnown) });
       const lab = ['1–10', '11–20', '21–30', '31–40', '41–50', '51–60', '61–70'], mx = Math.max(...bins);
       F.push({ k: 'Maalit minuuteittain', v: `${lab[bins.indexOf(mx)]}'`, d: `eniten omia maaleja · 10 min jaksot`, n: basis(withGoals.length), spark: bins.map((b, i) => `<span style="height:${mx ? Math.max(6, Math.round(100 * b / mx)) : 6}%" title="${lab[i]}': ${b}"></span>`).join('') });
       F.push({ k: 'Eri maalintekijöitä', v: scorers.size, d: `pelinumeroa teki maalin, yhteensä ${own} maalia`, n: basis(withGoals.length) });
