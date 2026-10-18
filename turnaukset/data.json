@@ -61,12 +61,17 @@
    "teams": [
     {
      "name": "SJK",
-     "label": "Kilpa",
-     "level": "P11 (2015) Kilpa",
+     "label": "Otteluohjelma",
+     "level": "Otteluohjelma",
+     "place": {
+      "pos": 6,
+      "of": 6
+     },
      "matches": [
       {
        "date": "2026-09-19",
-       "series": "Kilpa",
+       "time": "09.00",
+       "series": "Otteluohjelma",
        "home": "JJK",
        "away": "SJK",
        "score": [
@@ -78,7 +83,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Kilpa",
+       "time": "11.40",
+       "series": "Otteluohjelma",
        "home": "KuPS musta",
        "away": "SJK",
        "score": [
@@ -90,7 +96,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Kilpa",
+       "time": "14.20",
+       "series": "Otteluohjelma",
        "home": "Ilves keltainen",
        "away": "SJK",
        "score": [
@@ -102,7 +109,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Kilpa",
+       "time": "16.20",
+       "series": "Otteluohjelma",
        "home": "SJK",
        "away": "HoDy",
        "score": [
@@ -114,7 +122,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Kilpa",
+       "time": "17.40",
+       "series": "Otteluohjelma",
        "home": "SJK",
        "away": "Yilves",
        "score": [
@@ -124,20 +133,21 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 6,
-      "of": 6
-     }
+     ]
     },
     {
      "name": "SJK",
-     "label": "Haaste",
-     "level": "P11 (2015) Haaste",
+     "label": "Otteluohjelma",
+     "level": "Otteluohjelma",
+     "place": {
+      "pos": 6,
+      "of": 6
+     },
      "matches": [
       {
        "date": "2026-09-19",
-       "series": "Haaste",
+       "time": "09.00",
+       "series": "Otteluohjelma",
        "home": "SJK",
        "away": "ViPa",
        "score": [
@@ -149,7 +159,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Haaste",
+       "time": "10.20",
+       "series": "Otteluohjelma",
        "home": "KuPS keltainen",
        "away": "SJK",
        "score": [
@@ -161,7 +172,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Haaste",
+       "time": "12.20",
+       "series": "Otteluohjelma",
        "home": "Fc Lahti/4",
        "away": "SJK",
        "score": [
@@ -173,7 +185,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Haaste",
+       "time": "13.40",
+       "series": "Otteluohjelma",
        "home": "SJK",
        "away": "JJK",
        "score": [
@@ -185,7 +198,8 @@
       },
       {
        "date": "2026-09-19",
-       "series": "Haaste",
+       "time": "15.00",
+       "series": "Otteluohjelma",
        "home": "SJK",
        "away": "Yilves/punainen",
        "score": [
@@ -195,11 +209,7 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 6,
-      "of": 6
-     }
+     ]
     }
    ]
   },
@@ -214,6 +224,10 @@
      "name": "SJK-j/Kulta",
      "label": "Kulta",
      "level": "P11",
+     "place": {
+      "pos": 3,
+      "of": 14
+     },
      "matches": [
       {
        "date": "2026-09-05",
@@ -287,16 +301,16 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 3,
-      "of": 14
-     }
+     ]
     },
     {
      "name": "SJK-j/Musta",
      "label": "Musta",
      "level": "P11",
+     "place": {
+      "pos": 5,
+      "of": 14
+     },
      "matches": [
       {
        "date": "2026-09-05",
@@ -370,16 +384,16 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 5,
-      "of": 14
-     }
+     ]
     },
     {
      "name": "SJK-j/Oranssi",
      "label": "Oranssi",
      "level": "P11",
+     "place": {
+      "pos": 2,
+      "of": 14
+     },
      "matches": [
       {
        "date": "2026-09-05",
@@ -441,16 +455,16 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 2,
-      "of": 14
-     }
+     ]
     },
     {
      "name": "SJK-j/Valkoinen",
      "label": "Valkoinen",
      "level": "P11",
+     "place": {
+      "pos": 7,
+      "of": 14
+     },
      "matches": [
       {
        "date": "2026-09-05",
@@ -512,11 +526,7 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 7,
-      "of": 14
-     }
+     ]
     }
    ]
   },
@@ -531,10 +541,14 @@
      "name": "SJK-j/ Musta",
      "label": "Musta",
      "level": "E11 Kilpa 8v8",
+     "place": {
+      "pos": 1,
+      "of": 32
+     },
      "matches": [
       {
        "date": "2026-05-23",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "SJK-j/ Musta",
        "away": "JäPS/Sininen",
        "score": [
@@ -546,7 +560,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "GrIFK/ Bayern Munchen",
        "away": "SJK-j/ Musta",
        "score": [
@@ -558,7 +572,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "HJK/Munkka 2015 Sininen",
        "away": "SJK-j/ Musta",
        "score": [
@@ -570,7 +584,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "TuNL/yj",
        "away": "SJK-j/ Musta",
        "score": [
@@ -583,7 +597,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "EPS/2",
        "away": "SJK-j/ Musta",
        "score": [
@@ -595,7 +609,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "SJK-j/ Musta",
        "away": "IF Gnistan 2",
        "score": [
@@ -605,20 +619,20 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 1,
-      "of": 32
-     }
+     ]
     },
     {
      "name": "SJK-j",
      "label": "SJK-j",
      "level": "E11 Haaste 8v8",
+     "place": {
+      "pos": 25,
+      "of": 28
+     },
      "matches": [
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "Harku United FC",
        "away": "SJK-j",
        "score": [
@@ -630,7 +644,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j",
        "away": "TuPS/KP-75 YJ5",
        "score": [
@@ -642,7 +656,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "Kuopion Elo / Valkoinen",
        "away": "SJK-j",
        "score": [
@@ -654,7 +668,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j",
        "away": "EPS/3",
        "score": [
@@ -666,7 +680,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j",
        "away": "NJS/Sininen",
        "score": [
@@ -678,7 +692,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "MPS/valkoinen",
        "away": "SJK-j",
        "score": [
@@ -690,7 +704,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j",
        "away": "HJK Töölö 2015 sininen",
        "score": [
@@ -700,20 +714,20 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 25,
-      "of": 28
-     }
+     ]
     },
     {
      "name": "SJK-j/ Kulta",
      "label": "Kulta",
      "level": "E11 Haaste 8v8",
+     "place": {
+      "pos": 12,
+      "of": 28
+     },
      "matches": [
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j/ Kulta",
        "away": "ÅIFK Gul",
        "score": [
@@ -725,7 +739,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "EsPa/2",
        "away": "SJK-j/ Kulta",
        "score": [
@@ -737,7 +751,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "HJK/Kannelmäki 2015 valkoinen",
        "away": "SJK-j/ Kulta",
        "score": [
@@ -749,7 +763,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j/ Kulta",
        "away": "FC Lahti/ 1 Valkoinen",
        "score": [
@@ -761,7 +775,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "EPS/3",
        "away": "SJK-j/ Kulta",
        "score": [
@@ -773,7 +787,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Haaste",
+       "series": "P11H",
        "home": "SJK-j/ Kulta",
        "away": "FC Kirkkonummi/ Black",
        "score": [
@@ -783,20 +797,20 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 12,
-      "of": 28
-     }
+     ]
     },
     {
      "name": "SJK-j/ Valkoinen",
      "label": "Valkoinen",
      "level": "E11 Harraste 8v8",
+     "place": {
+      "pos": 25,
+      "of": 26
+     },
      "matches": [
       {
        "date": "2026-05-23",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "HPS/Valkoinen",
        "away": "SJK-j/ Valkoinen",
        "score": [
@@ -808,7 +822,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "SJK-j/ Valkoinen",
        "away": "KäPa/City 2 White",
        "score": [
@@ -820,7 +834,7 @@
       },
       {
        "date": "2026-05-23",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "SJK-j/ Valkoinen",
        "away": "EsPa/3",
        "score": [
@@ -832,7 +846,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "SJK-j/ Valkoinen",
        "away": "HJK Töölö 2015 Keltasininen",
        "score": [
@@ -844,7 +858,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "IF Gnistan/sininen",
        "away": "SJK-j/ Valkoinen",
        "score": [
@@ -856,7 +870,7 @@
       },
       {
        "date": "2026-05-24",
-       "series": "Harraste",
+       "series": "P11R",
        "home": "FC Honka/T2015 Pre-akatemia K",
        "away": "SJK-j/ Valkoinen",
        "score": [
@@ -866,11 +880,7 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 25,
-      "of": 26
-     }
+     ]
     }
    ]
   },
@@ -1131,10 +1141,14 @@
      "name": "SJK-j",
      "label": "SJK-j",
      "level": "P11 Kilpa",
+     "place": {
+      "pos": 2,
+      "of": 6
+     },
      "matches": [
       {
        "date": "2026-04-03",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "Ilves/vihreä",
        "away": "SJK-j",
        "score": [
@@ -1146,7 +1160,7 @@
       },
       {
        "date": "2026-04-03",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "SJK-j",
        "away": "Ilves T11",
        "score": [
@@ -1158,7 +1172,7 @@
       },
       {
        "date": "2026-04-03",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "SJK-j",
        "away": "YIlves/punainen",
        "score": [
@@ -1170,7 +1184,7 @@
       },
       {
        "date": "2026-04-04",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "PaRi",
        "away": "SJK-j",
        "score": [
@@ -1182,7 +1196,7 @@
       },
       {
        "date": "2026-04-04",
-       "series": "Kilpa",
+       "series": "P11K",
        "home": "SJK-j",
        "away": "JJK-Sininen",
        "score": [
@@ -1192,11 +1206,7 @@
         ]
        ]
       }
-     ],
-     "place": {
-      "pos": 2,
-      "of": 6
-     }
+     ]
     }
    ]
   }
