@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title data-suffix="· Joukkuekuva">Joukkuekuva</title>
+<meta name="description" content="Tee joukkuekuvasta turnauksen kehyksellä varustettu somekuva.">
+<meta name="theme-color" content="#211e1e">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="logo-180.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="style.css?v=20261018a">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="logo-180.png" alt="Logo" width="56" height="56">
+    <div class="t">
+      <div class="eyebrow" id="evSub"></div>
+      <h1 id="evName">Joukkuekuva</h1>
+      <div class="sub">Joukkuekuva turnauskehyksellä</div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap kuva">
+  <section class="card kv-step">
+    <label class="kv-pick btn gold" for="photo">Valitse tai ota kuva</label>
+    <input id="photo" type="file" accept="image/*" hidden>
+    <div class="kv-row">
+      <label class="sel"><span>Joukkue</span><select id="team"></select></label>
+      <div class="tabs" role="tablist" id="fmt">
+        <button role="tab" data-fmt="post" aria-selected="true">Postaus 4:5</button>
+        <button role="tab" data-fmt="story" aria-selected="false">Tarina 9:16</button>
+      </div>
+    </div>
+    <label class="kv-text">Oma teksti (valinnainen)
+      <input id="txt" maxlength="32" placeholder="esim. Hieno turnauspäivä!" autocomplete="off">
+    </label>
+  </section>
+
+  <section class="kv-stage" id="stage">
+    <canvas id="cv" width="1080" height="1350" aria-label="Esikatselu"></canvas>
+    <div class="kv-empty" id="empty">Valitse kuva, niin kehys tulee sen päälle.</div>
+  </section>
+
+  <section class="card kv-step" id="adjust" hidden>
+    <label class="kv-zoom">Rajaus: siirrä kuvaa sormella, suurenna liukusäätimellä
+      <input id="zoom" type="range" min="1" max="3" step="0.01" value="1">
+    </label>
+    <div class="kv-actions">
+      <button class="btn gold" id="share">Jaa kuva</button>
+      <button class="btn ghost" id="save">Tallenna kuva</button>
+    </div>
+  </section>
+
+  <p class="note kv-privacy">Kuva käsitellään vain omassa puhelimessasi. Sitä ei lähetetä eikä tallenneta minnekään. Kysythän kuvassa olevien pelaajien huoltajilta luvan ennen julkaisua.</p>
+</main>
+
+<footer><a href="./">← Takaisin tulospalveluun</a></footer>
+
+<script src="common.js?v=20261018a"></script>
+<script src="kuva.js?v=20261018a"></script>
+</body>
+</html>

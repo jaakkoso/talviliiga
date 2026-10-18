@@ -1,42 +1,12 @@
-# P2015 tulokset
-
-Osoite: **https://p2015-tulokset.sjk-juniorit.fi/**
-
-| Polku | Sisältö | Data |
-|---|---|---|
-| `/` | Etusivu: tulevat tapahtumat, otteluohjelma, tulokset, kauden tilastot ja kehitys, sarjataulukot | `index.html` (turnauspäivän automaattinen ohjaus `REDIRECTS`-listassa, ohitus `#koti`) |
-| `/talviliiga/` | Talviliiga 24.10.2026, oma tulospalvelusovellus | Google Sheets + Apps Script |
-| `/turnaukset/` | Joukkueen talviturnaukset ja niiden tulokset | `turnaukset/data.json` |
-| `/eerikkila/` | Huuhkajaliiga, kevät ja syksy | `eerikkila/data.json` |
-| `/piirisarja/` | Kesän piirisarjat, kaikki joukkueet | `piirisarja/data.json` |
-| `/kuva/` | Joukkuekuva SJK P2015 -kehyksellä (käsitellään vain puhelimessa) | |
-| `assets/` | Yhteinen ilme (`site.css`), otteluluettelot ja taulukot (`matches.js`), etusivun kooste (`home.js`), logot | |
-
-**Uusi oma turnaus:** kopioi `talviliiga/`-kansio uudella nimellä, tee sille oma Google Sheet ja Apps Script ja vaihda `common.js`:n `CONFIG`. Selaimen muisti on kansiokohtainen, joten turnaukset eivät sekoitu keskenään. Lisää turnaus etusivun kortteihin ja `turnaukset/data.json`-tiedostoon.
-
-**Ei henkilötietoja:** sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. Pidä se niin, koska palvelu on seuran osoitteessa.
-
-## Automaattinen tulospäivitys
-
-GitHub Actions (`.github/workflows/paivita-tulokset.yml`) hakee tulokset kahden tunnin välein klo 7–23 ja julkaisee muutokset. Käsin: **Actions › Päivitä tulokset › Run workflow**.
-
-- Lähteet ovat tiedostossa `config/lahteet.json`: piirisarjajoukkueet (Palloliiton joukkue-id ja sarjataulukoiden osoitteet), Huuhkajaliiga ja turnaukset.
-- **Uusi turnaus:** lisää `config/lahteet.json`-tiedoston `turnaukset`-listaan id, tyyppi (`torneopal` tai `gameresultsonline`) ja tulossivun osoite, sekä `turnaukset/data.json`-tiedostoon tapahtuma samalla id:llä (nimi, päivät, paikka, `teams: []`). Ottelut, tulokset ja sijoitukset haetaan automaattisesti.
-- Haku ei koskaan poista jo tiedossa olevia pelattuja otteluita. Jos lähde ei vastaa, vanha data säilyy ja ajon yhteenvetoon tulee varoitus.
-- **Palloliiton tulospalvelu** estää GitHubin palvelimet (Cloudflare), joten piirisarjat, Huuhkajaliiga ja ottelutiedot haetaan kotikoneelta: `scripts/kotikone/asenna.sh` (ajastus kahden tunnin välein, loki `~/Library/Logs/p2015-tulospaivitys.log`). GitHub Actions hakee turnaukset.
-- Hakuohjelma: `scripts/paivitys/` (`node testi.mjs` testaa jäsennyksen, `node paivita.mjs` hakee).
-
----
-
-## Turnauksen tulospalvelu (`talviliiga/`)
+# Turnauksen tulospalvelu
 
 Junioriturnauksen tulospalvelu, jota voi käyttää uudelleen seuraavissa turnauksissa. Toimii puhelimella, iPadilla ja koneella. Ilmainen: GitHub Pages + Google Sheets + Google Apps Script. **Kaikki turnauskohtainen tieto on Google Sheetissä**, joten koodiin ei tarvitse koskea uutta turnausta varten.
 
 | Osoite | Kenelle | Mitä |
 |---|---|---|
 | `…/` | Kaikki | Ohjelma, live-tulokset, sarjataulukot, oman joukkueen suodatus, jaa tulos -kuva |
-| `…/kentta.html` | Kenttävastaavat (PIN 5151) | Maalit reaaliajassa yhdellä napautuksella, numero jälkikäteen |
-| `…/tuomari.html` | Tuomarit (PIN 1515) | Lopputuloksen vahvistus pelin jälkeen, maalit valinnaisesti |
+| `…/kentta.html` | Kenttävastaavat (oma PIN) | Maalit reaaliajassa yhdellä napautuksella, numero jälkikäteen |
+| `…/tuomari.html` | Tuomarit (oma PIN) | Lopputuloksen vahvistus pelin jälkeen, maalit valinnaisesti |
 | `…/kuva.html` | Kaikki | Joukkuekuva turnauskehyksellä somejakoon (kuva käsitellään vain puhelimessa) |
 | `…/yllapito.html` | Ylläpitäjä (ADMIN_PIN) | Tilanne, korjaukset, peruminen, aikataulun siirto, sarjataulukon käsikorjaus, **testaus** |
 
@@ -60,7 +30,7 @@ Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä vo
 ### 1. Google Sheet ja Apps Script
 1. Luo uusi Google Sheet.
 2. **Laajennukset → Apps Script**, liitä `apps-script/Code.gs`, tallenna.
-3. **Projektin asetukset → Skriptin ominaisuudet** → lisää `ADMIN_PIN` = vain ylläpitäjän tiedossa oleva PIN, **vähintään 6 numeroa**. Tuomarien PIN on **1515** ja kenttävastaavien **5151** (vaihdettavissa ominaisuuksilla `PIN_TUOMARI` ja `PIN_KENTTA`).
+3. **Projektin asetukset → Skriptin ominaisuudet** → lisää `ADMIN_PIN` (ylläpitäjä), `PIN_TUOMARI` ja `PIN_KENTTA`, kukin **6–8 numeroa** ja kaikki eri koodeja. Koodeja ei kirjoiteta koodiin, tähän tiedostoon eikä taulukkoon; toimitsijat saavat omansa toimitsijakortista. Vaihda toimitsijoiden koodit joka turnaukseen.
 4. Valitse funktio `setup` ja **Suorita** (hyväksy oikeudet). Syntyy kaikki välilehdet esimerkkidatalla.
 5. **Ota käyttöön → Uusi käyttöönotto → Verkkosovellus**: *Suorita käyttäjänä: Minä*, *Pääsy: Kaikki*. Kopioi `…/exec`-osoite.
 6. Taulukon **Jaa** → *Kuka tahansa, jolla on linkki: Katselija*.
@@ -68,7 +38,7 @@ Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä vo
 ### 2. Sivusto
 1. `common.js` → `CONFIG`: `SHEET_ID` (taulukon osoitteesta `/d/` ja `/edit` välistä) ja `API_URL` (kohdan 1.5 osoite).
 2. Vaihda tarvittaessa logo: `logo-180.png`, `logo-512.png`, `icon-192.png`, `icon-512.png`.
-3. Vie tiedostot GitHub-repoon omaan kansioonsa (esim. `talviliiga/`) → **Settings → Pages** (branch `main`, kansio `/`). Turnaus näkyy osoitteessa `p2015-tulokset.sjk-juniorit.fi/<kansio>/`.
+3. Vie tiedostot GitHub-repoon → **Settings → Pages** (branch `main`, kansio `/`).
 
 ## Testaus ennen turnausta
 
@@ -96,7 +66,7 @@ Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä vo
 Julkisen sivun alalaidassa on linkit tuomari- ja kenttänäkymiin (PIN-suojattuja). Ylläpidon osoitetta ei linkitetä mihinkään.
 
 ## Ennen julkaisua: tarkistuslista
-- [ ] `ADMIN_PIN` vähintään 6 numeroa, vain ylläpitäjällä
+- [ ] `ADMIN_PIN`, `PIN_TUOMARI` ja `PIN_KENTTA` asetettu (6–8 numeroa, eri koodit); Testi-välilehti tarkistaa tämän
 - [ ] Taulukon jakoasetus *Katselija*; muokkausoikeus vain ylläpitäjällä
 - [ ] Taulukossa ei muuta kuin turnauksen tiedot (taulukko on luettavissa linkin kautta)
 - [ ] Apps Script: **Hallinnoi käyttöönottoja → Muokkaa → Uusi versio** aina koodimuutoksen jälkeen
@@ -136,7 +106,7 @@ Kaikki uudet ominaisuudet tehdään valinnaisiksi Asetukset-välilehdeltä, jott
 
 ## Tietoturva lyhyesti
 - PIN-koodit tarkistetaan palvelimella. Selaimen koodista niitä ei voi lukea.
-- 25 väärää PIN-yritystä 10 minuutissa lukitsee kirjautumiset 5 minuutiksi, ja ylläpitäjä saa sähköpostin.
+- Väärät PIN-yritykset lasketaan, ja yli 25 yritystä 10 minuutissa lähettää ylläpitäjälle sähköpostin. Kirjautumisia ei lukita, jottei häirikkö voi estää toimitsijoita.
 - Kirjausnäkymät eivät voi muuttaa aikataulua, perua otteluita tai korjata taulukkoa (vaatii ylläpitäjän PIN-koodin).
 - Tallennettava teksti rajataan pituudeltaan, ja taulukkokaavat estetään. Sivulle tulostetaan data suojattuna (ei HTML-injektiota).
 - Ei nimiä, ei evästeitä, ei seurantaa. Pelaajista tallennetaan vain pelinumerot.
