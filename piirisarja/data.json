@@ -1,0 +1,1023 @@
+{
+ "season": 2026,
+ "updated": "2026-10-18",
+ "source": "Palloliiton tulospalvelu",
+ "teams": [
+  {
+   "id": "35138118",
+   "name": "SJK-j/musta -15",
+   "level": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "taso": "https://tulospalvelu.palloliitto.fi/team/35138118/results",
+   "matches": [
+    {
+     "date": "2026-09-28",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "APV",
+     "score": [
+      [
+       11,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-27",
+     "series": "P12 KOLMONEN",
+     "home": "LUJA/Valkoinen",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       3,
+       9
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-15",
+     "series": "P12 KOLMONEN",
+     "home": "KuKu",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       5,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-08",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "Sepsi-78/2",
+     "score": [
+      [
+       1,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-31",
+     "series": "P12 KOLMONEN",
+     "home": "IK/Punainen",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       3,
+       9
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-25",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "Virkiä/valkoinen",
+     "score": [
+      [
+       1,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "FC KoMu/musta",
+     "score": [
+      [
+       2,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-16",
+     "series": "P12 KOLMONEN",
+     "home": "FC Kiisto",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       11,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-07",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "TePa",
+     "score": [
+      [
+       8,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-28",
+     "series": "P12 KOLMONEN",
+     "home": "Jalas/Valkoinen",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       3,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-24",
+     "series": "P12 KOLMONEN",
+     "home": "SJK-j/musta -15",
+     "away": "BK-48 YJ4",
+     "score": [
+      [
+       4,
+       7
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-24",
+     "series": "P12 KAKKONEN",
+     "home": "Sisu/punainen",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       3,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-12",
+     "series": "P12 KAKKONEN",
+     "home": "SJK-j/musta -15",
+     "away": "KANU/La-Ve YJ",
+     "score": [
+      [
+       2,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-10",
+     "series": "P12 KAKKONEN",
+     "home": "SJK-j/musta -15",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       5,
+       9
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-06",
+     "series": "P12 KAKKONEN",
+     "home": "Sepsi-78",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       8,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-01",
+     "series": "P12 KAKKONEN",
+     "home": "SJK-j/musta -15",
+     "away": "Virkiä/valkoinen",
+     "score": [
+      [
+       2,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-31",
+     "series": "P12 KAKKONEN",
+     "home": "SJK-j/musta -15",
+     "away": "Sisu/punainen",
+     "score": [
+      [
+       7,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-12",
+     "series": "P12 KAKKONEN",
+     "home": "KANU/La-Ve YJ",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       6,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-10",
+     "series": "P12 KAKKONEN",
+     "home": "SJK-j/musta -15",
+     "away": "Sepsi-78",
+     "score": [
+      [
+       0,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-27",
+     "series": "P12 KAKKONEN",
+     "home": "Virkiä/valkoinen",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       1,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-01-11",
+     "series": "P12 KARSINTA YKKÖSEEN",
+     "home": "WFA YJ",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       8,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2025-12-20",
+     "series": "P12 KARSINTA YKKÖSEEN",
+     "home": "SJK-j/musta -15",
+     "away": "FC KoMu",
+     "score": [
+      [
+       0,
+       8
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "35138119",
+   "name": "SJK-j/kulta",
+   "level": "P11 Taso 1",
+   "taso": "https://tulospalvelu.palloliitto.fi/team/35138119/results",
+   "matches": [
+    {
+     "date": "2026-09-20",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "KPV/Vihreä",
+     "score": [
+      [
+       1,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-20",
+     "series": "P11 TASO 1",
+     "home": "GBK/röd",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       10,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-11",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "WFA/blå YJ",
+     "score": [
+      [
+       5,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-11",
+     "series": "P11 TASO 1",
+     "home": "WFA/2016 YJ",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       4,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-28",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "VIFK/Vit",
+     "score": [
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-28",
+     "series": "P11 TASO 1",
+     "home": "VPS J/Musta",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       2,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-06",
+     "series": "P11 TASO 1",
+     "home": "FF Jaro/röd",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       4,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-06",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "Ura",
+     "score": [
+      [
+       3,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-29",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "SJK-j/kulta -16",
+     "score": [
+      [
+       4,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-29",
+     "series": "P11 TASO 1",
+     "home": "Virkiä/valkoinen",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       1,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-25",
+     "series": "P11 TASO 1",
+     "home": "FF Jaro/-16",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       2,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-25",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "FF Jaro/röd",
+     "score": [
+      [
+       1,
+       9
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 1",
+     "home": "VIFK/Vit",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       1,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "VPS J/Musta",
+     "score": [
+      [
+       1,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-31",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "Sepsi-78/Sininen",
+     "score": [
+      [
+       8,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-31",
+     "series": "P11 TASO 1",
+     "home": "WFA/2016 YJ",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       11,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-16",
+     "series": "P11 TASO 1",
+     "home": "GBK/röd",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       2,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-16",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "KPV/Vihreä",
+     "score": [
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-12",
+     "series": "P11 TASO 1",
+     "home": "SJK-j/kulta",
+     "away": "WFA/blå YJ",
+     "score": [
+      [
+       7,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-12",
+     "series": "P11 TASO 1",
+     "home": "WFA/Orange YJ",
+     "away": "SJK-j/kulta",
+     "score": [
+      [
+       0,
+       6
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "35140758",
+   "name": "SJK-j/valkoinen",
+   "level": "P11 Taso 2",
+   "taso": "https://tulospalvelu.palloliitto.fi/team/35140758/results",
+   "matches": [
+    {
+     "date": "2026-09-26",
+     "series": "P11 TASO 2",
+     "home": "Sepsi-78/Sininen",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       4,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-26",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "VIFK/Blå",
+     "score": [
+      [
+       2,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-09",
+     "series": "P11 TASO 2",
+     "home": "WFA/Orange YJ",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       4,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-09",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "Närpes Kraft",
+     "score": [
+      [
+       6,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-27",
+     "series": "P11 TASO 2",
+     "home": "EULA YJ",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       7,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-27",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "JPK",
+     "score": [
+      [
+       7,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-04",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "Virkiä/sininen",
+     "score": [
+      [
+       3,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-04",
+     "series": "P11 TASO 2",
+     "home": "Virkiä/T2015",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       3,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-28",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "VPS J/Musta",
+     "score": [
+      [
+       0,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-28",
+     "series": "P11 TASO 2",
+     "home": "VPS J/Valkoinen",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       4,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-01",
+     "series": "P11 TASO 2",
+     "home": "KuRy/-16",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       11,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-01",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "Jalas/Valkoinen",
+     "score": [
+      [
+       5,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "Virkiä/T2015",
+     "score": [
+      [
+       1,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 2",
+     "home": "Virkiä/sininen",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       6,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-04",
+     "series": "P11 TASO 2",
+     "home": "BK-48",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       5,
+       7
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-04",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "I-JBK",
+     "score": [
+      [
+       4,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-17",
+     "series": "P11 TASO 2",
+     "home": "Närpes Kraft",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       2,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-17",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "LUJA",
+     "score": [
+      [
+       5,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-04",
+     "series": "P11 TASO 2",
+     "home": "SJK-j/valkoinen",
+     "away": "EULA YJ",
+     "score": [
+      [
+       6,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-04",
+     "series": "P11 TASO 2",
+     "home": "JPK",
+     "away": "SJK-j/valkoinen",
+     "score": [
+      [
+       3,
+       2
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "id": "35138117",
+   "name": "SJK-j/oranssi",
+   "level": "P11 Taso 3",
+   "taso": "https://tulospalvelu.palloliitto.fi/team/35138117/results",
+   "matches": [
+    {
+     "date": "2026-09-20",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "IK",
+     "score": [
+      [
+       1,
+       12
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-20",
+     "series": "P11 TASO 3",
+     "home": "Jalas/Sininen",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       5,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-09",
+     "series": "P11 TASO 3",
+     "home": "EULA Vihreä YJ2",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       3,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-09-09",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "KANU/Punainen",
+     "score": [
+      [
+       3,
+       10
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "SoPS",
+     "score": [
+      [
+       3,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-19",
+     "series": "P11 TASO 3",
+     "home": "APV",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       2,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-10",
+     "series": "P11 TASO 3",
+     "home": "Karhu/Valkoinen",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       6,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-08-10",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "Karhu/Sininen",
+     "score": [
+      [
+       0,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-28",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "Korsnäs BK",
+     "score": [
+      [
+       5,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-07-28",
+     "series": "P11 TASO 3",
+     "home": "Sporting Kristina",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       6,
+       4
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-27",
+     "series": "P11 TASO 3",
+     "home": "Sisu",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       4,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-27",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "Sepsi-78/Valkoinen",
+     "score": [
+      [
+       4,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "Virkiä/musta",
+     "score": [
+      [
+       6,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-08",
+     "series": "P11 TASO 3",
+     "home": "KuKu",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       7,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-04",
+     "series": "P11 TASO 3",
+     "home": "VPS J/Keltainen",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       8,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-06-04",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "VPS J/1924",
+     "score": [
+      [
+       1,
+       8
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-21",
+     "series": "P11 TASO 3",
+     "home": "VäVi",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       2,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-21",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "Norrvalla FF",
+     "score": [
+      [
+       4,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-04",
+     "series": "P11 TASO 3",
+     "home": "SJK-j/oranssi",
+     "away": "IK",
+     "score": [
+      [
+       2,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-05-04",
+     "series": "P11 TASO 3",
+     "home": "Jalas/Sininen",
+     "away": "SJK-j/oranssi",
+     "score": [
+      [
+       2,
+       5
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

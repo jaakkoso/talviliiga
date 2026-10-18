@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Piirisarjat · SJK P2015</title>
+<meta name="description" content="SJK P2015 -joukkueiden piirisarjojen tulokset kaikilla tasoilla.">
+<meta name="theme-color" content="#211e1e">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="../assets/logo-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=20261018a">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="../assets/logo-180.png" alt="SJK-juniorit" width="52" height="52">
+    <div class="t">
+      <a class="back" href="../">← P2015 tulokset</a>
+      <h1>Piirisarjat</h1>
+      <div class="sub" id="sub">Kausi 2026</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <nav class="tabs" id="tabs" aria-label="Joukkue"></nav>
+  <div class="sec" id="view"><p class="note">Ladataan tuloksia…</p></div>
+</main>
+<footer id="foot">Lähde: Palloliiton tulospalvelu.</footer>
+<script src="../assets/matches.js?v=20261018a"></script>
+<script>
+(async () => {
+  const view = document.getElementById('view'), tabs = document.getElementById('tabs');
+  let data;
+  try { data = await P15.load('data.json'); }
+  catch (e) { view.innerHTML = '<p class="note">Tuloksia ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
+  const short = n => n.replace('SJK-j/', '');
+  document.getElementById('sub').textContent = `Kausi ${data.season} · ${data.teams.length} joukkuetta`;
+  document.getElementById('foot').textContent = `Lähde: ${data.source}, päivitetty ${data.updated.split('-').reverse().map(Number).join('.')}. Sivustolla ei ole pelaajien nimiä.`;
+  const opts = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: short(t.name) }))];
+  tabs.innerHTML = opts.map(o => `<button type="button" id="tab-${o.id}" data-id="${o.id}" aria-pressed="false">${P15.esc(o.label)}</button>`).join('');
+  function render(id) {
+    tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+    if (id === 'kaikki') {
+      const items = data.teams.flatMap(t => t.matches.map(m => ({ m, opt: { own: t.name, showTeam: true, teamLabel: short(t.name) } })));
+      view.innerHTML = `<p class="note">Kaikkien P2015-joukkueiden sarjaottelut, uusin ensin. Valitse joukkue nähdäksesi sen kauden yhteenvedon.</p>` + P15.listHTML(items);
+    } else {
+      const t = data.teams.find(t => t.id === id);
+      view.innerHTML = `<div class="summary"><div class="sec-head"><h2>${P15.esc(t.name)}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
+        <div class="lvl">${P15.esc(t.level)}</div>${P15.summaryHTML(P15.summary(t.matches, t.name))}</div>`
+        + P15.listHTML(t.matches.map(m => ({ m, opt: { own: t.name } })));
+    }
+    P15.store.set('piirisarja-tab', id);
+  }
+  tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });
+  let start = P15.store.get('piirisarja-tab', 'kaikki');
+  if (!opts.some(o => o.id === start)) start = 'kaikki';
+  render(start);
+})();
+</script>
+</body>
+</html>

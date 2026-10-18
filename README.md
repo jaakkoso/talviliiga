@@ -1,4 +1,22 @@
-# Turnauksen tulospalvelu
+# P2015 tulokset
+
+Osoite: **https://p2015-tulokset.sjk-juniorit.fi/**
+
+| Polku | Sisältö | Data |
+|---|---|---|
+| `/` | Etusivu: tulevat tapahtumat ja kauden osiot | `index.html` (turnauspäivän automaattinen ohjaus `REDIRECTS`-listassa, ohitus `#koti`) |
+| `/talviliiga/` | Talviliiga 24.10.2026, oma tulospalvelusovellus | Google Sheets + Apps Script |
+| `/eerikkila/` | Huuhkajaliiga, kevät ja syksy | `eerikkila/data.json` |
+| `/piirisarja/` | Kesän piirisarjat, kaikki joukkueet | `piirisarja/data.json` |
+| `assets/` | Yhteinen ilme (`site.css`), otteluluettelot (`matches.js`), logot | |
+
+**Uusi oma turnaus:** kopioi `talviliiga/`-kansio uudella nimellä, tee sille oma Google Sheet ja Apps Script ja vaihda `common.js`:n `CONFIG`. Selaimen muisti on kansiokohtainen, joten turnaukset eivät sekoitu keskenään. Lisää turnaus etusivun kortteihin.
+
+**Ei henkilötietoja:** sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. Pidä se niin, koska palvelu on seuran osoitteessa.
+
+---
+
+## Turnauksen tulospalvelu (`talviliiga/`)
 
 Junioriturnauksen tulospalvelu, jota voi käyttää uudelleen seuraavissa turnauksissa. Toimii puhelimella, iPadilla ja koneella. Ilmainen: GitHub Pages + Google Sheets + Google Apps Script. **Kaikki turnauskohtainen tieto on Google Sheetissä**, joten koodiin ei tarvitse koskea uutta turnausta varten.
 
@@ -38,7 +56,7 @@ Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä vo
 ### 2. Sivusto
 1. `common.js` → `CONFIG`: `SHEET_ID` (taulukon osoitteesta `/d/` ja `/edit` välistä) ja `API_URL` (kohdan 1.5 osoite).
 2. Vaihda tarvittaessa logo: `logo-180.png`, `logo-512.png`, `icon-192.png`, `icon-512.png`.
-3. Vie tiedostot GitHub-repoon → **Settings → Pages** (branch `main`, kansio `/`).
+3. Vie tiedostot GitHub-repoon omaan kansioonsa (esim. `talviliiga/`) → **Settings → Pages** (branch `main`, kansio `/`). Turnaus näkyy osoitteessa `p2015-tulokset.sjk-juniorit.fi/<kansio>/`.
 
 ## Testaus ennen turnausta
 

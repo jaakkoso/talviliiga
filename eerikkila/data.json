@@ -1,0 +1,196 @@
+{
+ "updated": "2026-10-18",
+ "events": [
+  {
+   "id": "syksy-2026",
+   "name": "Syksy 2026",
+   "title": "P11 Huuhkajaliiga, alaloppusarja",
+   "dates": "1.–3.11.2026",
+   "venue": "Eerikkilän Urheiluopisto",
+   "team": "SJK-j",
+   "format": "7 tuplapeliä · 7v7 · 2 × 20 min",
+   "taso": "https://tulospalvelu.palloliitto.fi/category/P11HL!spljphhl26/tables",
+   "matches": [
+    {
+     "date": "2026-11-01",
+     "time": "15.30",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "P-Iirot",
+     "away": "SJK-j",
+     "score": null
+    },
+    {
+     "date": "2026-11-01",
+     "time": "19.15",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j",
+     "away": "Hercules-j",
+     "score": null
+    },
+    {
+     "date": "2026-11-02",
+     "time": "10.45",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "JJK/YJ",
+     "away": "SJK-j",
+     "score": null
+    },
+    {
+     "date": "2026-11-02",
+     "time": "14.45",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j",
+     "away": "FF Jaro",
+     "score": null
+    },
+    {
+     "date": "2026-11-02",
+     "time": "19.30",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "MuSa",
+     "away": "SJK-j",
+     "score": null
+    },
+    {
+     "date": "2026-11-03",
+     "time": "09.45",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "EPS",
+     "away": "SJK-j",
+     "score": null
+    },
+    {
+     "date": "2026-11-03",
+     "time": "12.45",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j",
+     "away": "HPS",
+     "score": null
+    }
+   ]
+  },
+  {
+   "id": "kevat-2026",
+   "name": "Kevät 2026",
+   "title": "P11 Huuhkajaliiga",
+   "dates": "8.–10.4.2026",
+   "venue": "Eerikkilän Urheiluopisto",
+   "team": "SJK-j/musta -15",
+   "format": "Tuplapelit",
+   "matches": [
+    {
+     "date": "2026-04-10",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j/musta -15",
+     "away": "GrIFK",
+     "score": [
+      [
+       0,
+       0
+      ],
+      [
+       0,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-10",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "FF Jaro/-15",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       2,
+       0
+      ],
+      [
+       0,
+       2
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-09",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "P-Iirot/kelt",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       0,
+       3
+      ],
+      [
+       1,
+       5
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-09",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j/musta -15",
+     "away": "TPS P2015",
+     "score": [
+      [
+       0,
+       3
+      ],
+      [
+       0,
+       6
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-09",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j/musta -15",
+     "away": "OLS/Keltainen",
+     "score": [
+      [
+       0,
+       2
+      ],
+      [
+       0,
+       3
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-08",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "SJK-j/musta -15",
+     "away": "MuSa/Black",
+     "score": [
+      [
+       2,
+       1
+      ],
+      [
+       2,
+       0
+      ]
+     ]
+    },
+    {
+     "date": "2026-04-08",
+     "series": "P11 HUUHKAJALIIGA",
+     "home": "Ilves/P2015",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       5,
+       0
+      ],
+      [
+       2,
+       0
+      ]
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -7,6 +7,7 @@ const CONFIG = {
   SHEET_ID: '1clMT47Y5qaXw3C3qUfX-YllHxRXXs1JT_crahSrwZWY',      // Google Sheetin tunnus (osoitteen /d/ ja /edit välissä). Tyhjä = demotila.
   API_URL: 'https://script.google.com/macros/s/AKfycbwjoNUYYV5N5T2b-C_QWrWThrsePIe0OEesoTnvNzsCclJWRRhjU5QYPa-am6Ekw3Kh7w/exec',     // Apps Script -verkkosovelluksen osoite (…/exec)
   POLL_MS: 30000,    // Päivitysväli julkisella sivulla; kirjausnäkymät 15 s
+  PRODUCT: { name: '', url: '' },  // Palvelun oma nimi alalaitaan ("Tulospalvelu: nimi"). Tyhjä = ei näytetä.
 };
 /* ============================================ */
 
@@ -35,9 +36,11 @@ const DEMO_EVENT = {
 
 /* ---------- apurit ---------- */
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+/* Selainmuisti kansiokohtaisesti: /talviliiga/ ja /jokin-turnaus/ eivät jaa välimuistia, PIN-istuntoa eivätkä lähettämättömiä kirjauksia. */
+const LS_NS = (location.pathname.split('/').filter(Boolean).find(p => !p.includes('.')) || 'root') + ':';
 const ls = {
-  get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } },
+  get(k, d) { try { const v = localStorage.getItem(LS_NS + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(LS_NS + k, JSON.stringify(v)); } catch (e) { } },
 };
 function parseTime(t) {
   const s = String(t ?? '').trim().replace(':', '.');
@@ -120,6 +123,8 @@ function applyHeader() {
   set('evName', EVENT.name); set('evSub', EVENT.sub);
   set('evVenue', [EVENT.venue, EVENT.dateText].filter(Boolean).join(' · '));
   set('evOrg', EVENT.organizer ? `Järjestäjä ${EVENT.organizer}` : '');
+  const pr = document.getElementById('product');
+  if (pr && CONFIG.PRODUCT && CONFIG.PRODUCT.name) pr.innerHTML = ` · Tulospalvelu: ${CONFIG.PRODUCT.url ? `<a href="${esc(CONFIG.PRODUCT.url)}" target="_blank" rel="noopener">${esc(CONFIG.PRODUCT.name)}</a>` : esc(CONFIG.PRODUCT.name)}`;
   set('evEyebrow', [EVENT.name, EVENT.venue.split(',')[0], EVENT.dateText].filter(Boolean).join(' · '));
   const root = document.documentElement.style, raw = EVENT.raw || {};
   if (HEX.test(raw.vari_pohja || '')) { root.setProperty('--head', raw.vari_pohja); root.setProperty('--ink', raw.vari_pohja); }

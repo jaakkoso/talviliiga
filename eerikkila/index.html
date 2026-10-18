@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Huuhkajaliiga · SJK P2015</title>
+<meta name="description" content="SJK P2015 Huuhkajaliigassa Eerikkilässä: otteluohjelma ja tulokset.">
+<meta name="theme-color" content="#211e1e">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="../assets/logo-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="../assets/site.css?v=20261018a">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="../assets/logo-180.png" alt="SJK-juniorit" width="52" height="52">
+    <div class="t">
+      <a class="back" href="../">← P2015 tulokset</a>
+      <h1>Huuhkajaliiga</h1>
+      <div class="sub">Eerikkilän Urheiluopisto, Tammela</div>
+    </div>
+  </div>
+</header>
+<main class="wrap">
+  <nav class="tabs" id="tabs" aria-label="Tapahtuma"></nav>
+  <div class="sec" id="view"><p class="note">Ladataan…</p></div>
+</main>
+<footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
+<script src="../assets/matches.js?v=20261018a"></script>
+<script>
+(async () => {
+  const view = document.getElementById('view'), tabs = document.getElementById('tabs');
+  let data;
+  try { data = await P15.load('data.json'); }
+  catch (e) { view.innerHTML = '<p class="note">Tietoja ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
+  tabs.innerHTML = data.events.map(ev => `<button type="button" id="tab-${ev.id}" data-id="${ev.id}" aria-pressed="false">${P15.esc(ev.name)}</button>`).join('');
+  function render(id) {
+    tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+    const ev = data.events.find(e => e.id === id);
+    const played = ev.matches.some(m => m.score);
+    const upcoming = ev.matches.every(m => !m.score);
+    view.innerHTML = `<div class="summary">
+        <div class="sec-head"><h2>${P15.esc(ev.title)}</h2>${ev.taso ? `<a class="btn" href="${ev.taso}" target="_blank" rel="noopener">Live Palloliitossa ↗</a>` : ''}</div>
+        <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
+        ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
+      </div>` + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), upcoming);
+    P15.store.set('eerikkila-tab', id);
+  }
+  tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });
+  let start = P15.store.get('eerikkila-tab', data.events[0].id);
+  if (!data.events.some(e => e.id === start)) start = data.events[0].id;
+  render(start);
+})();
+</script>
+</body>
+</html>

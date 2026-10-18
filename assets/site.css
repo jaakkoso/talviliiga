@@ -1,0 +1,84 @@
+/* P2015-kokonaisuuden yhteinen ilme: sama musta ja kulta kuin Talviliigan tulospalvelussa. Aina vaalea tila. */
+:root{
+  --bg:#f5f3ec; --surface:#ffffff; --surface2:#efece2; --ink:#211e1e; --muted:#5b5650; --line:#e2ddcc;
+  --gold:#bdb03a; --head:#211e1e; --head-ink:#ffffff;
+  --win:#17804a; --win-bg:#dff3e7; --draw:#7a6a12; --draw-bg:#f4efd2; --loss:#b0362b; --loss-bg:#f8e1dd;
+  --display:"Saira Condensed","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+/* Yläpalkki */
+.top{background:var(--head);color:var(--head-ink);padding-top:env(safe-area-inset-top,0px)}
+.top-in{max-width:880px;margin:0 auto;padding-block:14px 16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:14px}
+.top img{width:52px;height:52px;flex:none}
+.top .t{flex:1;min-width:0}
+.eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.16em;font-size:.78rem;color:var(--gold);text-transform:uppercase}
+.top h1{font-family:var(--display);font-weight:800;font-size:2rem;line-height:.95;margin:2px 0;text-transform:uppercase;text-wrap:balance}
+.top .sub{font-size:.85rem;opacity:.85}
+.back{display:inline-block;font-size:.82rem;color:var(--gold);text-decoration:none;margin-bottom:2px}
+.back:hover{text-decoration:underline}
+
+.wrap{max-width:880px;margin:0 auto;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:24px}
+h2{font-family:var(--display);font-weight:800;font-size:1.5rem;text-transform:uppercase;margin:0;line-height:1;letter-spacing:.01em}
+.sec{display:grid;gap:12px;min-width:0}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sec-head .meta{font-size:.82rem;color:var(--muted)}
+.note{font-size:.88rem;color:var(--muted);max-width:65ch;margin:0}
+
+/* Välilehdet */
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.tabs button{flex:none;font:600 .92rem var(--body);border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:6px 14px;border-radius:999px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--head-ink)}
+
+/* Kauden yhteenveto */
+.summary{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:12px}
+.summary .lvl{font-size:.82rem;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.stat b{display:block;font-family:var(--display);font-weight:800;font-size:1.8rem;line-height:1;font-variant-numeric:tabular-nums}
+.stat small{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat.w b{color:var(--win)} .stat.d b{color:var(--draw)} .stat.l b{color:var(--loss)}
+.form{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.form .lbl{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+@media (max-width:440px){.stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Tulosmerkit */
+.pip{width:24px;height:24px;border-radius:5px;display:inline-grid;place-items:center;font:800 .8rem var(--display)}
+.pip.W{background:var(--win-bg);color:var(--win)} .pip.D{background:var(--draw-bg);color:var(--draw)} .pip.L{background:var(--loss-bg);color:var(--loss)}
+
+/* Otteluluettelo */
+.month{display:grid;gap:6px}
+.month h3{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:8px 0 0}
+.match{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.match .date{font-size:.75rem;color:var(--muted);line-height:1.2}
+.match .date b{display:block;font-size:1rem;color:var(--ink);font-variant-numeric:tabular-nums}
+.match .tm{min-width:0;display:grid;gap:1px}
+.match .tm span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.match .tm .me{font-weight:700}
+.match .ser{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.match .res{display:flex;gap:8px;align-items:center}
+.match .sc{font-family:var(--display);font-weight:800;font-size:1.35rem;line-height:1.05;text-align:right;font-variant-numeric:tabular-nums}
+.match .sc span{display:block}
+.match .pips{display:grid;gap:3px}
+.match .tbd{font-size:.8rem;color:var(--muted)}
+
+/* Etusivun kortit */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:6px;text-decoration:none;color:var(--ink);min-width:0}
+a.card:hover{border-color:var(--ink)}
+.card .k{font-family:var(--display);font-weight:600;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.card .n{font-family:var(--display);font-weight:800;font-size:1.45rem;line-height:1;text-transform:uppercase}
+.card .d{font-size:.9rem;color:var(--muted)}
+.card .go{font-weight:600;font-size:.9rem;margin-top:4px}
+.card.next{background:var(--head);color:var(--head-ink);border-color:var(--head)}
+.card.next .k{color:var(--gold)} .card.next .d{color:#d9d4c8}
+.badge{display:inline-block;font:700 .7rem var(--body);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--gold);color:var(--ink);justify-self:start}
+
+.btn{display:inline-block;font-weight:600;font-size:.9rem;border:1.5px solid var(--ink);border-radius:999px;padding:6px 14px;text-decoration:none}
+footer{max-width:880px;margin:0 auto;padding-block:0 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));font-size:.78rem;color:var(--muted)}

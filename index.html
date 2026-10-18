@@ -3,41 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title data-suffix="">Tulospalvelu</title>
-<meta name="description" content="Turnauksen otteluohjelma, tulokset ja sarjataulukot.">
+<title>SJK P2015 tulokset</title>
+<meta name="description" content="SJK-juniorien P2015-poikien kausi: turnaukset, Huuhkajaliiga ja piirisarjat.">
 <meta name="theme-color" content="#211e1e">
 <meta name="color-scheme" content="only light">
-<link rel="icon" href="logo-180.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Tulokset">
+<link rel="icon" href="assets/logo-180.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<script>
+/* Turnauspäivänä juuriosoite ohjaa suoraan turnauksen tulospalveluun. Ohituksen saa lisäämällä osoitteeseen #koti. */
+(function () {
+  var REDIRECTS = [{ from: '2026-10-24', to: '2026-10-24', url: 'talviliiga/' }];
+  if (location.hash === '#koti') return;
+  var n = new Date(), t = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
+  for (var i = 0; i < REDIRECTS.length; i++) if (t >= REDIRECTS[i].from && t <= REDIRECTS[i].to) { location.replace(REDIRECTS[i].url); return; }
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="style.css?v=20261015a">
+<link rel="stylesheet" href="assets/site.css?v=20261018a">
 </head>
 <body>
 <header class="top">
   <div class="top-in">
-    <img src="logo-180.png" alt="Logo" width="56" height="56">
+    <img src="assets/logo-180.png" alt="SJK-juniorit" width="52" height="52">
     <div class="t">
-      <div class="eyebrow" id="evSub"></div>
-      <h1 id="evName">Tulospalvelu</h1>
-      <div class="sub" id="evVenue"></div>
+      <div class="eyebrow">SJK-juniorit · pojat 2015</div>
+      <h1>P2015 tulokset</h1>
+      <div class="sub">Kausi 2026–2027</div>
     </div>
-    <div class="upd" id="upd"></div>
   </div>
 </header>
 
-<main class="wrap" id="app">
-  <div class="card">Ladataan otteluohjelmaa…</div>
+<main class="wrap">
+  <section class="sec" aria-labelledby="h-next">
+    <h2 id="h-next">Seuraavaksi</h2>
+    <div class="cards">
+      <a class="card next" href="talviliiga/">
+        <span class="badge">La 24.10.</span>
+        <span class="k">Turnaus · Wallsport, Seinäjoki</span>
+        <span class="n">Talviliiga P12</span>
+        <span class="d">Otteluohjelma, live-tulokset ja sarjataulukot</span>
+        <span class="go">Avaa tulospalvelu →</span>
+      </a>
+      <a class="card" href="eerikkila/">
+        <span class="badge">1.–3.11.</span>
+        <span class="k">Huuhkajaliiga · Eerikkilä</span>
+        <span class="n">P11 alaloppusarja</span>
+        <span class="d">7 tuplapeliä kolmessa päivässä</span>
+        <span class="go">Otteluohjelma →</span>
+      </a>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="h-season">
+    <h2 id="h-season">Kausi</h2>
+    <div class="cards">
+      <a class="card" href="talviliiga/">
+        <span class="k">Talvi</span>
+        <span class="n">Turnaukset</span>
+        <span class="d">Talviliiga 24.10.2026, Wallsport</span>
+      </a>
+      <a class="card" href="eerikkila/">
+        <span class="k">Kevät ja syksy</span>
+        <span class="n">Huuhkajaliiga</span>
+        <span class="d">Eerikkilä: kevät 8.–10.4. ja syksy 1.–3.11.2026</span>
+      </a>
+      <a class="card" href="piirisarja/">
+        <span class="k">Kesä</span>
+        <span class="n">Piirisarjat</span>
+        <span class="d">Neljä joukkuetta: kulta, valkoinen, oranssi ja musta -15</span>
+      </a>
+    </div>
+  </section>
 </main>
 
-<p class="kuvalink"><button type="button" id="cafeBtn" hidden>☕ Kahvio ja hinnasto</button><a href="kuva.html">📸 Joukkuekuva turnauskehyksellä</a></p>
-
-<footer><span id="evOrg"></span> · Toimitsijat: <a href="tuomari.html">Tuomarit</a> · <a href="kentta.html">Kenttävastaavat</a></footer>
-
-<script src="common.js?v=20261015a"></script>
-<script src="app.js?v=20261015a"></script>
+<footer>Tulokset Palloliiton tulospalvelusta ja joukkueen omista turnauksista. Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
 </body>
 </html>
