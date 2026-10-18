@@ -61,8 +61,8 @@
    "teams": [
     {
      "name": "SJK",
-     "label": "Otteluohjelma",
-     "level": "Otteluohjelma",
+     "label": "Kilpa",
+     "level": "P11 (2015) Kilpa",
      "place": {
       "pos": 6,
       "of": 6
@@ -71,7 +71,7 @@
       {
        "date": "2026-09-19",
        "time": "09.00",
-       "series": "Otteluohjelma",
+       "series": "Kilpa",
        "home": "JJK",
        "away": "SJK",
        "score": [
@@ -84,7 +84,7 @@
       {
        "date": "2026-09-19",
        "time": "11.40",
-       "series": "Otteluohjelma",
+       "series": "Kilpa",
        "home": "KuPS musta",
        "away": "SJK",
        "score": [
@@ -97,7 +97,7 @@
       {
        "date": "2026-09-19",
        "time": "14.20",
-       "series": "Otteluohjelma",
+       "series": "Kilpa",
        "home": "Ilves keltainen",
        "away": "SJK",
        "score": [
@@ -110,7 +110,7 @@
       {
        "date": "2026-09-19",
        "time": "16.20",
-       "series": "Otteluohjelma",
+       "series": "Kilpa",
        "home": "SJK",
        "away": "HoDy",
        "score": [
@@ -123,7 +123,7 @@
       {
        "date": "2026-09-19",
        "time": "17.40",
-       "series": "Otteluohjelma",
+       "series": "Kilpa",
        "home": "SJK",
        "away": "Yilves",
        "score": [
@@ -137,8 +137,8 @@
     },
     {
      "name": "SJK",
-     "label": "Otteluohjelma",
-     "level": "Otteluohjelma",
+     "label": "Haaste",
+     "level": "P11 (2015) Haaste",
      "place": {
       "pos": 6,
       "of": 6
@@ -147,7 +147,7 @@
       {
        "date": "2026-09-19",
        "time": "09.00",
-       "series": "Otteluohjelma",
+       "series": "Haaste",
        "home": "SJK",
        "away": "ViPa",
        "score": [
@@ -160,7 +160,7 @@
       {
        "date": "2026-09-19",
        "time": "10.20",
-       "series": "Otteluohjelma",
+       "series": "Haaste",
        "home": "KuPS keltainen",
        "away": "SJK",
        "score": [
@@ -173,7 +173,7 @@
       {
        "date": "2026-09-19",
        "time": "12.20",
-       "series": "Otteluohjelma",
+       "series": "Haaste",
        "home": "Fc Lahti/4",
        "away": "SJK",
        "score": [
@@ -186,7 +186,7 @@
       {
        "date": "2026-09-19",
        "time": "13.40",
-       "series": "Otteluohjelma",
+       "series": "Haaste",
        "home": "SJK",
        "away": "JJK",
        "score": [
@@ -199,7 +199,7 @@
       {
        "date": "2026-09-19",
        "time": "15.00",
-       "series": "Otteluohjelma",
+       "series": "Haaste",
        "home": "SJK",
        "away": "Yilves/punainen",
        "score": [

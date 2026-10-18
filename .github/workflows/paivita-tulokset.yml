@@ -44,13 +44,13 @@ jobs:
         working-directory: .
         run: |
           rm -f scripts/paivitys/varoitukset.txt
-          if git diff --quiet -- piirisarja eerikkila turnaukset; then
+          if git diff --quiet -- piirisarja eerikkila turnaukset scripts/paivitys/tila.json && [ -z "$(git status --porcelain scripts/paivitys/tila.json)" ]; then
             echo "Ei muutoksia tuloksiin."
             exit 0
           fi
           git config user.name "Tulospäivitys"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add piirisarja/data.json eerikkila/data.json turnaukset/data.json
+          git add piirisarja/data.json eerikkila/data.json turnaukset/data.json scripts/paivitys/tila.json
           git commit -m "Tulokset päivitetty automaattisesti $(TZ=Europe/Helsinki date '+%-d.%-m.%Y klo %H.%M')"
           git push
           # GitHub Actionsin omat pushit eivät aina käynnistä sivuston julkaisua, joten pyydetään se erikseen

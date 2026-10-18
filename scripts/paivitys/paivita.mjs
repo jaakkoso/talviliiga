@@ -18,6 +18,7 @@ const kirjoita = (p, d) => {
 const cfg = lue('config/lahteet.json');
 const tanaan = new Date().toISOString().slice(0, 10);
 const varoitukset = [];
+const tila = { piirisarjat: {}, huuhkajaliiga: {}, turnaukset: {} };
 const varoita = msg => { varoitukset.push(msg); console.warn('VAROITUS:', msg); };
 
 const selain = await chromium.launch();
@@ -58,6 +59,7 @@ async function paivitaPiirisarjat() {
       const sarja = kaikki.filter(m => !/HUUHKAJALIIGA/i.test(m.series));
       if (turvallinen(t.matches, sarja)) t.matches = sarja; else varoita(`${j.nimi}: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty`);
       t._hh = kaikki.filter(m => /HUUHKAJALIIGA/i.test(m.series));
+      tila.piirisarjat[j.nimi] = { ottelut: kaikki.length, pelatut: kaikki.filter(m => m.score).length };
     } catch (e) { varoita(`${j.nimi}: ${e.message}`); }
     const uudet = [];
     for (const tb of j.taulukot || []) {
@@ -65,6 +67,7 @@ async function paivitaPiirisarjat() {
       catch (e) { varoita(`${tb.nimi}: ${e.message}`); const vanha = (t.tables || []).find(x => x.url === tb.url); if (vanha) uudet.push(vanha); }
     }
     t.tables = uudet;
+    if (tila.piirisarjat[j.nimi]) tila.piirisarjat[j.nimi].taulukot = uudet.filter(x => x.rows && x.rows.length).length;
   }
   const hh = Object.fromEntries(d.teams.map(t => [t.name, t._hh || []]));
   d.teams.forEach(t => delete t._hh);
@@ -86,7 +89,8 @@ async function paivitaHuuhkajaliiga(hh) {
       if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) vanha.score = m.score; if (m.time && !vanha.time) vanha.time = m.time; }
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
-    try { const rows = await palloliittoTaulukko(h.taulukko); if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows }; }
+    tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
+    try { const rows = await palloliittoTaulukko(h.taulukko); tila.huuhkajaliiga[h.id].taulukko = rows ? rows.length : 0; if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows }; }
     catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko: ${e.message}`); }
   }
   d.updated = tanaan;
@@ -162,7 +166,10 @@ async function gameResultsOnline(url, paiva) {
           if (i >= 0) { place = { pos: parseInt(rivit[i][0], 10) || i + 1, of: rivit.length }; break; }
         }
       } catch { }
-      if (ms.length) res.push({ label: a.innerText.trim(), ms, place });
+      // Sarjan nimi sivun otsikosta ("Otteluohjelma - Kilpa | …"), linkin teksti on usein vain "Otteluohjelma"
+      const otsikko = (d.title || '').split('|')[0];
+      const label = (otsikko.includes(' - ') ? otsikko.split(' - ').slice(1).join(' - ') : a.innerText).trim();
+      if (ms.length) res.push({ label, ms, place });
     }
     return res;
   }, paiva).then(res => res.map(r => ({
@@ -181,6 +188,7 @@ async function paivitaTurnaukset() {
     try {
       const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : null;
       if (!teams) { varoita(`Turnaus ${tc.id}: tuntematon tyyppi ${tc.tyyppi}`); continue; }
+      tila.turnaukset[tc.id] = { joukkueet: teams.length, ottelut: teams.reduce((n, t) => n + t.matches.length, 0) };
       if (!teams.length) { varoita(`Turnaus ${tc.id}: SJK:n joukkueita ei löytynyt`); continue; }
       const vanhat = ev.teams || [];
       const uudet = teams.map(t => { const v = vanhat.find(x => x.label.toLowerCase() === t.label.toLowerCase()); return { ...t, label: v?.label || t.label, level: v?.level || t.level, place: t.place || v?.place }; });
@@ -198,6 +206,8 @@ try {
   await paivitaTurnaukset();
 } finally { await selain.close(); }
 
+// Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
+fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/tila.json'), JSON.stringify({ ...tila, varoitukset }, null, 1) + '\n');
 if (varoitukset.length) {
   fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/varoitukset.txt'), varoitukset.join('\n') + '\n');
   // Varoitukset eivät kaada ajoa, mutta GitHub näyttää ne ajon yhteenvedossa
