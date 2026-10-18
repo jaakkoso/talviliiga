@@ -53,6 +53,12 @@
   "SJK-j/valkoinen: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
   "SJK-j/oranssi: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty",
   "Turnaus vpscup-2026: page.evaluate: TypeError: Failed to fetch\n    at html (eval at evaluate (:234:30), <anonymous>:4:74)\n    at eval (eval at evaluate (:234:30), <anonymous>:8:76)\n    at async <anonymous>:260:30",
-  "Turnaus ilves-paasiainen-2026: page.goto: Navigation to \"https://paasiaisturnaus.torneopal.fi/\" is interrupted by another navigation to \"https://vpscup2026.torneopal.fi/\"\nCall log:\n  - navigating to \"https://paasiaisturnaus.torneopal.fi/\", waiting until \"domcontentloaded\"\n"
- ]
+  "Turnaus ilves-paasiainen-2026: page.goto: Navigation to \"about:blank\" is interrupted by another navigation to \"https://vpscup2026.torneopal.fi/taso/seurat.php\"\nCall log:\n  - navigating to \"about:blank\", waiting until \"load\"\n"
+ ],
+ "diagnoosi": {
+  "35138117": "",
+  "35138118": "",
+  "35138119": "",
+  "35140758": ""
+ }
 }
