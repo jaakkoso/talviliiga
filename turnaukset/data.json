@@ -124,7 +124,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 6,
+      "of": 6
+     }
     },
     {
      "name": "SJK",
@@ -191,7 +195,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 6,
+      "of": 6
+     }
     }
    ]
   },
@@ -206,7 +214,6 @@
      "name": "SJK-j/Kulta",
      "label": "Kulta",
      "level": "P11",
-     "trophy": true,
      "matches": [
       {
        "date": "2026-09-05",
@@ -280,7 +287,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 3,
+      "of": 14
+     }
     },
     {
      "name": "SJK-j/Musta",
@@ -359,13 +370,16 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 5,
+      "of": 14
+     }
     },
     {
      "name": "SJK-j/Oranssi",
      "label": "Oranssi",
      "level": "P11",
-     "trophy": true,
      "matches": [
       {
        "date": "2026-09-05",
@@ -427,7 +441,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 2,
+      "of": 14
+     }
     },
     {
      "name": "SJK-j/Valkoinen",
@@ -494,7 +512,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 7,
+      "of": 14
+     }
     }
    ]
   },
@@ -509,8 +531,6 @@
      "name": "SJK-j/ Musta",
      "label": "Musta",
      "level": "E11 Kilpa 8v8",
-     "trophy": true,
-     "result": "Sarjan voittaja",
      "matches": [
       {
        "date": "2026-05-23",
@@ -585,7 +605,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 1,
+      "of": 32
+     }
     },
     {
      "name": "SJK-j",
@@ -676,7 +700,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 25,
+      "of": 28
+     }
     },
     {
      "name": "SJK-j/ Kulta",
@@ -755,7 +783,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 12,
+      "of": 28
+     }
     },
     {
      "name": "SJK-j/ Valkoinen",
@@ -834,7 +866,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 25,
+      "of": 26
+     }
     }
    ]
   },
@@ -849,7 +885,6 @@
      "name": "SJK-j/Musta",
      "label": "Musta",
      "level": "U11 (2015) Taso 1",
-     "trophy": true,
      "matches": [
       {
        "date": "2026-05-02",
@@ -911,13 +946,16 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 2,
+      "of": 9
+     }
     },
     {
      "name": "SJK-j/Kulta",
      "label": "Kulta",
      "level": "U11 (2015) Taso 2",
-     "trophy": true,
      "matches": [
       {
        "date": "2026-05-02",
@@ -1003,7 +1041,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 1,
+      "of": 9
+     }
     },
     {
      "name": "SJK-j/Valkoinen",
@@ -1070,7 +1112,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 4,
+      "of": 8
+     }
     }
    ]
   },
@@ -1085,7 +1131,6 @@
      "name": "SJK-j",
      "label": "SJK-j",
      "level": "P11 Kilpa",
-     "trophy": true,
      "matches": [
       {
        "date": "2026-04-03",
@@ -1147,7 +1192,11 @@
         ]
        ]
       }
-     ]
+     ],
+     "place": {
+      "pos": 2,
+      "of": 6
+     }
     }
    ]
   }

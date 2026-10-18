@@ -16,6 +16,15 @@ Osoite: **https://p2015-tulokset.sjk-juniorit.fi/**
 
 **Ei henkilötietoja:** sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. Pidä se niin, koska palvelu on seuran osoitteessa.
 
+## Automaattinen tulospäivitys
+
+GitHub Actions (`.github/workflows/paivita-tulokset.yml`) hakee tulokset kahden tunnin välein klo 7–23 ja julkaisee muutokset. Käsin: **Actions › Päivitä tulokset › Run workflow**.
+
+- Lähteet ovat tiedostossa `config/lahteet.json`: piirisarjajoukkueet (Palloliiton joukkue-id ja sarjataulukoiden osoitteet), Huuhkajaliiga ja turnaukset.
+- **Uusi turnaus:** lisää `config/lahteet.json`-tiedoston `turnaukset`-listaan id, tyyppi (`torneopal` tai `gameresultsonline`) ja tulossivun osoite, sekä `turnaukset/data.json`-tiedostoon tapahtuma samalla id:llä (nimi, päivät, paikka, `teams: []`). Ottelut, tulokset ja sijoitukset haetaan automaattisesti.
+- Haku ei koskaan poista jo tiedossa olevia pelattuja otteluita. Jos lähde ei vastaa, vanha data säilyy ja ajon yhteenvetoon tulee varoitus.
+- Hakuohjelma: `scripts/paivitys/` (`node testi.mjs` testaa jäsennyksen, `node paivita.mjs` hakee).
+
 ---
 
 ## Turnauksen tulospalvelu (`talviliiga/`)

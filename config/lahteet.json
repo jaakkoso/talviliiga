@@ -1,0 +1,95 @@
+{
+ "_ohje": "Tulevat turnaukset lisätään 'turnaukset'-listaan: id, nimi, päivät, paikka ja tulossivun osoite. Tyyppi: torneopal, gameresultsonline tai oma. Muut tiedot haetaan automaattisesti.",
+ "kausi": 2026,
+ "piirisarjat": [
+  {
+   "id": "35138118",
+   "nimi": "SJK-j/musta -15",
+   "taso": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "taulukot": [
+    {
+     "nimi": "P12 Kolmonen, syksy",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/"
+    },
+    {
+     "nimi": "P12 Kakkonen, kevät",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P122!lanjp26/group/2/"
+    },
+    {
+     "nimi": "P12 Karsinta Ykköseen",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/"
+    }
+   ]
+  },
+  {
+   "id": "35138119",
+   "nimi": "SJK-j/kulta",
+   "taso": "P11 Taso 1",
+   "taulukot": []
+  },
+  {
+   "id": "35140758",
+   "nimi": "SJK-j/valkoinen",
+   "taso": "P11 Taso 2",
+   "taulukot": []
+  },
+  {
+   "id": "35138117",
+   "nimi": "SJK-j/oranssi",
+   "taso": "P11 Taso 3",
+   "taulukot": []
+  }
+ ],
+ "huuhkajaliiga": [
+  {
+   "id": "syksy-2026",
+   "joukkue": "SJK-j/musta -15",
+   "alku": "2026-11-01",
+   "loppu": "2026-11-03",
+   "taulukko": "https://tulospalvelu.palloliitto.fi/category/P11HL!spljphhl26/group/4/"
+  },
+  {
+   "id": "kevat-2026",
+   "joukkue": "SJK-j/musta -15",
+   "alku": "2026-04-08",
+   "loppu": "2026-04-10",
+   "taulukko": "https://tulospalvelu.palloliitto.fi/category/P11HL!spljphhl26/group/1/"
+  }
+ ],
+ "turnaukset": [
+  {
+   "id": "talviliiga-2026",
+   "tyyppi": "oma"
+  },
+  {
+   "id": "jjk-mekipa-2026",
+   "tyyppi": "gameresultsonline",
+   "url": "https://www.gameresultsonline.com/jjk/jjk-syysturnaus",
+   "paiva": "2026-09-19"
+  },
+  {
+   "id": "messucup-2026",
+   "tyyppi": "torneopal",
+   "url": "https://messucup.torneopal.fi/",
+   "suodatin": "P11|2015"
+  },
+  {
+   "id": "kapa-kevat-2026",
+   "tyyppi": "torneopal",
+   "url": "https://kapakevat.torneopal.fi/",
+   "suodatin": "P11|E11|2015"
+  },
+  {
+   "id": "vpscup-2026",
+   "tyyppi": "torneopal",
+   "url": "https://vpscup2026.torneopal.fi/",
+   "suodatin": "U11|P11|2015"
+  },
+  {
+   "id": "ilves-paasiainen-2026",
+   "tyyppi": "torneopal",
+   "url": "https://paasiaisturnaus.torneopal.fi/",
+   "suodatin": "P11|2015"
+  }
+ ]
+}

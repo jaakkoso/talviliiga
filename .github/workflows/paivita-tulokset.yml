@@ -1,0 +1,59 @@
+# Hakee tulokset ja sarjataulukot automaattisesti ja julkaisee muutokset sivustolle.
+# Ajastus: kahden tunnin välein klo 7–23 Suomen aikaa. Käsin: Actions › Päivitä tulokset › Run workflow.
+name: Päivitä tulokset
+
+on:
+  schedule:
+    - cron: "23 4-20/2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: paivita-tulokset
+  cancel-in-progress: false
+
+jobs:
+  paivita:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: scripts/paivitys
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Asenna riippuvuudet ja selain
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Testaa jäsennys
+        run: node testi.mjs
+
+      - name: Hae tulokset
+        run: node paivita.mjs
+
+      - name: Julkaise muutokset
+        working-directory: .
+        run: |
+          rm -f scripts/paivitys/varoitukset.txt
+          if git diff --quiet -- piirisarja eerikkila turnaukset; then
+            echo "Ei muutoksia tuloksiin."
+            exit 0
+          fi
+          git config user.name "Tulospäivitys"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add piirisarja/data.json eerikkila/data.json turnaukset/data.json
+          git commit -m "Tulokset päivitetty automaattisesti $(TZ=Europe/Helsinki date '+%-d.%-m.%Y klo %H.%M')"
+          git push
+          # GitHub Actionsin omat pushit eivät aina käynnistä sivuston julkaisua, joten pyydetään se erikseen
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || echo "Sivuston julkaisupyyntö epäonnistui, julkaisu tapahtuu seuraavan muutoksen yhteydessä."
+        env:
+          GH_TOKEN: ${{ github.token }}

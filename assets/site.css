@@ -172,3 +172,26 @@ a.card:hover{border-color:#fff;box-shadow:0 1px 0 #fff inset,0 14px 36px rgba(33
 @media (prefers-reduced-motion:reduce){.btn,.tabs button{transition:none}.btn:hover,.tabs button:hover{transform:none}}
 .month .btn+.btn{margin-left:8px}
 .sec{align-content:start}
+
+.medal.plain{background:rgba(33,30,30,.07);color:var(--muted)}
+.eteam-head b{font-size:1.1rem}
+
+/* Sarjatasoittain-palkit */
+.levels{display:grid;gap:12px}
+.lv-legend{display:flex;gap:14px;font-size:.78rem;color:var(--muted)}
+.lv-legend span{display:inline-flex;align-items:center;gap:6px}
+.lv-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.lv-legend i.W,.lv-bar .W{background:var(--win)} .lv-legend i.D,.lv-bar .D{background:#b59b1c} .lv-legend i.L,.lv-bar .L{background:var(--loss)}
+.lv{display:grid;grid-template-columns:minmax(150px,220px) minmax(0,1fr) 64px;gap:14px;align-items:center}
+.lv-name{display:grid;min-width:0}
+.lv-name b{font-weight:700;font-size:.92rem}
+.lv-name small{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.lv-bar{display:flex;gap:2px;height:22px;border-radius:6px;overflow:hidden;min-width:0}
+.lv-bar span{display:flex;align-items:center;justify-content:center;color:#fff;font:700 .75rem var(--body);font-variant-numeric:tabular-nums;min-width:0;overflow:hidden}
+.lv-bar span:first-child{border-radius:6px 0 0 6px}.lv-bar span:last-child{border-radius:0 6px 6px 0}
+.lv-pct{font-family:var(--display);font-weight:800;font-size:1.3rem;line-height:1;text-align:right;font-variant-numeric:tabular-nums}
+.lv-pct small{display:block;font:500 .65rem var(--body);color:var(--muted);letter-spacing:.04em}
+@media (max-width:560px){.lv{grid-template-columns:minmax(0,1fr) 56px}.lv-name{grid-column:1/-1}.lv-bar{grid-column:1}}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+
+.lv-bar .D{color:var(--ink)}

@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261018g">
+<link rel="stylesheet" href="../assets/site.css?v=20261018h">
 </head>
 <body>
 <header class="top">
@@ -22,14 +22,14 @@
     </div>
   </div>
 </header>
-<nav class="menu" aria-label="Osiot"><div class="menu-in"><a href="../">Etusivu</a><a href="../turnaukset/">Turnaukset</a><a href="../eerikkila/">Huuhkajaliiga</a><a href="../piirisarja/" aria-current="page">Piirisarjat</a><a href="../kuva/">Joukkuekuva</a></div></nav>
+<nav class="menu" aria-label="Osiot"><div class="menu-in"><a href="../">Etusivu</a><a href="../turnaukset/">Turnaukset</a><a href="../eerikkila/">Huuhkajaliiga</a><a href="../piirisarja/" aria-current="page">Piirisarjat</a><a href="../kuva/">Ota somekuva</a></div></nav>
 <script>(function(){var a=document.querySelector(".menu [aria-current]");if(a&&a.offsetLeft+a.offsetWidth>a.parentNode.clientWidth)a.parentNode.scrollLeft=a.offsetLeft-12;})();</script>
 <main class="wrap">
-  <nav class="tabs" id="tabs" aria-label="Joukkue"></nav>
+  <nav class="tabs" id="tabs" aria-label="Sarjataso"></nav>
   <div class="sec" id="view"><p class="note">Ladataan tuloksia…</p></div>
 </main>
 <footer id="foot">Lähde: Palloliiton tulospalvelu.</footer>
-<script src="../assets/matches.js?v=20261018g"></script>
+<script src="../assets/matches.js?v=20261018h"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -37,19 +37,20 @@
   try { data = await P15.load('data.json'); }
   catch (e) { view.innerHTML = '<p class="note">Tuloksia ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
   const short = n => n.replace('SJK-j/', '');
-  document.getElementById('sub').textContent = `Kausi ${data.season} · ${data.teams.length} joukkuetta`;
+  const lvl = t => t.level.split('·')[0].replace(/\s*\(.*?\)/, '').trim();
+  document.getElementById('sub').textContent = `Kausi ${data.season} · ${data.teams.length} sarjatasoa`;
   document.getElementById('foot').textContent = `Lähde: ${data.source}, päivitetty ${data.updated.split('-').reverse().map(Number).join('.')}. Sivustolla ei ole pelaajien nimiä.`;
-  const opts = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: short(t.name) }))];
+  const opts = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: lvl(t) }))];
   tabs.innerHTML = opts.map(o => `<button type="button" id="tab-${o.id}" data-id="${o.id}" aria-pressed="false">${P15.esc(o.label)}</button>`).join('');
   function render(id) {
     tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
     if (id === 'kaikki') {
-      const items = data.teams.flatMap(t => t.matches.map(m => ({ m, opt: { own: t.name, showTeam: true, teamLabel: short(t.name) } })));
-      view.innerHTML = `<p class="note">Kaikkien P2015-joukkueiden sarjaottelut, uusin ensin. Valitse joukkue nähdäksesi sen kauden yhteenvedon.</p>` + P15.listHTML(items);
+      const items = data.teams.flatMap(t => t.matches.map(m => ({ m, opt: { own: t.name, showSeries: true } })));
+      view.innerHTML = `<p class="note">Kaikki P2015-sarjaottelut, uusin ensin. Valitse sarjataso nähdäksesi sen yhteenvedon ja taulukot.</p>` + P15.listHTML(items);
     } else {
       const t = data.teams.find(t => t.id === id);
-      view.innerHTML = `<div class="summary"><div class="sec-head"><h2>${P15.esc(t.name)}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
-        <div class="lvl">${P15.esc(t.level)}</div>${P15.summaryHTML(P15.summary(t.matches, t.name))}</div>`
+      view.innerHTML = `<div class="summary"><div class="sec-head"><h2>${P15.esc(lvl(t))}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
+        <div class="lvl">${P15.esc(t.level)} · ${P15.esc(t.name)}</div>${P15.summaryHTML(P15.summary(t.matches, t.name))}</div>`
         + (t.tables && t.tables.length ? `<div class="tables">${t.tables.map(x => P15.tableHTML(x)).join('')}</div>` : `<p class="note">${P15.esc(data.noTables || '')}</p>`)
         + P15.listHTML(t.matches.map(m => ({ m, opt: { own: t.name } })));
     }

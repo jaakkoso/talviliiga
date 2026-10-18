@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261018g">
+<link rel="stylesheet" href="../assets/site.css?v=20261018h">
 </head>
 <body>
 <header class="top">
@@ -22,11 +22,11 @@
     </div>
   </div>
 </header>
-<nav class="menu" aria-label="Osiot"><div class="menu-in"><a href="../">Etusivu</a><a href="../turnaukset/" aria-current="page">Turnaukset</a><a href="../eerikkila/">Huuhkajaliiga</a><a href="../piirisarja/">Piirisarjat</a><a href="../kuva/">Joukkuekuva</a></div></nav>
+<nav class="menu" aria-label="Osiot"><div class="menu-in"><a href="../">Etusivu</a><a href="../turnaukset/" aria-current="page">Turnaukset</a><a href="../eerikkila/">Huuhkajaliiga</a><a href="../piirisarja/">Piirisarjat</a><a href="../kuva/">Ota somekuva</a></div></nav>
 <script>(function(){var a=document.querySelector(".menu [aria-current]");if(a&&a.offsetLeft+a.offsetWidth>a.parentNode.clientWidth)a.parentNode.scrollLeft=a.offsetLeft-12;})();</script>
 <main class="wrap" id="view"><p class="note">Ladataan…</p></main>
 <footer>Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa.</footer>
-<script src="../assets/matches.js?v=20261018g"></script>
+<script src="../assets/matches.js?v=20261018h"></script>
 <script>
 (async () => {
   const view = document.getElementById('view');
@@ -38,10 +38,11 @@
   const isUp = ev => ev.teams.every(t => t.matches.every(m => !m.score));
   const teamHTML = (ev, t) => {
     const s = P15.summary(t.matches, t.name);
-    const medal = t.trophy ? `<span class="medal">${CUP}${P15.esc(t.result || 'Palkintosija')}</span>` : '';
+    const pl = t.place, top = pl && pl.pos <= 3;
+    const badge = pl ? `<span class="medal${top ? '' : ' plain'}">${top ? CUP : ''}${pl.pos}. / ${pl.of}</span>` : '';
     return `<div class="eteam">
-      <div class="eteam-head"><b>${P15.esc(t.label)}</b>${medal}</div>
-      <div class="rec"><span>${P15.esc(t.level)}</span>${s.p ? `<span><b>${s.w}–${s.d}–${s.l}</b> V–T–H</span><span>maalit <b>${s.gf}–${s.ga}</b></span>` : ''}</div>
+      <div class="eteam-head"><b>${P15.esc(t.level)}</b>${badge}</div>
+      <div class="rec"><span>${P15.esc(t.name)}</span>${s.p ? `<span><b>${s.w}–${s.d}–${s.l}</b> V–T–H</span><span>maalit <b>${s.gf}–${s.ga}</b></span>` : ''}</div>
       ${[...t.matches].sort((a, b) => a.date.localeCompare(b.date) || (a.time || '').localeCompare(b.time || '')).map(m => P15.matchHTML(m, { own: t.name, showSeries: false })).join('')}
     </div>`;
   };
