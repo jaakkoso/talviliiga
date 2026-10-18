@@ -72,3 +72,36 @@ export function turvallinen(vanhat, uudet) {
   const pelatut = a => (a || []).filter(m => m.score).length;
   return pelatut(uudet) >= pelatut(vanhat);
 }
+
+/* Palloliiton ottelusivun teksti → ottelutiedot ilman nimiä.
+   Maalintekijät muunnetaan pelinumeroiksi saman sivun kokoonpanon perusteella; nimiä ei palauteta. */
+export function ottelusivu(txt) {
+  const L = String(txt).split('\n').map(s => s.replace(/ /g, ' ').trim()).filter(Boolean);
+  const out = { time: null, venue: null, ht: null, goals: [], tupla: false };
+  const hdr = L.findIndex(l => /^\d{1,2}:\d{2} \|/.test(l));
+  if (hdr >= 0) { const m = L[hdr].match(/^(\d{1,2}):(\d{2})/); out.time = `${m[1]}.${m[2]}`; out.venue = (L[hdr + 1] || '').split(',')[0].trim() || null; }
+  const i = L.findIndex(l => /^(PÄÄTTYNYT|ENDED|FINISHED|FULL TIME)$/i.test(l));
+  if (i < 0) return out;
+  let j = i + 2; const hg = [];
+  while (j < L.length && !/^\d+ – \d+$/.test(L[j])) hg.push(L[j++]);
+  j++;
+  if (/^\d+ – \d+$/.test(L[j] || '')) { out.tupla = true; return out; } // tuplapeli: maaleja ei voi kohdistaa peliin
+  if (/^\(\d+–\d+\)$/.test(L[j] || '')) { out.ht = L[j].replace(/[()]/g, ''); j++; }
+  j++;
+  const ag = [];
+  while (j < L.length && !/^(KOKOONPANOT|LINEUPS)/i.test(L[j])) ag.push(L[j++]);
+  const sec = L.indexOf('1 PUOLIAIKA'), so = L.lastIndexOf('SHOTOFFTARGET');
+  const kokoonpano = (a, b) => L.slice(a, b).filter(l => /^#\d+ /.test(l)).map(l => { const m = l.match(/^#(\d+) (.+)$/); return { no: +m[1], name: m[2] }; });
+  const hl = kokoonpano(j, sec > 0 ? sec : j + 40), al = so > 0 ? kokoonpano(so + 1, so + 40) : [];
+  const lisaa = (rivit, kp, side) => {
+    for (const g of rivit) {
+      const mins = [...g.matchAll(/(\d+)(?:\+\d+)?'/g)].map(x => +x[1]); if (!mins.length) continue;
+      const name = g.replace(/\s*\d+(?:\+\d+)?'.*$/, '').trim(), og = /\(om\)|oma maali/i.test(g);
+      const c = kp.filter(p => p.name.split(' ')[0] === name || (name.includes(' ') && p.name.startsWith(name)));
+      for (const min of mins) { const e = { min, side }; if (og) e.og = true; else if (c.length === 1) e.no = c[0].no; out.goals.push(e); }
+    }
+  };
+  lisaa(hg, hl, 'h'); lisaa(ag, al, 'a');
+  out.goals.sort((a, b) => a.min - b.min);
+  return out;
+}

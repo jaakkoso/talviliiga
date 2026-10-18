@@ -29,3 +29,12 @@ assert.deepEqual(torneopalOttelu(['24.5.', 'P11K', 'TuNL/yj', 'rp 1–3 (2–2)'
 assert.equal(turvallinen([{ score: [[1, 0]] }], []), false);
 assert.equal(turvallinen([{ score: [[1, 0]] }], [{ score: [[1, 0]] }, { score: null }]), true);
 console.log('Kaikki jäsennystestit OK');
+
+import { ottelusivu } from './jasennys.mjs';
+const os = ottelusivu(['SJK-j/musta -15', '11 – 1', 'APV', '18:30 | ma 28.9.', 'Kyrkösjärvi TN A, Seinäjoki', 'P12 KOLMONEN', 'PÄÄTTYNYT', 'SJK-j/musta -15',
+  'Sorvisto   2\'', 'Hattula   7\' 9\'', 'Mäki   59\'', '11 – 1', '(4–1)', 'APV', 'Onnela E   1\'', 'KOKOONPANOTTILASTOT',
+  '#11 Hattula Aatos', '#16 Sorvisto Pekka', '#32 Mäki Nuutti', '#36 Mäkinen Jaakko', '1 PUOLIAIKA', 'SHOTOFFTARGET', '#14 Onnela Eetu', '#15 Onnela Aaro'].join('\n'));
+assert.equal(os.time, '18.30'); assert.equal(os.venue, 'Kyrkösjärvi TN A'); assert.equal(os.ht, '4–1');
+assert.deepEqual(os.goals.map(g => `${g.min}${g.side}${g.no ?? ''}`), ['1a14', '2h16', '7h11', '9h11', '59h32']);
+assert.ok(!JSON.stringify(os).includes('Hattula'), 'nimiä ei saa palauttaa');
+console.log('Ottelusivutesti OK');

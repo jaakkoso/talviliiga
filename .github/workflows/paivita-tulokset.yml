@@ -40,19 +40,22 @@ jobs:
         run: node testi.mjs
 
       - name: Hae tulokset
+        # Palloliiton tulospalvelu estää GitHubin palvelimet (Cloudflare); se haetaan kotikoneelta (scripts/kotikone)
+        env:
+          PAIVITA: turnaukset
         run: node paivita.mjs
 
       - name: Julkaise muutokset
         working-directory: .
         run: |
           rm -f scripts/paivitys/varoitukset.txt
-          if git diff --quiet -- piirisarja eerikkila turnaukset scripts/paivitys/tila.json && [ -z "$(git status --porcelain scripts/paivitys/tila.json)" ]; then
+          if git diff --quiet -- piirisarja eerikkila turnaukset scripts/paivitys/tila-turnaukset.json && [ -z "$(git status --porcelain scripts/paivitys/tila-turnaukset.json)" ]; then
             echo "Ei muutoksia tuloksiin."
             exit 0
           fi
           git config user.name "Tulospäivitys"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add piirisarja/data.json eerikkila/data.json turnaukset/data.json scripts/paivitys/tila.json
+          git add piirisarja/data.json eerikkila/data.json turnaukset/data.json scripts/paivitys/tila-turnaukset.json
           git commit -m "Tulokset päivitetty automaattisesti $(TZ=Europe/Helsinki date '+%-d.%-m.%Y klo %H.%M')"
           # Jos sivustoon on tehty muutoksia ajon aikana, haetaan ne ensin ja yritetään uudelleen
           for i in 1 2 3; do

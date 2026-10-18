@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -16,15 +16,18 @@ const kirjoita = (p, d) => {
   console.log('Päivitetty:', p);
 };
 const cfg = lue('config/lahteet.json');
+// PAIVITA=palloliitto (kotikone), turnaukset (GitHub) tai kaikki
+const MITA = process.env.PAIVITA || 'kaikki';
 const tanaan = new Date().toISOString().slice(0, 10);
 const varoitukset = [];
 const tila = { piirisarjat: {}, huuhkajaliiga: {}, turnaukset: {} };
 const varoita = msg => { varoitukset.push(msg); console.warn('VAROITUS:', msg); };
 
-const selain = await chromium.launch();
+// Kotikoneella käytetään koneen omaa Chromea (SELAIN=chrome), jos se on asennettu
+const selain = await chromium.launch(process.env.SELAIN ? { channel: process.env.SELAIN } : {});
 // Englanninkielinen käyttöliittymä: ottelulistan tunniste on silloin "MATCH DETAILS" (sama kuin testatessa)
 const sivu = await selain.newPage({ locale: 'en-US', viewport: { width: 1300, height: 1000 },
-  userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' });
+  ...(process.env.SELAIN ? {} : { userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' }) });
 sivu.setDefaultTimeout(30000);
 
 /* ---------- Palloliiton tulospalvelu ---------- */
@@ -47,6 +50,16 @@ const diagnoosi = {};
 async function palloliittoJoukkue(id) {
   const raaka = await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/results`, 'MATCH DETAILS');
   const tulokset = palloliittoOttelut(raaka, cfg.kausi);
+  // Otteluiden tunnisteet (ottelutietoja varten): jokaisen ottelukortin linkki ja kortin teksti
+  const kortit = await sivu.evaluate(() => [...document.querySelectorAll('main a[href*="/match/"]')].map(a => {
+    let c = a; while (c.parentElement && !/\d+–\d+/.test(c.innerText)) c = c.parentElement;
+    return { id: (a.getAttribute('href').match(/match\/(\d+)/) || [])[1], L: c.innerText.split('\n').map(s => s.trim()).filter(Boolean) };
+  }));
+  const kaytetty = new Set();
+  for (const m of tulokset) {
+    const k = kortit.find(k => k.id && !kaytetty.has(k.id) && k.L.includes(m.home) && k.L.includes(m.away));
+    if (k) { m.pid = k.id; kaytetty.add(k.id); }
+  }
   if (!tulokset.length) diagnoosi[id] = {
     url: sivu.url(), otsikko: await sivu.title(),
     main: await sivu.evaluate(() => !!document.querySelector('main')),
@@ -96,6 +109,28 @@ async function paivitaPiirisarjat() {
   return hh;
 }
 
+/* Ottelutiedot (aika, kenttä, puoliaikatulos, maalit pelinumeroina) otteluille, joilta ne puuttuvat */
+async function paivitaOttelutiedot() {
+  const det = (() => { try { return lue('piirisarja/ottelut.json'); } catch { return {}; } })();
+  const p = lue('piirisarja/data.json'), e = lue('eerikkila/data.json');
+  const ottelut = [...p.teams.flatMap(t => t.matches), ...e.events.flatMap(ev => ev.matches)].filter(m => m.pid && m.score && !det[m.pid]);
+  let haettu = 0;
+  for (const m of ottelut.slice(0, 40)) {
+    try {
+      await sivu.goto(`https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap`, { waitUntil: 'domcontentloaded' });
+      await sivu.waitForFunction(() => /PÄÄTTYNYT|ENDED/i.test(document.querySelector('main')?.innerText || ''), null, { timeout: 20000 });
+      await sivu.waitForTimeout(800);
+      const o = ottelusivu(await sivu.evaluate(() => document.querySelector('main').innerText));
+      const rec = { time: o.time, venue: o.venue };
+      if (o.ht) rec.ht = o.ht;
+      if (!o.tupla && o.goals.length) rec.goals = o.goals;
+      det[m.pid] = rec; haettu++;
+    } catch (err) { varoita(`Ottelutiedot ${m.pid}: ${err.message.split('\n')[0]}`); }
+  }
+  tila.ottelutiedot = { haettu, puuttui: ottelut.length };
+  if (haettu) fs.writeFileSync(path.join(JUURI, 'piirisarja/ottelut.json'), JSON.stringify(det) + '\n');
+}
+
 async function paivitaHuuhkajaliiga(hh) {
   const d = lue('eerikkila/data.json');
   for (const h of cfg.huuhkajaliiga) {
@@ -106,7 +141,7 @@ async function paivitaHuuhkajaliiga(hh) {
       // Nimet voivat olla ohjelmassa lyhyempiä (esim. "P-Iirot" vs "P-Iirot/kelt"), joten verrataan nimien alkuja
       const ydin = n => String(n).toLowerCase().replace(/[^a-zäöå]/g, '').slice(0, 4);
       const vanha = ev.matches.find(x => x.date === m.date && ydin(x.home) === ydin(m.home) && ydin(x.away) === ydin(m.away));
-      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) vanha.score = m.score; if (m.time && !vanha.time) vanha.time = m.time; }
+      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) vanha.score = m.score; if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
     tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
@@ -223,13 +258,16 @@ async function paivitaTurnaukset() {
 }
 
 try {
-  const hh = await paivitaPiirisarjat();
-  await paivitaHuuhkajaliiga(hh);
-  await paivitaTurnaukset();
+  if (MITA !== 'turnaukset') {
+    const hh = await paivitaPiirisarjat();
+    await paivitaHuuhkajaliiga(hh);
+    await paivitaOttelutiedot();
+  }
+  if (MITA !== 'palloliitto') await paivitaTurnaukset();
 } finally { await selain.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
-fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/tila.json'), JSON.stringify({ ...tila, varoitukset, diagnoosi }, null, 1) + '\n');
+fs.writeFileSync(path.join(JUURI, `scripts/paivitys/tila-${MITA}.json`), JSON.stringify({ ...tila, varoitukset, diagnoosi }, null, 1) + '\n');
 if (varoitukset.length) {
   fs.writeFileSync(path.join(JUURI, 'scripts/paivitys/varoitukset.txt'), varoitukset.join('\n') + '\n');
   // Varoitukset eivät kaada ajoa, mutta GitHub näyttää ne ajon yhteenvedossa
