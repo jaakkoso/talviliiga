@@ -35,7 +35,7 @@ echo "[3/4] Selaimen asennus (voi kestää pari minuuttia)"
 
 # 4. Oikeus viedä tulokset GitHubiin (tallennetaan macOS:n avainnippuun)
 echo "[4/4] GitHub-yhteys"
-if ! git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1; then
+if ! GIT_TERMINAL_PROMPT=0 git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1; then
   echo
   echo "Tarvitaan GitHub-avain, jolla tulokset viedään sivustolle:"
   echo "  1. Avaa https://github.com/settings/personal-access-tokens/new"
@@ -46,7 +46,7 @@ if ! git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1; then
   printf "Liitä avain tähän (ei näy kirjoittaessa) ja paina Enter: "
   read -rs TOKEN < /dev/tty; echo
   printf "protocol=https\nhost=github.com\nusername=jaakkoso\npassword=%s\n\n" "$TOKEN" | git credential-osxkeychain store
-  git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1 || { echo "Avain ei toiminut. Tarkista oikeudet (Contents: Read and write) ja aja asennus uudelleen."; exit 1; }
+  GIT_TERMINAL_PROMPT=0 git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1 || { echo "Avain ei toiminut. Tarkista oikeudet (Contents: Read and write) ja aja asennus uudelleen."; exit 1; }
 fi
 echo "GitHub-yhteys kunnossa."
 
