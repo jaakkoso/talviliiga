@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /talviliiga/yllapito.html
+Disallow: /talviliiga/tuomari.html
+Disallow: /talviliiga/kentta.html
+
+Sitemap: https://p2015-tulokset.sjk-juniorit.fi/sitemap.xml
