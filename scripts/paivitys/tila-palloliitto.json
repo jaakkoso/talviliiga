@@ -1,0 +1,43 @@
+{
+ "piirisarjat": {
+  "SJK-j/musta -15": {
+   "ottelut": 30,
+   "pelatut": 30,
+   "taulukot": 3
+  },
+  "SJK-j/kulta": {
+   "ottelut": 20,
+   "pelatut": 20,
+   "taulukot": 0
+  },
+  "SJK-j/valkoinen": {
+   "ottelut": 20,
+   "pelatut": 20,
+   "taulukot": 0
+  },
+  "SJK-j/oranssi": {
+   "ottelut": 20,
+   "pelatut": 20,
+   "taulukot": 0
+  }
+ },
+ "huuhkajaliiga": {
+  "syksy-2026": {
+   "haetut": 0,
+   "pelatut": 0,
+   "taulukko": 8
+  },
+  "kevat-2026": {
+   "haetut": 7,
+   "pelatut": 7,
+   "taulukko": 8
+  }
+ },
+ "turnaukset": {},
+ "ottelutiedot": {
+  "haettu": 0,
+  "puuttui": 0
+ },
+ "varoitukset": [],
+ "diagnoosi": {}
+}
