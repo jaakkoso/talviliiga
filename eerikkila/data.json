@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-19",
+ "updated": "2026-10-20",
  "events": [
   {
    "id": "syksy-2026",
@@ -15,7 +15,7 @@
      "date": "2026-11-01",
      "time": "15.30",
      "series": "P11 HUUHKAJALIIGA",
-     "home": "P-Iirot",
+     "home": "P-Iirot/kelt",
      "away": "SJK-j/musta -15",
      "score": null
     },
@@ -40,14 +40,14 @@
      "time": "14.45",
      "series": "P11 HUUHKAJALIIGA",
      "home": "SJK-j/musta -15",
-     "away": "FF Jaro",
+     "away": "FF Jaro/-15",
      "score": null
     },
     {
      "date": "2026-11-02",
      "time": "19.30",
      "series": "P11 HUUHKAJALIIGA",
-     "home": "MuSa",
+     "home": "MuSa/Black",
      "away": "SJK-j/musta -15",
      "score": null
     },
