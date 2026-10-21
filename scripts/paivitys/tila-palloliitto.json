@@ -38,6 +38,8 @@
   "haettu": 0,
   "puuttui": 0
  },
- "varoitukset": [],
+ "varoitukset": [
+  "P12 Kakkonen, kevät: page.evaluate: TypeError: Cannot read properties of null (reading 'querySelector')\n    at eval (eval at evaluate (:311:30), <anonymous>:3:29)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)"
+ ],
  "diagnoosi": {}
 }
