@@ -99,3 +99,5 @@ body.kp-on .kp{display:flex}
 .st-dot.st-done{background:#e3f4e8;border-color:#7cc49a}.st-dot.st-ann{background:#e3ecf8;border-color:#8fb0dc}.st-dot.st-wait{background:#fff;border:2px solid var(--live)}
 .kp-mbtn:disabled{background:#d9d4c7;color:#5b5650;cursor:not-allowed}
 .kp-mini:disabled{opacity:.4;cursor:not-allowed}
+
+.kp-rbtn:disabled{background:#3a3535;color:#8a837a;cursor:not-allowed}

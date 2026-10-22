@@ -18,7 +18,7 @@
     { id: 'tauko', file: '07-tauko', label: 'Tauko alkaa', sub: 'Aamupäivä pelattu', rel: [4, 32] },
     { id: 'tauko-loppuu', file: '08-tauko-loppuu', label: 'Tauko loppuu', sub: '15 min iltapäivään', rel: [5, -15] },
     { id: 'saannot-ip', audio: 'saannot', label: 'Säännöt', sub: 'Sääntömuistutus', rel: [5, -10] },
-    { id: 'lopetus', file: '14-lopetus', label: 'Kiitos ja näkemiin', sub: 'Päivän päätös', rel: [9, 32] },
+    { id: 'lopetus', file: '14-lopetus', label: 'Kiitos ja näkemiin', sub: 'Päivän päätös · käsin loppusijoitusten jälkeen', rel: [9, 32], manual: true },
   ];
   /* Lisäkuulutukset otteluiden väliin: minuutti ottelun päättymisen jälkeen (ottelu 30 min, kutsu seuraavaan 2 min ennen alkua). */
   [['lounas', 'Lounas', 0, 31], ['kahvio', 'Kahvio', 1, 31], ['pukukopit', 'Pukukopit', 2, 31], ['qr', 'Tulokset puhelimeen', 3, 31],
@@ -37,6 +37,8 @@
     ...Array.from({ length: 13 }, (_, n) => ({ id: `p-${n}-kesken` })), ...Array.from({ length: 13 }, (_, n) => ({ id: `p-${n}-loppu` })),
     ...[13, 14, 15].map(n => ({ id: `p-${n}-kesken` })), ...[13, 14, 15].map(n => ({ id: `p-${n}-loppu` }))];
   PIECES.forEach((p, i) => { p.file = 'T' + String(i + 1).padStart(2, '0') + '-' + p.id.slice(2); p.label = p.id; });
+  const STAND = [['p-loppusij', 'S01-loppusijoitukset'], ['p-sija1', 'S02-sija1'], ['p-sija2', 'S03-sija2'], ['p-sija3', 'S04-sija3'], ['p-onnittelut', 'S05-onnittelut']].map(([id, file]) => ({ id, file, label: id }));
+  PIECES.push(...STAND);
   const OMAT_N = 6;
   const FILES = {}, LABEL = {};
   [...P, ...EXTRAS, ...PIECES].forEach(c => { if (c.file) FILES[c.id] = c.file; LABEL[c.id] = c.label; });
@@ -45,7 +47,7 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), offset: null, open: false, txt: {},
+    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), offset: null, open: false, txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
@@ -156,7 +158,7 @@
     if (my !== stopFlag) return;
     playingKey = it.key; paint();
     const t0 = actx.currentTime + .05; let t = t0 + (it.seq ? fanfareAt(t0) : gongAt(t0));
-    bufs.forEach((b, i) => { const s = actx.createBufferSource(); s.buffer = b; s.connect(actx.destination); s.start(t); nodes.push(s); t += b.duration + (it.seq ? gapOf(ids[i]) : 0); });
+    bufs.forEach((b, i) => { const s = actx.createBufferSource(); s.buffer = b; s.connect(actx.destination); s.start(t); nodes.push(s); t += b.duration + (it.seq ? gapOf(ids[i]) + (/^p-(sija[23]|haaste|onnittelut)$/.test(ids[i + 1] || '') ? .25 : 0) : 0); });
     await wait(Math.max(0, (t - actx.currentTime) * 1000) + 400);
     if (my === stopFlag) { nodes = []; playingKey = null; }
   }
@@ -197,7 +199,7 @@
   function tickAuto() {
     if (!S.auto || !live() || !loggedIn()) return;
     const m = nowSec() / 60;
-    program().forEach(c => { const at = timeOf(c); if (m >= at && m < at + 3 && !isFired(c) && !isSkip(c)) fire(c); });
+    program().forEach(c => { const at = timeOf(c); if (m >= at && m < at + 3 && !isFired(c) && !isSkip(c) && !c.manual) fire(c); });
   }
   async function setAuto(on) {
     S.auto = on; ls.set('k-auto', on);
@@ -221,9 +223,43 @@
     const st = S.ann[ak(i)] != null ? (S.ann[ak(i)] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'valmis kuulutettavaksi' : 'odottaa toista ottelua';
     return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}" ${sr.complete || S.ann[ak(i)] != null ? '' : 'disabled title="Vahvista ensin molemmat ottelut"'}>${S.ann[ak(i)] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
   }
+  /* ---- loppusijoitukset sarjataulukosta ---- */
+  const allMatches = () => ((typeof R !== 'undefined' && R.data && R.data.matches) || []);
+  const allDone = () => { const ms = allMatches().filter(m => !cancelled(m)); return ms.length > 0 && ms.every(isFinal); };
+  const seriesOf = re => seriesList(allMatches()).find(x => re.test(x));
+  function standTop(series) { if (!series) return []; return standings(allMatches(), series, (R.data && R.data.adjust) || []).slice(0, 3); }
+  function standParts() {
+    const parts = [['k', 'Kilpasarjassa', seriesOf(/kilpa/i)]]; if (S.standHaaste) parts.push(['h', 'Haastesarjassa', seriesOf(/haaste/i)]);
+    return parts.map(([k, l, ser]) => ({ k, l, top: standTop(ser) })).filter(x => x.top.length);
+  }
+  const standLot = () => standParts().some(x => x.top.some(r => r.lot));
+  function standText() { const ps = standParts(); if (!ps.length) return ''; return 'Päivän loppusijoitukset! ' + ps.map(x => x.l + ' ' + x.top.map((r, n) => ['ensimmäisenä', 'toisena', 'kolmantena'][n] + ' ' + r.team).join(', ') + '.').join(' ') + ' Onnittelut menestyneille – ja kiitos kaikille joukkueille upeista peleistä!'; }
+  function standSeq() { const seq = ['p-loppusij']; standParts().forEach(x => { seq.push(x.k === 'k' ? 'p-kilpa' : 'p-haaste'); x.top.forEach((r, n) => seq.push('p-sija' + (n + 1), 'p-' + r.team.toLowerCase())); }); seq.push('p-onnittelut'); return seq; }
+  const standAnn = () => S.ann[ak('stand')] != null;
+  function sayStand(withEnd) {
+    if (!allDone()) { toast('Kaikkien otteluiden tulokset pitää ensin vahvistaa.'); return; }
+    if (standLot()) { toast('Kärkikolmikossa on tasapisteitä, jotka pitää ratkaista. Aseta sija ylläpidon Taulukko-välilehdellä.'); return; }
+    const bad = standSeq().filter(id => !FILES[id]); if (bad.length) { toast('Joukkueen nimeä ei löydy äänitiedostoista: ' + bad.join(', ')); return; }
+    S.ann[ak('stand')] = 1; ls.set('k-ann2', S.ann);
+    enqueue({ key: 'stand', seq: standSeq(), label: 'Loppusijoitukset' });
+    if (withEnd) { const c = P.find(x => x.id === 'lopetus'); S.fired[dayKey() + ':lopetus'] = true; ls.set('k-fired', S.fired); enqueue({ key: 'lopetus', id: 'lopetus', label: c.label }); }
+    draw();
+  }
+  function standBox(inNext) {
+    const done = allDone(), lot = done && standLot(), ann = standAnn(), txt = standText();
+    if (inNext && (!done || ann)) return '';
+    const missing = allMatches().filter(m => !cancelled(m) && !isFinal(m)).length;
+    return `<div class="${inNext ? 'kp-ready' : ''}">${inNext ? '<div class="kp-eyebrow">Loppusijoitukset valmiina</div>' : ''}<div class="kp-rcard">
+      ${txt ? `<p>”${esc(txt)}”</p>` : ''}
+      <label class="kp-chk" style="margin:0"><input type="checkbox" data-kstandh ${S.standHaaste ? 'checked' : ''}> Kuulutetaan myös haastesarjan kärki</label>
+      <p class="kp-help" style="margin:0">${!done ? `Odottaa vielä ${missing} ottelun tulosta. Sijoitukset voivat muuttua.` : lot ? 'Kärkikolmikossa on ratkaisemattomia tasapisteitä. Aseta sija Taulukko-välilehdellä.' : ann ? 'Kuulutettu.' : 'Kaikki tulokset vahvistettu.'}</p>
+      <button class="kp-rbtn" data-kstand="1" ${done && !lot ? '' : 'disabled'}>📣 ${ann ? 'Kuuluta uudelleen' : 'Kuuluta loppusijoitukset'} + lopetus</button>
+      <button class="kp-mini" data-kstand="0" ${done && !lot ? '' : 'disabled'}>Vain loppusijoitukset</button></div></div>`;
+  }
   function readyBox() {
     const ready = BASE.map((_, i) => i).filter(i => slotResult(i).complete && S.ann[ak(i)] == null);
     if (!ready.length) return '';
+    if (!ready.length) return standBox(true);
     return `<div class="kp-ready"><div class="kp-eyebrow">Tulokset valmiina kuulutettavaksi</div>${ready.map(i => `<div class="kp-rcard"><p>”${esc(resultText(i))}”</p><button class="kp-rbtn" data-kres="${i}">📣 Kuuluta tulokset ${BASE[i][1]}–${BASE[i][2]}</button></div>`).join('')}<div class="kp-note">Hyvä hetki on otteluiden välissä, ennen seuraavaa ottelukutsua.</div></div>`;
   }
   function row(c, nx) {
@@ -250,6 +286,7 @@
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
+    panel.querySelector('.kp-stand').innerHTML = standBox(false);
     drawOmat(); paint(); tickCd();
   }
   function drawOmat(force) {
@@ -294,6 +331,7 @@
         <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
           <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Tuloskuulutus kootaan automaattisesti tulospalvelun vahvistetuista tuloksista, mutta se kuulutetaan vasta, kun painat Kuuluta tulokset -nappia. Nappi ilmestyy keltaiseen korttiin, kun kierroksen molemmat ottelut on vahvistettu.</p></details>
+        <details class="kp-sec"><summary>Loppusijoitukset</summary><div class="kp-stand"></div><p class="kp-help">Kootaan sarjataulukosta (3 parasta). Lopetuskuulutus ei soi itsestään, vaan tulee tämän napin kautta loppusijoitusten perään.</p></details>
         <details class="kp-sec" open><summary>Muut kuulutukset</summary><div class="kp-extras"></div></details>
         <details class="kp-sec"><summary>Omat kuulutukset</summary>
           <p class="kp-help">Kirjoita teksti tavallisesti → <b>Kopioi ElevenLabsiin</b> → <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener">ElevenLabs</a> (Christoffer Weiss · v4 · Finnish · Stability 40 % · Similarity 75 %) → lataa mp3 → <b>Lisää ääni</b>. Äänet tallentuvat tämän koneen selaimeen.</p>
@@ -315,6 +353,7 @@
     const q = s => e.target.closest(s); let t;
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
     if (q('[data-kclose]')) { panel.classList.remove('open'); return; }
+    if ((t = q('[data-kstand]'))) { if (playingKey === 'stand') { stopAll(); return; } unlock(); sayStand(t.dataset.kstand === '1'); return; }
     if ((t = q('[data-kmres]'))) { const i = +t.dataset.kmres; if (playingKey === 'r' + i) { stopAll(); return; } unlock(); sayResult(i, true); draw(); matchCard(); return; }
     if (!panel || !panel.contains(e.target)) return;
     if (q('[data-kunlock]')) { unlock(); setTimeout(tickCd, 200); return; }
@@ -349,6 +388,7 @@
     const d = e.target.dataset || {};
     if (d.komtone != null) { S.omat[d.komtone].tone = e.target.value; saveOmat(); const p = panel.querySelector(`[data-komel="${d.komtone}"]`); if (p) p.textContent = toEl(S.omat[d.komtone].text, e.target.value); return; }
     if (d.komfile && e.target.files[0]) { const id = d.komfile; await idb('readwrite', s => s.put(e.target.files[0], id)); S.ownAudio[id] = true; delete buf[id]; drawOmat(true); toast('Ääni lisätty'); return; }
+    if (d.kstandh != null) { S.standHaaste = e.target.checked; ls.set('k-standh', S.standHaaste); draw(); return; }
     if (d.kgong != null) { S.gong = e.target.checked; ls.set('k-gong', S.gong); }
   });
 
