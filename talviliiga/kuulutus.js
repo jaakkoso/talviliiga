@@ -176,8 +176,6 @@
   let lock = null;
   function fire(c) {
     S.fired[dayKey() + ':' + c.id] = true; ls.set('k-fired', S.fired);
-    const t = timeOf(c);
-    BASE.forEach((_, i) => { const sr = slotResult(i); if (kick(i) < t && sr.complete && S.ann[ak(i)] == null) sayResult(i); });
     enqueue({ key: c.id, id: audioOf(c), label: c.label });
   }
   function tickAuto() {
@@ -204,8 +202,13 @@
     const sr = slotResult(i); if (!sr.any) return '';
     const { r } = sr, [, a, b] = BASE[i];
     const txt = [['k', 'Kilpa'], ['h', 'Haaste']].filter(([s]) => r[s + 'a'] != null).map(([s, l]) => `${l} ${a} ${r[s + 'a']}–${r[s + 'b']} ${b}`).join(' · ');
-    const st = S.ann[ak(i)] != null ? (S.ann[ak(i)] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'kuulutetaan ennen seuraavaa kutsua' : 'odottaa toista ottelua';
+    const st = S.ann[ak(i)] != null ? (S.ann[ak(i)] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'valmis kuulutettavaksi' : 'odottaa toista ottelua';
     return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}">${S.ann[ak(i)] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
+  }
+  function readyBox() {
+    const ready = BASE.map((_, i) => i).filter(i => slotResult(i).complete && S.ann[ak(i)] == null);
+    if (!ready.length) return '';
+    return `<div class="kp-ready"><div class="kp-eyebrow">Tulokset valmiina kuulutettavaksi</div>${ready.map(i => `<div class="kp-rcard"><p>”${esc(resultText(i))}”</p><button class="kp-rbtn" data-kres="${i}">📣 Kuuluta tulokset ${BASE[i][1]}–${BASE[i][2]}</button></div>`).join('')}<div class="kp-note">Hyvä hetki on otteluiden välissä, ennen seuraavaa ottelukutsua.</div></div>`;
   }
   function row(c, nx) {
     const t = timeOf(c), moved = t !== origOf(c), f = isFired(c), sk = isSkip(c);
@@ -220,7 +223,7 @@
     document.body.classList.toggle('kp-on', loggedIn());
     if (!loggedIn()) return;
     const nx = nextItem(), lv = live();
-    const autoTxt = S.auto ? (lv ? `Kuulutetaan automaattisesti klo ${fmtTime(timeOf(nx))}. Jos joukkueet ovat valmiina aiemmin, paina ”Kuuluta nyt”: kuulutus tulee heti, eikä sitä toisteta enää klo ${fmtTime(timeOf(nx))}.` : `Tänään ei ole turnauspäivä. Automaatti alkaa kuuluttaa itse turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}. Voit kuunnella kuulutuksia listan ▶-napeista, tai kokeilla koko päivää kohdassa Asetukset ja testaus → Testikello.`) : 'Automaatti pois. Kuulutukset tulevat vain, kun painat nappia.';
+    const autoTxt = S.auto ? (lv ? `Kuulutetaan automaattisesti klo ${fmtTime(timeOf(nx))}. Jos haluat sen jo aiemmin, paina ”Kuuluta nyt”: kuulutus tulee heti, eikä sitä toisteta enää klo ${fmtTime(timeOf(nx))}.` : `Tänään ei ole turnauspäivä. Automaatti alkaa kuuluttaa itse turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}. Voit kuunnella kuulutuksia listan ▶-napeista, tai kokeilla koko päivää kohdassa Asetukset ja testaus → Testikello.`) : 'Automaatti pois. Kuulutukset tulevat vain, kun painat nappia.';
     panel.querySelector('.kp-next').innerHTML = `
       <div class="kp-unlock" data-kunlock hidden>🔈 Napauta tästä, jotta kuulutukset kuuluvat</div>
       <div class="kp-eyebrow">${lv ? 'Seuraavaksi' : 'Turnauspäivän ensimmäinen'} · klo ${fmtTime(timeOf(nx))}</div>
@@ -228,7 +231,7 @@
       <div class="kp-big" data-kbig="${timeOf(nx)}"></div>
       <div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>
       <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
-      <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>`;
+      <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
     drawOmat(); paint(); tickCd();
@@ -273,7 +276,7 @@
       <div class="kp-body">
         <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
-          <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Vahvistetut tulokset kuulutetaan automaattisesti ennen seuraavaa kuulutusta, kun saman ottelukierroksen molemmat ottelut on vahvistettu.</p></details>
+          <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Tuloskuulutus kootaan automaattisesti tulospalvelun vahvistetuista tuloksista, mutta se kuulutetaan vasta, kun painat Kuuluta tulokset -nappia. Nappi ilmestyy keltaiseen korttiin, kun kierroksen molemmat ottelut on vahvistettu.</p></details>
         <details class="kp-sec" open><summary>Muut kuulutukset</summary><div class="kp-extras"></div></details>
         <details class="kp-sec"><summary>Omat kuulutukset</summary>
           <p class="kp-help">Kirjoita teksti tavallisesti → <b>Kopioi ElevenLabsiin</b> → <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener">ElevenLabs</a> (Christoffer Weiss · v4 · Finnish · Stability 40 % · Similarity 75 %) → lataa mp3 → <b>Lisää ääni</b>. Äänet tallentuvat tämän koneen selaimeen.</p>
