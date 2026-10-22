@@ -82,3 +82,6 @@ body.kp-on .kp{display:flex}
 .kp-rcard p{margin:0;font-size:.85rem;line-height:1.35}
 .kp-rbtn{background:var(--klive);color:#06210f;border:0;border-radius:10px;padding:12px;font-family:var(--display);font-weight:800;font-size:1.1rem;text-transform:uppercase;letter-spacing:.04em}
 .kp-rbtn.playing{background:var(--kgold);color:#141212}
+
+.kp-mbtn{background:#211e1e;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:1.05rem}
+.kp-mbtn.playing{background:#17804a}

@@ -251,6 +251,7 @@
   }
   function paint() {
     if (!panel) return;
+    matchCard();
     panel.querySelectorAll('[data-kplay]').forEach(b => b.classList.toggle('playing', b.dataset.kplay === playingKey));
     panel.querySelectorAll('[data-kres]').forEach(b => b.classList.toggle('playing', 'r' + b.dataset.kres === playingKey));
     const ab = panel.querySelector('[data-kattn]'); if (ab) ab.classList.toggle('playing', playingKey === 'huomio');
@@ -297,6 +298,7 @@
     const q = s => e.target.closest(s); let t;
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
     if (q('[data-kclose]')) { panel.classList.remove('open'); return; }
+    if ((t = q('[data-kmres]'))) { const i = +t.dataset.kmres; if (playingKey === 'r' + i) { stopAll(); return; } unlock(); sayResult(i, true); draw(); matchCard(); return; }
     if (!panel || !panel.contains(e.target)) return;
     if (q('[data-kunlock]')) { unlock(); setTimeout(tickCd, 200); return; }
     if (q('[data-kauto]')) { setAuto(!S.auto); return; }
@@ -333,8 +335,28 @@
     if (d.kgong != null) { S.gong = e.target.checked; ls.set('k-gong', S.gong); }
   });
 
+  /* ---- tuloskuulutus myös ottelun ylläpitonäkymään ---- */
+  function matchCard() {
+    const appEl = document.getElementById('app');
+    if (!appEl || typeof R === 'undefined' || R.view !== 'match' || !R.data || !loggedIn()) return;
+    const m = R.data.matches.find(x => x.id === R.match); if (!m) return;
+    const i = BASE.findIndex((_, k) => pairOf(k)(m));
+    const old = appEl.querySelector('.kp-mcard');
+    if (i < 0) { if (old) old.remove(); return; }
+    const sr = slotResult(i), txt = resultText(i), done = S.ann[ak(i)] != null, changed = done && S.ann[ak(i)] !== sr.sig;
+    const others = matchesOf(i).filter(x => !cancelled(x) && !isFinal(x)).map(x => x.series);
+    const status = !sr.any ? 'Tuloskuulutus kootaan, kun lopputulos on vahvistettu.' : changed ? 'Tulos on muuttunut kuuluttamisen jälkeen.' : done ? 'Kuulutettu.' : others.length ? `Odottaa vielä: ${others.join(', ')}. Voit kuuluttaa jo nyt vahvistetut, tai odottaa ja kuuluttaa molemmat kerralla.` : 'Valmis kuulutettavaksi.';
+    const html = `<section class="card kp-mcard" style="display:grid;gap:10px"><div class="sec-h" style="margin:0"><h2>Tuloskuulutus</h2><small>${esc(BASE[i][1])}–${esc(BASE[i][2])} · kilpa ja haaste yhdessä</small></div>
+      ${txt ? `<p style="margin:0;font-size:1.05rem">”${esc(txt)}”</p>` : ''}<p class="note" style="margin:0">${status}</p>
+      ${sr.any ? `<button class="btn kp-mbtn ${playingKey === 'r' + i ? 'playing' : ''}" data-kmres="${i}">${playingKey === 'r' + i ? '■ Pysäytä' : done ? '📣 Kuuluta tulokset uudelleen' : '📣 Kuuluta tulokset'}</button>` : ''}</section>`;
+    const sig = html;
+    if (old && old.dataset.sig === sig) return;
+    const tmp = document.createElement('div'); tmp.innerHTML = html; const node = tmp.firstElementChild; node.dataset.sig = sig;
+    if (old) old.replaceWith(node); else { const first = appEl.querySelector('section.card'); if (first) first.after(node); }
+  }
   /* ---- käynnistys ---- */
   build(); preload();
+  { const appEl = document.getElementById('app'); if (appEl) new MutationObserver(() => matchCard()).observe(appEl, { childList: true }); }
   idb('readonly', s => s.getAllKeys()).then(keys => { (keys || []).forEach(k => S.ownAudio[k] = true); draw(); });
   let lastSig = '';
   setInterval(() => {
