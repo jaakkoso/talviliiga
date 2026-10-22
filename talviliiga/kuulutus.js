@@ -18,6 +18,10 @@
     { id: 'saannot-ip', audio: 'saannot', label: 'Säännöt', sub: 'Sääntömuistutus', rel: [5, -10] },
     { id: 'lopetus', file: '14-lopetus', label: 'Kiitos ja näkemiin', sub: 'Päivän päätös', rel: [9, 32] },
   ];
+  /* Lisäkuulutukset otteluiden väliin: minuutti ottelun päättymisen jälkeen (ottelu 30 min, kutsu seuraavaan 2 min ennen alkua). */
+  [['lounas', 'Lounas', 0, 31], ['kahvio', 'Kahvio', 1, 31], ['pukukopit', 'Pukukopit', 2, 31], ['qr', 'Tulokset puhelimeen', 3, 31],
+   ['kahvio', 'Kahvio', 4, 55], ['kannustus', 'Reilu kannustus', 5, 31], ['kahvio', 'Kahvio', 6, 31], ['qr', 'Tulokset puhelimeen', 7, 31], ['pukukopit', 'Pukukopit', 8, 31]]
+    .forEach(([audio, label, slot, off], n) => P.push({ id: 'lisa' + (n + 1), audio, label, sub: 'Lisäkuulutus otteluiden välissä', rel: [slot, off], extra: true }));
   const callFiles = ['02-ottelu1', '03-ottelu2', '04-ottelu3', '05-ottelu4', '06-ottelu5', '09-ottelu6', '10-ottelu7', '11-ottelu8', '12-ottelu9', '13-ottelu10'];
   BASE.forEach(([, a, b], i) => P.push({ id: 'ottelu' + (i + 1), file: callFiles[i], slot: i, a, b, label: `${a} – ${b}`, sub: 'Ottelukutsu', rel: [i, (i === 0 || i === 5) ? -5 : -2] }));
   const EXTRAS = [
@@ -261,7 +265,7 @@
       <div class="kp-body">
         <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
-          <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Vahvistetut tulokset kuulutetaan automaattisesti ennen seuraavaa kuulutusta, kun saman ottelukierroksen molemmat ottelut on vahvistettu.</p></details>
+          <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Vahvistetut tulokset kuulutetaan automaattisesti ennen seuraavaa kuulutusta, kun saman ottelukierroksen molemmat ottelut on vahvistettu.</p></details>
         <details class="kp-sec" open><summary>Muut kuulutukset</summary><div class="kp-extras"></div></details>
         <details class="kp-sec"><summary>Omat kuulutukset</summary>
           <p class="kp-help">Kirjoita teksti tavallisesti → <b>Kopioi ElevenLabsiin</b> → <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener">ElevenLabs</a> (Christoffer Weiss · v4 · Finnish · Stability 40 % · Similarity 75 %) → lataa mp3 → <b>Lisää ääni</b>. Äänet tallentuvat tämän koneen selaimeen.</p>
