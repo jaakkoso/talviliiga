@@ -64,11 +64,14 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,54px);lin
 .sbar{position:absolute;left:4cqw;right:4cqw;bottom:6cqw;display:flex;gap:2.5cqw;align-items:center;z-index:5}
 .sbar .c,.sbar .url{height:12.5cqw;border-radius:7cqw;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 1cqw 4cqw rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center}
 .sbar .c{width:12.5cqw;flex:none;font-size:5cqw;font-weight:700}
-.sbar .url{flex:1;font-size:3.7cqw;gap:1.5cqw;color:#222}
+.sbar .url{flex:1;min-width:0;font-size:3.7cqw;gap:2cqw;color:#222;justify-content:space-between;padding:0 3cqw 0 1.5cqw}
+.sbar .url .ut{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:center}
+.burger{width:9.5cqw;height:9.5cqw;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.sbar .ico{width:5.4cqw;height:5.4cqw}
 .dots{letter-spacing:.06em;font-size:5.5cqw;line-height:1;transform:translateY(-1cqw)}
 
 /* ••• -valikko */
-.screen .menu{position:absolute;inset:auto 4cqw 21cqw auto;width:66cqw;background:rgba(104,102,97,.985);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;border-radius:6cqw;padding:2cqw 0;transform-origin:bottom right;z-index:10;box-shadow:0 4cqw 10cqw rgba(0,0,0,.35)}
+.screen .menu{position:absolute;inset:auto auto 21cqw 18cqw;width:66cqw;background:rgba(104,102,97,.985);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;border-radius:6cqw;padding:2cqw 0;transform-origin:bottom left;z-index:10;box-shadow:0 4cqw 10cqw rgba(0,0,0,.35)}
 .menu div{display:flex;gap:3.5cqw;align-items:center;padding:2.9cqw 5cqw;font-size:4.2cqw}
 .menu hr{border:0;border-top:1px solid rgba(255,255,255,.22);margin:1cqw 5cqw}
 .ico{width:5cqw;height:5cqw;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -199,8 +202,8 @@ kbd{font-family:inherit;font-weight:700;background:var(--bg);border:1px solid va
             </div>
             <div class="sbar">
               <div class="c">‹</div>
-              <div class="url">p2015-tulokset.sjk-juniorit.fi</div>
-              <div class="c hit" id="t-more"><span class="dots">•••</span></div>
+              <div class="url"><span class="burger hit" id="t-more"><svg class="ico" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></span><span class="ut">tulokset.sjk-juniorit.fi</span><svg class="ico" viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg></div>
+              <div class="c"><svg class="ico" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 4H6a2 2 0 0 0-2 2v10"/></svg></div>
             </div>
           </div>
 
@@ -256,7 +259,7 @@ kbd{font-family:inherit;font-weight:700;background:var(--bg);border:1px solid va
     </div>
 
     <ol class="steps" id="steps">
-      <li><button class="step" type="button" data-i="0"><span class="no">1</span><div><b>Avaa sivu Safarissa ja napauta <kbd>•••</kbd></b><span>Mene osoitteeseen p2015-tulokset.sjk-juniorit.fi. Kolme pistettä on alapalkin oikeassa reunassa.</span></div></button></li>
+      <li><button class="step" type="button" data-i="0"><span class="no">1</span><div><b>Avaa sivu Safarissa ja napauta <kbd>☰</kbd></b><span>Mene osoitteeseen p2015-tulokset.sjk-juniorit.fi. Kolme viivaa on alapalkin osoiterivin vasemmassa reunassa.</span></div></button></li>
       <li><button class="step" type="button" data-i="1"><span class="no">2</span><div><b>Valitse <kbd>Jaa</kbd></b><span>Se on valikon ylimpänä.</span></div></button></li>
       <li><button class="step" type="button" data-i="2"><span class="no">3</span><div><b>Valitse <kbd>Lisää Koti-valikkoon</kbd></b><span>Jos et näe sitä, vieritä listaa alaspäin.</span></div></button></li>
       <li><button class="step" type="button" data-i="3"><span class="no">4</span><div><b>Paina <kbd>Lisää</kbd> oikeassa yläkulmassa</b><span>Nimen voi lyhentää esimerkiksi muotoon "SJK tulokset". Pidä Avaa verkkoappina päällä.</span></div></button></li>
@@ -265,7 +268,7 @@ kbd{font-family:inherit;font-weight:700;background:var(--bg);border:1px solid va
   </div>
 
   <div class="tips">
-    <div class="tip"><h2>Ei •••-nappia?</h2><p>Vanhemmissa iPhoneissa alapalkissa on suoraan Jaa-painike (neliö, josta nuoli osoittaa ylös). Napauta sitä ja jatka kohdasta 3.</p></div>
+    <div class="tip"><h2>Ei ☰-nappia?</h2><p>Vanhemmissa iPhoneissa alapalkissa on suoraan Jaa-painike (neliö, josta nuoli osoittaa ylös). Napauta sitä ja jatka kohdasta 3.</p></div>
     <div class="tip"><h2>Android</h2><p>Avaa sivu Chromessa, napauta oikean yläkulman kolmea pistettä ja valitse Lisää aloitusnäytölle.</p></div>
     <div class="tip"><h2>Poistaminen</h2><p>Paina kuvaketta pitkään ja valitse Poista. Mitään ei ole asennettu, joten jälkiä ei jää.</p></div>
   </div>
