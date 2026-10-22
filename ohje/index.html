@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tulokset kotinäytölle</title>
+<meta name="description" content="Näin lisäät SJK P2015 -tulokset iPhonen kotinäytölle, niin ne aukeavat yhdellä napautuksella.">
+<meta property="og:title" content="SJK P2015 tulokset kotinäytölle">
+<meta property="og:description" content="Viisi napautusta: tulokset aukeavat jatkossa kuin sovellus.">
+<meta property="og:image" content="https://p2015-tulokset.sjk-juniorit.fi/assets/icon-192.png">
+<meta property="og:url" content="https://p2015-tulokset.sjk-juniorit.fi/ohje/">
+<meta name="theme-color" content="#211e1e">
+<link rel="icon" href="../assets/logo-180.png">
+<link rel="apple-touch-icon" href="../assets/icon-192.png">
+<style>html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;600;700&display=swap">
+<style>
+/* Layout: animoitu iPhone vasemmalla, numeroidut vaiheet oikealla; puhelimella pinottuna. SJK:n kulta ja musta. */
+:root{
+  --bg:#f5f3ea; --surface:#ffffff; --ink:#1d1b19; --muted:#5f5a50; --line:#e2ddcc;
+  --gold:#bdb03a; --gold-ink:#6f6714; --dark:#211e1e;
+  --display:"Saira Condensed","Arial Narrow",sans-serif; --body:Figtree,system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151413;--surface:#1f1d1b;--ink:#f1eee6;--muted:#a9a396;--line:#332f2a;--gold-ink:#d8cb55;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151413;--surface:#1f1d1b;--ink:#f1eee6;--muted:#a9a396;--line:#332f2a;--gold-ink:#d8cb55;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 48px}
+header{display:flex;gap:18px;align-items:center;margin-bottom:28px}
+header img{width:64px;height:64px;flex:none}
+.eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.16em;font-size:14px;color:var(--gold-ink);text-transform:uppercase}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,54px);line-height:.95;margin:2px 0 6px;text-wrap:balance}
+.lede{margin:0;color:var(--muted);max-width:56ch}
+.main{display:grid;grid-template-columns:minmax(0,340px) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:760px){.main{grid-template-columns:minmax(0,1fr)}.stage{order:0}}
+.stage{display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:16px}
+@media (max-width:760px){.stage{position:static}}
+
+/* ---------- puhelin ---------- */
+.phone{width:min(300px,78vw);max-width:100%;aspect-ratio:9/19.3;border-radius:46px;background:#0c0c0c;padding:10px;box-shadow:0 0 0 2px #3a3835,0 24px 50px -18px rgba(0,0,0,.45)}
+.screen{position:relative;width:100%;height:100%;border-radius:37px;overflow:hidden;background:#f3f0e1;container-type:inline-size;font-family:-apple-system,"SF Pro Text",Figtree,system-ui,sans-serif;color:#111}
+.layer{position:absolute;inset:0;transition:opacity .45s ease,transform .45s cubic-bezier(.2,.8,.2,1)}
+.island{position:absolute;top:2.6cqw;left:50%;transform:translateX(-50%);width:28cqw;height:8cqw;background:#000;border-radius:5cqw;z-index:40}
+.status{position:absolute;top:0;left:0;right:0;height:13cqw;display:flex;justify-content:space-between;align-items:center;padding:1cqw 8cqw 0;font-weight:600;font-size:4.4cqw;z-index:35}
+.status i{font-style:normal;letter-spacing:.05em}
+
+/* sivu */
+.page{background:#f3f0e1}
+.pg-head{background:#211e1e;color:#fff;padding:15cqw 5cqw 5cqw;display:flex;gap:3.5cqw;align-items:center}
+.pg-head img{width:15cqw;height:15cqw}
+.pg-head small{display:block;font-family:var(--display);color:#bdb03a;letter-spacing:.12em;font-size:3cqw;font-weight:600}
+.pg-head b{display:block;font-family:var(--display);font-weight:800;font-size:8.6cqw;line-height:1}
+.pg-nav{background:#4a4643;color:#fff;display:flex;gap:5cqw;padding:3cqw 5cqw;font-size:3.8cqw;white-space:nowrap;overflow:hidden}
+.pg-nav span:first-child{border-bottom:.8cqw solid #bdb03a;padding-bottom:1cqw}
+.pg-body{padding:5cqw}
+.pg-h{font-family:var(--display);font-weight:800;font-size:6.6cqw;margin-bottom:3cqw}
+.pg-card{border-radius:4cqw;padding:4.5cqw;margin-bottom:3cqw;background:#fff;color:#111}
+.pg-card.dk{background:#3c3836;color:#fff}
+.chip{display:inline-block;background:#bdb03a;color:#111;font-weight:700;font-size:3.2cqw;border-radius:9cqw;padding:.6cqw 3cqw}
+.pg-card .k{font-family:var(--display);color:#bdb03a;letter-spacing:.1em;font-size:3.2cqw;margin-top:2cqw;font-weight:600}
+.pg-card.l .k{color:#555}
+.pg-card .t{font-family:var(--display);font-weight:800;font-size:8cqw;line-height:1}
+.pg-card .s{font-size:3.6cqw;opacity:.75;margin-top:1cqw}
+.sbar{position:absolute;left:4cqw;right:4cqw;bottom:6cqw;display:flex;gap:2.5cqw;align-items:center;z-index:5}
+.sbar .c,.sbar .url{height:12.5cqw;border-radius:7cqw;background:rgba(255,255,255,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 1cqw 4cqw rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center}
+.sbar .c{width:12.5cqw;flex:none;font-size:5cqw;font-weight:700}
+.sbar .url{flex:1;font-size:3.7cqw;gap:1.5cqw;color:#222}
+.dots{letter-spacing:.06em;font-size:5.5cqw;line-height:1;transform:translateY(-1cqw)}
+
+/* ••• -valikko */
+.screen .menu{position:absolute;inset:auto 4cqw 21cqw auto;width:66cqw;background:rgba(104,102,97,.985);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:#fff;border-radius:6cqw;padding:2cqw 0;transform-origin:bottom right;z-index:10;box-shadow:0 4cqw 10cqw rgba(0,0,0,.35)}
+.menu div{display:flex;gap:3.5cqw;align-items:center;padding:2.9cqw 5cqw;font-size:4.2cqw}
+.menu hr{border:0;border-top:1px solid rgba(255,255,255,.22);margin:1cqw 5cqw}
+.ico{width:5cqw;height:5cqw;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.dim{position:absolute;inset:0;background:rgba(0,0,0,.28);z-index:8}
+
+/* jakovalikko */
+.sheet{top:auto;height:84%;background:#1c1c1e;color:#fff;border-radius:7cqw 7cqw 0 0;z-index:12;padding:4cqw}
+.sh-top{display:flex;gap:3.5cqw;align-items:center;padding:1cqw 1cqw 4cqw;border-bottom:1px solid #333}
+.sh-top img{width:13cqw;height:13cqw;border-radius:3cqw;background:#2a2a2a}
+.sh-top b{display:block;font-size:4.2cqw}
+.sh-top small{color:#8e8e93;font-size:3.5cqw}
+.sh-x{margin-left:auto;width:10cqw;height:10cqw;border-radius:50%;background:#3a3a3c;display:flex;align-items:center;justify-content:center;font-size:5cqw}
+.grp{background:#2c2c2e;border-radius:5cqw;margin-top:4cqw;overflow:hidden}
+.grp div{display:flex;gap:4cqw;align-items:center;padding:3.6cqw 5cqw;font-size:4.2cqw;border-top:1px solid #3a3a3c}
+.grp div:first-child{border-top:0}
+
+/* lisäysikkuna */
+.dialog{background:#1c1c1e;color:#fff;z-index:14;padding:15cqw 4cqw 4cqw}
+.dl-top{display:flex;align-items:center;justify-content:space-between;gap:2cqw}
+.dl-top .x{width:11cqw;height:11cqw;border-radius:50%;background:#3a3a3c;display:flex;align-items:center;justify-content:center;font-size:5cqw;flex:none}
+.dl-top b{font-size:4.3cqw;text-align:center}
+.add{background:#3b82f6;color:#fff;font-weight:700;font-size:4.2cqw;border-radius:8cqw;padding:2.6cqw 4.5cqw;flex:none}
+.dl-card{background:#2c2c2e;border-radius:5cqw;margin-top:7cqw;padding:4cqw;display:flex;gap:4cqw;align-items:center}
+.dl-card img{width:16cqw;height:16cqw;border-radius:3.6cqw;background:#2a2a2a;flex:none}
+.dl-card .n{font-size:4.3cqw;border-bottom:1px solid #444;padding-bottom:2.4cqw;margin-bottom:2.4cqw}
+.dl-card .n::after{content:"";display:inline-block;width:.5cqw;height:4.4cqw;background:#3b82f6;vertical-align:-.6cqw;margin-left:.4cqw;animation:blink 1s steps(1) infinite}
+.dl-card .u{font-size:3.4cqw;color:#c7c7cc;word-break:break-all}
+.dl-row{background:#2c2c2e;border-radius:5cqw;margin-top:4cqw;padding:3.6cqw 5cqw;display:flex;justify-content:space-between;align-items:center;font-size:4.2cqw}
+.tog{width:12.5cqw;height:7.5cqw;border-radius:5cqw;background:#34c759;position:relative}
+.tog::after{content:"";position:absolute;right:.7cqw;top:.7cqw;width:6.1cqw;height:6.1cqw;border-radius:50%;background:#fff}
+.dl-note{color:#8e8e93;font-size:3.3cqw;margin:2.5cqw 2cqw 0}
+@keyframes blink{50%{opacity:0}}
+
+/* kotinäyttö */
+.home{background:radial-gradient(60cqw 80cqw at 25% 30%,#1b2a18 0,transparent 70%),radial-gradient(60cqw 70cqw at 85% 75%,#162414 0,transparent 70%),#050505;color:#fff;z-index:16}
+.grid{position:absolute;top:17cqw;left:7cqw;right:7cqw;display:grid;grid-template-columns:repeat(4,1fr);gap:6cqw 5cqw}
+.app{display:flex;flex-direction:column;align-items:center;gap:1.4cqw;font-size:2.9cqw;text-align:center;white-space:nowrap}
+.app i{display:block;width:100%;aspect-ratio:1;border-radius:22%;background:#2b2b2e}
+.app img{width:100%;aspect-ratio:1;border-radius:22%;background:#1a1a1a;display:block}
+.app.new{transform:scale(0);opacity:0}
+.home.go .app.new{animation:pop .7s .25s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes pop{to{transform:scale(1);opacity:1}}
+.home.go .app.new img{animation:glow 1.6s 1s ease-out}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(189,176,58,.9)}100%{box-shadow:0 0 0 5cqw rgba(189,176,58,0)}}
+.dock{position:absolute;left:4cqw;right:4cqw;bottom:4.5cqw;height:21cqw;border-radius:9cqw;background:rgba(255,255,255,.12);display:flex;justify-content:space-around;align-items:center;padding:0 4cqw}
+.dock i{width:15cqw;height:15cqw;border-radius:22%;background:#2b2b2e}
+.dock i:first-child{background:#2f6b33}
+.search{position:absolute;bottom:31cqw;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.14);border-radius:5cqw;padding:1.4cqw 4cqw;font-size:3.3cqw}
+
+/* näkyvyys vaiheittain */
+.screen .menu,.screen .dim,.screen .sheet,.screen .dialog,.screen .home{opacity:0;pointer-events:none}
+.screen .menu{transform:scale(.6)}
+.screen .sheet{transform:translateY(100%)}
+.screen .dialog{transform:translateY(100%)}
+.screen[data-step="1"] .menu,.screen[data-step="1"] .dim{opacity:1;transform:none}
+.screen[data-step="2"] .sheet,.screen[data-step="2"] .dim{opacity:1;transform:none}
+.screen[data-step="3"] .dialog{opacity:1;transform:none}
+.screen[data-step="4"] .home{opacity:1}
+.status{color:#fff;mix-blend-mode:difference}
+.screen[data-step="4"] .status,.screen[data-step="3"] .status{mix-blend-mode:normal}
+
+/* sormi */
+.finger{position:absolute;width:11cqw;height:11cqw;margin:-5.5cqw 0 0 -5.5cqw;border-radius:50%;background:rgba(255,255,255,.55);border:.7cqw solid rgba(255,255,255,.95);box-shadow:0 1cqw 5cqw rgba(0,0,0,.45);left:50%;top:115%;opacity:0;z-index:50;transition:left .7s cubic-bezier(.4,0,.2,1),top .7s cubic-bezier(.4,0,.2,1),opacity .3s,transform .15s}
+.finger.on{opacity:1}
+.finger.press{transform:scale(.78)}
+.finger::after{content:"";position:absolute;inset:-.7cqw;border-radius:50%;border:.7cqw solid #fff;opacity:0}
+.finger.press::after{animation:ripple .55s ease-out}
+@keyframes ripple{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(2.4)}}
+.hit{transition:background .2s}
+.hit.pressed{background:rgba(255,255,255,.28)!important}
+.sbar .hit.pressed{background:#d9d6cc!important}
+.add.pressed{background:#1d5fd0!important}
+
+/* ohjaimet */
+.ctrl{display:flex;gap:10px;align-items:center}
+.btn{font:600 14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px;cursor:pointer}
+.btn:focus-visible,.step:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* vaiheet */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:s}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;align-items:start;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;font:inherit;color:inherit;transition:border-color .2s,box-shadow .2s}
+.step .no{font-family:var(--display);font-weight:800;font-size:26px;line-height:1;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.step b{display:block;font-size:17px;line-height:1.3}
+.step span{display:block;color:var(--muted);font-size:15px;margin-top:3px}
+.step[aria-current="step"]{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset}
+.step[aria-current="step"] .no{background:var(--gold);color:#161414;border-color:var(--gold)}
+kbd{font-family:inherit;font-weight:700;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:0 6px;white-space:nowrap}
+
+.tips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:36px}
+@media (max-width:760px){.tips{grid-template-columns:minmax(0,1fr)}}
+.tip{border-top:3px solid var(--dark);padding-top:10px}
+:root:not([data-theme="light"]) .tip{border-top-color:var(--line)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .tip{border-top-color:var(--dark)}}
+:root[data-theme="light"] .tip{border-top-color:var(--dark)}
+.tip h2{font-family:var(--display);font-weight:800;font-size:22px;margin:0 0 4px;text-transform:uppercase;letter-spacing:.02em}
+.tip p{margin:0;color:var(--muted);font-size:15px}
+.foot{margin-top:32px;font-size:15px;color:var(--muted)}
+.foot a{color:var(--gold-ink);font-weight:700}
+@media (prefers-reduced-motion:reduce){.layer,.finger,.step{transition:none!important}.home.go .app.new{animation:none;transform:none;opacity:1}.dl-card .n::after{animation:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <img src="../assets/logo-180.png" alt="SJK">
+    <div>
+      <div class="eyebrow">SJK P2015 · iPhone</div>
+      <h1>Tulokset kotinäytölle</h1>
+      <p class="lede">Lisää P2015-tulokset iPhonen kotinäytölle, niin sivu aukeaa yhdellä napautuksella kuin sovellus. Lataamista tai sovelluskauppaa ei tarvita.</p>
+    </div>
+  </header>
+
+  <div class="main">
+    <div class="stage">
+      <div class="phone" aria-hidden="true">
+        <div class="screen" id="screen" data-step="0">
+          <div class="island"></div>
+          <div class="status"><span>17.45</span><i>●●● 4G</i></div>
+
+          <div class="layer page">
+            <div class="pg-head"><img src="../assets/logo-180.png" alt=""><div><small>SJK-JUNIORIT · POJAT 2015</small><b>P2015 TULOKSET</b></div></div>
+            <div class="pg-nav"><span>Etusivu</span><span>Turnaukset</span><span>Huuhkajaliiga</span><span>Piirisarjat</span></div>
+            <div class="pg-body">
+              <div class="pg-h">SEURAAVAT TAPAHTUMAT</div>
+              <div class="pg-card dk"><span class="chip">LA 24.10.</span><div class="k">TURNAUS · WALLSPORT</div><div class="t">TALVILIIGA</div><div class="s">Avaa tulospalvelu →</div></div>
+              <div class="pg-card l"><span class="chip">1.–3.11.</span><div class="k">HUUHKAJALIIGA</div><div class="t">P11 ALALOPPUSARJA</div></div>
+            </div>
+            <div class="sbar">
+              <div class="c">‹</div>
+              <div class="url">p2015-tulokset.sjk-juniorit.fi</div>
+              <div class="c hit" id="t-more"><span class="dots">•••</span></div>
+            </div>
+          </div>
+
+          <div class="layer dim"></div>
+
+          <div class="layer menu">
+            <div class="hit" id="t-share"><svg class="ico" viewBox="0 0 24 24"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11H5v10h14V11h-1"/></svg>Jaa</div>
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Lisää: Kirjanmerkit</div>
+            <hr>
+            <div><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>Etsi sivulta</div>
+            <div><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5M11 8v6M8 11h6"/></svg>Sivun zoomaus</div>
+            <hr>
+            <div><svg class="ico" viewBox="0 0 24 24"><path d="M4 4l6 6M20 20l-6-6M4 4v5M4 4h5M20 20v-5M20 20h-5"/></svg>Kätke työkalupalkki</div>
+          </div>
+
+          <div class="layer sheet">
+            <div class="sh-top"><img src="../assets/icon-192.png" alt=""><div><b>SJK P2015 tulokset</b><small>p2015-tulokset.sjk-juniorit.fi</small></div><div class="sh-x">×</div></div>
+            <div class="grp">
+              <div><svg class="ico" viewBox="0 0 24 24"><path d="M3 5h7a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H3zM21 5h-7a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h7z"/></svg>Lisää kirjanmerkki…</div>
+              <div><svg class="ico" viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>Lisää suosikkeihin</div>
+              <div><svg class="ico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>Etsi sivulta</div>
+              <div class="hit" id="t-home"><svg class="ico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8M8 12h8"/></svg>Lisää Koti-valikkoon</div>
+            </div>
+            <div class="grp">
+              <div><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M9 16l3-8 3 8"/></svg>Merkitse</div>
+              <div><svg class="ico" viewBox="0 0 24 24"><path d="M7 8V4h10v4M5 8h14v8H5zM8 14h8v6H8z"/></svg>Tulosta</div>
+            </div>
+          </div>
+
+          <div class="layer dialog">
+            <div class="dl-top"><div class="x">×</div><b>Lisää Koti-valikkoon</b><div class="add hit" id="t-add">Lisää</div></div>
+            <div class="dl-card"><img src="../assets/icon-192.png" alt=""><div style="min-width:0;flex:1"><div class="n">SJK tulokset</div><div class="u">p2015-tulokset.sjk-juniorit.fi</div></div></div>
+            <div class="dl-row"><span>Avaa verkkoappina</span><span class="tog"></span></div>
+            <div class="dl-note">Kuvake lisätään kotinäytölle.</div>
+          </div>
+
+          <div class="layer home" id="home">
+            <div class="grid">
+              <div class="app"><i style="background:#3a3f4a"></i>Kalenteri</div><div class="app"><i style="background:#43403a"></i>Kuvat</div><div class="app"><i style="background:#2d4256"></i>Sää</div>
+              <div class="app new"><img src="../assets/icon-192.png" alt="">SJK tulokset</div>
+            </div>
+            <div class="search">⌕ Haku</div>
+            <div class="dock"><i></i><i></i><i></i><i></i></div>
+          </div>
+
+          <div class="finger" id="finger"></div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <button class="btn" id="play" type="button">Pysäytä</button>
+        <button class="btn" id="restart" type="button">Alusta</button>
+      </div>
+    </div>
+
+    <ol class="steps" id="steps">
+      <li><button class="step" type="button" data-i="0"><span class="no">1</span><div><b>Avaa sivu Safarissa ja napauta <kbd>•••</kbd></b><span>Mene osoitteeseen p2015-tulokset.sjk-juniorit.fi. Kolme pistettä on alapalkin oikeassa reunassa.</span></div></button></li>
+      <li><button class="step" type="button" data-i="1"><span class="no">2</span><div><b>Valitse <kbd>Jaa</kbd></b><span>Se on valikon ylimpänä.</span></div></button></li>
+      <li><button class="step" type="button" data-i="2"><span class="no">3</span><div><b>Valitse <kbd>Lisää Koti-valikkoon</kbd></b><span>Jos et näe sitä, vieritä listaa alaspäin.</span></div></button></li>
+      <li><button class="step" type="button" data-i="3"><span class="no">4</span><div><b>Paina <kbd>Lisää</kbd> oikeassa yläkulmassa</b><span>Nimen voi lyhentää esimerkiksi muotoon "SJK tulokset". Pidä Avaa verkkoappina päällä.</span></div></button></li>
+      <li><button class="step" type="button" data-i="4"><span class="no">5</span><div><b>Valmis</b><span>SJK-kuvake on nyt kotinäytöllä. Se aukeaa koko näytölle ilman Safarin palkkeja, ja tulokset päivittyvät itsestään.</span></div></button></li>
+    </ol>
+  </div>
+
+  <div class="tips">
+    <div class="tip"><h2>Ei •••-nappia?</h2><p>Vanhemmissa iPhoneissa alapalkissa on suoraan Jaa-painike (neliö, josta nuoli osoittaa ylös). Napauta sitä ja jatka kohdasta 3.</p></div>
+    <div class="tip"><h2>Android</h2><p>Avaa sivu Chromessa, napauta oikean yläkulman kolmea pistettä ja valitse Lisää aloitusnäytölle.</p></div>
+    <div class="tip"><h2>Poistaminen</h2><p>Paina kuvaketta pitkään ja valitse Poista. Mitään ei ole asennettu, joten jälkiä ei jää.</p></div>
+  </div>
+
+  <p class="foot">Sivu: <a href="https://p2015-tulokset.sjk-juniorit.fi/">p2015-tulokset.sjk-juniorit.fi</a></p>
+</div>
+
+<script>
+(() => {
+  const screen = document.getElementById('screen'), finger = document.getElementById('finger'), home = document.getElementById('home');
+  const stepBtns = [...document.querySelectorAll('.step')], playBtn = document.getElementById('play');
+  const targets = ['t-more', 't-share', 't-home', 't-add', null];
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let run = 0, playing = !reduce, cur = 0;
+
+  function show(i) {
+    cur = i;
+    screen.dataset.step = i;
+    stepBtns.forEach((b, k) => { if (k === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current'); });
+    finger.classList.remove('on', 'press');
+    finger.style.left = '50%'; finger.style.top = '115%';
+    home.classList.remove('go');
+    if (i === 4) { void home.offsetWidth; home.classList.add('go'); }
+  }
+  async function tapOn(id, token) {
+    const el = document.getElementById(id), s = screen.getBoundingClientRect(), r = el.getBoundingClientRect();
+    finger.style.left = (r.left + r.width / 2 - s.left) + 'px';
+    finger.style.top = (r.top + r.height / 2 - s.top) + 'px';
+    finger.classList.add('on');
+    await sleep(800); if (token !== run) return false;
+    finger.classList.add('press'); el.classList.add('pressed');
+    await sleep(450);
+    finger.classList.remove('press'); el.classList.remove('pressed');
+    await sleep(350);
+    return token === run;
+  }
+  async function loop(from) {
+    const token = ++run;
+    for (let i = from; ; i = (i + 1) % 5) {
+      show(i);
+      await sleep(i === 0 ? 1400 : 1100); if (token !== run) return;
+      if (targets[i]) { if (!(await tapOn(targets[i], token))) return; }
+      else { await sleep(3200); if (token !== run) return; }
+    }
+  }
+  function setPlaying(p) { playing = p; playBtn.textContent = p ? 'Pysäytä' : 'Toista'; if (p) loop(cur); else { run++; show(cur); } }
+  stepBtns.forEach(b => b.addEventListener('click', () => { const i = +b.dataset.i; run++; show(i); if (playing) loop(i); }));
+  playBtn.addEventListener('click', () => setPlaying(!playing));
+  document.getElementById('restart').addEventListener('click', () => { run++; show(0); if (playing) loop(0); });
+  if (playing) loop(0); else { playBtn.textContent = 'Toista'; show(0); }
+})();
+</script>
+
+</body>
+</html>
