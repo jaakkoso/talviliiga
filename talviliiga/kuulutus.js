@@ -280,7 +280,7 @@
           <div class="kp-omat"></div></details>
         <details class="kp-sec"><summary>Asetukset ja testaus</summary>
           <label class="kp-chk"><input type="checkbox" data-kgong ${S.gong ? 'checked' : ''}> Merkkiääni ennen kuulutusta ja fanfaari ennen tuloksia</label>
-          <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: turnausaamu 09.44</button><button class="kp-mini" data-kjump>Hyppää 10 s ennen seuraavaa kuulutusta</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
+          <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: aloita testi alusta (09.44)</button><button class="kp-mini" data-kjump>Hyppää 10 s ennen seuraavaa kuulutusta</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
           <p class="kp-help">Kytke kone hallin äänentoistoon ja testaa äänenvoimakkuus. Pidä tämä sivu auki ja kone hereillä (kansi auki, virtajohto kiinni).</p></details>
       </div>
       <div class="kp-toast" role="status" hidden></div>`;
@@ -308,7 +308,7 @@
     if ((t = q('[data-ktxt]'))) { const id = t.dataset.ktxt; S.txt[id] = !S.txt[id]; draw(); return; }
     if ((t = q('[data-kskip]'))) { const id = t.dataset.kskip; if (S.skip[ak(id)]) delete S.skip[ak(id)]; else S.skip[ak(id)] = true; ls.set('k-skip2', S.skip); queue = queue.filter(x => x.key !== id); draw(); return; }
     if (q('[data-ktest]')) { stopAll(); unlock(); const t0 = actx.currentTime + .05; gongAt(t0); fanfareAt(t0 + 1.8); return; }
-    if (q('[data-kclock]')) { const e0 = EVENT.date || new Date(2026, 9, 24); S.offset = new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30) - Date.now(); if (S.auto) setAuto(true); else draw(); toast('Testikello päällä: kello hyppäsi turnausaamuun'); return; }
+    if (q('[data-kclock]')) { ['fired', 'ann', 'skip'].forEach(k => Object.keys(S[k]).forEach(x => { if (x.includes('-testi')) delete S[k][x]; })); ls.set('k-fired', S.fired); ls.set('k-ann2', S.ann); ls.set('k-skip2', S.skip); stopAll(); const e0 = EVENT.date || new Date(2026, 9, 24); S.offset = new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30) - Date.now(); if (S.auto) setAuto(true); else draw(); toast('Testikello: kello hyppäsi turnausaamuun ja testin kuulutukset nollattiin'); return; }
     if (q('[data-kjump]')) { if (S.offset == null) { toast('Paina ensin Testikello'); return; } const nx = nextItem(), d = now(); const target = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() + timeOf(nx) * 60000 - 10000; S.offset += target - d.getTime(); draw(); toast('Kello: 10 s ennen kuulutusta ' + nx.label); return; }
     if (q('[data-krealclock]')) { S.offset = null; draw(); return; }
     if ((t = q('[data-kreset]'))) { if (!t.dataset.sure) { t.dataset.sure = '1'; t.textContent = 'Paina uudelleen vahvistaaksesi'; setTimeout(() => { t.dataset.sure = ''; t.textContent = 'Nollaa soitetut ja kuulutetut'; }, 3000); return; }
