@@ -42,19 +42,20 @@
 
   /* ---- tila ---- */
   const S = {
-    auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip', {}), ann: ls.get('k-ann', {}),
+    auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
     gong: ls.get('k-gong', true), offset: null, open: false,
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
   const p2 = n => String(n).padStart(2, '0');
   const now = () => new Date(Date.now() + (S.offset || 0));
-  const dayKey = () => { const d = now(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}${S.offset != null ? '-testi' : ''}`; };
+  const dayKey = () => { const d = now(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}${S.offset != null ? '-testi' : ''}${Store.demo ? '-harjoitus' : ''}`; };
+  const ak = i => dayKey() + ':' + i;
   const isEventDay = () => { const d = now(), e = EVENT.date; return !!e && d.getFullYear() === e.getFullYear() && d.getMonth() === e.getMonth() && d.getDate() === e.getDate(); };
   const live = () => isEventDay();
   const nowSec = () => { const d = now(); return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds(); };
   const isFired = c => live() && !!S.fired[dayKey() + ':' + c.id];
-  const isSkip = c => !!S.skip[c.id];
+  const isSkip = c => !!S.skip[ak(c.id)];
   const loggedIn = () => typeof R !== 'undefined' && !!R.pin;
 
   /* ---- aikataulu tulospalvelusta ---- */
@@ -87,7 +88,7 @@
   function sayResult(i, manual) {
     if (!resultSeq(i)) { if (manual) toast('Tulosta ei ole vielä vahvistettu tulospalvelussa'); return; }
     if (tooBig(i)) { toast(`Yli ${MAXN} maalin lukemaa ei ole äänitiedostona. Kuuluta tämä tulos itse.`); return; }
-    S.ann[i] = slotResult(i).sig; ls.set('k-ann', S.ann); enqueue(resultItem(i));
+    S.ann[ak(i)] = slotResult(i).sig; ls.set('k-ann2', S.ann); enqueue(resultItem(i));
   }
 
   /* ---- äänet ---- */
@@ -169,7 +170,7 @@
   function fire(c) {
     S.fired[dayKey() + ':' + c.id] = true; ls.set('k-fired', S.fired);
     const t = timeOf(c);
-    BASE.forEach((_, i) => { const sr = slotResult(i); if (kick(i) < t && sr.complete && S.ann[i] == null) sayResult(i); });
+    BASE.forEach((_, i) => { const sr = slotResult(i); if (kick(i) < t && sr.complete && S.ann[ak(i)] == null) sayResult(i); });
     enqueue({ key: c.id, id: audioOf(c), label: c.label });
   }
   function tickAuto() {
@@ -196,14 +197,14 @@
     const sr = slotResult(i); if (!sr.any) return '';
     const { r } = sr, [, a, b] = BASE[i];
     const txt = [['k', 'Kilpa'], ['h', 'Haaste']].filter(([s]) => r[s + 'a'] != null).map(([s, l]) => `${l} ${a} ${r[s + 'a']}–${r[s + 'b']} ${b}`).join(' · ');
-    const st = S.ann[i] != null ? (S.ann[i] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'kuulutetaan ennen seuraavaa kutsua' : 'odottaa toista ottelua';
-    return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}">${S.ann[i] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
+    const st = S.ann[ak(i)] != null ? (S.ann[ak(i)] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'kuulutetaan ennen seuraavaa kutsua' : 'odottaa toista ottelua';
+    return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}">${S.ann[ak(i)] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
   }
   function row(c, nx) {
     const t = timeOf(c), moved = t !== origOf(c), f = isFired(c), sk = isSkip(c);
     return `<div class="kp-row ${c === nx ? 'next' : ''} ${f ? 'done' : ''} ${sk ? 'skip' : ''}">
       <div class="kp-t">${fmtTime(t)}${moved ? `<s>${fmtTime(origOf(c))}</s>` : ''}</div>
-      <div class="kp-l"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · soitettu' : ''}${sk ? ' · ei soiteta' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
+      <div class="kp-l"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
       <button class="kp-skip ${sk ? 'on' : ''}" data-kskip="${c.id}">${sk ? 'Palauta' : 'Ohita'}</button>
       <button class="kp-play" data-kplay="${c.id}" aria-label="Soita ${esc(c.label)}">${PLAY}</button></div>${c.slot != null ? resLine(c.slot) : ''}`;
   }
@@ -212,14 +213,14 @@
     document.body.classList.toggle('kp-on', loggedIn());
     if (!loggedIn()) return;
     const nx = nextItem(), lv = live();
-    const autoTxt = S.auto ? (lv ? `Automaatti soittaa tämän itse klo ${fmtTime(timeOf(nx))}. ”Soita heti” soittaa sen nyt, eikä se soi enää uudelleen.` : `Tänään ei ole turnauspäivä. Automaatti alkaa soittaa itse turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}. Voit kuunnella kuulutuksia listan ▶-napeista, tai kokeilla koko päivää kohdassa Asetukset ja testaus → Testikello.`) : 'Automaatti pois. Kuulutukset soivat vain napista.';
+    const autoTxt = S.auto ? (lv ? `Kuulutetaan automaattisesti klo ${fmtTime(timeOf(nx))}. Jos joukkueet ovat valmiina aiemmin, paina ”Kuuluta nyt”: kuulutus tulee heti, eikä sitä toisteta enää klo ${fmtTime(timeOf(nx))}.` : `Tänään ei ole turnauspäivä. Automaatti alkaa kuuluttaa itse turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}. Voit kuunnella kuulutuksia listan ▶-napeista, tai kokeilla koko päivää kohdassa Asetukset ja testaus → Testikello.`) : 'Automaatti pois. Kuulutukset tulevat vain, kun painat nappia.';
     panel.querySelector('.kp-next').innerHTML = `
       <div class="kp-unlock" data-kunlock hidden>🔈 Napauta tästä, jotta kuulutukset kuuluvat</div>
       <div class="kp-eyebrow">${lv ? 'Seuraavaksi' : 'Turnauspäivän ensimmäinen'} · klo ${fmtTime(timeOf(nx))}</div>
       <div class="kp-what">${esc(nx.label)}</div>
       <div class="kp-big" data-kbig="${timeOf(nx)}"></div>
       <div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>
-      <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Soita heti</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
+      <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
@@ -250,9 +251,9 @@
     if (!panel || !loggedIn()) return;
     const d = now(), sec = nowSec(), lv = live();
     panel.querySelector('.kp-clock').innerHTML = `${p2(d.getHours())}.${p2(d.getMinutes())}<span>.${p2(d.getSeconds())}</span>`;
-    panel.querySelectorAll('[data-kcd]').forEach(el => { const t = el.dataset.kcd * 60 - sec; el.textContent = lv && t > -180 ? (t > 0 ? 'soi ' + cdText(t) + ' päästä' : 'soi nyt') : ''; });
+    panel.querySelectorAll('[data-kcd]').forEach(el => { const t = el.dataset.kcd * 60 - sec; el.textContent = lv && t > -180 ? (t > 0 ? 'kuulutetaan ' + cdText(t) + ' päästä' : 'kuulutetaan nyt') : ''; });
     const b = panel.querySelector('[data-kbig]');
-    if (b) { const t = b.dataset.kbig * 60 - sec; b.innerHTML = !lv ? '' : t > 0 ? `${t >= 3600 ? Math.floor(t / 3600) + '.' + p2(Math.floor(t % 3600 / 60)) + '.' + p2(t % 60) : Math.floor(t / 60) + '.' + p2(t % 60)}<small>${S.auto ? 'soi itse' : 'kuulutukseen'}</small>` : `Nyt<small>${S.auto ? 'soi itse' : 'soita napista'}</small>`; }
+    if (b) { const t = b.dataset.kbig * 60 - sec; b.innerHTML = !lv ? '' : t > 0 ? `${t >= 3600 ? Math.floor(t / 3600) + '.' + p2(Math.floor(t % 3600 / 60)) + '.' + p2(t % 60) : Math.floor(t / 60) + '.' + p2(t % 60)}<small>kuulutukseen</small>` : `Nyt<small>${S.auto ? 'kuulutetaan' : 'paina Kuuluta nyt'}</small>`; }
     const un = panel.querySelector('[data-kunlock]'); if (un) un.hidden = !(S.auto && needUnlock());
   }
 
@@ -272,7 +273,7 @@
           <div class="kp-omat"></div></details>
         <details class="kp-sec"><summary>Asetukset ja testaus</summary>
           <label class="kp-chk"><input type="checkbox" data-kgong ${S.gong ? 'checked' : ''}> Merkkiääni ennen kuulutusta ja fanfaari ennen tuloksia</label>
-          <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: turnausaamu 09.44</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
+          <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: turnausaamu 09.44</button><button class="kp-mini" data-kjump>Hyppää 10 s ennen seuraavaa kuulutusta</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
           <p class="kp-help">Kytke kone hallin äänentoistoon ja testaa äänenvoimakkuus. Pidä tämä sivu auki ja kone hereillä (kansi auki, virtajohto kiinni).</p></details>
       </div>
       <div class="kp-toast" role="status" hidden></div>`;
@@ -297,12 +298,13 @@
       if (/^oma\d$/.test(id)) { if (!S.ownAudio[id]) { toast('Lisää ensin ääni tälle napille'); return; } enqueue({ key: id, id, label: S.omat[+id.slice(3) - 1].label }); return; }
       enqueue({ key: id, id: audioOf(c), label: c.label }); return; }
     if ((t = q('[data-kres]'))) { const i = +t.dataset.kres; if (playingKey === 'r' + i) { stopAll(); return; } sayResult(i, true); draw(); return; }
-    if ((t = q('[data-kskip]'))) { const id = t.dataset.kskip; if (S.skip[id]) delete S.skip[id]; else S.skip[id] = true; ls.set('k-skip', S.skip); queue = queue.filter(x => x.key !== id); draw(); return; }
+    if ((t = q('[data-kskip]'))) { const id = t.dataset.kskip; if (S.skip[ak(id)]) delete S.skip[ak(id)]; else S.skip[ak(id)] = true; ls.set('k-skip2', S.skip); queue = queue.filter(x => x.key !== id); draw(); return; }
     if (q('[data-ktest]')) { stopAll(); unlock(); const t0 = actx.currentTime + .05; gongAt(t0); fanfareAt(t0 + 1.8); return; }
     if (q('[data-kclock]')) { const e0 = EVENT.date || new Date(2026, 9, 24); S.offset = new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30) - Date.now(); if (S.auto) setAuto(true); else draw(); toast('Testikello päällä: kello hyppäsi turnausaamuun'); return; }
+    if (q('[data-kjump]')) { if (S.offset == null) { toast('Paina ensin Testikello'); return; } const nx = nextItem(), d = now(); const target = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() + timeOf(nx) * 60000 - 10000; S.offset += target - d.getTime(); draw(); toast('Kello: 10 s ennen kuulutusta ' + nx.label); return; }
     if (q('[data-krealclock]')) { S.offset = null; draw(); return; }
     if ((t = q('[data-kreset]'))) { if (!t.dataset.sure) { t.dataset.sure = '1'; t.textContent = 'Paina uudelleen vahvistaaksesi'; setTimeout(() => { t.dataset.sure = ''; t.textContent = 'Nollaa soitetut ja kuulutetut'; }, 3000); return; }
-      S.fired = {}; S.ann = {}; S.skip = {}; ls.set('k-fired', {}); ls.set('k-ann', {}); ls.set('k-skip', {}); draw(); return; }
+      S.fired = {}; S.ann = {}; S.skip = {}; ls.set('k-fired', {}); ls.set('k-ann2', {}); ls.set('k-skip2', {}); draw(); return; }
     if ((t = q('[data-komcopy]'))) { const i = +t.dataset.komcopy, txt = toEl(S.omat[i].text, S.omat[i].tone);
       if (!txt) { t.textContent = 'Kirjoita ensin teksti'; setTimeout(() => t.textContent = 'Kopioi ElevenLabsiin', 1500); return; }
       try { await navigator.clipboard.writeText(txt); t.textContent = 'Kopioitu'; } catch (err) { t.textContent = 'Valitse ja kopioi teksti alta'; }
