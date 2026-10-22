@@ -101,7 +101,20 @@
   /* ---- äänet ---- */
   let actx = null, stopFlag = 0, queue = [], running = false, playingKey = null, nodes = [];
   const raw = {}, buf = {}, trimC = {};
-  function unlock() { try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); if (actx.state !== 'running') actx.resume(); } catch (e) { } }
+  /* Safari ja iPad: äänen saa käyttöön vain käyttäjän napautuksen sisällä. Soitetaan samalla hiljainen näyte, joka avaa äänen varmasti. */
+  function unlock() {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      if (actx.state !== 'running') { const p = actx.resume(); if (p && p.catch) p.catch(() => { }); }
+      const b = actx.createBuffer(1, 1, 22050), s = actx.createBufferSource(); s.buffer = b; s.connect(actx.destination); s.start(0);
+    } catch (e) { }
+  }
+  async function ensureRunning() {
+    if (!actx) unlock(); if (!actx) return false;
+    if (actx.state === 'running') return true;
+    try { await Promise.race([actx.resume(), wait(1200)]); } catch (e) { }
+    return actx.state === 'running';
+  }
   const needUnlock = () => !actx || actx.state !== 'running';
   function preload() { Object.entries(FILES).forEach(([id, f]) => { if (!raw[id]) raw[id] = fetch(AUDIO_DIR + f + '.mp3').then(r => r.ok ? r.arrayBuffer() : null).catch(() => null); }); }
   async function getBuffer(id) {
@@ -134,6 +147,7 @@
   const wait = ms => new Promise(r => setTimeout(r, ms));
   async function playItem(it) {
     const my = stopFlag;
+    if (!(await ensureRunning())) { toast('Selain esti äänen. Napauta sivua kerran ja paina nappia uudelleen.'); return; }
     if (it.chime) { playingKey = it.key; paint(); await wait(attnAt(actx.currentTime + .05) * 1000 + 300); if (my === stopFlag) { nodes = []; playingKey = null; } return; }
     const ids = it.seq || [it.id], bufs = [];
     for (const id of ids) { const b = await getBuffer(id); if (!b) { toast(`Ääntä "${LABEL[id] || id}" ei löytynyt. Tarkista nettiyhteys.`); return; } bufs.push(it.seq ? trimmed(id, b) : b); }
@@ -196,7 +210,7 @@
   /* ---- piirto ---- */
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
   let panel, toastT;
-  function toast(msg) { const t = panel.querySelector('.kp-toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 7000); }
+  function toast(msg) { const t = document.querySelector('.kp-toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 7000); }
   function cdText(sec) { if (sec <= 0) return 'nyt'; const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = Math.floor(sec % 60); return h ? `${h} h ${p2(m)} min` : m >= 10 ? `${m} min` : `${m}.${p2(s)}`; }
   function resLine(i) {
     const sr = slotResult(i); if (!sr.any) return '';
@@ -287,13 +301,14 @@
           <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: aloita testi alusta (09.44)</button><button class="kp-mini" data-kjump>Hyppää 10 s ennen seuraavaa kuulutusta</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
           <p class="kp-help">Kytke kone hallin äänentoistoon ja testaa äänenvoimakkuus. Pidä tämä sivu auki ja kone hereillä (kansi auki, virtajohto kiinni).</p></details>
       </div>
-      <div class="kp-toast" role="status" hidden></div>`;
+`;
     document.body.append(panel);
+    const tst = document.createElement('div'); tst.className = 'kp-toast'; tst.setAttribute('role', 'status'); tst.hidden = true; document.body.append(tst);
     const fab = document.createElement('button'); fab.className = 'kp-fab'; fab.dataset.kopen = ''; fab.innerHTML = '🔊 Kuulutukset'; document.body.append(fab);
   }
 
   /* ---- tapahtumat ---- */
-  document.addEventListener('pointerdown', () => { if (needUnlock()) unlock(); }, true);
+  ['pointerdown', 'mousedown', 'click', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (needUnlock()) unlock(); }, true));
   document.addEventListener('click', async e => {
     const q = s => e.target.closest(s); let t;
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
