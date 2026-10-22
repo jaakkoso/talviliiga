@@ -261,7 +261,7 @@
     panel.querySelectorAll('[data-kcd]').forEach(el => { const t = el.dataset.kcd * 60 - sec; el.textContent = lv && t > -180 ? (t > 0 ? 'kuulutetaan ' + cdText(t) + ' päästä' : 'kuulutetaan nyt') : ''; });
     const b = panel.querySelector('[data-kbig]');
     if (b) { const t = b.dataset.kbig * 60 - sec; b.innerHTML = !lv ? '' : t > 0 ? `${t >= 3600 ? Math.floor(t / 3600) + '.' + p2(Math.floor(t % 3600 / 60)) + '.' + p2(t % 60) : Math.floor(t / 60) + '.' + p2(t % 60)}<small>kuulutukseen</small>` : `Nyt<small>${S.auto ? 'kuulutetaan' : 'paina Kuuluta nyt'}</small>`; }
-    const un = panel.querySelector('[data-kunlock]'); if (un) un.hidden = !(S.auto && needUnlock());
+    const un = panel.querySelector('[data-kunlock]'); if (un) un.hidden = !needUnlock();
   }
 
   /* ---- paneeli ---- */
@@ -341,5 +341,5 @@
   }, 1000);
   draw();
   if (S.auto) setAuto(true);
-  window.KUULUTUS = { S, program, timeOf, get queue() { return queue; }, get playing() { return playingKey; }, tickAuto };
+  window.KUULUTUS = { S, program, timeOf, get queue() { return queue; }, get playing() { return playingKey; }, get audio() { return actx ? actx.state + ' ' + actx.sampleRate + ' ' + (actx.sinkId ?? '') : 'ei luotu'; }, tickAuto };
 })();
