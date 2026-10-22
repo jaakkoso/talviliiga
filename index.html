@@ -16,7 +16,7 @@
   var REDIRECTS = [{ from: '2026-10-24', to: '2026-10-24', url: 'talviliiga/' }];
   if (location.hash === '#koti') return;
   var n = new Date(), t = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
-  for (var i = 0; i < REDIRECTS.length; i++) if (t >= REDIRECTS[i].from && t <= REDIRECTS[i].to) { location.replace(REDIRECTS[i].url); return; }
+  for (var i = 0; i < REDIRECTS.length; i++) if (t >= REDIRECTS[i].from && t <= REDIRECTS[i].to) { try { sessionStorage.setItem('p15-hub', '1'); } catch (e) {} location.replace(REDIRECTS[i].url); return; }
 })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,5 +89,6 @@
 <footer><span id="updated">Tulokset Palloliiton tulospalvelusta.</span> Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. <a href="ohje/">Lisää tulokset puhelimen kotinäytölle →</a></footer>
 <script src="assets/matches.js?v=20261018q"></script>
 <script src="assets/home.js?v=20261018q"></script>
+<script src="assets/takaisin.js?v=20261022a"></script>
 </body>
 </html>
