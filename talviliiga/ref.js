@@ -224,6 +224,26 @@ const MANUAL_TESTS = [
   'Wallsportissa paikan päällä: sivu latautuu hallin verkossa / 4G:llä',
   'Kaikki testitulokset tyhjennetty taulukosta ennen turnausta',
 ];
+/* Testitulosten nollaus ennen turnausta: tyhjentää vahvistetut tulokset, maalit, sarjataulukon korjaukset ja perumiset.
+   Otteluohjelma, ajat, joukkueet ja asetukset jäävät. Harjoitustilassa palauttaa esimerkkidatan. */
+function resetCounts() { const d = R.data; return { res: d.matches.filter(isFinal).length, goals: d.goals.length, adj: (d.adjust || []).length, canc: d.matches.filter(m => m.tila).length }; }
+function resetCard() {
+  const c = resetCounts(), total = c.res + c.goals + c.adj + c.canc, sure = R.confirmDel === 'resetall';
+  return `<section class="card" style="display:grid;gap:10px">
+    <div class="sec-h" style="margin:0"><h2>4. Nollaa testitulokset</h2><small>${Store.demo ? 'Harjoitustila' : 'Oikea tulospalvelu'}</small></div>
+    <p class="note" style="margin:0">${Store.demo ? 'Palauttaa harjoitustilan esimerkkidatan alkutilaan.' : `Tyhjentää kaikki vahvistetut tulokset (${c.res}), maalit (${c.goals}), sarjataulukon käsikorjaukset (${c.adj}) ja perumiset (${c.canc}) oikeasta tulospalvelusta. Otteluohjelma, alkuajat, joukkueet ja asetukset jäävät ennalleen. Tee tämä ennen turnausaamua, älä turnauksen aikana.`}</p>
+    ${!Store.demo && !total ? '<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>✓ Tuloksia ei ole. Tulospalvelu on valmis turnaukseen.</b></div>' : `<button class="btn ghost" data-resetall style="color:var(--danger)">${sure ? 'Vahvista: nollaa kaikki tulokset' : Store.demo ? 'Palauta harjoitusdata alkuun' : 'Nollaa kaikki testitulokset'}</button>`}
+  </section>`;
+}
+function resetAll() {
+  if (Store.demo) { Store.demoReset(); load(); toast('Harjoitusdata palautettu'); return; }
+  const d = R.data;
+  d.goals.slice().forEach(g => enqueue({ action: 'deleteGoal', id: g.id }));
+  d.matches.filter(isFinal).forEach(m => enqueue({ action: 'result', match: m.id, hg: '', ag: '' }));
+  d.matches.filter(m => m.tila).forEach(m => enqueue({ action: 'setStatus', match: m.id, tila: '' }));
+  (d.adjust || []).slice().forEach(a => enqueue({ action: 'setAdjust', adj: { series: a.series, team: a.team, pts: 0, gf: 0, ga: 0, pos: 0, note: '' } }));
+  R.draft = {}; toast('Nollataan… Odota, kunnes yläkulmassa lukee Kaikki tallennettu.');
+}
 function testView() {
   if (!R.data) return `${tabsBar('test')}<div class="card">Ladataan…</div>`;
   const issues = validateData(EVENT, R.data.matches), errs = issues.filter(i => i.lvl === 'virhe');
@@ -247,7 +267,8 @@ function testView() {
     <div class="sec-h" style="margin:0"><h2>3. Koeajo</h2><small>${Object.values(done).filter(Boolean).length}/${MANUAL_TESTS.length} tehty</small></div>
     <p class="note" style="margin:0">Tee viikkoa ennen turnausta. Rasti säilyy tällä laitteella.</p>
     ${MANUAL_TESTS.map((t, i) => `<label class="toggle" style="display:flex;gap:10px;align-items:flex-start;font-size:.92rem"><input type="checkbox" data-mt="${i}" ${done[i] ? 'checked' : ''} style="width:20px;height:20px;flex:none;accent-color:var(--gold)"> ${esc(t)}</label>`).join('')}
-  </section>`;
+  </section>
+  ${resetCard()}`;
 }
 async function runTest() {
   R.testing = true; R.testRes = []; render();
@@ -419,6 +440,7 @@ document.addEventListener('click', e => {
     if (R.confirmDel !== id) { R.confirmDel = id; render(); return; }
     R.confirmDel = null; const m = curMatch(); enqueue({ action: 'deleteGoal', id }); if (!isFinal(m)) syncDraft(m); render(); toast('Maali poistettu'); return;
   }
+  if (q('[data-resetall]')) { if (R.confirmDel !== 'resetall') { R.confirmDel = 'resetall'; render(); setTimeout(() => { if (R.confirmDel === 'resetall') { R.confirmDel = null; render(); } }, 5000); return; } R.confirmDel = null; resetAll(); render(); return; }
   if (q('[data-runtest]')) { runTest(); return; }
   if (q('[data-reloadmeta]')) { Store.load(true).then(d => { R.data = d; render(); toast('Tiedot haettu'); }).catch(() => toast('Ei yhteyttä')); return; }
   if ((t = q('[data-shiftmin]'))) { R.shiftMin = Number(t.dataset.shiftmin); R.confirmDel = null; render(); return; }
