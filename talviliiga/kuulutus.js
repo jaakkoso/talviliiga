@@ -53,7 +53,7 @@
   const isEventDay = () => { const d = now(), e = EVENT.date; return !!e && d.getFullYear() === e.getFullYear() && d.getMonth() === e.getMonth() && d.getDate() === e.getDate(); };
   const live = () => isEventDay();
   const nowSec = () => { const d = now(); return d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds(); };
-  const isFired = c => !!S.fired[dayKey() + ':' + c.id];
+  const isFired = c => live() && !!S.fired[dayKey() + ':' + c.id];
   const isSkip = c => !!S.skip[c.id];
   const loggedIn = () => typeof R !== 'undefined' && !!R.pin;
 
@@ -180,12 +180,12 @@
   async function setAuto(on) {
     S.auto = on; ls.set('k-auto', on);
     if (on) { unlock(); try { lock = await navigator.wakeLock.request('screen'); } catch (e) { }
-      const m = nowSec() / 60; program().forEach(c => { if (timeOf(c) + 3 <= m) S.fired[dayKey() + ':' + c.id] = true; }); ls.set('k-fired', S.fired); tickAuto(); }
+      const m = nowSec() / 60; if (live()) program().forEach(c => { if (timeOf(c) + 3 <= m) S.fired[dayKey() + ':' + c.id] = true; }); ls.set('k-fired', S.fired); tickAuto(); }
     else { try { if (lock) { await lock.release(); lock = null; } } catch (e) { } }
     draw();
   }
   document.addEventListener('visibilitychange', async () => { if (S.auto && document.visibilityState === 'visible') { try { lock = await navigator.wakeLock.request('screen'); } catch (e) { } } });
-  function nextItem() { const m = nowSec() / 60, pr = program(); return pr.find(c => timeOf(c) + 3 > m && !isFired(c) && !isSkip(c)) || pr[pr.length - 1]; }
+  function nextItem() { const m = nowSec() / 60, pr = program(); if (!live()) return pr.find(c => !isSkip(c)) || pr[0]; return pr.find(c => timeOf(c) + 3 > m && !isFired(c) && !isSkip(c)) || pr[pr.length - 1]; }
 
   /* ---- piirto ---- */
   const PLAY = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>';
@@ -212,14 +212,14 @@
     document.body.classList.toggle('kp-on', loggedIn());
     if (!loggedIn()) return;
     const nx = nextItem(), lv = live();
-    const autoTxt = S.auto ? (lv ? `Automaatti päällä. Seuraava soi itse klo ${fmtTime(timeOf(nx))}.` : `Automaatti päällä. Se alkaa soittaa turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}.`) : 'Automaatti pois. Kuulutukset soivat vain napista.';
+    const autoTxt = S.auto ? (lv ? `Automaatti soittaa tämän itse klo ${fmtTime(timeOf(nx))}. ”Soita heti” soittaa sen nyt, eikä se soi enää uudelleen.` : `Tänään ei ole turnauspäivä. Automaatti alkaa soittaa itse turnauspäivänä${EVENT.dateText ? ' (' + EVENT.dateText + ')' : ''}. Voit kuunnella kuulutuksia listan ▶-napeista, tai kokeilla koko päivää kohdassa Asetukset ja testaus → Testikello.`) : 'Automaatti pois. Kuulutukset soivat vain napista.';
     panel.querySelector('.kp-next').innerHTML = `
       <div class="kp-unlock" data-kunlock hidden>🔈 Napauta tästä, jotta kuulutukset kuuluvat</div>
-      <div class="kp-eyebrow">Seuraavaksi · klo ${fmtTime(timeOf(nx))}</div>
+      <div class="kp-eyebrow">${lv ? 'Seuraavaksi' : 'Turnauspäivän ensimmäinen'} · klo ${fmtTime(timeOf(nx))}</div>
       <div class="kp-what">${esc(nx.label)}</div>
       <div class="kp-big" data-kbig="${timeOf(nx)}"></div>
       <div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>
-      <div class="kp-btns"><button class="kp-ghost" data-kplay="${nx.id}">Soita tämä nyt</button><button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
+      <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Soita heti</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
@@ -289,6 +289,7 @@
     if (!panel || !panel.contains(e.target)) return;
     if (q('[data-kunlock]')) { unlock(); setTimeout(tickCd, 200); return; }
     if (q('[data-kauto]')) { setAuto(!S.auto); return; }
+    if ((t = q('[data-kfirenow]'))) { const c = P.find(x => x.id === t.dataset.kfirenow); if (c) { fire(c); draw(); } return; }
     if (q('[data-kstop]')) { stopAll(); return; }
     if (q('[data-kattn]')) { if (playingKey === 'huomio') { stopAll(); return; } enqueue({ key: 'huomio', chime: true, label: 'Huomioääni' }, true); return; }
     if ((t = q('[data-kplay]'))) { const id = t.dataset.kplay; if (playingKey === id) { stopAll(); return; }
