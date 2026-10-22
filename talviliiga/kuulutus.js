@@ -94,8 +94,10 @@
   const resultItem = i => { const seq = resultSeq(i); return seq && !tooBig(i) ? { key: 'r' + i, seq, label: 'Tulokset ' + BASE[i][1] + '–' + BASE[i][2] } : null; };
   function sayResult(i, manual) {
     if (!resultSeq(i)) { if (manual) toast('Tulosta ei ole vielä vahvistettu tulospalvelussa'); return; }
+    if (!slotResult(i).complete && S.ann[ak(i)] == null) { if (manual) toast('Vahvista ensin kierroksen molempien otteluiden (kilpa ja haaste) tulokset.'); return; }
     if (tooBig(i)) { toast(`Yli ${MAXN} maalin lukemaa ei ole äänitiedostona. Kuuluta tämä tulos itse.`); return; }
     S.ann[ak(i)] = slotResult(i).sig; ls.set('k-ann2', S.ann); enqueue(resultItem(i));
+    try { if (typeof R !== 'undefined' && R.view === 'list' && typeof render === 'function') render(); } catch (e) { }
   }
 
   /* ---- äänet ---- */
@@ -217,7 +219,7 @@
     const { r } = sr, [, a, b] = BASE[i];
     const txt = [['k', 'Kilpa'], ['h', 'Haaste']].filter(([s]) => r[s + 'a'] != null).map(([s, l]) => `${l} ${a} ${r[s + 'a']}–${r[s + 'b']} ${b}`).join(' · ');
     const st = S.ann[ak(i)] != null ? (S.ann[ak(i)] === sr.sig ? 'kuulutettu' : 'tulos muuttunut') : sr.complete ? 'valmis kuulutettavaksi' : 'odottaa toista ottelua';
-    return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}">${S.ann[ak(i)] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
+    return `<div class="kp-res"><span>${esc(txt)} <em>· ${st}</em></span><button class="kp-mini" data-kres="${i}" ${sr.complete || S.ann[ak(i)] != null ? '' : 'disabled title="Vahvista ensin molemmat ottelut"'}>${S.ann[ak(i)] != null ? 'Uudelleen' : 'Kuuluta'}</button></div>`;
   }
   function readyBox() {
     const ready = BASE.map((_, i) => i).filter(i => slotResult(i).complete && S.ann[ak(i)] == null);
@@ -360,10 +362,10 @@
     if (i < 0) { if (old) old.remove(); return; }
     const sr = slotResult(i), txt = resultText(i), done = S.ann[ak(i)] != null, changed = done && S.ann[ak(i)] !== sr.sig;
     const others = matchesOf(i).filter(x => !cancelled(x) && !isFinal(x)).map(x => x.series);
-    const status = !sr.any ? 'Tuloskuulutus kootaan, kun lopputulos on vahvistettu.' : changed ? 'Tulos on muuttunut kuuluttamisen jälkeen.' : done ? 'Kuulutettu.' : others.length ? `Odottaa vielä: ${others.join(', ')}. Voit kuuluttaa jo nyt vahvistetut, tai odottaa ja kuuluttaa molemmat kerralla.` : 'Valmis kuulutettavaksi.';
+    const status = !sr.any ? 'Tuloskuulutus kootaan, kun lopputulos on vahvistettu.' : changed ? 'Tulos on muuttunut kuuluttamisen jälkeen.' : done ? 'Kuulutettu.' : others.length ? `Kuulutusnappi aktivoituu, kun myös ${others.join(' ja ').toLowerCase()}-ottelun tulos on vahvistettu.` : 'Valmis kuulutettavaksi.';
     const html = `<section class="card kp-mcard" style="display:grid;gap:10px"><div class="sec-h" style="margin:0"><h2>Tuloskuulutus</h2><small>${esc(BASE[i][1])}–${esc(BASE[i][2])} · kilpa ja haaste yhdessä</small></div>
       ${txt ? `<p style="margin:0;font-size:1.05rem">”${esc(txt)}”</p>` : ''}<p class="note" style="margin:0">${status}</p>
-      ${sr.any ? `<button class="btn kp-mbtn ${playingKey === 'r' + i ? 'playing' : ''}" data-kmres="${i}">${playingKey === 'r' + i ? '■ Pysäytä' : done ? '📣 Kuuluta tulokset uudelleen' : '📣 Kuuluta tulokset'}</button>` : ''}</section>`;
+      <button class="btn kp-mbtn ${playingKey === 'r' + i ? 'playing' : ''}" data-kmres="${i}" ${sr.complete || done ? '' : 'disabled'}>${playingKey === 'r' + i ? '■ Pysäytä' : done ? '📣 Kuuluta tulokset uudelleen' : sr.complete ? '📣 Kuuluta tulokset' : '📣 Kuuluta tulokset · odottaa ' + (others.length ? others.join(' ja ').toLowerCase() + '-ottelun vahvistusta' : 'tulosta')}</button></section>`;
     const sig = html;
     if (old && old.dataset.sig === sig) return;
     const tmp = document.createElement('div'); tmp.innerHTML = html; const node = tmp.firstElementChild; node.dataset.sig = sig;
@@ -381,5 +383,5 @@
   }, 1000);
   draw();
   if (S.auto) setAuto(true);
-  window.KUULUTUS = { S, program, timeOf, get queue() { return queue; }, get playing() { return playingKey; }, get audio() { return actx ? actx.state + ' ' + actx.sampleRate + ' ' + (actx.sinkId ?? '') : 'ei luotu'; }, tickAuto };
+  window.KUULUTUS = { annOf: m => { const i = BASE.findIndex((_, k) => pairOf(k)(m)); if (i < 0) return null; const a = S.ann[ak(i)]; return a == null ? null : a === slotResult(i).sig ? 'ann' : 'changed'; }, S, program, timeOf, get queue() { return queue; }, get playing() { return playingKey; }, get audio() { return actx ? actx.state + ' ' + actx.sampleRate + ' ' + (actx.sinkId ?? '') : 'ei luotu'; }, tickAuto };
 })();

@@ -85,3 +85,17 @@ body.kp-on .kp{display:flex}
 
 .kp-mbtn{background:#211e1e;color:#fff;border:0;border-radius:12px;padding:14px;font-weight:800;font-size:1.05rem}
 .kp-mbtn.playing{background:#17804a}
+
+/* Ylläpidon ottelulista: tila väreinä */
+.rm.st-done{background:#e3f4e8;border-color:#7cc49a}
+.rm.st-ann{background:#e3ecf8;border-color:#8fb0dc}
+.rm.st-changed{background:#fbefd2;border-color:#d9a640}
+.rm.st-cancel{opacity:.5}
+.rm .st-row{grid-column:1/-1;display:flex;justify-content:flex-end;margin-top:-4px}
+.rm .st-tag{font-size:.75rem;font-weight:700;color:#1f3b2a}
+.rm.st-ann .st-tag{color:#1d3a66}.rm.st-changed .st-tag{color:#6b4a00}
+.st-legend{display:flex;gap:6px 14px;align-items:center;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
+.st-dot{display:inline-block;width:14px;height:14px;border-radius:4px;border:1px solid var(--line);margin-right:6px;vertical-align:-2px}
+.st-dot.st-done{background:#e3f4e8;border-color:#7cc49a}.st-dot.st-ann{background:#e3ecf8;border-color:#8fb0dc}.st-dot.st-wait{background:#fff;border:2px solid var(--live)}
+.kp-mbtn:disabled{background:#d9d4c7;color:#5b5650;cursor:not-allowed}
+.kp-mini:disabled{opacity:.4;cursor:not-allowed}

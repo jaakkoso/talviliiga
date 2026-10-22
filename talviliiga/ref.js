@@ -174,6 +174,18 @@ function refList() {
       <div><div class="d num" style="font-size:2rem">${done.length}/${ms.length}</div><div class="note" style="margin:0">vahvistettu</div></div>
       <div><div class="d num" style="font-size:2rem;color:${R.queue.length ? 'var(--warn)' : 'inherit'}">${R.queue.length}</div><div class="note" style="margin:0">jonossa tällä laitteella</div></div>
     </section>` : '';
+  if (MODE === 'admin') {
+    /* Ylläpito: yksi lista aikajärjestyksessä, tila näkyy värinä (vahvistettu vihreä, kuulutettu sininen). */
+    const ann = m => (window.KUULUTUS && KUULUTUS.annOf) ? KUULUTUS.annOf(m) : null;
+    const row = m => { const st = status(m, clk).k, a = st === 'done' ? ann(m) : null;
+      const cls = st === 'cancel' ? 'st-cancel' : a === 'ann' ? 'st-ann' : a === 'changed' ? 'st-changed' : st === 'done' ? 'st-done' : '';
+      const tag = a === 'ann' ? '<span class="st-tag">📣 Kuulutettu</span>' : a === 'changed' ? '<span class="st-tag">Tulos muuttunut kuuluttamisen jälkeen</span>' : st === 'done' ? '<span class="st-tag">✓ Vahvistettu</span>' : '';
+      return item(m).replace('class="rm ', `class="rm ${cls} `).replace('</span></button>', `</span>${tag ? `<span class="st-row">${tag}</span>` : ''}</button>`); };
+    const legend = `<div class="st-legend"><span><span class="st-dot st-done"></span>Vahvistettu</span><span><span class="st-dot st-ann"></span>Tulokset kuulutettu</span><span><span class="st-dot st-wait"></span>Ottelu käynnissä / odottaa tulosta</span></div>`;
+    return `${demoBanner(clk)}${tabsBar('list')}${summary}${filterBar()}${legend}
+    <div style="display:grid;gap:8px">${ms.map(row).join('')}</div>
+    <button class="btn ghost" data-logout>Kirjaudu ulos</button>`;
+  }
   return `${demoBanner(clk)}${tabsBar('list')}${summary}${filterBar()}
     ${group('Odottaa tulosta', wait, 'Vahvista heti ottelun jälkeen')}${group('Tulevat', up)}${group('Vahvistetut', done)}${group('Perutut', cancel)}
     <button class="btn ghost" data-logout>Kirjaudu ulos</button>`;
