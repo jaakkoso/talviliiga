@@ -71,3 +71,8 @@ body.kp-on .kp{display:flex}
   .kp-close{display:block}
   body.kp-on .kp-fab{display:block;position:fixed;right:16px;bottom:16px;z-index:39;background:#211e1e;color:#fff;border:0;border-radius:999px;padding:14px 18px;font-weight:800;box-shadow:0 4px 16px rgba(0,0,0,.25)}
 }
+
+.kp-l[data-ktxt]{cursor:pointer}.kp-l[data-ktxt]:hover b{text-decoration:underline}
+.kp-l[data-ktxt] b::after{content:" ▾";font-size:.7em;color:var(--kmuted)}
+.kp-txt{margin:-2px 4px 4px 3.9em;padding:8px 10px;background:var(--kbg);border-left:3px solid var(--kgold);border-radius:6px;font-size:.82rem;line-height:1.4}
+.kp-txt p{margin:0}.kp-txt p+p{margin-top:6px}.kp-txtres{color:var(--kmuted)}.kp-txtres b{color:var(--kfg)}

@@ -8,6 +8,8 @@
   const BASE = [['10.00', 'SJK', 'VPS'], ['10.35', 'WFA', 'Jaro'], ['11.10', 'JJK', 'SJK'], ['11.45', 'VPS', 'WFA'], ['12.20', 'Jaro', 'JJK'],
     ['14.00', 'SJK', 'WFA'], ['14.35', 'VPS', 'Jaro'], ['15.10', 'JJK', 'WFA'], ['15.45', 'SJK', 'Jaro'], ['16.20', 'VPS', 'JJK']];
   const MAXN = 15;
+  /* Kuulutusten tekstit sellaisina kuin ne on äänitetty */
+  const TEXTS = {"tervetuloa": "Hyvää huomenta, Wallsport – ja tervetuloa Talviliigaan! Tänään kentillä nähdään viisi kovaa joukkuetta: VPS, WFA, Jaro, JJK… ja tietysti kotijoukkue, SJK! Kilpasarja pelaa takakentällä, haastesarja etukentällä. Ohjelman ja tulokset löydät puhelimeesi otteluohjelmajulisteen QR-koodista. Hyvää pelipäivää kaikille!", "ottelu1": "Hyvät pelaajat ja yleisö, päivän ensimmäiset ottelut alkavat viiden minuutin kuluttua! Kello kymmenen vastakkain ovat SJK ja VPS. Kilpasarja pelaa takakentällä ja haastesarja etukentällä. Joukkueet, valmiiksi kentän laidalle!", "ottelu2": "Seuraavaksi kello kymmenen kolmekymmentäviisi: WFA vastaan Jaro! Ottelut alkavat hetken kuluttua.", "ottelu3": "Kohta kentälle astuu kotijoukkue! Kello yksitoista kymmenen vastakkain JJK ja SJK. Kova kannustus molemmille!", "ottelu4": "Seuraavat ottelut kello yksitoista neljäkymmentäviisi: VPS vastaan WFA. Joukkueet, valmistautukaa!", "ottelu5": "Aamupäivän viimeiset ottelut! Kello kaksitoista kaksikymmentä vastakkain Jaro ja JJK. Antakaa kaikkenne ennen taukoa!", "tauko": "Aamupäivän ottelut on pelattu – hienoa työtä, kaikki joukkueet! Pidämme nyt tauon, ja iltapäivän ottelut alkavat kello neljätoista. Lounaan ennakkoon tilanneet joukkueet ruokailevat OmaSP-stadionilla, Carlsberg-tilassa toisessa kerroksessa. Kahvio palvelee – tervetuloa!", "tauko-loppuu": "Tauko alkaa olla ohi! Iltapäivän ensimmäiset ottelut alkavat viidentoista minuutin kuluttua, kello neljätoista. Joukkueet, aloitetaan lämmittely.", "ottelu6": "Iltapäivän ottelut alkavat viiden minuutin kuluttua! Kello neljätoista kentälle astuvat SJK ja WFA. Kilpasarja takakentällä, haastesarja etukentällä. Kova kannustus molemmille joukkueille!", "ottelu7": "Seuraavaksi kello neljätoista kolmekymmentäviisi: VPS vastaan Jaro. Joukkueet, kentän laidalle!", "ottelu8": "Kello viisitoista kymmenen vastakkain JJK ja WFA! Joukkueet, valmiiksi kentän laidalle.", "ottelu9": "Kotijoukkue kentälle vielä kerran! Kello viisitoista neljäkymmentäviisi vastakkain SJK ja Jaro. Ottelut alkavat hetken kuluttua.", "ottelu10": "Päivän viimeiset ottelut! Kello kuusitoista kaksikymmentä vastakkain VPS ja JJK. Annetaan kunnon kannustus loppuun asti!", "lopetus": "Talviliigan pelipäivä Seinäjoella on pelattu! Iso kiitos kaikille joukkueille, valmentajille, tuomareille ja vanhemmille – ja kiitos myös kaikille talkoolaisille. Tulokset löytyvät tulospalvelusta. Turvallista kotimatkaa, ja nähdään taas!", "kahvio": "Muistathan kahvion! Sieltä saat kahvia, mehua, mokkapaloja, sämpylöitä ja herkkuja. Maksaa voi käteisellä tai MobilePaylla, ja kaikki tuotto menee junioreiden hyväksi. Kiitos, että tuet!", "qr": "Otteluohjelma ja tulokset kulkevat mukanasi! Skannaa QR-koodi otteluohjelmajulisteesta, niin näet puhelimestasi, missä ja milloin oma joukkue pelaa.", "kannustus": "Muistetaan kannustaa kaikkia pelaajia – ja annetaan tuomareille työrauha. Hyvä fiilis kentän laidalla tekee pelistä paremman kaikille!", "pukukopit": "Muistutus joukkueille: älkää jättäkö arvotavaroita pukukoppeihin. Halli ei vastaa koppeihin jätetyistä tavaroista. Kiitos!", "lounas": "Tiedoksi lounaan ennakkoon tilanneille joukkueille: lounas on tarjolla OmaSP-stadionilla, Carlsberg-tilassa toisessa kerroksessa, kello kymmenen kolmekymmentä ja kello neljätoista välillä. Sinne kuljetaan pääsisäänkäynnin vierestä vasemmalta. Hyvää ruokahalua!", "saannot": "Muistutus säännöistä: peliaika on kolmekymmentä minuuttia, ja pelataan seitsemän vastaan seitsemän. Käytössä on boksipaitsio. Sivurajalta pallon saa syöttää, heittää tai kuljettaa, ja myös kulma- ja vapaapotkut saa kuljettaa. Maalipotkut otetaan normaalisti. Reilua peliä kaikille!", "kentat": "Muistattehan: kilpasarja pelaa takakentällä ja haastesarja etukentällä. Kiitos!"};
 
   /* ---- kuulutukset: aika = ottelupaikan (slot) alkamisaika + siirto minuutteina ---- */
   const P = [
@@ -43,7 +45,7 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), offset: null, open: false,
+    gong: ls.get('k-gong', true), offset: null, open: false, txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
@@ -82,6 +84,11 @@
     const { r } = slotResult(i), [, a, b] = BASE[i], seq = [];
     [['k', 'p-kilpa'], ['h', 'p-haaste']].forEach(([s, pid]) => { if (r[s + 'a'] != null && r[s + 'b'] != null) seq.push(pid, 'p-' + a.toLowerCase(), `p-${r[s + 'a']}-kesken`, 'p-' + b.toLowerCase(), `p-${r[s + 'b']}-loppu`); });
     return seq.length ? ['p-tuloksia', ...seq, 'p-kiitos'] : null;
+  }
+  function resultText(i) {
+    const { r } = slotResult(i), [, a, b] = BASE[i], parts = [];
+    [['k', 'Kilpasarjassa'], ['h', 'Haastesarjassa']].forEach(([s, l]) => { if (r[s + 'a'] != null && r[s + 'b'] != null) parts.push(`${l} ${a} ${r[s + 'a']}, ${b} ${r[s + 'b']}.`); });
+    return parts.length ? `Tuloksia! ${parts.join(' ')} Kiitos joukkueille hyvistä peleistä!` : '';
   }
   const tooBig = i => Object.values(slotResult(i).r).some(v => v > MAXN);
   const resultItem = i => { const seq = resultSeq(i); return seq && !tooBig(i) ? { key: 'r' + i, seq, label: 'Tulokset ' + BASE[i][1] + '–' + BASE[i][2] } : null; };
@@ -204,9 +211,9 @@
     const t = timeOf(c), moved = t !== origOf(c), f = isFired(c), sk = isSkip(c);
     return `<div class="kp-row ${c === nx ? 'next' : ''} ${f ? 'done' : ''} ${sk ? 'skip' : ''}">
       <div class="kp-t">${fmtTime(t)}${moved ? `<s>${fmtTime(origOf(c))}</s>` : ''}</div>
-      <div class="kp-l"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
+      <div class="kp-l" data-ktxt="${c.id}" title="Näytä kuulutuksen teksti"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
       <button class="kp-skip ${sk ? 'on' : ''}" data-kskip="${c.id}">${sk ? 'Palauta' : 'Ohita'}</button>
-      <button class="kp-play" data-kplay="${c.id}" aria-label="Soita ${esc(c.label)}">${PLAY}</button></div>${c.slot != null ? resLine(c.slot) : ''}`;
+      <button class="kp-play" data-kplay="${c.id}" aria-label="Soita ${esc(c.label)}">${PLAY}</button></div>${S.txt[c.id] ? `<div class="kp-txt"><p>”${esc(TEXTS[audioOf(c)] || '')}”</p>${c.slot != null ? `<p class="kp-txtres"><b>Tuloskuulutus ottelujen jälkeen:</b> ${resultText(c.slot) ? '”' + esc(resultText(c.slot)) + '”' : 'tulee, kun tulokset on vahvistettu. Muoto: ”Tuloksia! Kilpasarjassa ' + c.a + ' 3, ' + c.b + ' 1. Haastesarjassa … Kiitos joukkueille hyvistä peleistä!”'}</p>` : ''}</div>` : ''}${c.slot != null ? resLine(c.slot) : ''}`;
   }
   function draw() {
     if (!panel) return;
@@ -223,7 +230,7 @@
       <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
-    panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
+    panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
     drawOmat(); paint(); tickCd();
   }
   function drawOmat(force) {
@@ -298,6 +305,7 @@
       if (/^oma\d$/.test(id)) { if (!S.ownAudio[id]) { toast('Lisää ensin ääni tälle napille'); return; } enqueue({ key: id, id, label: S.omat[+id.slice(3) - 1].label }); return; }
       enqueue({ key: id, id: audioOf(c), label: c.label }); return; }
     if ((t = q('[data-kres]'))) { const i = +t.dataset.kres; if (playingKey === 'r' + i) { stopAll(); return; } sayResult(i, true); draw(); return; }
+    if ((t = q('[data-ktxt]'))) { const id = t.dataset.ktxt; S.txt[id] = !S.txt[id]; draw(); return; }
     if ((t = q('[data-kskip]'))) { const id = t.dataset.kskip; if (S.skip[ak(id)]) delete S.skip[ak(id)]; else S.skip[ak(id)] = true; ls.set('k-skip2', S.skip); queue = queue.filter(x => x.key !== id); draw(); return; }
     if (q('[data-ktest]')) { stopAll(); unlock(); const t0 = actx.currentTime + .05; gongAt(t0); fanfareAt(t0 + 1.8); return; }
     if (q('[data-kclock]')) { const e0 = EVENT.date || new Date(2026, 9, 24); S.offset = new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30) - Date.now(); if (S.auto) setAuto(true); else draw(); toast('Testikello päällä: kello hyppäsi turnausaamuun'); return; }
