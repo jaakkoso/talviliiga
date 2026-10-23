@@ -122,3 +122,7 @@ body.kp-on .kp{display:flex}
 
 .kp-row.missed{border-color:#d9a640;background:#3a3020}
 .kp-miss{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.74rem;font-weight:700;color:#f0c46a;margin-top:2px}
+
+.rm.st-pending{background:#fff4d6;border-color:#e0b44a}
+.rm.st-pending .st-tag{color:#6b4a00}
+.st-dot.st-pending{background:#fff4d6;border-color:#e0b44a}

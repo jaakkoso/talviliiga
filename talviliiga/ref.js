@@ -106,7 +106,17 @@ async function saveAdjust(adj) {
 }
 function demoBanner(clk) { return clk.demo ? `<div class="banner"><span><b>${CONFIG.SHEET_ID ? 'Harjoitustila' : 'Esikatselu'}</b> · esimerkkidata, kello simuloitu klo ${fmtTime(clk.min)}. Tallennukset jäävät tähän puhelimeen eivätkä näy oikeassa tulospalvelussa. <a href="./${CONFIG.SHEET_ID ? '#harjoitus' : ''}" style="color:inherit;font-weight:700">Avaa harjoitus­tulospalvelu</a></span></div>` : ''; }
 
+/* Muokkausoikeus (marssijärjestys): kenttävastaava < tuomari < ylläpitäjä.
+   Kenttävastaava kirjaa maalit, kunnes lopputulos on vahvistettu. Tuomari voi korjata vahvistettua tulosta,
+   kunnes ylläpitäjä hyväksyy ja lukitsee sen (Ottelut-välilehden tila = hyväksytty). Ylläpitäjä voi aina muokata. */
+const isLocked = m => !!m && m.tila === 'hyväksytty';
+const canEdit = m => MODE === 'admin' || (MODE === 'tuomari' && !isLocked(m)) || (MODE === 'kentta' && !isFinal(m) && !isLocked(m));
+function lockNote(m) {
+  return isLocked(m) ? `<div class="banner"><b>🔒 Ylläpitäjä on hyväksynyt tuloksen ${m.hg}–${m.ag} ja lukinnut sen.</b><span>Korjaukset vain ylläpidon kautta.</span></div>`
+    : `<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>Lopputulos ${m.hg}–${m.ag} on vahvistettu ✓</b><span>Tuomari tai ylläpitäjä voi tarvittaessa korjata sen.</span></div>`;
+}
 function goalItems(m, goals, withNumberBtn) {
+  if (!canEdit(m)) return goals.length ? `<div class="glist">${goals.slice().reverse().map(g => `<div class="gi"><span class="m">${g.min != null ? g.min + "'" : '–'}</span>${chip(g.team)}${g.no ? `<span class="note" style="margin:0">#${esc(g.no)}</span>` : ''}</div>`).join('')}</div>` : '';
   if (!goals.length) return '';
   return `<div class="glist">${goals.slice().reverse().map(g => `<div class="gi"><span class="m">${g.min != null ? g.min + "'" : '–'}</span>${chip(g.team)}
     <button class="btn ghost" data-editgoal="${g.id}" style="padding:4px 10px">${g.no ? '#' + esc(g.no) : withNumberBtn ? '+ numero' : 'Ei numeroa'}</button>
@@ -115,13 +125,17 @@ function goalItems(m, goals, withNumberBtn) {
 
 function resultBlock(m, goals, opts = {}) {
   const final = isFinal(m);
+  if (!canEdit(m)) return lockNote(m);
   const d = R.draft[m.id] || (R.draft[m.id] = final ? [m.hg, m.ag] : goalCount(m, goals));
   const changed = !final || d[0] !== m.hg || d[1] !== m.ag;
   const side = (i, t) => `<div style="display:grid;gap:8px;justify-items:center">${chip(t)}<div class="v">${d[i]}</div><div class="step" style="width:100%"><button data-adj="${i},-1" aria-label="${esc(t)} miinus">−</button><button data-adj="${i},1" aria-label="${esc(t)} plus">+</button></div></div>`;
   return `<div class="adj">${side(0, m.home)}<span aria-hidden="true"></span>${side(1, m.away)}</div>
     ${final && !changed ? `<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>Lopputulos vahvistettu ${m.hg}–${m.ag} ✓</b><span>Muuta lukemia ja tallenna, jos tulos pitää korjata.</span></div>`
       : `<button class="btn gold" data-confirm style="font-size:1.15rem;padding:14px">${final ? 'Tallenna korjattu tulos' : 'Vahvista lopputulos'} ${d[0]}–${d[1]}</button>`}
-    ${final ? `<button class="btn ghost" data-clear style="justify-self:start">Poista vahvistettu tulos</button>` : ''}`;
+    ${final ? `<button class="btn ghost" data-clear style="justify-self:start">Poista vahvistettu tulos</button>` : ''}
+    ${MODE === 'admin' && final && !changed ? (isLocked(m)
+      ? `<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>🔒 Hyväksytty ja lukittu.</b><span>Tuomari ja kenttävastaava eivät voi enää muuttaa tulosta.</span></div><button class="btn ghost" data-unlock style="justify-self:start">Avaa lukitus</button>`
+      : `<div class="banner"><b>Tuomari on vahvistanut tuloksen ${m.hg}–${m.ag}.</b><span>Tarkista ja hyväksy, niin tulos lukittuu.</span></div><button class="btn gold" data-approve style="font-size:1.1rem;padding:14px">✓ Hyväksy ja lukitse tulos ${m.hg}–${m.ag}</button>`) : ''}`;
 }
 
 function goalSheet(m, clk) {
@@ -178,10 +192,13 @@ function refList() {
     /* Ylläpito: yksi lista aikajärjestyksessä, tila näkyy värinä (vahvistettu vihreä, kuulutettu sininen). */
     const ann = m => (window.KUULUTUS && KUULUTUS.annOf) ? KUULUTUS.annOf(m) : null;
     const row = m => { const st = status(m, clk).k, a = st === 'done' ? ann(m) : null;
-      const cls = st === 'cancel' ? 'st-cancel' : a === 'ann' ? 'st-ann' : a === 'changed' ? 'st-changed' : st === 'done' ? 'st-done' : '';
-      const tag = a === 'ann' ? '<span class="st-tag">📣 Kuulutettu</span>' : a === 'changed' ? '<span class="st-tag">Tulos muuttunut kuuluttamisen jälkeen</span>' : st === 'done' ? '<span class="st-tag">✓ Vahvistettu</span>' : '';
+      const lk = isLocked(m);
+      const cls = st === 'cancel' ? 'st-cancel' : st !== 'done' ? '' : !lk ? 'st-pending' : a === 'ann' ? 'st-ann' : a === 'changed' ? 'st-changed' : 'st-done';
+      const tags = st !== 'done' ? [] : [lk ? '🔒 Hyväksytty' : '⏳ Tuomari vahvistanut · odottaa hyväksyntääsi', a === 'ann' ? '📣 Kuulutettu' : a === 'changed' ? 'Tulos muuttunut kuuluttamisen jälkeen' : ''].filter(Boolean);
+      const tag = tags.map(x => `<span class="st-tag">${x}</span>`).join(' · ');
       return item(m).replace('class="rm ', `class="rm ${cls} `).replace('</span></button>', `</span>${tag ? `<span class="st-row">${tag}</span>` : ''}</button>`); };
-    const legend = `<div class="st-legend"><span><span class="st-dot st-done"></span>Vahvistettu</span><span><span class="st-dot st-ann"></span>Tulokset kuulutettu</span><span><span class="st-dot st-wait"></span>Ottelu käynnissä / odottaa tulosta</span></div>`;
+    const pend = ms.filter(m => status(m, clk).k === 'done' && !isLocked(m)).length;
+    const legend = `<div class="st-legend"><span><span class="st-dot st-pending"></span>Odottaa hyväksyntää${pend ? ` (${pend})` : ''}</span><span><span class="st-dot st-done"></span>Hyväksytty</span><span><span class="st-dot st-ann"></span>Tulokset kuulutettu</span><span><span class="st-dot st-wait"></span>Ottelu käynnissä / odottaa tulosta</span></div>`;
     return `${demoBanner(clk)}${tabsBar('list')}${summary}${filterBar()}${legend}
     <div style="display:grid;gap:8px">${ms.map(row).join('')}</div>
     <button class="btn ghost" data-logout>Kirjaudu ulos</button>`;
@@ -205,7 +222,7 @@ function refMatch() {
   <details class="card" ${goals.length ? 'open' : ''}><summary style="font-weight:700;cursor:pointer">Maalit (valinnainen) · ${goals.length} kirjattu</summary>
     <div style="display:grid;gap:12px;margin-top:12px">
       <p class="note" style="margin:0">Kirjaa tarvittaessa maalien minuutit ja pelinumerot. Lopputulos vahvistetaan yllä.</p>
-      <div class="addg">${goalBtn(m.home, 'data-addgoal')}${goalBtn(m.away, 'data-addgoal')}</div>
+      ${canEdit(m) ? `<div class="addg">${goalBtn(m.home, 'data-addgoal')}${goalBtn(m.away, 'data-addgoal')}</div>` : ''}
       ${goalItems(m, goals, true)}
     </div></details>
   ${R.sheet ? goalSheet(m, clk) : ''}`;
@@ -415,6 +432,9 @@ document.addEventListener('click', e => {
   if ((t = q('[data-pin]'))) { if (t.dataset.pin) { R.pinned = t.dataset.pin; R.draft = {}; render(); } return; }
   if (q('[data-unpin]')) { R.pinned = null; render(); return; }
   if (q('[data-logout]')) { R.pin = ''; ls.set(PIN_KEY, ''); render(); return; }
+  if (MODE !== 'admin' && q('[data-adj],[data-confirm],[data-clear],[data-addgoal],[data-editgoal],[data-delgoal],[data-quickgoal],[data-undo]')) { const m = curMatch(); if (m && !canEdit(m)) { toast(isLocked(m) ? 'Tulos on lukittu. Korjaukset vain ylläpidon kautta.' : 'Tulos on jo vahvistettu. Korjaukset tuomarin tai ylläpidon kautta.'); render(); return; } }
+  if (q('[data-approve]')) { const m = curMatch(); if (m) { enqueue({ action: 'setStatus', match: m.id, tila: 'hyväksytty' }); toast('Tulos hyväksytty ja lukittu'); } return; }
+  if (q('[data-unlock]')) { const m = curMatch(); if (m) { enqueue({ action: 'setStatus', match: m.id, tila: '' }); toast('Lukitus avattu'); } return; }
   if ((t = q('[data-adj]'))) { const m = curMatch(); const [i, dv] = t.dataset.adj.split(',').map(Number); const d = R.draft[m.id]; d[i] = Math.max(0, d[i] + dv); render(); return; }
   if (q('[data-confirm]')) { const m = curMatch(), d = R.draft[m.id]; enqueue({ action: 'result', match: m.id, hg: d[0], ag: d[1] }); toast(`Tulos ${d[0]}–${d[1]} vahvistettu`); return; }
   if (q('[data-clear]')) { const m = curMatch(); enqueue({ action: 'result', match: m.id, hg: '', ag: '' }); delete R.draft[m.id]; render(); toast('Vahvistus poistettu'); return; }
