@@ -47,7 +47,7 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, open: false, role: ls.get('k-role', (window.matchMedia && matchMedia('(pointer:fine)').matches) ? 'soitin' : 'kauko'), txt: {},
+    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, over: ls.get('k-over', {}), editing: null, open: false, role: ls.get('k-role', (window.matchMedia && matchMedia('(pointer:fine)').matches) ? 'soitin' : 'kauko'), txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
@@ -69,7 +69,8 @@
   const pairOf = i => { const [, a, b] = BASE[i]; return m => (m.home === a && m.away === b) || (m.home === b && m.away === a); };
   const matchesOf = i => ((typeof R !== 'undefined' && R.data && R.data.matches) || []).filter(pairOf(i));
   function kick(i) { const ms = matchesOf(i).filter(m => m.start != null); return ms.length ? Math.min(...ms.map(m => m.start)) : parseTime(BASE[i][0]); }
-  const timeOf = c => kick(c.rel[0]) + c.rel[1];
+  const timeOf = c => { const o = S.over[ak(c.id)]; return o != null ? o : kick(c.rel[0]) + c.rel[1]; };
+  const autoTimeOf = c => kick(c.rel[0]) + c.rel[1];
   const origOf = c => parseTime(BASE[c.rel[0]][0]) + c.rel[1];
   const program = () => P.slice().sort((x, y) => timeOf(x) - timeOf(y));
 
@@ -267,9 +268,9 @@
     return `<div class="kp-ready"><div class="kp-eyebrow">Tulokset valmiina kuulutettavaksi</div>${ready.map(i => `<div class="kp-rcard"><p>”${esc(resultText(i))}”</p><button class="kp-rbtn" data-kres="${i}">📣 Kuuluta tulokset ${BASE[i][1]}–${BASE[i][2]}</button></div>`).join('')}<div class="kp-note">Hyvä hetki on otteluiden välissä, ennen seuraavaa ottelukutsua.</div></div>`;
   }
   function row(c, nx) {
-    const t = timeOf(c), moved = t !== origOf(c), f = isFired(c), sk = isSkip(c);
+    const t = timeOf(c), moved = t !== origOf(c) || S.over[ak(c.id)] != null, f = isFired(c), sk = isSkip(c);
     return `<div class="kp-row ${c === nx ? 'next' : ''} ${f ? 'done' : ''} ${sk ? 'skip' : ''}">
-      <div class="kp-t">${fmtTime(t)}${moved ? `<s>${fmtTime(origOf(c))}</s>` : ''}</div>
+      ${S.editing === c.id ? `<div class="kp-tedit"><input type="time" step="60" data-kover="${c.id}" value="${fmtTime(t).replace('.', ':')}" aria-label="Uusi aika"><div class="kp-btns" style="gap:4px"><button class="kp-mini kp-save" data-kovsave="${c.id}">✓ Tallenna</button><button class="kp-mini" data-kovreset="${c.id}" title="Palauta aikataulun mukainen aika">Autom.</button><button class="kp-mini" data-kovcancel>✕</button></div></div>` : `<button class="kp-t kp-tbtn" data-kedit="${c.id}" title="Muuta aikaa">${fmtTime(t)}${moved ? `<s>${fmtTime(S.over[ak(c.id)] != null ? autoTimeOf(c) : origOf(c))}</s>` : ''}${S.over[ak(c.id)] != null ? '<em>käsin</em>' : ''}</button>`}
       <div class="kp-l" data-ktxt="${c.id}" title="Näytä kuulutuksen teksti"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
       <button class="kp-skip ${sk ? 'on' : ''}" data-kskip="${c.id}">${sk ? 'Palauta' : 'Ohita'}</button>
       <button class="kp-play" data-kplay="${c.id}" aria-label="Soita ${esc(c.label)}">${PLAY}</button></div>${S.txt[c.id] ? `<div class="kp-txt"><p>”${esc(TEXTS[audioOf(c)] || '')}”</p>${c.slot != null ? `<p class="kp-txtres"><b>Tuloskuulutus ottelujen jälkeen:</b> ${resultText(c.slot) ? '”' + esc(resultText(c.slot)) + '”' : 'tulee, kun tulokset on vahvistettu. Muoto: ”Tuloksia! Kilpasarjassa ' + c.a + ' 3, ' + c.b + ' 1. Haastesarjassa … Kiitos joukkueille hyvistä peleistä!”'}</p>` : ''}</div>` : ''}${c.slot != null ? resLine(c.slot) : ''}`;
@@ -288,7 +289,9 @@
       ${S.role === 'kauko' ? '<div class="kp-note"><b>📱 Kauko-ohjain.</b> Automaatti ja äänet toimivat kuulutuskoneella.</div>' : `<div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>`}
       <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
+    const ed = panel.querySelector('[data-kover]'), edVal = ed && ed.value, edFocus = ed && document.activeElement === ed;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
+    if (ed) { const ne = panel.querySelector('[data-kover]'); if (ne) { ne.value = edVal; if (edFocus) ne.focus(); } }
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
     panel.querySelector('.kp-testwrap').innerHTML = roleBox() + testBar();
     panel.querySelector('.kp-stand').innerHTML = standBox(false);
@@ -360,6 +363,10 @@
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
     if (q('[data-kclose]')) { panel.classList.remove('open'); return; }
     if ((t = q('[data-krole]'))) { S.role = t.dataset.krole; ls.set('k-role', S.role); if (S.role === 'kauko') stopAll(); draw(); toast(S.role === 'kauko' ? 'Tämä laite on nyt kauko-ohjain: kuulutukset soivat kuulutuskoneelta.' : 'Tämä laite on nyt kuulutuskone: kuulutukset soivat tästä.'); return; }
+    if ((t = q('[data-kedit]'))) { S.editing = t.dataset.kedit; draw(); const inp = panel.querySelector('[data-kover]'); if (inp) { inp.focus(); try { inp.showPicker && inp.showPicker(); } catch (err) { } } return; }
+    if ((t = q('[data-kovreset]'))) { setOver(t.dataset.kovreset, null); return; }
+    if ((t = q('[data-kovsave]'))) { commitOver(panel.querySelector(`[data-kover="${t.dataset.kovsave}"]`)); return; }
+    if (q('[data-kovcancel]')) { S.editing = null; draw(); return; }
     if (S.role === 'kauko') { const cmd = remoteCmd(q); if (cmd) { sendRemote(...cmd); return; } }
     if ((t = q('[data-kstand]'))) { if (playingKey === 'stand') { stopAll(); return; } unlock(); sayStand(t.dataset.kstand === '1'); return; }
     if ((t = q('[data-kmres]'))) { const i = +t.dataset.kmres; if (playingKey === 'r' + i) { stopAll(); return; } unlock(); sayResult(i, true); draw(); matchCard(); return; }
@@ -406,6 +413,15 @@
   /* ---- kauko-ohjaus: puhelin lähettää komennon, kuulutuskone soittaa ----
      Komento kulkee tulospalvelun Asetukset-välilehden rivin viimeisin_testi kautta (sama kuin yhteystesti).
      Kuulutuskone lukee riviä muutaman sekunnin välein ja kuittaa. */
+  function setOver(id, min, fromRemote) {
+    if (min == null) delete S.over[ak(id)]; else S.over[ak(id)] = min;
+    ls.set('k-over', S.over); S.editing = null;
+    const c = P.find(x => x.id === id);
+    if (c && min != null && min * 60 > nowSec()) delete S.fired[dayKey() + ':' + id];
+    draw();
+    if (!fromRemote) toast(min == null ? `${c ? c.label : id}: aika palautettu aikataulun mukaiseksi` : `${c ? c.label : id}: kuulutetaan klo ${fmtTime(min)}`);
+    if (S.role === 'kauko' && !fromRemote) sendRemote('time', `${id}:${min == null ? '' : min}`);
+  }
   function remoteCmd(q) {
     let t;
     if ((t = q('[data-kmres]')) || (t = q('[data-kres]'))) return ['res', t.dataset.kmres ?? t.dataset.kres];
@@ -416,7 +432,7 @@
     if (q('[data-kstop]')) return ['stop', ''];
     return null;
   }
-  const CMD_LABEL = { res: 'tulokset', stand: 'loppusijoitukset', fire: 'kuulutus', play: 'kuulutus', attn: 'huomioääni', stop: 'pysäytys' };
+  const CMD_LABEL = { time: 'kellonajan muutos', res: 'tulokset', stand: 'loppusijoitukset', fire: 'kuulutus', play: 'kuulutus', attn: 'huomioääni', stop: 'pysäytys' };
   let pending = null;
   async function sendRemote(cmd, arg) {
     if (cmd === 'res' && !slotResult(+arg).complete && S.ann[ak(+arg)] == null) { toast('Vahvista ensin kierroksen molempien otteluiden tulokset.'); return; }
@@ -459,6 +475,7 @@
     else if (cmd === 'play') { const c = P.find(x => x.id === arg) || EXTRAS.find(x => x.id === arg); if (/^oma\d$/.test(arg)) { if (S.ownAudio[arg]) enqueue({ key: arg, id: arg, label: S.omat[+arg.slice(3) - 1].label }); } else if (c) enqueue({ key: arg, id: audioOf(c), label: c.label }); }
     else if (cmd === 'attn') enqueue({ key: 'huomio', chime: true, label: 'Huomioääni' }, true);
     else if (cmd === 'stop') stopAll();
+    else if (cmd === 'time') { const [id, m] = arg.split(':'); setOver(id, m === '' ? null : +m, true); }
     toast('📡 Kauko-ohjaus: ' + (CMD_LABEL[cmd] || cmd)); draw();
   }
   function roleBox() {
@@ -512,6 +529,9 @@
     const tmp = document.createElement('div'); tmp.innerHTML = html; const node = tmp.firstElementChild; node.dataset.sig = sig;
     if (old) old.replaceWith(node); else { const first = appEl.querySelector('section.card'); if (first) first.after(node); }
   }
+  /* Kellonajan muokkaus: tallentuu Tallenna-napista tai Enterillä, Esc peruu */
+  const commitOver = el => { if (!el || el.dataset.kover == null || el.dataset.done) return; el.dataset.done = '1'; const [h, mi] = (el.value || '').split(':').map(Number); if (!isNaN(h) && !isNaN(mi)) setOver(el.dataset.kover, h * 60 + mi); else { S.editing = null; draw(); } };
+  document.addEventListener('keydown', e => { if (e.target.dataset && e.target.dataset.kover != null) { if (e.key === 'Enter') { e.preventDefault(); commitOver(e.target); } if (e.key === 'Escape') { e.target.dataset.done = '1'; S.editing = null; draw(); } } });
   /* ---- käynnistys ---- */
   /* Testin aikana myös ylläpidon ottelutilat (käynnissä, odottaa tulosta) seuraavat testikelloa */
   if (typeof window.clock === 'function') { const orig = window.clock; window.clock = () => S.vt ? { day: 0, min: Math.floor(nowSec() / 60), demo: Store.demo } : orig(); }

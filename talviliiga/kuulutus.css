@@ -107,3 +107,11 @@ body.kp-on .kp{display:flex}
 .kp-mini.on{background:#6b5bd6;border-color:#6b5bd6;color:#fff}
 
 .kp-role{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.8rem;color:var(--kmuted)}
+
+.kp-tbtn{background:transparent;border:0;padding:0;text-align:left;cursor:pointer;color:var(--kgold);text-decoration:underline dotted 2px;text-underline-offset:4px}
+.kp-tbtn em{display:block;font-style:normal;font-family:var(--body);font-size:.62rem;color:var(--kgold);text-decoration:none}
+.kp-tedit{display:grid;gap:4px}
+.kp-tedit input{font:inherit;font-size:.95rem;background:var(--kbg);color:var(--kfg);border:1px solid var(--kgold);border-radius:6px;padding:3px;width:6.2em}
+.kp-row:has(.kp-tedit){grid-template-columns:minmax(0,1fr) auto auto}
+.kp-row:has(.kp-tedit) .kp-tedit{grid-column:1/-1;order:9}
+.kp-save{background:var(--kgold);color:#141212;border-color:var(--kgold)}
