@@ -232,7 +232,7 @@ function resetCard() {
   return `<section class="card" style="display:grid;gap:10px">
     <div class="sec-h" style="margin:0"><h2>4. Nollaa testitulokset</h2><small>${Store.demo ? 'Harjoitustila' : 'Oikea tulospalvelu'}</small></div>
     <p class="note" style="margin:0">${Store.demo ? 'Palauttaa harjoitustilan esimerkkidatan alkutilaan.' : `Tyhjentää kaikki vahvistetut tulokset (${c.res}), maalit (${c.goals}), sarjataulukon käsikorjaukset (${c.adj}) ja perumiset (${c.canc}) oikeasta tulospalvelusta. Otteluohjelma, alkuajat, joukkueet ja asetukset jäävät ennalleen. Tee tämä ennen turnausaamua, älä turnauksen aikana.`}</p>
-    ${!Store.demo && !total ? '<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>✓ Tuloksia ei ole. Tulospalvelu on valmis turnaukseen.</b></div>' : `<button class="btn ghost" data-resetall style="color:var(--danger)">${sure ? 'Vahvista: nollaa kaikki tulokset' : Store.demo ? 'Palauta harjoitusdata alkuun' : 'Nollaa kaikki testitulokset'}</button>`}
+    ${!Store.demo && EVENT.date && clock().day >= 0 ? `<div class="banner"><b>Nollaus on lukittu turnauspäivästä alkaen</b>, jotta oikeat tulokset eivät katoa vahingossa.</div>` : !Store.demo && !total ? '<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>✓ Tuloksia ei ole. Tulospalvelu on valmis turnaukseen.</b></div>' : `<button class="btn ghost" data-resetall style="color:var(--danger)">${sure ? 'Vahvista: nollaa kaikki tulokset' : Store.demo ? 'Palauta harjoitusdata alkuun' : 'Nollaa kaikki testitulokset'}</button>`}
   </section>`;
 }
 function resetAll() {
