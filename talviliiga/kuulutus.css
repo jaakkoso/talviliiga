@@ -115,3 +115,7 @@ body.kp-on .kp{display:flex}
 .kp-row:has(.kp-tedit){grid-template-columns:minmax(0,1fr) auto auto}
 .kp-row:has(.kp-tedit) .kp-tedit{grid-column:1/-1;order:9}
 .kp-save{background:var(--kgold);color:#141212;border-color:var(--kgold)}
+
+.kp-memo{font-size:.82rem;line-height:1.4}
+.kp-memo h4{margin:10px 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--kgold)}
+.kp-memo ul{margin:0;padding-left:18px;display:grid;gap:3px}

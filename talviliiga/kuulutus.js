@@ -336,6 +336,36 @@
       <div class="kp-head"><div><div class="kp-title">Kuulutukset</div><div class="kp-sub">Ajat seuraavat tulospalvelun aikataulua</div></div><div class="kp-clock">--.--</div>
         <button class="kp-stop" data-kstop disabled>Stop</button><button class="kp-close" data-kclose aria-label="Sulje">✕</button></div>
       <div class="kp-body">
+        <details class="kp-sec kp-memo"><summary>📋 Muistilista</summary>
+          <h4>Kuulutuskone: läppäri</h4>
+          <ul><li>Kansi auki ja virtajohto kiinni. Kannen sulkeminen vie koneen lepotilaan.</li>
+          <li>Chrome, ylläpito auki ja kirjautuneena (ilman #harjoitus-loppua).</li>
+          <li>Macissa <b>Älä häiritse</b> päälle, ettei ilmoitusäänet kuulu kaiuttimista.</li>
+          <li>Macin äänenvoimakkuus noin 75 %, varsinainen taso mikseristä.</li></ul>
+          <h4>Kuulutuskone: iPad</h4>
+          <ul><li>Valitse yläosasta <b>🔊 Kuulutuskone</b>. iPad on oletuksena kauko-ohjain.</li>
+          <li>Asetukset → Näyttö ja kirkkaus → <b>Automaattilukitus: Ei koskaan</b>.</li>
+          <li><b>Virransäästötila pois.</b> Se lyhentää lukituksen 30 sekuntiin.</li>
+          <li>Safari edessä, älä vaihda sovellusta äläkä paina virtanappia. Varmin tapa on <b>Ohjattu käyttö</b> (Käytettävyys → Ohjattu käyttö, sivupainike 3 kertaa).</li>
+          <li>Jos näyttö lukittuu, sivu pysähtyy: automaatti ja kauko-ohjaus eivät toimi, ja yli 3 min myöhästyneet kuulutukset jäävät soimatta.</li>
+          <li>USB-C- tai Lightning-adapteri 3,5 mm:iin. Lataa iPad täyteen aamulla.</li>
+          <li>Ohjauskeskuksessa ei mykistystä.</li></ul>
+          <h4>Äänentoisto (Alto-mikseri)</h4>
+          <ul><li>Hallin oma Aux-johto LINE IN 3/4:ssä, taso "Aux – volume" -kanavalla.</li>
+          <li>Varalla 3,5 mm → 2 × RCA ja 2 × RCA → 6,3 mm -adapterit LINE IN 3/4:ään (tai RCA:t TAPE IN:iin).</li>
+          <li>Surina laturin kanssa → maadoitussilmukan erotin tai akulla.</li></ul>
+          <h4>Aamulla ennen 9.45</h4>
+          <ul><li>Napauta sivua kerran, jotta ääni sallitaan. Punainen palkki katoaa.</li>
+          <li>Testaa ääni (Asetukset ja testaus → Testaa ääni) ja Huomioääni.</li>
+          <li>Automaatti päällä, kortissa ”Seuraavaksi · klo 09.45 · Tervetuloa”.</li>
+          <li>Kauko-ohjain: kokeile puhelimesta yksi Muut kuulutukset -nappi, kuittaus tulee muutamassa sekunnissa.</li></ul>
+          <h4>Päivän aikana</h4>
+          <ul><li>Myöhästymiset: siirrä otteluita ylläpidon Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Yksittäisen kuulutuksen aikaa voi muuttaa klikkaamalla kellonaikaa.</li>
+          <li>Tulevaan aikaan siirretty kuulutus soi itse. Yli 3 min menneeseen aikaan siirretty pitää kuuluttaa ”Kuuluta nyt”.</li>
+          <li>Tulokset: nappi aktivoituu, kun kierroksen kilpa ja haaste on vahvistettu. Kuuluta otteluiden välissä.</li>
+          <li>Lopuksi: ”Kuuluta loppusijoitukset + lopetus”. Lopetus ei soi itsestään.</li>
+          <li>Ottelukutsuissa sanotaan alkuperäinen kellonaika, vaikka aikataulu siirtyisi.</li></ul>
+        </details>
         <div class="kp-testwrap"></div>
         <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
