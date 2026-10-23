@@ -209,7 +209,7 @@
   async function setAuto(on) {
     S.auto = on; ls.set('k-auto', on);
     if (on) { unlock(); try { lock = await navigator.wakeLock.request('screen'); } catch (e) { }
-      const m = nowSec() / 60; if (live()) program().forEach(c => { if (timeOf(c) + 3 <= m) S.fired[dayKey() + ':' + c.id] = true; }); ls.set('k-fired', S.fired); tickAuto(); }
+      tickAuto(); }
     else { try { if (lock) { await lock.release(); lock = null; } } catch (e) { } }
     draw();
   }
@@ -267,11 +267,12 @@
     if (!ready.length) return standBox(true);
     return `<div class="kp-ready"><div class="kp-eyebrow">Tulokset valmiina kuulutettavaksi</div>${ready.map(i => `<div class="kp-rcard"><p>”${esc(resultText(i))}”</p><button class="kp-rbtn" data-kres="${i}">📣 Kuuluta tulokset ${BASE[i][1]}–${BASE[i][2]}</button></div>`).join('')}<div class="kp-note">Hyvä hetki on otteluiden välissä, ennen seuraavaa ottelukutsua.</div></div>`;
   }
+  const isMissed = c => live() && !isFired(c) && !isSkip(c) && !c.manual && timeOf(c) + 3 <= nowSec() / 60;
   function row(c, nx) {
-    const t = timeOf(c), moved = t !== origOf(c) || S.over[ak(c.id)] != null, f = isFired(c), sk = isSkip(c);
-    return `<div class="kp-row ${c === nx ? 'next' : ''} ${f ? 'done' : ''} ${sk ? 'skip' : ''}">
+    const t = timeOf(c), moved = t !== origOf(c) || S.over[ak(c.id)] != null, f = isFired(c), sk = isSkip(c), ms = isMissed(c);
+    return `<div class="kp-row ${c === nx ? 'next' : ''} ${f ? 'done' : ''} ${sk ? 'skip' : ''} ${ms ? 'missed' : ''}">
       ${S.editing === c.id ? `<div class="kp-tedit"><input type="time" step="60" data-kover="${c.id}" value="${fmtTime(t).replace('.', ':')}" aria-label="Uusi aika"><div class="kp-btns" style="gap:4px"><button class="kp-mini kp-save" data-kovsave="${c.id}">✓ Tallenna</button><button class="kp-mini" data-kovreset="${c.id}" title="Palauta aikataulun mukainen aika">Autom.</button><button class="kp-mini" data-kovcancel>✕</button></div></div>` : `<button class="kp-t kp-tbtn" data-kedit="${c.id}" title="Muuta aikaa">${fmtTime(t)}${moved ? `<s>${fmtTime(S.over[ak(c.id)] != null ? autoTimeOf(c) : origOf(c))}</s>` : ''}${S.over[ak(c.id)] != null ? '<em>käsin</em>' : ''}</button>`}
-      <div class="kp-l" data-ktxt="${c.id}" title="Näytä kuulutuksen teksti"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${!f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
+      <div class="kp-l" data-ktxt="${c.id}" title="Näytä kuulutuksen teksti"><b>${esc(c.label)}</b><small>${esc(c.sub)}${f ? ' · kuulutettu' : ''}${sk ? ' · ohitetaan' : ''}</small>${ms ? `<span class="kp-miss">⚠ Jäi kuuluttamatta <button class="kp-mini kp-save" data-kfirenow="${c.id}">Kuuluta nyt</button></span>` : !f && !sk ? `<span class="kp-cd" data-kcd="${t}"></span>` : ''}</div>
       <button class="kp-skip ${sk ? 'on' : ''}" data-kskip="${c.id}">${sk ? 'Palauta' : 'Ohita'}</button>
       <button class="kp-play" data-kplay="${c.id}" aria-label="Soita ${esc(c.label)}">${PLAY}</button></div>${S.txt[c.id] ? `<div class="kp-txt"><p>”${esc(TEXTS[audioOf(c)] || '')}”</p>${c.slot != null ? `<p class="kp-txtres"><b>Tuloskuulutus ottelujen jälkeen:</b> ${resultText(c.slot) ? '”' + esc(resultText(c.slot)) + '”' : 'tulee, kun tulokset on vahvistettu. Muoto: ”Tuloksia! Kilpasarjassa ' + c.a + ' 3, ' + c.b + ' 1. Haastesarjassa … Kiitos joukkueille hyvistä peleistä!”'}</p>` : ''}</div>` : ''}${c.slot != null ? resLine(c.slot) : ''}`;
   }
@@ -288,7 +289,7 @@
       <div class="kp-big" data-kbig="${timeOf(nx)}"></div>
       ${S.role === 'kauko' ? '<div class="kp-note"><b>📱 Kauko-ohjain.</b> Automaatti ja äänet toimivat kuulutuskoneella.</div>' : `<div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>`}
       <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
-      <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
+      <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${(() => { const mi = program().filter(isMissed); return mi.length ? `<div class="kp-note" style="font-weight:700">⚠ ${mi.length} kuulutus${mi.length > 1 ? 'ta' : ''} jäi kuuluttamatta (${mi.map(c => esc(c.label)).join(', ')}). Kuuluta ne listasta tai ohita.</div>` : ''; })()}${readyBox()}`;
     const ed = panel.querySelector('[data-kover]'), edVal = ed && ed.value, edFocus = ed && document.activeElement === ed;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     if (ed) { const ne = panel.querySelector('[data-kover]'); if (ne) { ne.value = edVal; if (edFocus) ne.focus(); } }

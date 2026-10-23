@@ -119,3 +119,6 @@ body.kp-on .kp{display:flex}
 .kp-memo{font-size:.82rem;line-height:1.4}
 .kp-memo h4{margin:10px 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--kgold)}
 .kp-memo ul{margin:0;padding-left:18px;display:grid;gap:3px}
+
+.kp-row.missed{border-color:#d9a640;background:#3a3020}
+.kp-miss{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.74rem;font-weight:700;color:#f0c46a;margin-top:2px}
