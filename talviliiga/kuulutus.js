@@ -47,7 +47,7 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, open: false, txt: {},
+    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, open: false, role: ls.get('k-role', (window.matchMedia && matchMedia('(pointer:fine)').matches) ? 'soitin' : 'kauko'), txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
@@ -200,6 +200,7 @@
     enqueue({ key: c.id, id: audioOf(c), label: c.label });
   }
   function tickAuto() {
+    if (S.role === 'kauko') return;
     if (!S.auto || !live() || !loggedIn()) return;
     const m = nowSec() / 60;
     program().forEach(c => { const at = timeOf(c); if (m >= at && m < at + 3 && !isFired(c) && !isSkip(c) && !c.manual) fire(c); });
@@ -284,12 +285,12 @@
       <div class="kp-eyebrow">${lv ? 'Seuraavaksi' : 'Turnauspäivän ensimmäinen'} · klo ${fmtTime(timeOf(nx))}</div>
       <div class="kp-what">${esc(nx.label)}</div>
       <div class="kp-big" data-kbig="${timeOf(nx)}"></div>
-      <div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>
+      ${S.role === 'kauko' ? '<div class="kp-note"><b>📱 Kauko-ohjain.</b> Automaatti ja äänet toimivat kuulutuskoneella.</div>' : `<div class="kp-btns"><button class="kp-auto ${S.auto ? 'on' : ''}" data-kauto>${S.auto ? 'Automaatti päällä · pysäytä' : 'Käynnistä automaatti'}</button></div>`}
       <div class="kp-btns">${lv ? `<button class="kp-ghost" data-kfirenow="${nx.id}" title="Soittaa tämän kuulutuksen heti. Automaatti ei soita sitä enää uudelleen.">Kuuluta nyt</button>` : ''}<button class="kp-ghost" data-kattn>🔔 Huomioääni</button></div>
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
-    panel.querySelector('.kp-testwrap').innerHTML = testBar();
+    panel.querySelector('.kp-testwrap').innerHTML = roleBox() + testBar();
     panel.querySelector('.kp-stand').innerHTML = standBox(false);
     drawOmat(); paint(); tickCd();
   }
@@ -358,6 +359,8 @@
     const q = s => e.target.closest(s); let t;
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
     if (q('[data-kclose]')) { panel.classList.remove('open'); return; }
+    if ((t = q('[data-krole]'))) { S.role = t.dataset.krole; ls.set('k-role', S.role); if (S.role === 'kauko') stopAll(); draw(); toast(S.role === 'kauko' ? 'Tämä laite on nyt kauko-ohjain: kuulutukset soivat kuulutuskoneelta.' : 'Tämä laite on nyt kuulutuskone: kuulutukset soivat tästä.'); return; }
+    if (S.role === 'kauko') { const cmd = remoteCmd(q); if (cmd) { sendRemote(...cmd); return; } }
     if ((t = q('[data-kstand]'))) { if (playingKey === 'stand') { stopAll(); return; } unlock(); sayStand(t.dataset.kstand === '1'); return; }
     if ((t = q('[data-kmres]'))) { const i = +t.dataset.kmres; if (playingKey === 'r' + i) { stopAll(); return; } unlock(); sayResult(i, true); draw(); matchCard(); return; }
     if (!panel || !panel.contains(e.target)) return;
@@ -400,6 +403,68 @@
     if (d.kgong != null) { S.gong = e.target.checked; ls.set('k-gong', S.gong); }
   });
 
+  /* ---- kauko-ohjaus: puhelin lähettää komennon, kuulutuskone soittaa ----
+     Komento kulkee tulospalvelun Asetukset-välilehden rivin viimeisin_testi kautta (sama kuin yhteystesti).
+     Kuulutuskone lukee riviä muutaman sekunnin välein ja kuittaa. */
+  function remoteCmd(q) {
+    let t;
+    if ((t = q('[data-kmres]')) || (t = q('[data-kres]'))) return ['res', t.dataset.kmres ?? t.dataset.kres];
+    if ((t = q('[data-kstand]'))) return ['stand', t.dataset.kstand];
+    if ((t = q('[data-kfirenow]'))) return ['fire', t.dataset.kfirenow];
+    if ((t = q('[data-kplay]'))) return ['play', t.dataset.kplay];
+    if (q('[data-kattn]')) return ['attn', ''];
+    if (q('[data-kstop]')) return ['stop', ''];
+    return null;
+  }
+  const CMD_LABEL = { res: 'tulokset', stand: 'loppusijoitukset', fire: 'kuulutus', play: 'kuulutus', attn: 'huomioääni', stop: 'pysäytys' };
+  let pending = null;
+  async function sendRemote(cmd, arg) {
+    if (cmd === 'res' && !slotResult(+arg).complete && S.ann[ak(+arg)] == null) { toast('Vahvista ensin kierroksen molempien otteluiden tulokset.'); return; }
+    const nonce = Math.random().toString(36).slice(2, 8);
+    try { await Store.send({ action: 'ping', value: `K|${nonce}|${cmd}|${arg}|${Date.now()}` }, R.pin); }
+    catch (e) { toast('Komentoa ei saatu lähetettyä. Tarkista nettiyhteys.'); return; }
+    if (cmd === 'res') { S.ann[ak(+arg)] = slotResult(+arg).sig; ls.set('k-ann2', S.ann); }
+    if (cmd === 'stand') { S.ann[ak('stand')] = 1; ls.set('k-ann2', S.ann); }
+    pending = { nonce, cmd, at: Date.now() }; draw(); matchCard();
+    toast(`📡 Lähetetty kuulutuskoneelle: ${CMD_LABEL[cmd]}. Odotetaan kuittausta…`);
+  }
+  async function readRemote() {
+    if (Store.demo) { const d = ls.get('tulospalvelu-demo-v2', null); return (d && d.settings && d.settings.viimeisin_testi) || ''; }
+    const rows = await Store.gviz('Asetukset'); const r = rows.find(x => (x.avain || '').trim().toLowerCase() === 'viimeisin_testi'); return r ? String(r.arvo || '') : '';
+  }
+  let lastPoll = 0, polling = false;
+  async function pollRemote() {
+    if (!loggedIn() || polling) return;
+    const iv = S.role === 'soitin' ? 4000 : pending ? 3000 : 0; if (!iv || Date.now() - lastPoll < iv) return;
+    lastPoll = Date.now(); polling = true;
+    try {
+      const v = await readRemote(), parts = v.split('|');
+      if (S.role === 'soitin' && parts[0] === 'K') {
+        const [, nonce, cmd, arg, ts] = parts, seen = ls.get('k-lastnonce', '');
+        if (nonce && nonce !== seen && Math.abs(Date.now() - +ts) < 300000) { ls.set('k-lastnonce', nonce); await execRemote(cmd, arg); try { await Store.send({ action: 'ping', value: `A|${nonce}|ok` }, R.pin); } catch (e) { } }
+      }
+      if (S.role === 'kauko' && pending) {
+        if (parts[0] === 'A' && parts[1] === pending.nonce) { toast(`✓ Kuulutuskone kuuluttaa: ${CMD_LABEL[pending.cmd]}`); pending = null; }
+        else if (Date.now() - pending.at > 30000) { toast('Kuulutuskone ei kuitannut. Onko kone päällä, ylläpito auki ja kirjautuneena?'); pending = null; }
+      }
+    } catch (e) { } finally { polling = false; }
+  }
+  async function execRemote(cmd, arg) {
+    unlock();
+    /* Puhelimella juuri vahvistettu tulos ei ehkä ole vielä tällä koneella: haetaan tiedot ensin */
+    if ((cmd === 'res' && !slotResult(+arg).complete) || (cmd === 'stand' && !allDone())) { try { if (typeof load === 'function') await load(); } catch (e) { } }
+    if (cmd === 'res') { const i = +arg; S.ann[ak(i)] = null; delete S.ann[ak(i)]; sayResult(i, true); }
+    else if (cmd === 'stand') sayStand(arg === '1');
+    else if (cmd === 'fire') { const c = P.find(x => x.id === arg); if (c) fire(c); }
+    else if (cmd === 'play') { const c = P.find(x => x.id === arg) || EXTRAS.find(x => x.id === arg); if (/^oma\d$/.test(arg)) { if (S.ownAudio[arg]) enqueue({ key: arg, id: arg, label: S.omat[+arg.slice(3) - 1].label }); } else if (c) enqueue({ key: arg, id: audioOf(c), label: c.label }); }
+    else if (cmd === 'attn') enqueue({ key: 'huomio', chime: true, label: 'Huomioääni' }, true);
+    else if (cmd === 'stop') stopAll();
+    toast('📡 Kauko-ohjaus: ' + (CMD_LABEL[cmd] || cmd)); draw();
+  }
+  function roleBox() {
+    return `<div class="kp-role"><span>Tämä laite:</span><button class="kp-mini ${S.role === 'soitin' ? 'on' : ''}" data-krole="soitin">🔊 Kuulutuskone</button><button class="kp-mini ${S.role === 'kauko' ? 'on' : ''}" data-krole="kauko">📱 Kauko-ohjain</button></div>
+      ${S.role === 'kauko' ? '<p class="kp-help" style="margin:0">Napit lähettävät kuulutuksen kuulutuskoneelle (läppäri äänentoistossa). Kuittaus tulee muutamassa sekunnissa. Tämä laite ei soita mitään itse.</p>' : ''}`;
+  }
   /* ---- koko päivän testi pikakelauksella ---- */
   function startFullTest() {
     ['fired', 'ann', 'skip'].forEach(k => Object.keys(S[k]).forEach(x => { if (x.includes('-testi')) delete S[k][x]; }));
@@ -441,7 +506,7 @@
     const status = !sr.any ? 'Tuloskuulutus kootaan, kun lopputulos on vahvistettu.' : changed ? 'Tulos on muuttunut kuuluttamisen jälkeen.' : done ? 'Kuulutettu.' : others.length ? `Kuulutusnappi aktivoituu, kun myös ${others.join(' ja ').toLowerCase()}-ottelun tulos on vahvistettu.` : 'Valmis kuulutettavaksi.';
     const html = `<section class="card kp-mcard" style="display:grid;gap:10px"><div class="sec-h" style="margin:0"><h2>Tuloskuulutus</h2><small>${esc(BASE[i][1])}–${esc(BASE[i][2])} · kilpa ja haaste yhdessä</small></div>
       ${txt ? `<p style="margin:0;font-size:1.05rem">”${esc(txt)}”</p>` : ''}<p class="note" style="margin:0">${status}</p>
-      <button class="btn kp-mbtn ${playingKey === 'r' + i ? 'playing' : ''}" data-kmres="${i}" ${sr.complete || done ? '' : 'disabled'}>${playingKey === 'r' + i ? '■ Pysäytä' : done ? '📣 Kuuluta tulokset uudelleen' : sr.complete ? '📣 Kuuluta tulokset' : '📣 Kuuluta tulokset · odottaa ' + (others.length ? others.join(' ja ').toLowerCase() + '-ottelun vahvistusta' : 'tulosta')}</button></section>`;
+      <button class="btn kp-mbtn ${playingKey === 'r' + i ? 'playing' : ''}" data-kmres="${i}" ${sr.complete || done ? '' : 'disabled'}>${playingKey === 'r' + i ? '■ Pysäytä' : done ? (S.role === 'kauko' ? '📡 Kuuluta uudelleen kuulutuskoneelta' : '📣 Kuuluta tulokset uudelleen') : sr.complete ? (S.role === 'kauko' ? '📡 Kuuluta tulokset kuulutuskoneelta' : '📣 Kuuluta tulokset') : '📣 Kuuluta tulokset · odottaa ' + (others.length ? others.join(' ja ').toLowerCase() + '-ottelun vahvistusta' : 'tulosta')}</button></section>`;
     const sig = html;
     if (old && old.dataset.sig === sig) return;
     const tmp = document.createElement('div'); tmp.innerHTML = html; const node = tmp.firstElementChild; node.dataset.sig = sig;
@@ -455,7 +520,7 @@
   idb('readonly', s => s.getAllKeys()).then(keys => { (keys || []).forEach(k => S.ownAudio[k] = true); draw(); });
   let lastSig = '';
   setInterval(() => {
-    tickAuto(); tickCd(); autoResults();
+    tickAuto(); tickCd(); autoResults(); pollRemote();
     const sig = [loggedIn(), nextItem().id, dayKey(), JSON.stringify(((typeof R !== 'undefined' && R.data && R.data.matches) || []).map(m => [m.start, m.hg, m.ag, m.tila]))].join('|');
     if (sig !== lastSig) { lastSig = sig; draw(); }
   }, 1000);

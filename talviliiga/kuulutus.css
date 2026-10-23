@@ -105,3 +105,5 @@ body.kp-on .kp{display:flex}
 .kp-test{background:#2b2350;border:1px solid #6b5bd6;border-radius:14px;padding:12px;display:grid;gap:8px;font-size:.85rem}
 .kp-test p{margin:0;color:#d6d0f5}.kp-test b{font-size:.95rem}
 .kp-mini.on{background:#6b5bd6;border-color:#6b5bd6;color:#fff}
+
+.kp-role{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:.8rem;color:var(--kmuted)}
