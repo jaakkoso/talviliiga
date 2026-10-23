@@ -47,13 +47,16 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), offset: null, open: false, txt: {},
+    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, open: false, txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
   const p2 = n => String(n).padStart(2, '0');
-  const now = () => new Date(Date.now() + (S.offset || 0));
-  const dayKey = () => { const d = now(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}${S.offset != null ? '-testi' : ''}${Store.demo ? '-harjoitus' : ''}`; };
+  /* Testikello: virtuaaliaika, joka voi kulkea nopeutettuna (pikakelaus) */
+  const now = () => S.vt ? new Date(S.vt.base + (Date.now() - S.vt.anchor) * S.vt.speed) : new Date();
+  const setVirtual = ms => { S.vt = { base: ms, anchor: Date.now(), speed: S.vt ? S.vt.speed : 1 }; };
+  const setSpeed = x => { if (!S.vt) return; S.vt = { base: now().getTime(), anchor: Date.now(), speed: x }; };
+  const dayKey = () => { const d = now(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}${S.vt ? '-testi' : ''}${Store.demo ? '-harjoitus' : ''}`; };
   const ak = i => dayKey() + ':' + i;
   const isEventDay = () => { const d = now(), e = EVENT.date; return !!e && d.getFullYear() === e.getFullYear() && d.getMonth() === e.getMonth() && d.getDate() === e.getDate(); };
   const live = () => isEventDay();
@@ -286,6 +289,7 @@
       <div class="kp-note">${autoTxt}</div><div class="kp-q" data-kq></div>${readyBox()}`;
     panel.querySelector('.kp-list').innerHTML = program().map(c => row(c, nx)).join('');
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
+    panel.querySelector('.kp-testwrap').innerHTML = testBar();
     panel.querySelector('.kp-stand').innerHTML = standBox(false);
     drawOmat(); paint(); tickCd();
   }
@@ -328,6 +332,7 @@
       <div class="kp-head"><div><div class="kp-title">Kuulutukset</div><div class="kp-sub">Ajat seuraavat tulospalvelun aikataulua</div></div><div class="kp-clock">--.--</div>
         <button class="kp-stop" data-kstop disabled>Stop</button><button class="kp-close" data-kclose aria-label="Sulje">✕</button></div>
       <div class="kp-body">
+        <div class="kp-testwrap"></div>
         <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
           <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Tuloskuulutus kootaan automaattisesti tulospalvelun vahvistetuista tuloksista, mutta se kuulutetaan vasta, kun painat Kuuluta tulokset -nappia. Nappi ilmestyy keltaiseen korttiin, kun kierroksen molemmat ottelut on vahvistettu.</p></details>
@@ -369,9 +374,11 @@
     if ((t = q('[data-ktxt]'))) { const id = t.dataset.ktxt; S.txt[id] = !S.txt[id]; draw(); return; }
     if ((t = q('[data-kskip]'))) { const id = t.dataset.kskip; if (S.skip[ak(id)]) delete S.skip[ak(id)]; else S.skip[ak(id)] = true; ls.set('k-skip2', S.skip); queue = queue.filter(x => x.key !== id); draw(); return; }
     if (q('[data-ktest]')) { stopAll(); unlock(); const t0 = actx.currentTime + .05; gongAt(t0); fanfareAt(t0 + 1.8); return; }
-    if (q('[data-kclock]')) { ['fired', 'ann', 'skip'].forEach(k => Object.keys(S[k]).forEach(x => { if (x.includes('-testi')) delete S[k][x]; })); ls.set('k-fired', S.fired); ls.set('k-ann2', S.ann); ls.set('k-skip2', S.skip); stopAll(); const e0 = EVENT.date || new Date(2026, 9, 24); S.offset = new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30) - Date.now(); if (S.auto) setAuto(true); else draw(); toast('Testikello: kello hyppäsi turnausaamuun ja testin kuulutukset nollattiin'); return; }
-    if (q('[data-kjump]')) { if (S.offset == null) { toast('Paina ensin Testikello'); return; } const nx = nextItem(), d = now(); const target = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() + timeOf(nx) * 60000 - 10000; S.offset += target - d.getTime(); draw(); toast('Kello: 10 s ennen kuulutusta ' + nx.label); return; }
-    if (q('[data-krealclock]')) { S.offset = null; draw(); return; }
+    if (q('[data-kclock]')) { ['fired', 'ann', 'skip'].forEach(k => Object.keys(S[k]).forEach(x => { if (x.includes('-testi')) delete S[k][x]; })); ls.set('k-fired', S.fired); ls.set('k-ann2', S.ann); ls.set('k-skip2', S.skip); stopAll(); const e0 = EVENT.date || new Date(2026, 9, 24); setVirtual(new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 30).getTime()); if (S.auto) setAuto(true); else draw(); toast('Testikello: kello hyppäsi turnausaamuun ja testin kuulutukset nollattiin'); return; }
+    if (q('[data-kjump]')) { if (!S.vt) { toast('Aloita ensin testi'); return; } const nx = nextItem(), d = now(); const target = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0).getTime() + timeOf(nx) * 60000 - 10000; setVirtual(target); draw(); toast('Kello: 10 s ennen kuulutusta ' + nx.label); return; }
+    if (q('[data-krealclock]')) { S.vt = null; stopAll(); draw(); toast('Testi lopetettu, kello on taas oikea'); return; }
+    if ((t = q('[data-kspeed]'))) { setSpeed(+t.dataset.kspeed); draw(); return; }
+    if (q('[data-kfulltest]')) { startFullTest(); return; }
     if ((t = q('[data-kreset]'))) { if (!t.dataset.sure) { t.dataset.sure = '1'; t.textContent = 'Paina uudelleen vahvistaaksesi'; setTimeout(() => { t.dataset.sure = ''; t.textContent = 'Nollaa soitetut ja kuulutetut'; }, 3000); return; }
       S.fired = {}; S.ann = {}; S.skip = {}; ls.set('k-fired', {}); ls.set('k-ann2', {}); ls.set('k-skip2', {}); draw(); return; }
     if ((t = q('[data-komcopy]'))) { const i = +t.dataset.komcopy, txt = toEl(S.omat[i].text, S.omat[i].tone);
@@ -388,10 +395,39 @@
     const d = e.target.dataset || {};
     if (d.komtone != null) { S.omat[d.komtone].tone = e.target.value; saveOmat(); const p = panel.querySelector(`[data-komel="${d.komtone}"]`); if (p) p.textContent = toEl(S.omat[d.komtone].text, e.target.value); return; }
     if (d.komfile && e.target.files[0]) { const id = d.komfile; await idb('readwrite', s => s.put(e.target.files[0], id)); S.ownAudio[id] = true; delete buf[id]; drawOmat(true); toast('Ääni lisätty'); return; }
+    if (d.kautores != null) { S.autoRes = e.target.checked; return; }
     if (d.kstandh != null) { S.standHaaste = e.target.checked; ls.set('k-standh', S.standHaaste); draw(); return; }
     if (d.kgong != null) { S.gong = e.target.checked; ls.set('k-gong', S.gong); }
   });
 
+  /* ---- koko päivän testi pikakelauksella ---- */
+  function startFullTest() {
+    ['fired', 'ann', 'skip'].forEach(k => Object.keys(S[k]).forEach(x => { if (x.includes('-testi')) delete S[k][x]; }));
+    ls.set('k-fired', S.fired); ls.set('k-ann2', S.ann); ls.set('k-skip2', S.skip); stopAll();
+    if (Store.demo) { const d = Store.demoData(); d.matches.forEach(m => { m.hg = null; m.ag = null; m.tila = ''; if (m.start == null) return; }); d.goals = []; d.adjust = []; ls.set('tulospalvelu-demo-v2', d); if (typeof load === 'function') load(); }
+    const e0 = EVENT.date || new Date(2026, 9, 24);
+    S.vt = null; setVirtual(new Date(e0.getFullYear(), e0.getMonth(), e0.getDate(), 9, 44, 0).getTime()); setSpeed(20);
+    unlock(); setAuto(true);
+    toast('Testi alkoi klo 09.44, kello kulkee 20× nopeammin');
+  }
+  /* Testissä tulokset arvotaan itsestään, kun ottelu päättyy (vain harjoitustilassa) */
+  let lastRes = 0;
+  function autoResults() {
+    if (!S.vt || !Store.demo || !S.autoRes || typeof R === 'undefined' || !R.data || typeof window.enqueue !== 'function') return;
+    if (Date.now() - lastRes < 1500) return;
+    const m0 = nowSec() / 60, dur = EVENT.matchMin || 30;
+    const m = R.data.matches.find(x => x.start != null && !isFinal(x) && !cancelled(x) && x.start + dur <= m0);
+    if (m) { lastRes = Date.now(); window.enqueue({ action: 'result', match: m.id, hg: Math.floor(Math.random() * 5), ag: Math.floor(Math.random() * 4) }); }
+  }
+  function testBar() {
+    if (!S.vt && !Store.demo) return '';
+    if (!S.vt) return `<div class="kp-test"><b>🧪 Harjoitustila</b><p>Käy koko turnauspäivä läpi muutamassa minuutissa: kello kelautuu, kuulutukset soivat itse ja tulokset arvotaan otteluiden päättyessä. Kuulutat tulokset ja loppusijoitukset itse napeista kuten turnauksessa.</p><button class="kp-rbtn" data-kfulltest>▶ Aloita koko päivän testi</button></div>`;
+    const sp = S.vt.speed;
+    return `<div class="kp-test"><b>🧪 Testi käynnissä · kello ${sp}× nopeammin</b>
+      <div class="kp-btns">${[1, 10, 20, 40].map(x => `<button class="kp-mini ${sp === x ? 'on' : ''}" data-kspeed="${x}">${x}×</button>`).join('')}<button class="kp-mini" data-kjump>⏭ Seuraava kuulutus</button></div>
+      ${Store.demo ? `<label class="kp-chk" style="margin:0"><input type="checkbox" data-kautores ${S.autoRes ? 'checked' : ''}> Arvo tulokset otteluiden päättyessä</label>` : '<p>Oikeassa tulospalvelussa: tuloksia ei arvota.</p>'}
+      <div class="kp-btns"><button class="kp-mini" data-kfulltest>↺ Alusta uudelleen</button><button class="kp-mini" data-krealclock>■ Lopeta testi</button></div></div>`;
+  }
   /* ---- tuloskuulutus myös ottelun ylläpitonäkymään ---- */
   function matchCard() {
     const appEl = document.getElementById('app');
@@ -412,12 +448,14 @@
     if (old) old.replaceWith(node); else { const first = appEl.querySelector('section.card'); if (first) first.after(node); }
   }
   /* ---- käynnistys ---- */
+  /* Testin aikana myös ylläpidon ottelutilat (käynnissä, odottaa tulosta) seuraavat testikelloa */
+  if (typeof window.clock === 'function') { const orig = window.clock; window.clock = () => S.vt ? { day: 0, min: Math.floor(nowSec() / 60), demo: Store.demo } : orig(); }
   build(); preload();
   { const appEl = document.getElementById('app'); if (appEl) new MutationObserver(() => matchCard()).observe(appEl, { childList: true }); }
   idb('readonly', s => s.getAllKeys()).then(keys => { (keys || []).forEach(k => S.ownAudio[k] = true); draw(); });
   let lastSig = '';
   setInterval(() => {
-    tickAuto(); tickCd();
+    tickAuto(); tickCd(); autoResults();
     const sig = [loggedIn(), nextItem().id, dayKey(), JSON.stringify(((typeof R !== 'undefined' && R.data && R.data.matches) || []).map(m => [m.start, m.hg, m.ag, m.tila]))].join('|');
     if (sig !== lastSig) { lastSig = sig; draw(); }
   }, 1000);
