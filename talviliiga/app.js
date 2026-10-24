@@ -142,10 +142,47 @@ function render() {
   document.getElementById('upd').innerHTML = S.offline ? 'Ei yhteyttä' : S.updated ? `Päivitetty ${fmtTime(S.updated.getHours() * 60 + S.updated.getMinutes())}` : '';
   let h = '';
   if (clk.demo) { const hs = CONFIG.SHEET_ID ? '#harjoitus' : ''; h += `<p class="demo">${CONFIG.SHEET_ID ? 'Harjoitustila (esimerkkidata, ei vaikuta oikeisiin tuloksiin)' : 'Esikatselu'}, kello ${fmtTime(clk.min)} · <button class="lnk" data-reset>Aloita alusta</button> · <a href="kentta.html${hs}">Kenttävastaava</a> · <a href="tuomari.html${hs}">Tuomari</a>${CONFIG.SHEET_ID ? '' : ` · <a href="yllapito.html">Ylläpito</a>`}</p>`; }
-  h += nowCard(slots, clk, goals);
+  const sum = daySummary(matches, goals);
+  h += sum || nowCard(slots, clk, goals);
   h += controls(slots, clk);
   h += (EVENT.showTable && S.tab === 'sarjat') ? tables(matches) : program(slots, clk, goals);
   app.innerHTML = h;
+}
+
+/* Päivän koonti: näytetään, kun kaikki ottelut on pelattu ja tulokset vahvistettu */
+function daySummary(matches, goals) {
+  const played = matches.filter(m => m.tila !== 'peruttu');
+  if (!played.length || !played.every(isFinal)) return '';
+  const medals = ['🥇', '🥈', '🥉'];
+  const podium = seriesList(matches).map(k => {
+    const st = standings(matches, k, S.data.adjust).slice(0, 3);
+    return `<div class="sum-pod ${sxc(k)}"><div class="sum-pt">${sxp(k)}</div>${st.map((r, i) => `<div class="sum-row"><span class="sum-m">${medals[i]}</span>${chip(r.team)}<span class="sum-p">${r.pts} p</span></div>`).join('')}</div>`;
+  }).join('');
+  const tot = played.reduce((a, m) => a + m.hg + m.ag, 0);
+  const desc = (m, txt) => `${esc(m.home)}–${esc(m.away)} ${m.hg}–${m.ag} <small>${esc(m.series)} klo ${fmtTime(m.start)}</small>${txt ? ` <small>${txt}</small>` : ''}`;
+  const facts = [];
+  facts.push(['⚽', 'Maaleja yhteensä', `${tot} <small>${played.length} ottelussa, ${(tot / played.length).toFixed(1).replace('.', ',')} per ottelu</small>`]);
+  const big = played.slice().sort((a, b) => Math.abs(b.hg - b.ag) - Math.abs(a.hg - a.ag) || (b.hg + b.ag) - (a.hg + a.ag))[0];
+  if (big && big.hg !== big.ag) facts.push(['💪', 'Päivän isoin voitto', desc(big)]);
+  const most = played.slice().sort((a, b) => (b.hg + b.ag) - (a.hg + a.ag))[0];
+  if (most && most !== big) facts.push(['🎯', 'Maalirikkain ottelu', desc(most)]);
+  const gl = goals.filter(g => g.min != null && played.some(m => m.id === g.match));
+  const fast = gl.slice().sort((a, b) => a.min - b.min)[0];
+  if (fast) { const m = matches.find(x => x.id === fast.match); facts.push(['⚡', 'Päivän nopein maali', `${esc(fast.team)} ${fast.min}. minuutilla <small>${m ? esc(m.series) + ' ' + esc(m.home) + '–' + esc(m.away) : ''}</small>`]); }
+  const late = gl.filter(g => g.min >= (EVENT.matchMin || 30) - 2).length;
+  if (late) facts.push(['⏱️', 'Viime hetken maalit', `${late} <small>maalia ottelun kahdella viimeisellä minuutilla</small>`]);
+  const byTeam = {}; played.forEach(m => { byTeam[m.home] = (byTeam[m.home] || 0) + m.hg; byTeam[m.away] = (byTeam[m.away] || 0) + m.ag; });
+  const topT = Object.entries(byTeam).sort((a, b) => b[1] - a[1])[0];
+  if (topT) facts.push(['🔥', 'Tehokkain joukkue', `${chip(topT[0])} <small>${topT[1]} maalia molemmissa sarjoissa yhteensä</small>`]);
+  const cs = {}; played.forEach(m => { if (m.ag === 0) cs[m.home] = (cs[m.home] || 0) + 1; if (m.hg === 0) cs[m.away] = (cs[m.away] || 0) + 1; });
+  const csN = Object.values(cs).reduce((a, b) => a + b, 0);
+  if (csN) facts.push(['🧤', 'Nollapelit', `${csN} <small>${Object.entries(cs).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${esc(t)} ${n}`).join(' · ')}</small>`]);
+  const draws = played.filter(m => m.hg === m.ag).length;
+  if (draws) facts.push(['🤝', 'Tasapelit', `${draws} <small>ottelua päättyi tasan</small>`]);
+  return `<section class="sum"><div class="sum-h"><div class="now-lab">Pelipäivä on pelattu</div><div class="sum-title">Kiitos kaikille joukkueille, valmentajille, tuomareille ja kannustajille!</div></div>
+    <div class="sum-pods">${podium}</div>
+    <div class="sum-facts">${facts.map(([i, l, v]) => `<div class="sum-f"><span class="sum-i">${i}</span><div><div class="sum-l">${l}</div><div class="sum-v">${v}</div></div></div>`).join('')}</div>
+    <p class="sum-note">Kaikki ottelut ja maalit löytyvät alta. Napauta joukkuetta nähdäksesi sen päivän.</p></section>`;
 }
 
 /* Joukkueen oma näkymä: klikkaa joukkueen nimeä tai logoa. Jaettava osoite: …/talviliiga/?joukkue=SJK */
