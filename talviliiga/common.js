@@ -135,7 +135,8 @@ function applyHeader() {
 /* ---------- ottelut, sarjat ja kentät ---------- */
 function rowToMatch(r) {
   return { id: r.id, series: (r.sarja || '').trim() || 'Sarja', start: parseTime(r.alku), field: (r['kenttä'] || r.kentta || '').trim(),
-    home: (r.koti || '').trim(), away: (r.vieras || '').trim(), hg: toInt(r.koti_maalit), ag: toInt(r.vieras_maalit), tila: (r.tila || '').toLowerCase() };
+    home: (r.koti || '').trim(), away: (r.vieras || '').trim(), hg: toInt(r.koti_maalit), ag: toInt(r.vieras_maalit), tila: (r.tila || '').toLowerCase(),
+    veo: /^https:\/\/([a-z0-9-]+\.)*veo\.co\/\S+$/i.test((r.veo || '').trim()) ? r.veo.trim() : '' };
 }
 const rowToGoal = r => ({ id: r.id, match: r.ottelu, team: r.joukkue, no: r.pelinumero || '', min: toInt(r.minuutti) });
 const uniq = a => [...new Set(a.filter(Boolean))];

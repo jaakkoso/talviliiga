@@ -118,7 +118,7 @@ function program(allSlots, clk, goals) {
 function detail(m, clk, goals) {
   const st = status(m, clk), g = goalsOf(m.id, goals);
   const gl = g.length ? g.map(z => `${z.min != null ? z.min + "'" : ''} ${esc(z.team)}${EVENT.showNumbers && z.no ? ' #' + esc(z.no) : ''}`).join(' · ') : 'Maaleja ei kirjattu erikseen';
-  return `<div class="dl"><div><b>${esc(m.series)}</b>${m.field ? ' · ' + esc(m.field) : ''}<div class="muted">${gl}</div></div>${st.k === 'done' ? `<button class="lnk" data-share="${esc(m.id)}">Jaa tulos</button>` : ''}</div>`;
+  return `<div class="dl"><div><b>${esc(m.series)}</b>${m.field ? ' · ' + esc(m.field) : ''}<div class="muted">${gl}</div></div><span style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">${m.veo ? `<a class="lnk" href="${esc(m.veo)}" target="_blank" rel="noopener">🎥 Katso Veo</a>` : ''}${st.k === 'done' ? `<button class="lnk" data-share="${esc(m.id)}">Jaa tulos</button>` : ''}</span></div>`;
 }
 
 function tables(matches) {
