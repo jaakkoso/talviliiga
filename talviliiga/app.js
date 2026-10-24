@@ -185,9 +185,8 @@ function daySummary(matches, goals) {
   if (close) facts.push(['scale', 'Tiukat ottelut', `${close} <small>ottelua ratkesi yhdellä maalilla</small>`]);
   const bySer = seriesList(matches).map(k => { const ms = played.filter(m => m.series === k); return `${esc(k)} ${ms.reduce((a, m) => a + m.hg + m.ag, 0)}`; });
   if (bySer.length > 1) facts.push(['goals', 'Maalit sarjoittain', `${bySer.join(' · ')}`]);
-  const teamsAll = uniq(played.flatMap(m => [m.home, m.away]));
-  const winners = new Set(played.filter(m => m.hg !== m.ag).map(m => m.hg > m.ag ? m.home : m.away));
-  if (teamsAll.length && teamsAll.every(t => winners.has(t))) facts.push(['star', 'Jokainen voitti', `${teamsAll.length}/${teamsAll.length} <small>kaikki joukkueet juhlivat voittoa päivän aikana</small>`]);
+  const allWon = seriesList(matches).filter(k => { const ms = played.filter(m => m.series === k), ts = uniq(ms.flatMap(m => [m.home, m.away])); const w = new Set(ms.filter(m => m.hg !== m.ag).map(m => m.hg > m.ag ? m.home : m.away)); return ts.length && ts.every(t => w.has(t)); });
+  if (allWon.length) facts.push(['star', 'Jokainen voitti', `${allWon.map(esc).join(' ja ')}sarjassa <small>kaikki joukkueet voittivat ainakin kerran</small>`]);
   const byTeam = {}; played.forEach(m => { byTeam[m.home] = (byTeam[m.home] || 0) + m.hg; byTeam[m.away] = (byTeam[m.away] || 0) + m.ag; });
   const topT = Object.entries(byTeam).sort((a, b) => b[1] - a[1])[0];
   if (topT) facts.push(['flame', 'Tehokkain joukkue', `${chip(topT[0])} <small>${topT[1]} maalia molemmissa sarjoissa yhteensä</small>`]);
