@@ -22,6 +22,8 @@ GitHub Actions (`.github/workflows/paivita-tulokset.yml`) hakee tulokset kahden 
 
 - Lähteet ovat tiedostossa `config/lahteet.json`: piirisarjajoukkueet (Palloliiton joukkue-id ja sarjataulukoiden osoitteet), Huuhkajaliiga ja turnaukset.
 - **Uusi turnaus:** lisää `config/lahteet.json`-tiedoston `turnaukset`-listaan id, tyyppi (`torneopal` tai `gameresultsonline`) ja tulossivun osoite, sekä `turnaukset/data.json`-tiedostoon tapahtuma samalla id:llä (nimi, päivät, paikka, `teams: []`). Ottelut, tulokset ja sijoitukset haetaan automaattisesti.
+- **Oma turnaus** (oma tulospalvelu, esim. talviliiga): `{"id": "...", "tyyppi": "oma", "sheet": "<Google Sheetin tunnus>", "paiva": "2026-10-24", "joukkue": "SJK", "taso": "P12"}`. Tulokset, sijoitukset ja maalit minuutteineen siirtyvät sivulle seuraavassa ajossa turnauspäivästä alkaen (tulos näkyy, kun tuomari on vahvistanut sen, sijoitus kun sarjan kaikki ottelut on pelattu). Jos taulukon Asetukset-päivä ei vastaa `paiva`-kenttää (taulukko on jo otettu seuraavan turnauksen käyttöön), sivuun ei kosketa. Ohjelma lisätään `turnaukset/data.json`-tiedostoon käsin ennen turnausta.
+- Etusivun Seuraavat tapahtumat -kortti piiloutuu itsestään, kun sen `data-loppu`-päivä on ohi.
 - Haku ei koskaan poista jo tiedossa olevia pelattuja otteluita. Jos lähde ei vastaa, vanha data säilyy ja ajon yhteenvetoon tulee varoitus.
 - **Palloliiton tulospalvelu** estää GitHubin palvelimet (Cloudflare), joten piirisarjat, Huuhkajaliiga ja ottelutiedot haetaan kotikoneelta: `scripts/kotikone/asenna.sh` (ajastus kahden tunnin välein, loki `~/Library/Logs/p2015-tulospaivitys.log`). GitHub Actions hakee turnaukset.
 - Hakuohjelma: `scripts/paivitys/` (`node testi.mjs` testaa jäsennyksen, `node paivita.mjs` hakee).
@@ -85,6 +87,7 @@ Sarjat ja kentät luetaan suoraan Ottelut-välilehdeltä. Sarjoja ja kenttiä vo
 2. Päivitä **Asetukset**, **Joukkueet** ja **Ottelut**.
 3. Ylläpito → Testi → aja tarkistus ja yhteystesti.
 4. Tulosteet (julisteet, laput, toimitsijakortti) ja kuulutukset tehdään turnauskohtaisesti.
+5. P2015-sivulle: lisää turnaus `config/lahteet.json`-tiedostoon tyypillä `oma` (uusi `paiva`) ja `turnaukset/data.json`-tiedostoon, sekä etusivulle tapahtumakortti `data-loppu`-päivällä.
 
 ## Turnauspäivänä
 - **Aikataulu myöhässä?** Ylläpito → *Aikataulu* → siirrä kaikkia alkamattomia otteluita esim. +10 min.
