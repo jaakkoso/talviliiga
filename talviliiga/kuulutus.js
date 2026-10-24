@@ -337,6 +337,8 @@
       <div class="kp-head"><div><div class="kp-title">Kuulutukset</div><div class="kp-sub">Ajat seuraavat tulospalvelun aikataulua</div></div><div class="kp-clock">--.--</div>
         <button class="kp-stop" data-kstop disabled>Stop</button><button class="kp-close" data-kclose aria-label="Sulje">✕</button></div>
       <div class="kp-body">
+        <section class="kp-next"></section>
+        <div class="kp-testwrap"></div>
         <details class="kp-sec kp-memo"><summary>📋 Muistilista</summary>
           <h4>Kuulutuskone: läppäri</h4>
           <ul><li>Kansi auki ja virtajohto kiinni. Kannen sulkeminen vie koneen lepotilaan.</li>
@@ -367,8 +369,6 @@
           <li>Lopuksi: ”Kuuluta loppusijoitukset + lopetus”. Lopetus ei soi itsestään.</li>
           <li>Ottelukutsuissa sanotaan alkuperäinen kellonaika, vaikka aikataulu siirtyisi.</li></ul>
         </details>
-        <div class="kp-testwrap"></div>
-        <section class="kp-next"></section>
         <details class="kp-sec" open><summary>Päivän ohjelma</summary><div class="kp-list"></div>
           <p class="kp-help">Kutsut soivat 2 min ennen ottelua (päivän ja iltapäivän ensimmäinen 5 min ennen). Kun siirrät otteluita Aikataulu-välilehdellä, kuulutukset siirtyvät mukana. Lisäkuulutukset (kahvio, lounas, QR, pukukopit, kannustus) soivat otteluiden välissä minuutti pelien päättymisen jälkeen; ohita turhat. Tuloskuulutus kootaan automaattisesti tulospalvelun vahvistetuista tuloksista, mutta se kuulutetaan vasta, kun painat Kuuluta tulokset -nappia. Nappi ilmestyy keltaiseen korttiin, kun kierroksen molemmat ottelut on vahvistettu.</p></details>
         <details class="kp-sec"><summary>Loppusijoitukset</summary><div class="kp-stand"></div><p class="kp-help">Kootaan sarjataulukosta (3 parasta). Lopetuskuulutus ei soi itsestään, vaan tulee tämän napin kautta loppusijoitusten perään.</p></details>
