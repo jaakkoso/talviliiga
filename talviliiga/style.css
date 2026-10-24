@@ -337,11 +337,12 @@ section.sx-h .st thead th{border-bottom-color:#3b82c4}
 .sum-pod.sx-k{border-left:4px solid #fff}.sum-pod.sx-h{border-left:4px solid #7fb2e5}
 .sum-pt .sxp.sx-k{background:#fff;color:#211e1e}
 .sum-row{display:flex;align-items:center;gap:8px}
-.sum-m{font-size:1.3rem;width:1.6em}
+.sum-m{width:24px;height:24px;flex:none;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:.85rem;color:#211e1e}
+.sum-m.r1{background:var(--gold)}.sum-m.r2{background:#c9ccd1}.sum-m.r3{background:#c58b5a}
 .sum-p{margin-left:auto;font-family:var(--display);font-weight:800;color:var(--gold)}
 .sum-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
 .sum-f{display:flex;gap:10px;align-items:flex-start;background:rgba(255,255,255,.06);border-radius:12px;padding:10px}
-.sum-i{font-size:1.4rem;line-height:1}
+.sum-i{width:24px;height:24px;flex:none;fill:none;stroke:var(--gold);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;margin-top:1px}
 .sum-l{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--gold);font-weight:700}
 .sum-v{font-weight:700;margin-top:2px}.sum-v small{display:block;font-weight:500;opacity:.75;font-size:.8rem}
 .sum-note{margin:0;font-size:.82rem;opacity:.8}

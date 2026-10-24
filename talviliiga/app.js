@@ -149,39 +149,51 @@ function render() {
   app.innerHTML = h;
 }
 
+/* Koonnin viivakuvakkeet, samaa tyyliä kuin Kahvio- ja Somekuva-painikkeissa */
+const SICO = {
+  ball: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5l3.6 2.6-1.4 4.2H9.8l-1.4-4.2z"/><path d="M12 3.5v4M15.6 10.1l4-1.3M14.2 14.3l2.4 3.4M9.8 14.3l-2.4 3.4M8.4 10.1l-4-1.3"/>',
+  up: '<path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/>',
+  target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+  bolt: '<path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"/>',
+  clock: '<circle cx="12" cy="13" r="7.5"/><path d="M12 9v4l2.5 2M10 3h4M12 3v2.5"/>',
+  goals: '<path d="M3 19V6h18v13"/><path d="M3 10h18M3 14h18M8 6v13M13 6v13M18 6v13" opacity=".45"/>',
+  shield: '<path d="M12 3l7.5 3v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="M9 12l2 2 4-4"/>',
+  even: '<path d="M6 9.5h12M6 14.5h12"/>',
+};
+const sico = k => `<svg class="sum-i" viewBox="0 0 24 24" aria-hidden="true">${SICO[k]}</svg>`;
+
 /* Päivän koonti: näytetään, kun kaikki ottelut on pelattu ja tulokset vahvistettu */
 function daySummary(matches, goals) {
   const played = matches.filter(m => m.tila !== 'peruttu');
   if (!played.length || !played.every(isFinal)) return '';
-  const medals = ['🥇', '🥈', '🥉'];
-  const podium = seriesList(matches).map(k => {
+    const podium = seriesList(matches).map(k => {
     const st = standings(matches, k, S.data.adjust).slice(0, 3);
-    return `<div class="sum-pod ${sxc(k)}"><div class="sum-pt">${sxp(k)}</div>${st.map((r, i) => `<div class="sum-row"><span class="sum-m">${medals[i]}</span>${chip(r.team)}<span class="sum-p">${r.pts} p</span></div>`).join('')}</div>`;
+    return `<div class="sum-pod ${sxc(k)}"><div class="sum-pt">${sxp(k)}</div>${st.map((r, i) => `<div class="sum-row"><span class="sum-m r${i + 1}">${i + 1}</span>${chip(r.team)}<span class="sum-p">${r.pts} p</span></div>`).join('')}</div>`;
   }).join('');
   const tot = played.reduce((a, m) => a + m.hg + m.ag, 0);
   const desc = (m, txt) => `${esc(m.home)}–${esc(m.away)} ${m.hg}–${m.ag} <small>${esc(m.series)} klo ${fmtTime(m.start)}</small>${txt ? ` <small>${txt}</small>` : ''}`;
   const facts = [];
-  facts.push(['⚽', 'Maaleja yhteensä', `${tot} <small>${played.length} ottelussa, ${(tot / played.length).toFixed(1).replace('.', ',')} per ottelu</small>`]);
+  facts.push(['ball', 'Maaleja yhteensä', `${tot} <small>${played.length} ottelussa, ${(tot / played.length).toFixed(1).replace('.', ',')} per ottelu</small>`]);
   const big = played.slice().sort((a, b) => Math.abs(b.hg - b.ag) - Math.abs(a.hg - a.ag) || (b.hg + b.ag) - (a.hg + a.ag))[0];
-  if (big && big.hg !== big.ag) facts.push(['💪', 'Päivän isoin voitto', desc(big)]);
+  if (big && big.hg !== big.ag) facts.push(['up', 'Päivän isoin voitto', desc(big)]);
   const most = played.slice().sort((a, b) => (b.hg + b.ag) - (a.hg + a.ag))[0];
-  if (most && most !== big) facts.push(['🎯', 'Maalirikkain ottelu', desc(most)]);
+  if (most && most !== big) facts.push(['target', 'Maalirikkain ottelu', desc(most)]);
   const gl = goals.filter(g => g.min != null && played.some(m => m.id === g.match));
   const fast = gl.slice().sort((a, b) => a.min - b.min)[0];
-  if (fast) { const m = matches.find(x => x.id === fast.match); facts.push(['⚡', 'Päivän nopein maali', `${esc(fast.team)} ${fast.min}. minuutilla <small>${m ? esc(m.series) + ' ' + esc(m.home) + '–' + esc(m.away) : ''}</small>`]); }
+  if (fast) { const m = matches.find(x => x.id === fast.match); facts.push(['bolt', 'Päivän nopein maali', `${esc(fast.team)} ${fast.min}. minuutilla <small>${m ? esc(m.series) + ' ' + esc(m.home) + '–' + esc(m.away) : ''}</small>`]); }
   const late = gl.filter(g => g.min >= (EVENT.matchMin || 30) - 2).length;
-  if (late) facts.push(['⏱️', 'Viime hetken maalit', `${late} <small>maalia ottelun kahdella viimeisellä minuutilla</small>`]);
+  if (late) facts.push(['clock', 'Viime hetken maalit', `${late} <small>maalia ottelun kahdella viimeisellä minuutilla</small>`]);
   const byTeam = {}; played.forEach(m => { byTeam[m.home] = (byTeam[m.home] || 0) + m.hg; byTeam[m.away] = (byTeam[m.away] || 0) + m.ag; });
   const topT = Object.entries(byTeam).sort((a, b) => b[1] - a[1])[0];
-  if (topT) facts.push(['🔥', 'Tehokkain joukkue', `${chip(topT[0])} <small>${topT[1]} maalia molemmissa sarjoissa yhteensä</small>`]);
+  if (topT) facts.push(['goals', 'Tehokkain joukkue', `${chip(topT[0])} <small>${topT[1]} maalia molemmissa sarjoissa yhteensä</small>`]);
   const cs = {}; played.forEach(m => { if (m.ag === 0) cs[m.home] = (cs[m.home] || 0) + 1; if (m.hg === 0) cs[m.away] = (cs[m.away] || 0) + 1; });
   const csN = Object.values(cs).reduce((a, b) => a + b, 0);
-  if (csN) facts.push(['🧤', 'Nollapelit', `${csN} <small>${Object.entries(cs).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${esc(t)} ${n}`).join(' · ')}</small>`]);
+  if (csN) facts.push(['shield', 'Nollapelit', `${csN} <small>${Object.entries(cs).sort((a, b) => b[1] - a[1]).map(([t, n]) => `${esc(t)} ${n}`).join(' · ')}</small>`]);
   const draws = played.filter(m => m.hg === m.ag).length;
-  if (draws) facts.push(['🤝', 'Tasapelit', `${draws} <small>ottelua päättyi tasan</small>`]);
+  if (draws) facts.push(['even', 'Tasapelit', `${draws} <small>ottelua päättyi tasan</small>`]);
   return `<section class="sum"><div class="sum-h"><div class="now-lab">Pelipäivä on pelattu</div><div class="sum-title">Kiitos kaikille joukkueille, valmentajille, tuomareille ja kannustajille!</div></div>
     <div class="sum-pods">${podium}</div>
-    <div class="sum-facts">${facts.map(([i, l, v]) => `<div class="sum-f"><span class="sum-i">${i}</span><div><div class="sum-l">${l}</div><div class="sum-v">${v}</div></div></div>`).join('')}</div>
+    <div class="sum-facts">${facts.map(([i, l, v]) => `<div class="sum-f">${sico(i)}<div><div class="sum-l">${l}</div><div class="sum-v">${v}</div></div></div>`).join('')}</div>
     <p class="sum-note">Kaikki ottelut ja maalit löytyvät alta. Napauta joukkuetta nähdäksesi sen päivän.</p></section>`;
 }
 
