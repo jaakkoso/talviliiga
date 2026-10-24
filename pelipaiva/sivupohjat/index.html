@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title data-suffix="{{OTSIKKOLIITE}}">{{NIMI}} {{OTSIKKOLIITE}}</title>
+<meta name="description" content="{{KUVAUS}}">
+{{ROBOTS}}<meta name="theme-color" content="{{VARI}}">
+<meta name="color-scheme" content="only light">
+<link rel="icon" href="logo-180.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="{{LYHYTNIMI}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="{{M}}style.css?v={{v:style.css}}">
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <img src="logo-180.png" alt="Logo" width="56" height="56">
+    <div class="t">
+      <div class="eyebrow" id="evSub"></div>
+      <h1 id="evName">Tulospalvelu</h1>
+      <div class="sub" id="evVenue"></div>
+    </div>
+    <div class="upd" id="upd"></div>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <div class="card">Ladataan otteluohjelmaa…</div>
+</main>
+
+<p class="kuvalink"><button type="button" id="cafeBtn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9z"/><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3v3M12 3v3"/></svg>Kahvio ja hinnasto</button><a href="kuva.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Ota somekuva</a></p>
+
+<footer><span id="evOrg"></span> · Toimitsijat: <a href="tuomari.html">Tuomarit</a> · <a href="kentta.html">Kenttävastaavat</a><span id="product"></span></footer>
+
+<script src="turnaus.js?v={{v:turnaus.js}}"></script>
+<script src="{{M}}common.js?v={{v:common.js}}"></script>
+<script src="{{M}}app.js?v={{v:app.js}}"></script>
+<script src="{{M}}takaisin.js?v={{v:takaisin.js}}"></script>
+</body>
+</html>
