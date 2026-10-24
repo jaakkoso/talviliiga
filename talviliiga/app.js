@@ -145,6 +145,33 @@ function render() {
   app.innerHTML = h;
 }
 
+/* Joukkueen oma näkymä: klikkaa joukkueen nimeä tai logoa. Jaettava osoite: …/talviliiga/?joukkue=SJK */
+function teamDialog(team) {
+  if (!S.data || !EVENT.teamNames.includes(team)) return;
+  document.querySelectorAll('.overlay.team').forEach(x => x.remove());
+  const clk = clock(), { matches, goals } = S.data;
+  const ms = matches.filter(m => m.home === team || m.away === team).sort((a, b) => (a.start ?? 0) - (b.start ?? 0) || a.series.localeCompare(b.series));
+  const pos = seriesList(matches).filter(k => ms.some(m => m.series === k)).map(k => {
+    const st = standings(matches, k, S.data.adjust), i = st.findIndex(r => r.team === team), row = st[i];
+    return row ? `<div class="tm-pos"><span>${esc(k)}</span><b>${i + 1}. / ${st.length}</b><small>${row.p} ott. · ${row.pts} p · ${row.gf}–${row.ga}</small></div>` : '';
+  }).join('');
+  const next = ms.find(m => ['up', 'live', 'wait'].includes(status(m, clk).k));
+  const rows = ms.map(m => {
+    const st = status(m, clk), sc = st.k === 'cancel' ? null : score(m, goals, st), home = m.home === team, opp = home ? m.away : m.home;
+    const own = sc ? (home ? sc[0] : sc[1]) : null, their = sc ? (home ? sc[1] : sc[0]) : null;
+    const res = st.k === 'cancel' ? 'peruttu' : sc ? `${own}–${their}` : '–';
+    const wl = st.k === 'done' && sc ? (own > their ? '<em class="tm-w">V</em>' : own < their ? '<em class="tm-x">H</em>' : '<em class="tm-d">T</em>') : st.k === 'live' ? '<em class="tm-live">Käynnissä</em>' : '';
+    return `<li class="${m === next ? 'tm-next' : ''}"><span class="t num">${fmtTime(m.start)}</span><span class="o"><small>${esc(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</small><span class="tm-vs">vs ${chip(opp)}</span></span><span class="r num"><b>${res}</b>${wl}${m.veo ? ` <a href="${esc(m.veo)}" target="_blank" rel="noopener" title="Veo">🎥</a>` : ''}</span></li>`;
+  }).join('');
+  const ov = document.createElement('div'); ov.className = 'overlay team';
+  ov.innerHTML = `<div class="box tm" role="dialog" aria-label="${esc(team)}"><div class="tm-h">${chip(team)}<button class="btn ghost" data-close aria-label="Sulje">✕</button></div>
+    ${pos ? `<div class="tm-poss">${pos}</div>` : ''}
+    ${next ? `<div class="note" style="margin:0"><b>Seuraava ottelu:</b> klo ${fmtTime(next.start)} ${esc(next.series)} vs ${esc(next.home === team ? next.away : next.home)}</div>` : ''}
+    <ul class="tm-l">${rows}</ul></div>`;
+  ov.addEventListener('click', e => { if (e.target === ov || e.target.closest('[data-close]')) ov.remove(); });
+  document.body.append(ov);
+}
+
 async function share(id) {
   const m = S.data.matches.find(x => x.id === id); if (!m) return;
   const st = status(m, clock()), sc = score(m, S.data.goals, st); if (!sc) return;
@@ -163,12 +190,13 @@ async function share(id) {
 
 document.addEventListener('change', e => { if (e.target.id === 'mine') { S.mine = e.target.value; ls.set('tulospalvelu-team', S.mine); render(); } });
 document.addEventListener('click', e => {
+  const tc = e.target.closest('#app .chip, .overlay.team .tm-vs .chip'); if (tc) { const t = tc.textContent.trim(); if (EVENT.teamNames.includes(t)) { e.preventDefault(); teamDialog(t); return; } }
   const tb = e.target.closest('[data-tab]'); if (tb) { S.tab = tb.dataset.tab; ls.set('tulospalvelu-tab', S.tab); render(); return; }
   const o = e.target.closest('[data-open]'); if (o) { const k = Number(o.dataset.open); S.open.has(k) ? S.open.delete(k) : S.open.add(k); render(); return; }
   const sh = e.target.closest('[data-share]'); if (sh) { share(sh.dataset.share); return; }
   if (e.target.closest('[data-reset]')) { Store.demoReset(); refresh(); }
 });
-render(); refresh();
+render(); refresh().then(() => { try { const t = new URLSearchParams(location.search).get('joukkue'); if (t) teamDialog(EVENT.teamNames.find(n => n.toLowerCase() === t.toLowerCase()) || t); } catch (e) { } });
 const pollNow = schedulePoll(refresh, CONFIG.POLL_MS);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) pollNow(); });
 setInterval(render, 15000);
