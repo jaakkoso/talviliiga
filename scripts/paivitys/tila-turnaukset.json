@@ -1,7 +1,12 @@
 {
  "piirisarjat": {},
  "huuhkajaliiga": {},
- "turnaukset": {},
+ "turnaukset": {
+  "talviliiga-2026": {
+   "joukkueet": 2,
+   "ottelut": 8
+  }
+ },
  "varoitukset": [],
  "diagnoosi": {}
 }
