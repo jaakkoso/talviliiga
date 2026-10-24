@@ -1,0 +1,13 @@
+{
+  "name": "{{NIMI}}",
+  "short_name": "{{LYHYTNIMI}}",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "{{VARI}}",
+  "theme_color": "{{VARI}}",
+  "lang": "fi",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
