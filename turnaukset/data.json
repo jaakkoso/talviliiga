@@ -13,40 +13,127 @@
    "teams": [
     {
      "name": "SJK",
-     "label": "SJK",
-     "level": "P12 Kilpa ja Haaste",
+     "label": "Kilpa",
+     "level": "P12 Kilpa",
+     "place": {
+      "pos": 4,
+      "of": 5
+     },
      "matches": [
       {
        "date": "2026-10-24",
        "time": "10.00",
-       "series": "Kilpa & haaste",
+       "series": "Kilpa",
        "home": "SJK",
        "away": "VPS",
-       "score": null
+       "score": [
+        [
+         2,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-10-24",
        "time": "11.10",
-       "series": "Kilpa & haaste",
+       "series": "Kilpa",
        "home": "JJK",
        "away": "SJK",
-       "score": null
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
       },
       {
        "date": "2026-10-24",
        "time": "14.00",
-       "series": "Kilpa & haaste",
+       "series": "Kilpa",
        "home": "SJK",
        "away": "WFA",
-       "score": null
+       "score": [
+        [
+         0,
+         3
+        ]
+       ]
       },
       {
        "date": "2026-10-24",
        "time": "15.45",
-       "series": "Kilpa & haaste",
+       "series": "Kilpa",
        "home": "SJK",
        "away": "Jaro",
-       "score": null
+       "score": [
+        [
+         0,
+         6
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "name": "SJK",
+     "label": "Haaste",
+     "level": "P12 Haaste",
+     "place": {
+      "pos": 5,
+      "of": 5
+     },
+     "matches": [
+      {
+       "date": "2026-10-24",
+       "time": "10.00",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "VPS",
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-10-24",
+       "time": "11.10",
+       "series": "Haaste",
+       "home": "JJK",
+       "away": "SJK",
+       "score": [
+        [
+         1,
+         0
+        ]
+       ]
+      },
+      {
+       "date": "2026-10-24",
+       "time": "14.00",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "WFA",
+       "score": [
+        [
+         1,
+         2
+        ]
+       ]
+      },
+      {
+       "date": "2026-10-24",
+       "time": "15.45",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "Jaro",
+       "score": [
+        [
+         1,
+         3
+        ]
+       ]
       }
      ]
     }

@@ -59,7 +59,8 @@
  "turnaukset": [
   {
    "id": "talviliiga-2026",
-   "tyyppi": "oma"
+   "tyyppi": "oma",
+   "valmis": true
   },
   {
    "id": "jjk-mekipa-2026",
