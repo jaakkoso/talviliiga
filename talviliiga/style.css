@@ -316,3 +316,15 @@ body:not(.ref) .tables{grid-template-columns:minmax(0,1fr)}
 .tm-l em{font-style:normal;font-weight:800;font-size:.75rem;border-radius:6px;padding:1px 6px}
 .tm-w{background:var(--live-bg);color:var(--live)}.tm-x{background:#fbe3df;color:var(--danger)}.tm-d{background:var(--surface2);color:var(--muted)}.tm-live{background:var(--live-bg);color:var(--live)}
 .tm-l a{text-decoration:none}
+
+/* Sarjat erottuvat väreillä: kilpa tumma, haaste sininen */
+.sxp{display:inline-block;border-radius:5px;padding:1px 6px;font-weight:800;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;line-height:1.4;vertical-align:middle}
+.sxp.sx-k{background:#211e1e;color:#fff}
+.sxp.sx-h{background:#d6e6f7;color:#14467d}
+.h2 .sxp{font-size:.95em;padding:2px 10px;letter-spacing:.04em}
+.dl.sx-k{border-left:4px solid #211e1e;padding-left:8px}
+.dl.sx-h{border-left:4px solid #3b82c4;padding-left:8px}
+.tm-l li.sx-k{border-left:5px solid #211e1e}
+.tm-l li.sx-h{border-left:5px solid #3b82c4}
+.tm-pos.sx-h{background:#e8f1fb}
+section.sx-h .st thead th{border-bottom-color:#3b82c4}

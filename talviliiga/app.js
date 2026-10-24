@@ -37,6 +37,9 @@ document.getElementById('cafeBtn')?.addEventListener('click', cafeDialog);
 const slotState = (s, clk) => { const ks = s.ms.map(m => status(m, clk).k); return ks.includes('live') ? 'live' : ks.every(k => k === 'done' || k === 'cancel') ? 'done' : ks.includes('wait') ? 'wait' : 'up'; };
 const scoreTxt = (m, clk, goals) => { const st = status(m, clk); if (st.k === 'cancel') return 'peruttu'; const sc = score(m, goals, st); return sc ? sc.join('–') : '–'; };
 const pairHtml = m => `${chip(m.home)}<span class="vs">vs</span>${chip(m.away)}`;
+/* Sarjan väritunniste: kilpa tumma, haaste sininen */
+const sxc = k => /kilpa/i.test(k) ? 'sx-k' : /haaste/i.test(k) ? 'sx-h' : '';
+const sxp = k => `<span class="sxp ${sxc(k)}">${esc(k)}</span>`;
 const multiSeries = () => seriesList(S.data.matches).length > 1;
 
 /* Yksi tiivis "nyt"-kortti: käynnissä tai tulossa + mitä seuraavaksi */
@@ -65,7 +68,7 @@ function nowCard(slots, clk, goals) {
   let body;
   if (s.same) {
     const fields = live ? s.ms.map(m => `<span>${esc(multiSeries() ? m.series : m.field)} <b class="d num">${scoreTxt(m, clk, goals)}</b></span>`).join('')
-      : s.ms.map(m => `<span>${esc(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</span>`).join('');
+      : s.ms.map(m => `<span>${sxp(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</span>`).join('');
     body = `<div class="now-pair">${pairHtml(s.ms[0])}</div><div class="now-when">${when}</div><div class="now-fields">${fields}</div>`;
   } else {
     body = `<div class="now-when">${when}</div><div class="now-list">${s.ms.map(m => `<div class="now-row"><span class="now-pair">${pairHtml(m)}</span><span class="now-meta">${esc([m.series, m.field].filter(Boolean).join(' · '))}${live ? ` <b class="d num">${scoreTxt(m, clk, goals)}</b>` : ''}</span></div>`).join('')}</div>`;
@@ -102,9 +105,9 @@ function program(allSlots, clk, goals) {
     let mid, res;
     if (s.same) {
       mid = `${pairHtml(s.ms[0])}${state}`;
-      res = s.ms.map(m => `<span class="r">${ms.length > 1 || multiSeries() ? `<span class="rl">${esc(m.series)}</span>` : ''}<b class="d num">${scoreTxt(m, clk, goals)}</b></span>`).join('');
+      res = s.ms.map(m => `<span class="r">${ms.length > 1 || multiSeries() ? `<span class="rl">${sxp(m.series)}</span>` : ''}<b class="d num">${scoreTxt(m, clk, goals)}</b></span>`).join('');
     } else {
-      mid = `<span class="g-multi">${ms.map(m => `<span class="g-line">${pairHtml(m)}<span class="rl">${esc([m.series, m.field].filter(Boolean).join(' · '))}</span></span>`).join('')}${state}</span>`;
+      mid = `<span class="g-multi">${ms.map(m => `<span class="g-line">${pairHtml(m)}<span class="rl">${sxp(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</span></span>`).join('')}${state}</span>`;
       res = ms.map(m => `<span class="r"><b class="d num">${scoreTxt(m, clk, goals)}</b></span>`).join('');
     }
     out += `<li class="g ${st}"><button class="g-row" data-open="${s.start}" aria-expanded="${open}">
@@ -118,14 +121,14 @@ function program(allSlots, clk, goals) {
 function detail(m, clk, goals) {
   const st = status(m, clk), g = goalsOf(m.id, goals);
   const gl = g.length ? g.map(z => `${z.min != null ? z.min + "'" : ''} ${esc(z.team)}${EVENT.showNumbers && z.no ? ' #' + esc(z.no) : ''}`).join(' · ') : 'Maaleja ei kirjattu erikseen';
-  return `<div class="dl"><div><b>${esc(m.series)}</b>${m.field ? ' · ' + esc(m.field) : ''}<div class="muted">${gl}</div></div><span style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">${m.veo ? `<a class="lnk" href="${esc(m.veo)}" target="_blank" rel="noopener">🎥 Katso Veo</a>` : ''}${st.k === 'done' ? `<button class="lnk" data-share="${esc(m.id)}">Jaa tulos</button>` : ''}</span></div>`;
+  return `<div class="dl ${sxc(m.series)}"><div>${sxp(m.series)}${m.field ? ' · ' + esc(m.field) : ''}<div class="muted">${gl}</div></div><span style="display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end">${m.veo ? `<a class="lnk" href="${esc(m.veo)}" target="_blank" rel="noopener">🎥 Katso Veo</a>` : ''}${st.k === 'done' ? `<button class="lnk" data-share="${esc(m.id)}">Jaa tulos</button>` : ''}</span></div>`;
 }
 
 function tables(matches) {
   const t = k => {
     const rows = standings(matches, k, S.data.adjust).map((r, i) => `<tr class="${r.team === S.mine ? 'mine' : ''}"><td>${i + 1}</td><td>${chip(r.team)}${isAdjusted(r.adj) ? '<sup class="adjm" title="Korjattu käsin">*</sup>' : ''}${r.lot && !(r.adj && r.adj.pos) && r.p ? '<sup class="adjm" title="Täysin tasan, ratkaistaan arvalla">A</sup>' : ''}</td><td>${r.p}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}–${r.ga}</td><td>${r.pts}</td></tr>`).join('');
     const f = mainField(matches, k);
-    return `<section><h2 class="h2">${esc(k)} ${f ? `<small>${esc(f)}</small>` : ''}</h2>
+    return `<section class="${sxc(k)}"><h2 class="h2">${sxp(k)} ${f ? `<small>${esc(f)}</small>` : ''}</h2>
       <div class="tbl-wrap"><table class="st"><thead><tr><th>#</th><th>Joukkue</th><th title="Ottelut">O</th><th title="Voitot">V</th><th title="Tasapelit">T</th><th title="Häviöt">H</th><th title="Maalit">M</th><th title="Pisteet">P</th></tr></thead><tbody>${rows}</tbody></table></div></section>`;
   };
   const adjNotes = (S.data.adjust || []).filter(isAdjusted).map(a => `<li><b>${esc(a.series)}, ${esc(a.team)}:</b> ${esc(a.note || 'järjestäjän korjaus')}</li>`).join('');
@@ -153,7 +156,7 @@ function teamDialog(team) {
   const ms = matches.filter(m => m.home === team || m.away === team).sort((a, b) => (a.start ?? 0) - (b.start ?? 0) || a.series.localeCompare(b.series));
   const pos = seriesList(matches).filter(k => ms.some(m => m.series === k)).map(k => {
     const st = standings(matches, k, S.data.adjust), i = st.findIndex(r => r.team === team), row = st[i];
-    return row ? `<div class="tm-pos"><span>${esc(k)}</span><b>${i + 1}. / ${st.length}</b><small>${row.p} ott. · ${row.pts} p · ${row.gf}–${row.ga}</small></div>` : '';
+    return row ? `<div class="tm-pos ${sxc(k)}"><span>${sxp(k)}</span><b>${i + 1}. / ${st.length}</b><small>${row.p} ott. · ${row.pts} p · ${row.gf}–${row.ga}</small></div>` : '';
   }).join('');
   const next = ms.find(m => ['up', 'live', 'wait'].includes(status(m, clk).k));
   const rows = ms.map(m => {
@@ -161,7 +164,7 @@ function teamDialog(team) {
     const own = sc ? (home ? sc[0] : sc[1]) : null, their = sc ? (home ? sc[1] : sc[0]) : null;
     const res = st.k === 'cancel' ? 'peruttu' : sc ? `${own}–${their}` : '–';
     const wl = st.k === 'done' && sc ? (own > their ? '<em class="tm-w">V</em>' : own < their ? '<em class="tm-x">H</em>' : '<em class="tm-d">T</em>') : st.k === 'live' ? '<em class="tm-live">Käynnissä</em>' : '';
-    return `<li class="${m === next ? 'tm-next' : ''}"><span class="t num">${fmtTime(m.start)}</span><span class="o"><small>${esc(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</small><span class="tm-vs">vs ${chip(opp)}</span></span><span class="r num"><b>${res}</b>${wl}${m.veo ? ` <a href="${esc(m.veo)}" target="_blank" rel="noopener" title="Veo">🎥</a>` : ''}</span></li>`;
+    return `<li class="${m === next ? 'tm-next' : ''} ${sxc(m.series)}"><span class="t num">${fmtTime(m.start)}</span><span class="o"><small>${sxp(m.series)}${m.field ? ' · ' + esc(m.field) : ''}</small><span class="tm-vs">vs ${chip(opp)}</span></span><span class="r num"><b>${res}</b>${wl}${m.veo ? ` <a href="${esc(m.veo)}" target="_blank" rel="noopener" title="Veo">🎥</a>` : ''}</span></li>`;
   }).join('');
   const ov = document.createElement('div'); ov.className = 'overlay team';
   ov.innerHTML = `<div class="box tm" role="dialog" aria-label="${esc(team)}"><div class="tm-h">${chip(team)}<button class="btn ghost" data-close aria-label="Sulje">✕</button></div>
