@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -236,13 +236,38 @@ async function gameResultsOnline(url, paiva) {
   })));
 }
 
+/* Oma turnaus: luetaan tulospalvelun Google Sheet (sama julkinen gviz-CSV, jota tulospalvelun sivu lukee).
+   Turvana Asetukset-välilehden päivän pitää olla sama kuin asetuksissa, jottei seuraava turnaus samassa taulukossa korvaa tätä. */
+async function omaHaku(tc) {
+  const g = async n => {
+    const r = await fetch(`https://docs.google.com/spreadsheets/d/${tc.sheet}/gviz/tq?tqx=out:csv&headers=1&sheet=${encodeURIComponent(n)}`);
+    if (!r.ok) throw new Error(`${n}: HTTP ${r.status}`);
+    return csv(await r.text());
+  };
+  const [ottelut, maalit, korjaukset, asetukset] = await Promise.all([g('Ottelut'), g('Maalit').catch(() => []), g('Korjaukset').catch(() => []), g('Asetukset')]);
+  const paiva = asetusPaiva((asetukset.find(r => r.avain === 'paiva') || {}).arvo);
+  if (tc.paiva && paiva !== tc.paiva) { varoita(`Turnaus ${tc.id}: taulukon päivä on ${paiva || '?'}, odotettiin ${tc.paiva}. Ei päivitetty.`); return null; }
+  if (paiva && paiva > tanaanISO()) return []; // ei vielä pelattu: ohjelma on jo sivulla käsin
+  return omaTurnaus({ ottelut, maalit, korjaukset, asetukset }, { joukkue: tc.joukkue || 'SJK', taso: tc.taso || '' });
+}
+function tanaanISO() { const n = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' })); return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`; }
+
 async function paivitaTurnaukset() {
   const d = lue('turnaukset/data.json');
   for (const tc of cfg.turnaukset) {
     const ev = d.events.find(e => e.id === tc.id);
     if (!ev) { varoita(`Turnaus ${tc.id}: lisää nimi, päivät ja paikka turnaukset/data.json-tiedostoon (tai pyydä Claudea)`); continue; }
-    if (tc.tyyppi === 'oma' || !tc.url || tc.valmis) continue;
+    if (tc.valmis || (tc.tyyppi === 'oma' ? !tc.sheet : !tc.url)) continue;
     try {
+      if (tc.tyyppi === 'oma') {
+        const teams = await omaHaku(tc);
+        if (!teams || !teams.length) continue;
+        tila.turnaukset[tc.id] = { joukkueet: teams.length, ottelut: teams.reduce((n, t) => n + t.matches.length, 0) };
+        const vanhat = ev.teams || [];
+        if (turvallinen(vanhat.flatMap(t => t.matches), teams.flatMap(t => t.matches))) ev.teams = teams;
+        else varoita(`Turnaus ${tc.id}: taulukossa vähemmän pelattuja otteluita kuin sivulla, vanhat säilytetty`);
+        continue;
+      }
       const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : null;
       if (!teams) { varoita(`Turnaus ${tc.id}: tuntematon tyyppi ${tc.tyyppi}`); continue; }
       tila.turnaukset[tc.id] = { joukkueet: teams.length, ottelut: teams.reduce((n, t) => n + t.matches.length, 0) };

@@ -105,3 +105,97 @@ export function ottelusivu(txt) {
   out.goals.sort((a, b) => a.min - b.min);
   return out;
 }
+
+/* ---------- Oma turnaus (Talviliiga-tyyppinen tulospalvelu Google Sheetissä) ---------- */
+
+// Google Sheetsin gviz-CSV → [{sarake: arvo}]
+export function csv(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  const s = String(text || '');
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (q) { if (c === '"') { if (s[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && s[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+  const [h, ...rest] = rows.filter(r => r.some(x => String(x).trim() !== ''));
+  if (!h) return [];
+  const keys = h.map(k => k.trim().toLowerCase());
+  return rest.map(r => Object.fromEntries(keys.map((k, i) => [k, (r[i] ?? '').trim()])));
+}
+
+const luku = v => { const n = parseInt(String(v ?? '').trim(), 10); return Number.isFinite(n) ? n : null; };
+const kello = v => { const m = String(v || '').match(/(\d{1,2})[.:](\d{2})/); return m ? `${pad(m[1])}.${m[2]}` : undefined; };
+export function asetusPaiva(v) {
+  const s = String(v || '').trim(), iso = s.match(/^(\d{4})-(\d{2})-(\d{2})/), fi = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})/);
+  return iso ? `${iso[1]}-${iso[2]}-${iso[3]}` : fi ? `${fi[3]}-${pad(fi[2])}-${pad(fi[1])}` : null;
+}
+
+/* Sarjataulukko samoilla säännöillä kuin tulospalvelussa (talviliiga/common.js standings):
+   3/1/0, tasapisteissä keskinäiset pisteet, keskinäinen maaliero, keskinäiset tehdyt, maaliero, tehdyt.
+   Ylläpidon korjaukset lisätään ja pakotettu sija ohittaa järjestyksen. */
+export function omaSarjataulukko(ms, sarja, korjaukset = []) {
+  const valmis = m => m.hg != null && m.ag != null && m.tila !== 'peruttu';
+  const nimet = [...new Set(ms.filter(m => m.series === sarja).flatMap(m => [m.home, m.away]).filter(Boolean))];
+  const t = Object.fromEntries(nimet.map(n => [n, { team: n, p: 0, gf: 0, ga: 0, pts: 0 }]));
+  const pelaa = (taulu, m) => { const a = taulu[m.home], b = taulu[m.away]; a.gf += m.hg; a.ga += m.ag; b.gf += m.ag; b.ga += m.hg; if (m.hg > m.ag) a.pts += 3; else if (m.hg < m.ag) b.pts += 3; else { a.pts++; b.pts++; } };
+  for (const m of ms) if (m.series === sarja && valmis(m) && t[m.home] && t[m.away]) { t[m.home].p++; t[m.away].p++; pelaa(t, m); }
+  const adj = korjaukset.filter(a => a.series === sarja && t[a.team]);
+  for (const a of adj) { t[a.team].pts += a.pts; t[a.team].gf += a.gf; t[a.team].ga += a.ga; }
+  const byPts = Object.values(t).sort((x, y) => y.pts - x.pts), sorted = [];
+  for (let i = 0; i < byPts.length;) {
+    let j = i; while (j < byPts.length && byPts[j].pts === byPts[i].pts) j++;
+    const grp = byPts.slice(i, j);
+    if (grp.length > 1) {
+      const set = new Set(grp.map(r => r.team)), h = Object.fromEntries(grp.map(r => [r.team, { pts: 0, gf: 0, ga: 0 }]));
+      for (const m of ms) if (m.series === sarja && valmis(m) && set.has(m.home) && set.has(m.away)) pelaa(h, m);
+      const key = r => [h[r.team].pts, h[r.team].gf - h[r.team].ga, h[r.team].gf, r.gf - r.ga, r.gf];
+      grp.sort((x, y) => { const kx = key(x), ky = key(y); for (let k = 0; k < kx.length; k++) if (ky[k] !== kx[k]) return ky[k] - kx[k]; return x.team.localeCompare(y.team, 'fi'); });
+    }
+    sorted.push(...grp); i = j;
+  }
+  const forced = adj.filter(a => a.pos >= 1 && a.pos <= sorted.length).sort((a, b) => a.pos - b.pos);
+  if (!forced.length) return sorted;
+  const out = new Array(sorted.length).fill(null), rest = sorted.filter(r => !forced.some(f => f.team === r.team));
+  for (const f of forced) { let i = f.pos - 1; while (out[i]) i++; out[i] = t[f.team]; }
+  for (let i = 0; i < out.length; i++) if (!out[i]) out[i] = rest.shift();
+  return out;
+}
+
+/* Oman turnauksen välilehdet → joukkueen sarjat sivuston muodossa.
+   Tulos näkyy vasta, kun molemmat maalimäärät on kirjattu (kuten tulospalvelussa). Sijoitus näkyy, kun sarjan kaikki ottelut on pelattu.
+   Maalit minuutteineen ottelun tietoihin; pelinumerot vain, jos tulospalvelussakin näytetään ne (nayta_pelinumerot = kyllä). */
+export function omaTurnaus({ ottelut = [], maalit = [], korjaukset = [], asetukset = [] }, { joukkue = 'SJK', taso = '' } = {}) {
+  const as = Object.fromEntries(asetukset.filter(r => r.avain).map(r => [r.avain.toLowerCase(), r.arvo]));
+  const paiva = asetusPaiva(as.paiva), numerot = /^k/i.test(as.nayta_pelinumerot || '');
+  const ms = ottelut.filter(r => r.id && r.koti && r.vieras).map(r => ({
+    id: r.id, series: (r.sarja || 'Sarja').trim(), time: kello(r.alku), field: (r['kenttä'] || r.kentta || '').trim(),
+    home: r.koti.trim(), away: r.vieras.trim(), hg: luku(r.koti_maalit), ag: luku(r.vieras_maalit), tila: (r.tila || '').toLowerCase()
+  }));
+  const adj = korjaukset.filter(r => r.joukkue).map(r => ({ series: (r.sarja || '').trim(), team: r.joukkue.trim(), pts: luku(r.pisteet) || 0, gf: luku(r.tehdyt) || 0, ga: luku(r['päästetyt'] ?? r.paastetyt) || 0, pos: luku(r.sija) || 0 }));
+  const valmis = m => m.hg != null && m.ag != null && m.tila !== 'peruttu';
+  const sarjat = [...new Set(ms.map(m => m.series))].filter(s => ms.some(m => m.series === s && (m.home === joukkue || m.away === joukkue)));
+  return sarjat.map(s => {
+    const sm = ms.filter(m => m.series === s), omat = sm.filter(m => m.home === joukkue || m.away === joukkue);
+    const taulu = omaSarjataulukko(ms, s, adj), sija = taulu.findIndex(r => r.team === joukkue) + 1;
+    const kaikki = sm.filter(m => m.tila !== 'peruttu').every(valmis);
+    return {
+      name: joukkue, label: s, level: [taso, s].filter(Boolean).join(' '),
+      place: kaikki && sija ? { pos: sija, of: taulu.length } : undefined,
+      matches: omat.filter(m => m.tila !== 'peruttu').sort((a, b) => (a.time || '').localeCompare(b.time || '')).map(m => {
+        const out = { date: paiva, time: m.time, series: s, home: m.home, away: m.away, score: valmis(m) ? [[m.hg, m.ag]] : null };
+        const g = maalit.filter(x => x.ottelu === m.id && luku(x.minuutti) != null)
+          .sort((a, b) => luku(a.minuutti) - luku(b.minuutti) || String(a.kirjattu).localeCompare(String(b.kirjattu)))
+          .map(x => { const e = { min: luku(x.minuutti), side: x.joukkue === m.home ? 'h' : 'a' }; if (numerot && luku(x.pelinumero) != null) e.no = luku(x.pelinumero); return e; });
+        // Maalit näytetään vain, jos ne täsmäävät lopputulokseen
+        const tasmaa = out.score && g.filter(x => x.side === 'h').length === m.hg && g.filter(x => x.side === 'a').length === m.ag;
+        out.d = { venue: m.field || undefined };
+        if (tasmaa && g.length) out.d.goals = g;
+        return out;
+      })
+    };
+  });
+}

@@ -41,7 +41,7 @@
   <section class="sec" aria-labelledby="h-next">
     <h2 id="h-next">Seuraavat tapahtumat</h2>
     <div class="cards">
-      <a class="card next" href="eerikkila/">
+      <a class="card next" href="eerikkila/" data-loppu="2026-11-03">
         <span class="badge">1.–3.11.</span>
         <span class="k">Huuhkajaliiga · Eerikkilä</span>
         <span class="n">P11 alaloppusarja</span>
@@ -49,6 +49,9 @@
         <span class="go">Otteluohjelma →</span>
       </a>
     </div>
+    <script>/* Ohi menneet tapahtumat piiloon itsestään (data-loppu = viimeinen päivä). Korostus siirtyy seuraavalle. */
+    (function(){var n=new Date(),d=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),s=document.getElementById('h-next').parentNode,c=[].slice.call(s.querySelectorAll('.card'));
+    c.forEach(function(e){if(e.dataset.loppu&&e.dataset.loppu<d)e.hidden=true;e.classList.remove('next');});var v=c.filter(function(e){return!e.hidden;});if(v.length)v[0].classList.add('next');else s.hidden=true;})();</script>
   </section>
 
   <div class="cols">
@@ -80,7 +83,7 @@
 </main>
 
 <footer><span id="updated">Tulokset Palloliiton tulospalvelusta.</span> Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. <a href="ohje/">Lisää tulokset puhelimen kotinäytölle →</a></footer>
-<script src="assets/matches.js?v=20261018q"></script>
+<script src="assets/matches.js?v=20261024a"></script>
 <script src="assets/home.js?v=20261018q"></script>
 <script src="assets/takaisin.js?v=20261022a"></script>
 </body>

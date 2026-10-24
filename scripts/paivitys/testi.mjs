@@ -38,3 +38,24 @@ assert.equal(os.time, '18.30'); assert.equal(os.venue, 'Kyrkösjärvi TN A'); as
 assert.deepEqual(os.goals.map(g => `${g.min}${g.side}${g.no ?? ''}`), ['1a14', '2h16', '7h11', '9h11', '59h32']);
 assert.ok(!JSON.stringify(os).includes('Hattula'), 'nimiä ei saa palauttaa');
 console.log('Ottelusivutesti OK');
+
+import { csv, omaTurnaus, asetusPaiva } from './jasennys.mjs';
+assert.deepEqual(csv('"a","b"\n"1","x, ""y"""\n'), [{ a: '1', b: 'x, "y"' }]);
+assert.equal(asetusPaiva('24.10.2026'), '2026-10-24');
+const O = csv(`"id","sarja","alku","kenttä","koti","vieras","koti_maalit","vieras_maalit","tila"
+"K1","Kilpa","10.00","Takakenttä","SJK","VPS","2","0","hyväksytty"
+"K2","Kilpa","10:35","Takakenttä","WFA","VPS","1","1",""
+"K3","Kilpa","11.10","Takakenttä","WFA","SJK","",""," "
+"H1","Haaste","10.00","Etukenttä","SJK","VPS","1","1","hyväksytty"`);
+const M = csv(`"id","ottelu","joukkue","pelinumero","minuutti","kirjattu"
+"a","K1","SJK","7","23","2"
+"b","K1","SJK","","15","1"
+"c","H1","VPS","","5","1"`);
+const ot = omaTurnaus({ ottelut: O, maalit: M, asetukset: [{ avain: 'paiva', arvo: '2026-10-24' }] }, { joukkue: 'SJK', taso: 'P12' });
+assert.equal(ot.length, 2); assert.equal(ot[0].level, 'P12 Kilpa');
+assert.equal(ot[0].place, undefined, 'sijaa ei ennen kuin kaikki pelattu');
+assert.deepEqual(ot[0].matches[0].score, [[2, 0]]); assert.equal(ot[0].matches[1].score, null);
+assert.deepEqual(ot[0].matches[0].d.goals, [{ min: 15, side: 'h' }, { min: 23, side: 'h' }], 'numerot piiloon oletuksena');
+assert.equal(ot[1].matches[0].d.goals, undefined, 'maalit eivät täsmää tulokseen');
+assert.deepEqual(ot[1].place, { pos: 1, of: 2 });
+console.log('Oma turnaus -testi OK');

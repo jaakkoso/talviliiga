@@ -58,20 +58,20 @@ const P15 = (() => {
   }
   async function openMatch(mi) {
     const { m, opt } = REG[mi]; const dlg = dialogEl();
-    const d = parseDate(m.date), det = m.pid ? (await loadDetails())[m.pid] : null;
+    const d = parseDate(m.date), det = m.d || (m.pid ? (await loadDetails())[m.pid] : null);
     const rs = results(m, opt.own);
     const verdict = rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
     const score = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join(' · ') : 'vs';
     const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
     let goals = '';
     if (det && det.goals && det.goals.length) {
-      let h = 0, a = 0;
+      let h = 0, a = 0; const nums = det.goals.some(g => g.no != null || g.og);
       goals = `<h3>Maalit</h3><ol class="gl-list">${det.goals.map(g => {
         if (g.side === 'h') h++; else a++;
         const team = g.side === 'h' ? m.home : m.away;
         const who = g.og ? 'oma maali' : g.no != null ? '#' + g.no : '–';
-        return `<li class="${isOwn(team) ? 'me' : ''}"><span class="mn">${g.min}'</span><span class="tm">${isOwn(team) ? 'SJK' : esc(team)}</span><span class="no">${who}</span><span class="st">${h}–${a}</span></li>`;
-      }).join('')}</ol><p class="tl-note">Maalintekijät pelinumeroina. Nimiä ei näytetä.</p>`;
+        return `<li class="${isOwn(team) ? 'me' : ''}"><span class="mn">${g.min}'</span><span class="tm">${isOwn(team) ? 'SJK' : esc(team)}</span>${nums ? `<span class="no">${who}</span>` : '<span class="no"></span>'}<span class="st">${h}–${a}</span></li>`;
+      }).join('')}</ol>${nums ? '<p class="tl-note">Maalintekijät pelinumeroina. Nimiä ei näytetä.</p>' : ''}`;
     } else if (m.score) goals = `<p class="note">Maalien tarkempia tietoja ei ole saatavilla tästä ottelusta.</p>`;
     const link = m.pid ? `https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap` : opt.link;
     dlg.innerHTML = `<div class="mdlg-in">
