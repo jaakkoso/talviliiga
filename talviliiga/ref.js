@@ -365,7 +365,7 @@ function fieldView() {
       <p class="note" style="margin:0;text-align:center">Yksi napautus = maali kirjattu ja näkyy heti tulospalvelussa. Numeron voi lisätä alta.</p>` : ''}
     ${goals.length && canGoal ? `<button class="btn ghost" data-undo style="justify-self:center">↶ Kumoa viimeisin maali</button>` : ''}
     ${goalItems(m, goals, true)}
-    ${['live', 'wait'].includes(st.k) || isFinal(m) ? `<div class="confirm"><b>${isFinal(m) ? 'Lopputulos' : 'Ottelu päättyi?'}</b>${resultBlock(m, goals)}</div>` : ''}
+    ${isFinal(m) ? `<div class="confirm"><b>Lopputulos</b>${lockNote(m)}</div>` : ['live', 'wait'].includes(st.k) ? `<div class="confirm"><b>Ottelu päättyi?</b><div class="banner"><b>Tuomari vahvistaa lopputuloksen.</b><span>Tarkista, että kaikki maalit on kirjattu. Lopputulos näkyy yleisölle heti kirjausten perusteella.</span></div></div>` : ''}
   </section>
   ${R.sheet ? goalSheet(m, clk) : ''}`;
 }
@@ -432,6 +432,7 @@ document.addEventListener('click', e => {
   if ((t = q('[data-pin]'))) { if (t.dataset.pin) { R.pinned = t.dataset.pin; R.draft = {}; render(); } return; }
   if (q('[data-unpin]')) { R.pinned = null; render(); return; }
   if (q('[data-logout]')) { R.pin = ''; ls.set(PIN_KEY, ''); render(); return; }
+  if (MODE === 'kentta' && q('[data-adj],[data-confirm],[data-clear]')) { toast('Tuomari vahvistaa lopputuloksen.'); render(); return; }
   if (MODE !== 'admin' && q('[data-adj],[data-confirm],[data-clear],[data-addgoal],[data-editgoal],[data-delgoal],[data-quickgoal],[data-undo]')) { const m = curMatch(); if (m && !canEdit(m)) { toast(isLocked(m) ? 'Tulos on lukittu. Korjaukset vain ylläpidon kautta.' : 'Tulos on jo vahvistettu. Korjaukset tuomarin tai ylläpidon kautta.'); render(); return; } }
   if (q('[data-approve]')) { const m = curMatch(); if (m) { enqueue({ action: 'setStatus', match: m.id, tila: 'hyväksytty' }); toast('Tulos hyväksytty ja lukittu'); } return; }
   if (q('[data-unlock]')) { const m = curMatch(); if (m) { enqueue({ action: 'setStatus', match: m.id, tila: '' }); toast('Lukitus avattu'); } return; }
