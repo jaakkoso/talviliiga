@@ -135,7 +135,7 @@ function resultBlock(m, goals, opts = {}) {
     ${final ? `<button class="btn ghost" data-clear style="justify-self:start">Poista vahvistettu tulos</button>` : ''}
     ${MODE === 'admin' && final && !changed ? (isLocked(m)
       ? `<div class="banner" style="background:var(--live-bg);color:var(--live)"><b>🔒 Hyväksytty ja lukittu.</b><span>Tuomari ja kenttävastaava eivät voi enää muuttaa tulosta.</span></div><button class="btn ghost" data-unlock style="justify-self:start">Avaa lukitus</button>`
-      : `<div class="banner"><b>Tuomari on vahvistanut tuloksen ${m.hg}–${m.ag}.</b><span>Tarkista ja hyväksy, niin tulos lukittuu.</span></div><button class="btn gold" data-approve style="font-size:1.1rem;padding:14px">✓ Hyväksy ja lukitse tulos ${m.hg}–${m.ag}</button>`) : ''}`;
+      : `<div class="banner"><b>Tulos ${m.hg}–${m.ag} on vahvistettu (tuomari tai kenttävastaava).</b><span>Tarkista ja hyväksy, niin tulos lukittuu.</span></div><button class="btn gold" data-approve style="font-size:1.1rem;padding:14px">✓ Hyväksy ja lukitse tulos ${m.hg}–${m.ag}</button>`) : ''}`;
 }
 
 function goalSheet(m, clk) {
@@ -194,7 +194,7 @@ function refList() {
     const row = m => { const st = status(m, clk).k, a = st === 'done' ? ann(m) : null;
       const lk = isLocked(m);
       const cls = st === 'cancel' ? 'st-cancel' : st !== 'done' ? '' : !lk ? 'st-pending' : a === 'ann' ? 'st-ann' : a === 'changed' ? 'st-changed' : 'st-done';
-      const tags = st !== 'done' ? [] : [lk ? '🔒 Hyväksytty' : '⏳ Tuomari vahvistanut · odottaa hyväksyntääsi', a === 'ann' ? '📣 Kuulutettu' : a === 'changed' ? 'Tulos muuttunut kuuluttamisen jälkeen' : ''].filter(Boolean);
+      const tags = st !== 'done' ? [] : [lk ? '🔒 Hyväksytty' : '⏳ Vahvistettu · odottaa hyväksyntääsi', a === 'ann' ? '📣 Kuulutettu' : a === 'changed' ? 'Tulos muuttunut kuuluttamisen jälkeen' : ''].filter(Boolean);
       const tag = tags.map(x => `<span class="st-tag">${x}</span>`).join(' · ');
       return item(m).replace('class="rm ', `class="rm ${cls} `).replace('</span></button>', `</span>${tag ? `<span class="st-row">${tag}</span>` : ''}</button>`); };
     const pend = ms.filter(m => status(m, clk).k === 'done' && !isLocked(m)).length;
