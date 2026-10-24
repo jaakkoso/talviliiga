@@ -47,7 +47,7 @@
   /* ---- tila ---- */
   const S = {
     auto: ls.get('k-auto', true), fired: ls.get('k-fired', {}), skip: ls.get('k-skip2', {}), ann: ls.get('k-ann2', {}),
-    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, over: ls.get('k-over', {}), editing: null, open: false, role: ls.get('k-role', (window.matchMedia && matchMedia('(pointer:fine)').matches) ? 'soitin' : 'kauko'), txt: {},
+    gong: ls.get('k-gong', true), standHaaste: ls.get('k-standh', true), vt: null, autoRes: true, over: ls.get('k-over', {}), editing: null, open: false, role: /[?&]kone=kuulutus/.test(location.search) ? (ls.set('k-role', 'soitin'), 'soitin') : /[?&]kone=kauko/.test(location.search) ? (ls.set('k-role', 'kauko'), 'kauko') : ls.get('k-role', (window.matchMedia && matchMedia('(pointer:fine)').matches) ? 'soitin' : 'kauko'), txt: {},
     omat: (() => { const s = ls.get('k-omat', []); return Array.from({ length: OMAT_N }, (_, i) => Object.assign({ label: 'Oma kuulutus ' + (i + 1), text: '', tone: 'warm' }, s[i] || {})); })(),
     ownAudio: {},
   };
@@ -295,6 +295,7 @@
     if (ed) { const ne = panel.querySelector('[data-kover]'); if (ne) { ne.value = edVal; if (edFocus) ne.focus(); } }
     panel.querySelector('.kp-extras').innerHTML = EXTRAS.map(c => `<button class="kp-xbtn" data-kplay="${c.id}" title="${esc(TEXTS[c.id] || '')}">${PLAY}<span>${esc(c.label)}</span></button>`).join('');
     panel.querySelector('.kp-testwrap').innerHTML = roleBox() + testBar();
+    { const rs = panel.querySelector('[data-krolesel]'); if (rs && document.activeElement !== rs) rs.value = S.role; }
     panel.querySelector('.kp-stand').innerHTML = standBox(false);
     drawOmat(); paint(); tickCd();
   }
@@ -377,6 +378,7 @@
           <p class="kp-help">Kirjoita teksti tavallisesti → <b>Kopioi ElevenLabsiin</b> → <a href="https://elevenlabs.io/app/speech-synthesis/text-to-speech" target="_blank" rel="noopener">ElevenLabs</a> (Christoffer Weiss · v4 · Finnish · Stability 40 % · Similarity 75 %) → lataa mp3 → <b>Lisää ääni</b>. Äänet tallentuvat tämän koneen selaimeen.</p>
           <div class="kp-omat"></div></details>
         <details class="kp-sec"><summary>Asetukset ja testaus</summary>
+          <label class="kp-chk">Tämä laite: <select data-krolesel><option value="soitin">🔊 Kuulutuskone (soittaa äänet)</option><option value="kauko">📱 Kauko-ohjain</option></select></label>
           <label class="kp-chk"><input type="checkbox" data-kgong ${S.gong ? 'checked' : ''}> Merkkiääni ennen kuulutusta ja fanfaari ennen tuloksia</label>
           <div class="kp-btns"><button class="kp-mini" data-ktest>Testaa ääni</button><button class="kp-mini" data-kclock>Testikello: aloita testi alusta (09.44)</button><button class="kp-mini" data-kjump>Hyppää 10 s ennen seuraavaa kuulutusta</button><button class="kp-mini" data-krealclock>Oikea kello</button><button class="kp-mini" data-kreset>Nollaa soitetut ja kuulutetut</button></div>
           <p class="kp-help">Kytke kone hallin äänentoistoon ja testaa äänenvoimakkuus. Pidä tämä sivu auki ja kone hereillä (kansi auki, virtajohto kiinni).</p></details>
@@ -389,11 +391,14 @@
 
   /* ---- tapahtumat ---- */
   ['pointerdown', 'mousedown', 'click', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, () => { if (needUnlock()) unlock(); }, true));
+  function setRole(v) { if (S.role === v) return; S.role = v; ls.set('k-role', v); if (v === 'kauko') stopAll(); draw(); toast(v === 'kauko' ? 'Tämä laite on nyt kauko-ohjain: kuulutukset soivat kuulutuskoneelta.' : 'Tämä laite on nyt kuulutuskone: kuulutukset soivat tästä.'); }
+  document.addEventListener('pointerup', e => { const b = e.target.closest && e.target.closest('[data-krole]'); if (b) setRole(b.dataset.krole); }, true);
+  document.addEventListener('change', e => { if (e.target.dataset && e.target.dataset.krolesel != null) setRole(e.target.value); });
   document.addEventListener('click', async e => {
     const q = s => e.target.closest(s); let t;
     if (q('[data-kopen]')) { panel.classList.add('open'); return; }
     if (q('[data-kclose]')) { panel.classList.remove('open'); return; }
-    if ((t = q('[data-krole]'))) { S.role = t.dataset.krole; ls.set('k-role', S.role); if (S.role === 'kauko') stopAll(); draw(); toast(S.role === 'kauko' ? 'Tämä laite on nyt kauko-ohjain: kuulutukset soivat kuulutuskoneelta.' : 'Tämä laite on nyt kuulutuskone: kuulutukset soivat tästä.'); return; }
+    if ((t = q('[data-krole]'))) { setRole(t.dataset.krole); return; }
     if ((t = q('[data-kedit]'))) { S.editing = t.dataset.kedit; draw(); const inp = panel.querySelector('[data-kover]'); if (inp) { inp.focus(); try { inp.showPicker && inp.showPicker(); } catch (err) { } } return; }
     if ((t = q('[data-kovreset]'))) { setOver(t.dataset.kovreset, null); return; }
     if ((t = q('[data-kovsave]'))) { commitOver(panel.querySelector(`[data-kover="${t.dataset.kovsave}"]`)); return; }
