@@ -199,3 +199,37 @@ export function omaTurnaus({ ottelut = [], maalit = [], korjaukset = [], asetuks
     };
   });
 }
+
+/* ---------- fudisturnaus.com (julkinen JSON: /api/v1/public/tournaments/<slug>) ---------- */
+const hkiKello = iso => { if (!iso) return undefined; const p = new Intl.DateTimeFormat('fi-FI', { timeZone: 'Europe/Helsinki', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(iso)); return `${p.find(x => x.type === 'hour').value}.${p.find(x => x.type === 'minute').value}`; };
+
+/* Seuran joukkueet (oletuksena SJK-j / SJK) sivuston muotoon. Sarjataso = ikäryhmän nimi (esim. Kilpa, Haaste).
+   Sijoitus otetaan lohkotaulukosta, kun lohkon kaikki ottelut on pelattu ja jatkopelejä ei ole, tai jatkopelien jälkeen
+   ei arvata: silloin sija jätetään tyhjäksi ja sen voi lisätä käsin. */
+export function fudisTurnaus(t, { seura = /^SJK/ } = {}) {
+  const omaSeura = new Set((t.clubs || []).filter(c => seura.test(c.name)).map(c => c.id));
+  const oma = team => team && omaSeura.has(team.clubId);
+  const kaikki = [...(t.groupStageMatches || []), ...(t.playoffMatches || [])];
+  const joukkueet = new Map();
+  for (const m of kaikki) for (const team of [m.homeTeam, m.awayTeam]) if (oma(team)) {
+    const key = team.id;
+    if (!joukkueet.has(key)) joukkueet.set(key, { id: team.id, name: team.name, ag: m.ageGroup?.name || '', matches: [] });
+    joukkueet.get(key).matches.push(m);
+  }
+  const jatko = (t.playoffMatches || []).length > 0;
+  return [...joukkueet.values()].map(j => {
+    const g = (t.groups || []).find(x => (x.results || []).some(r => r.teamId === j.id));
+    const lohkoValmis = g && kaikki.filter(m => m.groupId === g.id && m.type !== 'PlayoffMatch').every(m => m.homeGoals != null && m.awayGoals != null);
+    const rivi = g && g.results.find(r => r.teamId === j.id);
+    const place = !jatko && lohkoValmis && rivi && rivi.ranking ? { pos: rivi.ranking, of: g.results.length } : undefined;
+    return {
+      name: j.name, label: j.ag || j.name, level: j.ag || j.name, place,
+      matches: j.matches.sort((a, b) => String(a.startTime).localeCompare(String(b.startTime))).map(m => ({
+        date: m.date, time: hkiKello(m.startTime), series: m.group?.name || m.ageGroup?.name || '',
+        home: m.homeTeam?.name || m.homeTeamOriginDescription || '?', away: m.awayTeam?.name || m.awayTeamOriginDescription || '?',
+        score: m.homeGoals != null && m.awayGoals != null ? [[m.homeGoals, m.awayGoals]] : null,
+        d: m.field?.name ? { venue: m.field.name } : undefined
+      }))
+    };
+  });
+}

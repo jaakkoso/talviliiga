@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -252,6 +252,15 @@ async function omaHaku(tc) {
 }
 function tanaanISO() { const n = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' })); return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`; }
 
+/* fudisturnaus.com: sivu on selainsovellus, data tulee julkisesta JSON-rajapinnasta */
+async function fudisHaku(url) {
+  const slug = (url.match(/fudisturnaus\.com\/t\/([^/?#]+)/) || [])[1];
+  if (!slug) throw new Error('osoitteesta ei löytynyt turnauksen tunnusta');
+  const r = await fetch(`https://www.fudisturnaus.com/api/v1/public/tournaments/${slug}`, { headers: { accept: 'application/json' } });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return fudisTurnaus(await r.json());
+}
+
 async function paivitaTurnaukset() {
   const d = lue('turnaukset/data.json');
   for (const tc of cfg.turnaukset) {
@@ -268,7 +277,7 @@ async function paivitaTurnaukset() {
         else varoita(`Turnaus ${tc.id}: taulukossa vähemmän pelattuja otteluita kuin sivulla, vanhat säilytetty`);
         continue;
       }
-      const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : null;
+      const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : tc.tyyppi === 'fudisturnaus' ? await fudisHaku(tc.url) : null;
       if (!teams) { varoita(`Turnaus ${tc.id}: tuntematon tyyppi ${tc.tyyppi}`); continue; }
       tila.turnaukset[tc.id] = { joukkueet: teams.length, ottelut: teams.reduce((n, t) => n + t.matches.length, 0) };
       if (!teams.length) { varoita(`Turnaus ${tc.id}: SJK:n joukkueita ei löytynyt`); continue; }

@@ -2,6 +2,139 @@
  "updated": "2026-10-18",
  "events": [
   {
+   "id": "jjk-talviliiga-2026",
+   "name": "JJK talviliiga",
+   "dates": "7.11.2026",
+   "venue": "Huhtahalli, Jyväskylä",
+   "link": "https://www.fudisturnaus.com/t/jjk-talviliiga-26",
+   "teams": [
+    {
+     "name": "SJK-j",
+     "label": "Kilpa",
+     "level": "Kilpa",
+     "matches": [
+      {
+       "date": "2026-11-07",
+       "time": "10.35",
+       "series": "Kilpa",
+       "home": "HoDy",
+       "away": "SJK-j",
+       "score": null,
+       "d": {
+        "venue": "Kenttä A"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.20",
+       "series": "Kilpa",
+       "home": "KuPS",
+       "away": "SJK-j",
+       "score": null,
+       "d": {
+        "venue": "Kenttä A"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.40",
+       "series": "Kilpa",
+       "home": "SJK-j",
+       "away": "VPS",
+       "score": null,
+       "d": {
+        "venue": "Kenttä A"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.50",
+       "series": "Kilpa",
+       "home": "SJK-j",
+       "away": "OLS",
+       "score": null,
+       "d": {
+        "venue": "Kenttä A"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "18.10",
+       "series": "Kilpa",
+       "home": "JJK",
+       "away": "SJK-j",
+       "score": null,
+       "d": {
+        "venue": "Kenttä A"
+       }
+      }
+     ]
+    },
+    {
+     "name": "SJK",
+     "label": "Haaste",
+     "level": "Haaste",
+     "matches": [
+      {
+       "date": "2026-11-07",
+       "time": "10.35",
+       "series": "Haaste",
+       "home": "FC Lahti",
+       "away": "SJK",
+       "score": null,
+       "d": {
+        "venue": "Kenttä B"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.20",
+       "series": "Haaste",
+       "home": "KuPS",
+       "away": "SJK",
+       "score": null,
+       "d": {
+        "venue": "Kenttä B"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.40",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "VPS",
+       "score": null,
+       "d": {
+        "venue": "Kenttä B"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.50",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "OLS",
+       "score": null,
+       "d": {
+        "venue": "Kenttä B"
+       }
+      },
+      {
+       "date": "2026-11-07",
+       "time": "18.10",
+       "series": "Haaste",
+       "home": "JJK",
+       "away": "SJK",
+       "score": null,
+       "d": {
+        "venue": "Kenttä B"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "talviliiga-2026",
    "name": "Talviliiga P12",
    "dates": "24.10.2026",

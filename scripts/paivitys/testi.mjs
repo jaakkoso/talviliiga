@@ -59,3 +59,16 @@ assert.deepEqual(ot[0].matches[0].d.goals, [{ min: 15, side: 'h' }, { min: 23, s
 assert.equal(ot[1].matches[0].d.goals, undefined, 'maalit eivät täsmää tulokseen');
 assert.deepEqual(ot[1].place, { pos: 1, of: 2 });
 console.log('Oma turnaus -testi OK');
+
+import { fudisTurnaus } from './jasennys.mjs';
+const FT = { clubs: [{ id: 192, name: 'SJK-j' }, { id: 447, name: 'FC Lahti' }], playoffMatches: [],
+  groupStageMatches: [
+    { id: 1, groupId: 9, type: 'GroupStageMatch', startTime: '2026-11-07T08:35:00.000Z', date: '2026-11-07', homeGoals: 1, awayGoals: 3, ageGroup: { name: 'Haaste' }, group: { name: 'Haaste' }, field: { name: 'Kenttä B' }, homeTeam: { id: 5, name: 'FC Lahti', clubId: 447 }, awayTeam: { id: 6, name: 'SJK', clubId: 192 } },
+    { id: 2, groupId: 9, type: 'GroupStageMatch', startTime: '2026-11-07T10:20:00.000Z', date: '2026-11-07', homeGoals: null, awayGoals: null, ageGroup: { name: 'Haaste' }, group: { name: 'Haaste' }, field: { name: 'Kenttä B' }, homeTeam: { id: 6, name: 'SJK', clubId: 192 }, awayTeam: { id: 5, name: 'FC Lahti', clubId: 447 } }],
+  groups: [{ id: 9, name: 'Haaste', results: [{ teamId: 6, ranking: 1 }, { teamId: 5, ranking: 2 }] }] };
+const ft = fudisTurnaus(FT);
+assert.equal(ft.length, 1); assert.equal(ft[0].level, 'Haaste'); assert.equal(ft[0].matches[0].time, '10.35');
+assert.deepEqual(ft[0].matches[0].score, [[1, 3]]); assert.equal(ft[0].matches[1].score, null); assert.equal(ft[0].place, undefined);
+FT.groupStageMatches[1].homeGoals = 2; FT.groupStageMatches[1].awayGoals = 0;
+assert.deepEqual(fudisTurnaus(FT)[0].place, { pos: 1, of: 2 });
+console.log('Fudisturnaus-testi OK');
