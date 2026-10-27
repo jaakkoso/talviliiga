@@ -145,7 +145,8 @@ function buildEvent(settings, teamRows) {
     const n = String(r.nimi || '').trim(); if (!n) continue;
     teams[n] = { bg: HEX.test(r.tausta || '') ? r.tausta : '#e2ddcc', ink: HEX.test(r.teksti || '') ? r.teksti : '#161414',
       edge: HEX.test(r.reuna || '') ? r.reuna : '', edgeType: /ala/i.test(r.reunatyyli || '') ? 'ala' : (r.reuna ? 'raita' : ''),
-      logo: /^[\w\-./]+\.(png|svg|jpe?g|webp)$/i.test(String(r.logo || '').trim()) ? String(r.logo).trim() : '',
+      // Logo vain sivuston omasta kansiosta: ei toisia palvelimia (//…), ei kansiosta ylöspäin (..)
+      logo: /^(?!\/\/)(?!.*\.\.)[\w\-./]+\.(png|svg|jpe?g|webp)$/i.test(String(r.logo || '').trim()) ? String(r.logo).trim() : '',
       say: String(r.lausunta || '').trim() };
   }
   const date = parseDate(s.paiva);
@@ -174,10 +175,12 @@ function logoSrc(t) { const c = EVENT.teams[t]; return c ? (c.logo || `${ENGINE}
 /* Puuttuvat logot muistetaan, ettei niitä haeta uudelleen jokaisella päivityksellä */
 const LOGO_MISS = new Set();
 function logoMiss(img) { LOGO_MISS.add(img.getAttribute('src')); const c = img.closest('.chip'); if (c) c.classList.remove('has-logo'); img.remove(); }
+/* Ei inline-tapahtumankäsittelijöitä (sisältöturvakäytäntö estää ne): kuvavirheet kuunnellaan yhdestä paikasta */
+if (typeof document !== 'undefined') document.addEventListener('error', e => { const t = e.target; if (t && t.tagName === 'IMG' && t.classList.contains('lg')) logoMiss(t); }, true);
 const chip = t => {
   const src0 = EVENT.showLogos && logoSrc(t), src = src0 && !LOGO_MISS.has(src0) ? src0 : '';
   const plain = src && EVENT.logoStyle === 'plain';
-  return `<span class="chip${src ? ' has-logo' : ''}${plain ? ' plain' : ''}"${plain ? '' : ` style="${teamStyle(t)}"`}>${src ? `<img class="lg" src="${esc(src)}" alt="" loading="lazy" onerror="logoMiss(this)">` : ''}${esc(t)}</span>`;
+  return `<span class="chip${src ? ' has-logo' : ''}${plain ? ' plain' : ''}"${plain ? '' : ` style="${teamStyle(t)}"`}>${src ? `<img class="lg" src="${esc(src)}" alt="" loading="lazy">` : ''}${esc(t)}</span>`;
 };
 function applyHeader() {
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
