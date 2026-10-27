@@ -72,4 +72,30 @@ Ylläpidon kuulutuspaneelin **Äänet**-osio listaa puuttuvat palat ElevenLabs-t
 
 ## Apps Script
 
-Apps Script -koodi (`apps-script/Code.gs`) tuodaan tähän kansioon versionhallintaan. Moottori käyttää samoja toimintoja kuin Talviliiga. Monipäiväisyys ei vaadi palvelimelta muutoksia, koska päivä-sarake luetaan suoraan taulukosta.
+Palvelinkoodi on tiedostossa `pelipaiva/apps-script/Code.gs`. Ota käyttöön:
+
+1. Turnauksen Google Sheet → Laajennukset → Apps Script.
+2. Liitä Code.gs.
+3. Lisää PIN-koodit skriptin ominaisuuksiin.
+4. Aja `setup`.
+5. Ota käyttöön verkkosovelluksena (ohje tiedoston alussa).
+
+Testit: `node pelipaiva/apps-script/testi.mjs`.
+
+**Turnauksen jälkeen** arkistoi käyttöönotto (Ota käyttöön → Hallinnoi käyttöönottoja → Arkistoi). Tulossivu toimii edelleen, mutta tuloksia ei voi enää muuttaa.
+
+## Tietoturva
+
+- **Julkinen data.** Tulossivu ja Google Sheet ovat julkisia (taulukko: kuka tahansa linkin saanut voi katsoa). Julkisen sivun automaattista lukemista ei voi estää, joten taulukkoon ei kirjoiteta mitään yksityistä:
+  - Pelaajien nimiä ei tallenneta.
+  - Pelinumerolistat ovat skriptin ominaisuuksissa.
+  - Maalintekijöiden numerot ovat taulukossa vain, jos `nayta_pelinumerot = kyllä`.
+- **Kirjautuminen.** PIN-koodilla kirjaudutaan kerran, ja laite saa 4 vuorokautta voimassa olevan istuntotunnisteen. PIN ei jää laitteelle. Kaikki istunnot mitätöidään ajamalla `mitatoiIstunnot()`.
+- **Arvaaminen.** Väärä PIN hidastaa vastausta. 15 väärää yritystä 10 minuutissa lukitsee uudet kirjautumiset 15 minuutiksi, ja lukitus pitenee toistuessa. Ylläpitäjä saa sähköpostin. Jo kirjautuneet toimitsijat voivat jatkaa.
+- **Roolit tarkistetaan palvelimella:**
+  - Kenttävastaava: maalit, kunnes tulos on vahvistettu.
+  - Tuomari: maalit ja lopputulos.
+  - Ylläpito: kaikki.
+  - Ylläpidon hyväksymää tulosta voi muuttaa vain ylläpito.
+- **Syötteet** tarkistetaan (id:t, joukkueet, lukemat, ajat). Tekstit kirjoitetaan niin, ettei niitä tulkita kaavoiksi.
+- **Sivut.** Sisältöturvakäytäntö sallii vain omat skriptit ja yhteydet Googlen taulukkoon ja Apps Scriptiin. `robots.txt` estää tekoälyindeksoijat, ja toimitsijasivut ovat `noindex`.

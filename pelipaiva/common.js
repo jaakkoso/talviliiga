@@ -423,6 +423,7 @@ const Store = {
       if (op.action === 'deleteGoal') d.goals = d.goals.filter(x => x.id !== op.id);
       if (op.action === 'result') { const m = d.matches.find(x => x.id === op.match); if (m) { m.hg = toInt(op.hg); m.ag = toInt(op.ag); } }
       if (op.action === 'getRoster') return { ok: true, roster: d.roster || {} };
+      if (op.action === 'getGoalNumbers') return { ok: true, numbers: {} };
       if (op.action === 'shift') for (const id of op.ids || []) { const m = d.matches.find(x => x.id === id); if (m && m.start != null) { m.start += op.minutes; place(m); } }
       if (op.action === 'setTime') { const m = d.matches.find(x => x.id === op.match); if (m) { m.start = parseTime(op.alku); place(m); } }
       if (op.action === 'setStatus') { const m = d.matches.find(x => x.id === op.match); if (m) m.tila = op.tila || ''; }
@@ -434,7 +435,7 @@ const Store = {
     if (!CONFIG.API_URL) throw new Error('API_URL puuttuu asetuksista');
     const r = await fetch(CONFIG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ ...op, pin }) });
     const j = await r.json();
-    if (!j.ok) { const e = new Error(j.error || 'virhe'); e.code = j.error; e.permanent = ['no_match', 'bad_minute', 'bad_score', 'bad_request', 'unknown_action'].includes(j.error); throw e; }
+    if (!j.ok) { const e = new Error(j.error || 'virhe'); e.code = j.error; e.wait = j.wait; e.permanent = ['no_match', 'bad_minute', 'bad_score', 'bad_request', 'unknown_action', 'locked_result', 'final', 'cancelled', 'forbidden'].includes(j.error); throw e; }
     return j;
   },
 };

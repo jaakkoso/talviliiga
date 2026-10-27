@@ -3,7 +3,9 @@
    kentta.html  (data-mode="kentta"):  kenttävastaava kirjaa maalit reaaliajassa yhdellä napautuksella.
    yllapito.html (data-mode="admin"):  ylläpitäjä (ADMIN_PIN): tilanne, korjaukset, aikataulu, peruminen, taulukko. */
 const MODE = document.body.dataset.mode || 'tuomari';
-const PIN_KEY = 'tulospalvelu-pin-' + MODE; // jokainen näkymä muistaa oman kirjautumisensa
+/* Jokainen näkymä muistaa oman kirjautumisensa. Palvelin antaa PIN-koodia vastaan istuntotunnisteen, joka tallennetaan
+   PINin sijaan: laitteelle ei jää PIN-koodia, ja tunnisteen voi mitätöidä palvelimella. */
+const PIN_KEY = 'tulospalvelu-pin-' + MODE;
 const R = {
   pin: ls.get(PIN_KEY, ''),
   filter: ls.get('tulospalvelu-ref-filter', ''),
@@ -13,12 +15,13 @@ const R = {
   data: null,
   queue: ls.get('tulospalvelu-queue', []),
   roster: ls.get('tulospalvelu-roster', {}),
+  nums: ls.get('tulospalvelu-nums', {}),       // maalintekijöiden numerot, jos ne eivät ole julkisia (vain toimitsijoille)
   draft: {},
   sheet: null,                                // { team, id?, no, min }
   sending: false, offline: false,
   rSeries: '', rTeam: '', rText: null,
   confirmDel: null,
-  aSeries: '', aTeam: '', aDraft: null, adminPin: '',
+  aSeries: '', aTeam: '', aDraft: null,
 };
 const app = document.getElementById('app');
 const syncEl = document.getElementById('sync');
@@ -41,11 +44,15 @@ function applyLocal(d, op) {
   if (op.action === 'setAdjust') { d.adjust = (d.adjust || []).filter(a => !(a.series === op.adj.series && a.team === op.adj.team)); if (isAdjusted(op.adj)) d.adjust.push(op.adj); }
 }
 async function load() {
-  try { const d = await Store.load(); R.queue.forEach(op => applyLocal(d, op)); R.data = d; R.offline = false; }
+  try { const d = await Store.load(); R.queue.forEach(op => applyLocal(d, op)); mergeNums(d); R.data = d; R.offline = false; }
   catch (e) { R.offline = true; }
   render();
 }
-function enqueue(op) { op.qid = uid(); R.queue.push(op); ls.set('tulospalvelu-queue', R.queue); applyLocal(R.data, op); render(); flush(); }
+/* Yksityiset pelinumerot maalikirjauksiin (julkisessa taulukossa numero on tyhjä, kun nayta_pelinumerot = ei) */
+function mergeNums(d) { if (d) d.goals.forEach(g => { if (!g.no && R.nums[g.id]) g.no = R.nums[g.id]; }); }
+async function loadNums() { if (Store.demo) return; try { const r = await Store.send({ action: 'getGoalNumbers' }, R.pin); R.nums = r.numbers || {}; ls.set('tulospalvelu-nums', R.nums); mergeNums(R.data); } catch (e) { } }
+function enqueue(op) { if (op.action === 'goal') { if (op.goal.no) R.nums[op.goal.id] = op.goal.no; else delete R.nums[op.goal.id]; ls.set('tulospalvelu-nums', R.nums); }
+  op.qid = uid(); R.queue.push(op); ls.set('tulospalvelu-queue', R.queue); applyLocal(R.data, op); render(); flush(); }
 async function flush() {
   if (R.sending || !R.queue.length) { renderSync(); return; }
   R.sending = true; renderSync();
@@ -53,18 +60,24 @@ async function flush() {
     const { qid, ...body } = R.queue[0];
     try { await Store.send(body, R.pin); R.queue.shift(); ls.set('tulospalvelu-queue', R.queue); R.offline = false; }
     catch (e) {
-      if (e.code === 'pin') { R.pin = ''; ls.set(PIN_KEY, ''); R.sending = false; toast('PIN-koodi ei kelpaa. Kirjaudu uudelleen.'); render(); return; }
-      if (e.permanent) { R.queue.shift(); ls.set('tulospalvelu-queue', R.queue); toast('Yksi kirjaus hylättiin virheellisenä. Tarkista tilanne.'); continue; }
+      if (e.code === 'pin') { R.pin = ''; ls.set(PIN_KEY, ''); R.sending = false; toast('Kirjautuminen on vanhentunut. Kirjaudu uudelleen PIN-koodilla.'); render(); return; }
+      if (e.permanent) { R.queue.shift(); ls.set('tulospalvelu-queue', R.queue); toast(REJECT[e.code] || 'Yksi kirjaus hylättiin virheellisenä. Tarkista tilanne.'); continue; }
       R.offline = true; break;
     }
   }
   R.sending = false; renderSync();
 }
+const REJECT = {
+  locked_result: 'Ylläpitäjä on hyväksynyt ja lukinnut tuloksen, joten kirjaus hylättiin.',
+  final: 'Lopputulos on jo vahvistettu, joten maalia ei kirjattu. Tuomari tai ylläpito voi korjata.',
+  cancelled: 'Ottelu on peruttu, joten kirjaus hylättiin.',
+  forbidden: 'Tällä kirjautumisella ei voi tehdä tätä.',
+};
 function renderSync() {
   const n = R.queue.length;
   syncEl.innerHTML = !R.pin ? '' : n ? `<span class="sync bad">${R.sending && !R.offline ? 'Tallennetaan…' : `Odottaa yhteyttä<br>${n} tallennusta`}</span>` : `<span class="sync ok">Kaikki<br>tallennettu ✓</span>`;
 }
-async function loadRoster() { try { const r = await Store.send({ action: 'getRoster' }, R.pin); R.roster = r.roster || {}; ls.set('tulospalvelu-roster', R.roster); } catch (e) { } }
+async function loadRoster() { try { const r = await Store.send({ action: 'getRoster' }, R.pin); R.roster = r.roster || {}; ls.set('tulospalvelu-roster', R.roster); } catch (e) { } loadNums(); }
 
 /* ---- yhteiset palat ---- */
 const pillFor = st => `<span class="pill ${{ live: 'live', done: 'done', wait: 'wait' }[st.k] || ''}">${st.k === 'live' ? `Käynnissä · ${st.left} min` : st.k === 'up' && st.inMin != null && st.inMin <= 90 ? `Alkaa ${st.inMin} min` : st.label}</span>`;
@@ -101,8 +114,8 @@ function adminView() {
   </section>`;
 }
 async function saveAdjust(adj) {
-  try { await Store.send({ action: 'setAdjust', adj, adminPin: Store.demo ? 'demo' : R.pin }, R.pin); applyLocal(R.data, { action: 'setAdjust', adj }); R.aDraft = null; render(); toast(isAdjusted(adj) ? 'Korjaus tallennettu' : 'Korjaus poistettu'); }
-  catch (e) { toast(e.code === 'admin' ? 'Ylläpitäjän PIN ei kelpaa' : e.code === 'pin' ? 'Kirjaudu uudelleen' : 'Ei yhteyttä, yritä uudelleen'); }
+  try { await Store.send({ action: 'setAdjust', adj }, R.pin); applyLocal(R.data, { action: 'setAdjust', adj }); R.aDraft = null; render(); toast(isAdjusted(adj) ? 'Korjaus tallennettu' : 'Korjaus poistettu'); }
+  catch (e) { toast(e.code === 'forbidden' || e.code === 'admin' ? 'Vain ylläpito voi korjata taulukkoa' : e.code === 'pin' ? 'Kirjaudu uudelleen' : 'Ei yhteyttä, yritä uudelleen'); }
 }
 /* Ottelun aika listoissa: monipäiväisessä turnauksessa viikonpäivä pienellä kellonajan yläpuolella */
 const tmHtml = m => `${EVENT.multiDay ? `<small class="tmd">${esc(dayShort(m.day).split(' ')[0])}</small>` : ''}${fmtTime(m.start)}`;
@@ -414,8 +427,8 @@ document.addEventListener('submit', async e => {
     try {
       const r = await Store.send({ action: 'check', want: MODE }, pin), role = r.role || (r.admin ? 'admin' : 'tuomari');
       if (role !== 'admin' && role !== MODE) { toast(role === 'tuomari' ? 'Tämä on tuomarien PIN. Avaa tuomarinäkymä.' : role === 'kentta' ? 'Tämä on kenttävastaavien PIN. Avaa kenttänäkymä.' : 'Tämä PIN ei käy tähän näkymään'); return; }
-      R.pin = pin; ls.set(PIN_KEY, pin); await loadRoster(); load(); flush(); }
-    catch (err) { toast(err.code === 'pin' ? 'Väärä PIN-koodi' : err.code === 'locked' ? 'Liian monta väärää yritystä. Odota 5 minuuttia.' : 'Ei yhteyttä. Yritä uudelleen.'); }
+      R.pin = r.token || pin; ls.set(PIN_KEY, R.pin); await loadRoster(); load(); flush(); }
+    catch (err) { toast(err.code === 'pin' ? 'Väärä PIN-koodi' : err.code === 'locked' ? `Liian monta väärää yritystä. Kirjautuminen on lukittu${err.wait ? ' ' + err.wait + ' minuutiksi' : ' hetkeksi'}.` : 'Ei yhteyttä. Yritä uudelleen.'); }
   }
   if (e.target.id === 'goalForm') {
     const m = curMatch(); if (!m) return;
@@ -436,7 +449,7 @@ document.addEventListener('click', e => {
   if ((t = q('[data-setfield]'))) { R.field = t.dataset.setfield; R.pinned = null; ls.set('tulospalvelu-field', R.field); render(); return; }
   if ((t = q('[data-pin]'))) { if (t.dataset.pin) { R.pinned = t.dataset.pin; R.draft = {}; render(); } return; }
   if (q('[data-unpin]')) { R.pinned = null; render(); return; }
-  if (q('[data-logout]')) { R.pin = ''; ls.set(PIN_KEY, ''); render(); return; }
+  if (q('[data-logout]')) { R.pin = ''; ls.set(PIN_KEY, ''); R.nums = {}; ls.set('tulospalvelu-nums', {}); render(); return; }
   if (MODE === 'kentta' && q('[data-adj],[data-confirm],[data-clear]')) { toast('Tuomari vahvistaa lopputuloksen.'); render(); return; }
   if (MODE !== 'admin' && q('[data-adj],[data-confirm],[data-clear],[data-addgoal],[data-editgoal],[data-delgoal],[data-quickgoal],[data-undo]')) { const m = curMatch(); if (m && !canEdit(m)) { toast(isLocked(m) ? 'Tulos on lukittu. Korjaukset vain ylläpidon kautta.' : 'Tulos on jo vahvistettu. Korjaukset tuomarin tai ylläpidon kautta.'); render(); return; } }
   if (q('[data-approve]')) { const m = curMatch(); if (m) { enqueue({ action: 'setStatus', match: m.id, tila: 'hyväksytty' }); toast('Tulos hyväksytty ja lukittu'); } return; }
