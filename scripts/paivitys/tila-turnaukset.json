@@ -11,6 +11,10 @@
    "ottelut": 10
   }
  },
+ "veo": {
+  "tallenteet": 20,
+  "liitetty": 0
+ },
  "varoitukset": [],
  "diagnoosi": {}
 }
