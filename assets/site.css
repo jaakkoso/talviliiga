@@ -285,10 +285,13 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .now-tag{display:inline-flex;align-items:center;gap:7px;font:700 .75rem var(--body);letter-spacing:.06em;text-transform:uppercase;color:#d32f2f;justify-self:start}
 .card.next .now-tag{color:#ff6b6b}
 .card .badge+.now-tag{margin-top:-2px}
-.live-bar{display:flex;align-items:center;gap:12px;margin:16px 0 0;padding:12px 16px;border-radius:12px;background:#2a1414;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.08)}
+.live-bar{display:grid;gap:6px;box-sizing:border-box;width:100%;max-width:100%;min-width:0;margin:16px 0 0;padding:12px 16px;border-radius:12px;background:#2a1414;color:#fff;text-decoration:none;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+.live-bar .lb-top{display:flex;align-items:center;gap:10px;min-width:0}
 .live-bar b{font-family:var(--display);font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#ff8a80}
-.live-bar span{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.live-bar em{font-style:normal;font-weight:700;white-space:nowrap}
+.live-bar small{font-size:.85rem;color:#ffcdd2}
+.live-bar .lb-m{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-width:0}
+.live-bar .lb-t{min-width:0;overflow-wrap:anywhere}
+.live-bar em{font-style:normal;font-weight:800;font-size:1.15rem;white-space:nowrap;flex:none}
 .menu a .live-dot{width:8px;height:8px;margin-left:6px;vertical-align:1px}
 @media (prefers-reduced-motion:reduce){.live-dot{animation:none}}
 
