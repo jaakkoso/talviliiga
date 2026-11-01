@@ -42,7 +42,7 @@ const P15 = (() => {
       <span class="date">${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b></span>
       <span class="tm">${sub ? `<span class="ser">${esc(sub)}</span>` : ''}
         <span class="${isOwn(m.home) ? 'me' : ''}">${esc(m.home)}</span>
-        <span class="${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>${m.veo ? '<span class="veo-tag">▶ Video</span>' : ''}</span>
+        <span class="${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>${m.veo ? '<span class="veo-tag"><b>▶</b> Video</span>' : ''}</span>
       <span class="res">${right}</span></button>`;
   }
 
@@ -86,8 +86,9 @@ const P15 = (() => {
         <span class="t a ${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>
       </div>
       <div class="mdlg-sub">${[det && det.ht ? 'Puoliaika ' + esc(det.ht) : '', m.note ? esc(m.note) : '', verdict].filter(Boolean).join(' · ')}</div>
+      ${m.veo ? `<a class="veo-big" href="${esc(m.veo)}" target="_blank" rel="noopener"><span>▶</span>Katso ottelu Veosta</a>` : ''}
       ${goals}
-      <div class="btns">${m.veo ? `<a class="btn veo" href="${esc(m.veo)}" target="_blank" rel="noopener">▶ Video Veossa ↗</a>` : ''}${link ? `<a class="btn" href="${link}" target="_blank" rel="noopener">Lähde ↗</a>` : ''}</div>
+      <div class="btns">${link ? `<a class="btn" href="${link}" target="_blank" rel="noopener">Lähde ↗</a>` : ''}</div>
     </div>`;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   }

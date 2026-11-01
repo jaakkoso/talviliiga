@@ -24,22 +24,23 @@ const tila = { piirisarjat: {}, huuhkajaliiga: {}, turnaukset: {} };
 const varoita = msg => { varoitukset.push(msg); console.warn('VAROITUS:', msg); };
 
 // Kotikoneella käytetään koneen omaa Chromea (SELAIN=chrome), jos se on asennettu
-const selain = await chromium.launch(process.env.SELAIN ? { channel: process.env.SELAIN } : {});
+// Veo-tarkistus ei tarvitse selainta
+const selain = MITA === 'veo' ? null : await chromium.launch(process.env.SELAIN ? { channel: process.env.SELAIN } : {});
 // Englanninkielinen käyttöliittymä: ottelulistan tunniste on silloin "MATCH DETAILS" (sama kuin testatessa)
-const sivu = await selain.newPage({ locale: 'en-US', viewport: { width: 1300, height: 1000 },
+const sivu = selain && await selain.newPage({ locale: 'en-US', viewport: { width: 1300, height: 1000 },
   ...(process.env.SELAIN ? {} : { userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36' }) });
-sivu.setDefaultTimeout(30000);
+sivu?.setDefaultTimeout(30000);
 
 /* ---------- Palloliiton tulospalvelu ---------- */
 // Palloliiton sivun taustakutsut (JSON) talteen: luotettavampi lähde kuin sivun teksti
 const restVastaukset = [];
-sivu.on('response', async r => {
+sivu?.on('response', async r => {
   const u = r.url();
   if (!/torneopal\.net\/taso\/rest\//.test(u)) return;
   try { const t = await r.text(); restVastaukset.push({ url: u.replace(/hash=[^&]+/, 'hash=…'), status: r.status(), koko: t.length, alku: t.slice(0, 300) }); } catch { }
 });
 let viimeisinOttelu = null;
-sivu.on('response', async r => { if (/torneopal\.net\/taso\/rest\/getMatch/.test(r.url())) { try { viimeisinOttelu = await r.json(); } catch { } } });
+sivu?.on('response', async r => { if (/torneopal\.net\/taso\/rest\/getMatch/.test(r.url())) { try { viimeisinOttelu = await r.json(); } catch { } } });
 async function palloliittoTeksti(url, odota) {
   restVastaukset.length = 0;
   await sivu.goto(url, { waitUntil: 'domcontentloaded' });
@@ -367,7 +368,7 @@ async function paivitaLive() {
 }
 
 /* Veo-tallenteiden linkit otteluihin (julkinen lista, ei kirjautumista). Kotikone päivittää sarjat ja Huuhkajaliigan, GitHub turnaukset. */
-async function paivitaVeo(tiedostot) {
+async function paivitaVeo(tiedostot, vainTuoreet = false) {
   if (!cfg.veo) return;
   let lista;
   try {
@@ -379,22 +380,24 @@ async function paivitaVeo(tiedostot) {
   for (const p of tiedostot) {
     const d = lue(p);
     const ottelut = p.startsWith('piirisarja') ? d.teams.flatMap(t => t.matches) : p.startsWith('eerikkila') ? d.events.flatMap(e => e.matches) : d.events.flatMap(e => e.teams.flatMap(t => t.matches));
-    for (const m of ottelut) { if (m.veo) continue; const u = veoOsuma(lista, m); if (u) { m.veo = u; tila.veo.liitetty++; } }
+    const raja = new Date(Date.now() - 5 * 864e5).toISOString().slice(0, 10);
+    for (const m of ottelut) { if (m.veo || (vainTuoreet && (m.date < raja || m.date > tanaan))) continue; const u = veoOsuma(lista, m); if (u) { m.veo = u; tila.veo.liitetty++; } }
     kirjoita(p, d);
   }
 }
 
 let liveJatkuu = true;
 try {
-  if (MITA === 'live') liveJatkuu = await paivitaLive();
+  if (MITA === 'veo') { await paivitaVeo(['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json'], true); }
+  else if (MITA === 'live') liveJatkuu = await paivitaLive();
   else if (MITA !== 'turnaukset') {
     const hh = await paivitaPiirisarjat();
     await paivitaHuuhkajaliiga(hh);
     await paivitaOttelutiedot();
   }
-  if (MITA !== 'palloliitto' && MITA !== 'live') await paivitaTurnaukset();
-  await paivitaVeo(MITA === 'turnaukset' ? ['turnaukset/data.json'] : MITA === 'live' ? ['eerikkila/data.json'] : MITA === 'palloliitto' ? ['eerikkila/data.json', 'piirisarja/data.json'] : ['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json']);
-} finally { await selain.close(); }
+  if (MITA !== 'palloliitto' && MITA !== 'live' && MITA !== 'veo') await paivitaTurnaukset();
+  if (MITA !== 'veo') await paivitaVeo(MITA === 'turnaukset' ? ['turnaukset/data.json'] : MITA === 'live' ? ['eerikkila/data.json'] : MITA === 'palloliitto' ? ['eerikkila/data.json', 'piirisarja/data.json'] : ['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json']);
+} finally { await selain?.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
 fs.writeFileSync(path.join(JUURI, `scripts/paivitys/tila-${MITA}.json`), JSON.stringify({ ...tila, varoitukset, diagnoosi }, null, 1) + '\n');
