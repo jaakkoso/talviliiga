@@ -38,6 +38,8 @@ sivu.on('response', async r => {
   if (!/torneopal\.net\/taso\/rest\//.test(u)) return;
   try { const t = await r.text(); restVastaukset.push({ url: u.replace(/hash=[^&]+/, 'hash=…'), status: r.status(), koko: t.length, alku: t.slice(0, 300) }); } catch { }
 });
+let viimeisinOttelu = null;
+sivu.on('response', async r => { if (/torneopal\.net\/taso\/rest\/getMatch/.test(r.url())) { try { viimeisinOttelu = await r.json(); } catch { } } });
 async function palloliittoTeksti(url, odota) {
   restVastaukset.length = 0;
   await sivu.goto(url, { waitUntil: 'domcontentloaded' });
@@ -141,7 +143,7 @@ async function paivitaHuuhkajaliiga(hh) {
       // Nimet voivat olla ohjelmassa lyhyempiä (esim. "P-Iirot" vs "P-Iirot/kelt"), joten verrataan nimien alkuja
       const ydin = n => String(n).toLowerCase().replace(/[^a-zäöå]/g, '').slice(0, 4);
       const vanha = ev.matches.find(x => x.date === m.date && ydin(x.home) === ydin(m.home) && ydin(x.away) === ydin(m.away));
-      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) vanha.score = m.score; if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
+      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) { vanha.score = m.score; delete vanha.live; } if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
     tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
@@ -291,13 +293,69 @@ async function paivitaTurnaukset() {
   kirjoita('turnaukset/data.json', d);
 }
 
+
+/* ---------- Live (kotikone, Huuhkajaliigan pelipäivinä muutaman minuutin välein) ----------
+   Haetaan vain käynnissä olevat ja juuri alkavat ottelut niiden ottelusivulta. Tuplapelissä (2 × 20 min samaa vastustajaa vastaan)
+   sivulla on kaksi tulosta, ja ne tallennetaan kahtena pelinä kuten valmiissakin ottelussa. Palauttaa false, kun päivän pelit ovat ohi. */
+function helsinki() { const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Helsinki', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map(x => [x.type, x.value])); return { pvm: `${p.year}-${p.month}-${p.day}`, min: +p.hour * 60 + +p.minute, klo: `${p.hour}.${p.minute}` }; }
+const minuutit = t => { const m = String(t || '').match(/(\d{1,2})[.:](\d{2})/); return m ? +m[1] * 60 + +m[2] : null; };
+async function ottelukortit(id) {
+  const kortit = [];
+  for (const osa of ['fixture', 'results']) {
+    await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/team/${id}/${osa}`, 'MATCH DETAILS');
+    kortit.push(...await sivu.evaluate(() => [...document.querySelectorAll('main a[href*="/match/"]')].map(a => {
+      let c = a; while (c.parentElement && !/(\d+–\d+|\d{1,2}:\d{2})/.test(c.innerText)) c = c.parentElement;
+      return { id: (a.getAttribute('href').match(/match\/(\d+)/) || [])[1], L: c.innerText.split('\n').map(s => s.trim()).filter(Boolean) };
+    })));
+  }
+  return kortit;
+}
+async function paivitaLive() {
+  const d = lue('eerikkila/data.json'), nyt = helsinki(), diag = {};
+  let jatkuu = false;
+  for (const h of cfg.huuhkajaliiga.filter(h => nyt.pvm >= h.alku && nyt.pvm <= h.loppu)) {
+    const ev = d.events.find(e => e.id === h.id), joukkue = cfg.piirisarjat.find(j => j.nimi === h.joukkue);
+    if (!ev || !joukkue) continue;
+    const valmis = m => m.score && !m.live;
+    const tanaan = ev.matches.filter(m => m.date === nyt.pvm && minuutit(m.time) != null);
+    jatkuu = jatkuu || tanaan.some(m => !valmis(m) && nyt.min <= minuutit(m.time) + 150);
+    const aktiiviset = tanaan.filter(m => !valmis(m) && nyt.min >= minuutit(m.time) - 5 && nyt.min <= minuutit(m.time) + 150);
+    if (!aktiiviset.length) continue;
+    if (aktiiviset.some(m => !m.pid)) {
+      const kortit = await ottelukortit(joukkue.id);
+      for (const m of aktiiviset.filter(m => !m.pid)) { const k = kortit.find(k => k.id && k.L.includes(m.home) && k.L.includes(m.away)); if (k) m.pid = k.id; }
+    }
+    for (const m of aktiiviset.filter(m => m.pid)) {
+      viimeisinOttelu = null;
+      const L = (await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap`, m.away)).map(x => x.trim()).filter(Boolean);
+      for (let i = 0; i < 10 && !viimeisinOttelu; i++) await sivu.waitForTimeout(300);
+      const j = (viimeisinOttelu && viimeisinOttelu.match) || {};
+      const loppu = L.findIndex(x => /KOKOONPANOT|LINEUPS|^1 PUOLIAIKA$/i.test(x));
+      const yla = L.slice(0, loppu > 0 ? loppu : 40);
+      const tulokset = yla.filter(x => /^\d+\s*[–-]\s*\d+$/.test(x)).map(x => x.split(/\s*[–-]\s*/).map(Number));
+      const ohi = /^(played|finished|ended|final)/i.test(j.status || '') || yla.some(x => /^(PÄÄTTYNYT|ENDED|FINISHED|FULL TIME)$/i.test(x));
+      const alkanut = ohi || tulokset.length > 0 || /live|playing|started|ongoing|progress/i.test(j.status || '') || !!j.p1_start_time;
+      diag[m.pid] = { klo: nyt.klo, status: j.status || null, fs: [j.fs_A ?? null, j.fs_B ?? null], tulokset, ohi, alkanut,
+        kentat: Object.fromEntries(Object.entries(j).filter(([k, v]) => typeof v !== 'object' && v !== '' && /status|fs_|ps_|p\d_|minute|period|live|winner|elapsed/i.test(k))), yla: yla.slice(0, 30) };
+      if (ohi && tulokset.length) { m.score = tulokset; delete m.live; }
+      else if (alkanut) { m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo; }
+    }
+  }
+  d.updated = tanaan;
+  kirjoita('eerikkila/data.json', d);
+  tila.live = diag;
+  return jatkuu;
+}
+
+let liveJatkuu = true;
 try {
-  if (MITA !== 'turnaukset') {
+  if (MITA === 'live') liveJatkuu = await paivitaLive();
+  else if (MITA !== 'turnaukset') {
     const hh = await paivitaPiirisarjat();
     await paivitaHuuhkajaliiga(hh);
     await paivitaOttelutiedot();
   }
-  if (MITA !== 'palloliitto') await paivitaTurnaukset();
+  if (MITA !== 'palloliitto' && MITA !== 'live') await paivitaTurnaukset();
 } finally { await selain.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
@@ -308,3 +366,5 @@ if (varoitukset.length) {
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, '### Varoitukset\n' + varoitukset.map(v => '- ' + v).join('\n') + '\n');
 }
 console.log(`Valmis. Varoituksia: ${varoitukset.length}`);
+// Live-tilassa poistumiskoodi 3 = päivän pelit ohi, silmukka voi lopettaa
+if (MITA === 'live' && !liveJatkuu) process.exitCode = 3;

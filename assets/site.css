@@ -268,3 +268,8 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .medal-row .minfo{display:grid;min-width:0}
 .medal-row .minfo small,.medal-row .mname small{font-size:.75rem;color:var(--muted)}
 .medal-row .mname{display:grid;text-align:right;font-weight:700;font-size:.9rem}
+
+/* Live-ottelu (Huuhkajaliigan pelipäivät) */
+.live-pill{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:999px;background:#c62828;color:#fff;font:700 11px/1.3 Figtree,system-ui,sans-serif;letter-spacing:.08em;animation:livepulse 1.6s ease-in-out infinite}
+@keyframes livepulse{50%{opacity:.55}}
+@media (prefers-reduced-motion:reduce){.live-pill{animation:none}}

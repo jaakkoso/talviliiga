@@ -81,5 +81,8 @@
   const upcoming = all.filter(x => !x.m.score).sort((a, b) => a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '')).slice(0, 6);
   $('upcoming').innerHTML = upcoming.length ? upcoming.map(x => P15.matchHTML(x.m, { own: x.own, link: x.link })).join('') : '<p class="note">Ei tulevia pelejä tiedossa.</p>';
 
+  // Huuhkajaliigan pelipäivänä etusivu päivittyy itsestään 3 min välein
+  { const n = new Date(), t = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
+    if (eer.events.some(ev => ev.matches.some(m => m.live || m.date === t))) setTimeout(() => { if (!document.querySelector('dialog[open]')) location.reload(); }, 180000); }
   $('updated').textContent = `Tulokset Palloliiton ja turnausten tulospalveluista, päivitetty ${piiri.updated.split('-').reverse().map(Number).join('.')}.`;
 })();

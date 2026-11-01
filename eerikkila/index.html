@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261018q">
+<link rel="stylesheet" href="../assets/site.css?v=20261101a">
 </head>
 <body>
 <header class="top">
@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261024a"></script>
+<script src="../assets/matches.js?v=20261101a"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -53,6 +53,13 @@
   let start = P15.store.get('eerikkila-tab', data.events[0].id);
   if (!data.events.some(e => e.id === start)) start = data.events[0].id;
   render(start);
+  // Pelipäivänä tilanne päivittyy itsestään 2 min välein (sivua ei tarvitse ladata uudelleen)
+  const tanaan = () => { const n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); };
+  const pelipaiva = () => data.events.some(ev => ev.matches.some(m => m.live || m.date === tanaan()));
+  setInterval(async () => {
+    if (!pelipaiva() || document.hidden) return;
+    try { const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) { data = await r.json(); render(tabs.querySelector('[aria-pressed="true"]')?.dataset.id || start); } } catch (e) {}
+  }, 120000);
 })();
 </script>
 <script src="../assets/takaisin.js?v=20261022a"></script>

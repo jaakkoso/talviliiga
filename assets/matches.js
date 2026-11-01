@@ -9,7 +9,7 @@ const P15 = (() => {
 
   // Tulos oman joukkueen näkökulmasta. own = oman joukkueen nimi; tyhjä = kumpi tahansa SJK-j.
   function results(m, own) {
-    if (!m.score) return [];
+    if (!m.score || m.live) return []; // keskeneräinen ottelu ei vielä tilastoihin
     const home = own ? m.home === own : isOwn(m.home);
     return m.score.map(([h, a]) => { const f = home ? h : a, g = home ? a : h; return { f, g, r: f > g ? 'W' : f < g ? 'L' : 'D' }; });
   }
@@ -31,7 +31,9 @@ const P15 = (() => {
   function matchHTML(m, opt = {}) {
     const d = parseDate(m.date);
     const rs = results(m, opt.own);
-    const right = m.score
+    const right = m.live
+      ? `<div class="sc">${(m.score || [[0, 0]]).map(([h, a]) => `<span>${h}–${a}</span>`).join('')}</div><span class="live-pill" title="Tilanne klo ${esc(m.live)}">LIVE</span>`
+      : m.score
       ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}${m.note ? `<small class="rp">${esc(m.note)}</small>` : ''}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
       : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : 'tulossa'}</span>`;
     const sub = [opt.showSeries !== false ? m.series : '', opt.showTeam ? (opt.teamLabel || '') : ''].filter(Boolean).join(' · ');
@@ -60,7 +62,7 @@ const P15 = (() => {
     const { m, opt } = REG[mi]; const dlg = dialogEl();
     const d = parseDate(m.date), det = m.d || (m.pid ? (await loadDetails())[m.pid] : null);
     const rs = results(m, opt.own);
-    const verdict = rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
+    const verdict = m.live ? `Käynnissä · tilanne klo ${esc(m.live)}` : rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
     const score = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join(' · ') : 'vs';
     const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
     let goals = '';
