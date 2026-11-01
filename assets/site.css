@@ -325,3 +325,6 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .lohko-list .lk-s{text-align:center;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25;min-width:42px}
 .lohko-list .lk-s .aika{font-weight:600;color:var(--muted)}
 .lohko-list .me{font-weight:800}
+
+/* Piilotetut elementit pysyvät piilossa, vaikka niillä olisi oma display-sääntö */
+[hidden]{display:none!important}
