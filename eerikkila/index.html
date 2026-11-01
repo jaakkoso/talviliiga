@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261101h">
+<link rel="stylesheet" href="../assets/site.css?v=20261101j">
 </head>
 <body>
 <header class="top">
@@ -42,8 +42,13 @@
     const ev = data.events.find(e => e.id === id);
     const played = ev.matches.some(m => m.score);
     const upcoming = ev.matches.every(m => !m.score);
+    const tday = (() => { const n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); })();
+    const liveNyt = ev.matches.some(m => m.live), pelipaivaNyt = ev.matches.some(m => m.date === tday);
+    const viim = ev.matches.map(m => m.live).filter(Boolean).sort().pop();
+    const paivita = pelipaivaNyt ? `<div class="refresh-row">${liveNyt ? '<span class="now-tag"><i class="live-dot"></i>Ottelu käynnissä</span>' : ''}<button type="button" class="btn refresh" data-refresh><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Päivitä tilanne</button><small>${viim ? 'Tilanne haettu klo ' + P15.esc(viim) : 'Päivittyy itsestään minuutin välein'}</small></div>` : '';
     view.innerHTML = `<div class="summary">
         <div class="sec-head"><h2>${P15.esc(ev.title)}</h2><span class="btns">${ev.taso ? `<a class="btn" href="${ev.taso}" target="_blank" rel="noopener">Live Palloliitossa ↗</a>` : ''}<a class="btn" href="https://live.veo.co/web-app/clubs/sjk-juniorit-ry-2/teams/sjk-p2015/" target="_blank" rel="noopener">▶ Veo-kanava ↗</a></span></div>
+        ${paivita}
         <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
         ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
       </div>` + P15.tableHTML(ev.table) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
@@ -56,10 +61,12 @@
   // Pelipäivänä tilanne päivittyy itsestään minuutin välein (sivua ei tarvitse ladata uudelleen)
   const tanaan = () => { const n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); };
   const pelipaiva = () => data.events.some(ev => ev.matches.some(m => m.live || m.date === tanaan()));
-  setInterval(async () => {
-    if (!pelipaiva() || document.hidden) return;
+  async function hae() {
     try { const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) { data = await r.json(); render(tabs.querySelector('[aria-pressed="true"]')?.dataset.id || start); } } catch (e) {}
-  }, 60000);
+  }
+  setInterval(() => { if (pelipaiva() && !document.hidden) hae(); }, 60000);
+  view.addEventListener('click', async e => { const b = e.target.closest('[data-refresh]'); if (!b) return; b.classList.add('pyorii'); b.disabled = true; await hae(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && pelipaiva()) hae(); });
 })();
 </script>
 <script src="../assets/takaisin.js?v=20261101a"></script>

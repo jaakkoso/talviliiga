@@ -88,7 +88,8 @@
       const x = liveHH[0] ? liveHH[0].m : liveT[0], sc = (x.score || [[0, 0]]).map(([h, a]) => `${h}–${a}`).join(' · ');
       bar.href = liveHH.length ? 'eerikkila/' : 'turnaukset/';
       bar.innerHTML = `<span class="lb-top"><i class="live-dot"></i><b>Live</b>${P15.liveText(x) ? `<small>${P15.esc(P15.liveText(x))}</small>` : ''}</span><span class="lb-m"><span class="lb-t">${P15.esc(x.home)} – ${P15.esc(x.away)}</span><em>${sc}</em></span>`;
-      bar.hidden = false;
+      $('liveWrap').hidden = false;
+      $('liveReload').onclick = e => { e.currentTarget.classList.add('pyorii'); location.replace(location.pathname + '?p=' + Date.now() + location.hash); };
       document.querySelectorAll(`.menu a[href="${liveHH.length ? 'eerikkila/' : 'turnaukset/'}"]`).forEach(a => a.insertAdjacentHTML('beforeend', '<i class="live-dot" aria-label="käynnissä"></i>'));
     } }
   // Huuhkajaliigan pelipäivänä etusivu päivittyy itsestään 2 min välein
