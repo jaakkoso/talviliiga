@@ -101,7 +101,7 @@ const P15 = (() => {
   }
   // items: [{m, opt}] ; ryhmitellään kuukausittain, uusin ensin (tai vanhin ensin, jos asc)
   function listHTML(items, asc) {
-    items = [...items].sort((a, b) => asc ? a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '') : b.m.date.localeCompare(a.m.date));
+    items = [...items].sort((a, b) => asc ? a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '') : b.m.date.localeCompare(a.m.date) || (b.m.time || '').localeCompare(a.m.time || ''));
     const groups = [];
     for (const it of items) {
       const d = parseDate(it.m.date), k = d.getFullYear() + '-' + d.getMonth();

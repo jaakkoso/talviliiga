@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261101e"></script>
+<script src="../assets/matches.js?v=20261101f"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -46,7 +46,7 @@
         <div class="sec-head"><h2>${P15.esc(ev.title)}</h2><span class="btns">${ev.taso ? `<a class="btn" href="${ev.taso}" target="_blank" rel="noopener">Live Palloliitossa ↗</a>` : ''}<a class="btn" href="https://live.veo.co/web-app/clubs/sjk-juniorit-ry-2/teams/sjk-p2015/" target="_blank" rel="noopener">▶ Veo-kanava ↗</a></span></div>
         <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
         ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
-      </div>` + P15.tableHTML(ev.table) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), upcoming);
+      </div>` + P15.tableHTML(ev.table) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
     P15.store.set('eerikkila-tab', id);
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });
