@@ -21,16 +21,20 @@
       [
        0,
        2
+      ],
+      [
+       0,
+       0
       ]
      ],
      "pid": "4349251",
-     "live": "15.51",
+     "live": "15.52",
      "veo": "https://live.veo.co/matches/4690ff27-761b-44a3-93d4-941e7e471680@1793539613096",
-     "liveInfo": "1. peli",
+     "liveInfo": "2. peli",
      "liveClock": {
       "s": 0,
-      "at": 1793541102517,
-      "on": true,
+      "at": 1793541169924,
+      "on": false,
       "max": 1200
      }
     },
