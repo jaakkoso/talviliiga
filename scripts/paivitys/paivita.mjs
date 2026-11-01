@@ -360,6 +360,33 @@ async function paivitaLive() {
       catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko: ${e.message}`); }
     }
   }
+  // Veo-linkki: etsitään 5 min ennen alkua – 15 min alun jälkeen (lähetys tai tallenne kanavalla). Myöhemmin ilmestyvät tallenteet liittää 15 min välein ajettava GitHub-tarkistus.
+  if (cfg.veo) {
+    const etsittavat = d.events.flatMap(e => e.matches).filter(m => m.date === nyt.pvm && !m.veo && minuutit(m.time) != null && nyt.min >= minuutit(m.time) - 5 && nyt.min <= minuutit(m.time) + 15);
+    if (etsittavat.length) {
+      diag.veo = { etsitaan: etsittavat.map(m => `${m.time} ${m.home}–${m.away}`) };
+      try {
+        const r = await fetch(`https://app.veo.co/api/app/clubs/${cfg.veo.seura}/recordings/?team=${cfg.veo.joukkue}`, { headers: { accept: 'application/json' } });
+        const lista = r.ok ? await r.json() : [];
+        for (const m of etsittavat) { const u = veoOsuma(lista, m); if (u) m.veo = u; }
+      } catch (e) { diag.veo.virhe = e.message; }
+      // Kanavan julkinen sivu: live-lähetykset näkyvät siellä ennen kuin tallenne on listalla
+      if (etsittavat.some(m => !m.veo) && cfg.veo.kanava) {
+        try {
+          await sivu.goto(cfg.veo.kanava, { waitUntil: 'domcontentloaded' }); await sivu.waitForTimeout(5000);
+          const linkit = await sivu.evaluate(() => [...document.querySelectorAll('a[href]')].map(a => ({ href: a.href, t: a.innerText.replace(/\s+/g, ' ').trim().slice(0, 120) })).filter(x => /\/matches\/|\/live\/|stream/i.test(x.href)));
+          diag.veo.kanava = { url: sivu.url(), linkit: linkit.slice(0, 15) };
+          const y4 = n => String(n || '').toLowerCase().replace(/^(fc|ff|fk|ac|if)\s+/, '').replace(/[^a-zäöå0-9]/g, '').slice(0, 4);
+          for (const m of etsittavat.filter(m => !m.veo)) {
+            const vast = /^SJK/.test(m.home) ? m.away : m.home;
+            const l = linkit.find(x => y4((x.t.split(/\bvs\.?\s*/i)[1] || '')) === y4(vast) && (x.href.includes(m.date.replace(/-/g, '')) || /live/i.test(x.t + x.href)));
+            if (l) m.veo = l.href;
+          }
+        } catch (e) { diag.veo.kanavaVirhe = e.message; }
+      }
+      diag.veo.loydetty = etsittavat.filter(m => m.veo).map(m => m.veo);
+    }
+  }
   d.updated = tanaan;
   kirjoita('eerikkila/data.json', d);
   tila.live = diag;
@@ -396,7 +423,7 @@ try {
     await paivitaOttelutiedot();
   }
   if (MITA !== 'palloliitto' && MITA !== 'live' && MITA !== 'veo') await paivitaTurnaukset();
-  if (MITA !== 'veo') await paivitaVeo(MITA === 'turnaukset' ? ['turnaukset/data.json'] : MITA === 'live' ? ['eerikkila/data.json'] : MITA === 'palloliitto' ? ['eerikkila/data.json', 'piirisarja/data.json'] : ['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json']);
+  if (MITA !== 'veo' && MITA !== 'live') await paivitaVeo(MITA === 'turnaukset' ? ['turnaukset/data.json'] : MITA === 'palloliitto' ? ['eerikkila/data.json', 'piirisarja/data.json'] : ['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json']);
 } finally { await selain?.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
