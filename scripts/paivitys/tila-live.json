@@ -4,7 +4,7 @@
  "turnaukset": {},
  "live": {
   "4349251": {
-   "klo": "15.48",
+   "klo": "15.51",
    "status": "Live",
    "fs": [
     "0",
@@ -40,8 +40,8 @@
     "period_count_fixed": "0",
     "period_min": "20",
     "live_period": "1",
-    "live_time": "00:07:54",
-    "live_time_mmss": "07:54",
+    "live_time": "00:20:22",
+    "live_time_mmss": "20:22",
     "live_minutes": 0,
     "live_A": "0",
     "live_B": "2",
@@ -54,8 +54,8 @@
     "periods_played": 0,
     "live_fouls_A": 0,
     "live_fouls_B": 0,
-    "live_timer_start": "2026-11-01 15:29:50",
-    "live_timer_start_time": "00:00:00",
+    "live_timer_start": "2026-11-01 15:50:22",
+    "live_timer_start_time": "00:20:22",
     "live_timer_on": "1",
     "lineups_public": 1,
     "lineups_published": 1
@@ -63,7 +63,7 @@
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "P-Iirot/kelt",
-    "18:31",
+    "00:00",
     "0 – 2",
     "0 – 0",
     "SJK-j/musta -15",
@@ -74,9 +74,9 @@
     "P11 HUUHKAJALIIGA",
     "ALALOPPUSARJA",
     "TUPLAPELI",
-    "1. PELI",
+    "TAUKO",
     "P-Iirot/kelt",
-    "18:31",
+    "00:00",
     "0 – 2",
     "0 – 0",
     "SJK-j/musta -15",
