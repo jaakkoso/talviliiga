@@ -4,8 +4,8 @@
  "turnaukset": {},
  "live": {
   "4349275": {
-   "klo": "19.36",
-   "status": "Break",
+   "klo": "19.37",
+   "status": "Live",
    "fs": [
     "0",
     "3"
@@ -25,7 +25,7 @@
    "kentat": {
     "competition_status": "published",
     "category_live": "1",
-    "status": "Break",
+    "status": "Live",
     "matchcard_status": "Locked",
     "fs_A": "0",
     "fs_B": "3",
@@ -54,16 +54,16 @@
     "periods_played": 1,
     "live_fouls_A": 0,
     "live_fouls_B": 0,
-    "live_timer_start": "2026-11-01 19:34:24",
+    "live_timer_start": "2026-11-01 19:37:00",
     "live_timer_start_time": "00:00:00",
-    "live_timer_on": "0",
+    "live_timer_on": "1",
     "lineups_public": 1,
     "lineups_published": 1
    },
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "SJK-j/musta -15",
-    "00:00",
+    "00:09",
     "0 – 3",
     "0 – 0",
     "Hercules -j",
@@ -74,9 +74,9 @@
     "P11 HUUHKAJALIIGA",
     "ALALOPPUSARJA",
     "TUPLAPELI",
-    "TAUKO",
+    "2. PELI",
     "SJK-j/musta -15",
-    "00:00",
+    "00:09",
     "0 – 3",
     "0 – 0",
     "Hercules -j",
