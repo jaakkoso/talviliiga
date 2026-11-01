@@ -310,3 +310,18 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .refresh-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:10px 0 4px}
 .btn.refresh{display:inline-flex;align-items:center;gap:8px;font-weight:700}
 .refresh-row small{color:var(--muted);font-size:.85rem}
+
+/* Lohkon kaikki ottelut */
+.lohko{margin:14px 0 6px}
+.lohko-btn{width:100%;justify-content:center;font-weight:700}
+.lohko-list h3{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.85rem;color:var(--muted);margin:16px 0 6px}
+.lohko-list ol{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.lohko-list li{display:grid;grid-template-columns:44px minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;padding:10px 12px;border-top:1px solid var(--line);font-size:.92rem}
+.lohko-list li:first-child{border-top:0}
+.lohko-list li.oma{background:rgba(189,176,58,.12)}
+.lohko-list .lk-t{color:var(--muted);font-size:.8rem;font-variant-numeric:tabular-nums}
+.lohko-list .lk-h{text-align:right;min-width:0;overflow-wrap:anywhere}
+.lohko-list .lk-a{min-width:0;overflow-wrap:anywhere}
+.lohko-list .lk-s{text-align:center;font-weight:800;font-variant-numeric:tabular-nums;line-height:1.25;min-width:42px}
+.lohko-list .lk-s .aika{font-weight:600;color:var(--muted)}
+.lohko-list .me{font-weight:800}

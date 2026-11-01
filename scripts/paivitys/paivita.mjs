@@ -134,6 +134,31 @@ async function paivitaOttelutiedot() {
   if (haettu) fs.writeFileSync(path.join(JUURI, 'piirisarja/ottelut.json'), JSON.stringify(det) + '\n');
 }
 
+/* Lohkon kaikki ottelut (myös muiden joukkueiden keskinäiset) sarjan tulos- ja ohjelmasivuilta, rajattuna lohkon joukkueisiin ja tapahtuman päiviin */
+async function lohkonOttelut(h, ev) {
+  const pohja = h.taulukko.replace(/group\/\d+\/?$/, '');
+  const joukkueet = new Set(((ev.table && ev.table.rows) || []).map(r => r.team));
+  if (!joukkueet.size) return null;
+  const kaikki = [];
+  for (const osa of ['results', 'fixture']) kaikki.push(...palloliittoOttelut(await palloliittoTeksti(pohja + osa, 'MATCH DETAILS'), cfg.kausi));
+  const nahty = new Set();
+  return kaikki.filter(m => m.date >= h.alku && m.date <= h.loppu && joukkueet.has(m.home) && joukkueet.has(m.away))
+    .filter(m => { const k = m.date + m.home + m.away; if (nahty.has(k)) return false; nahty.add(k); return true; })
+    .map(m => ({ date: m.date, time: m.time, home: m.home, away: m.away, score: m.score || null }))
+    .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '99').localeCompare(b.time || '99'));
+}
+async function paivitaLohko(h, ev) {
+  try {
+    const rows = await palloliittoTaulukko(h.taulukko); if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows };
+    const lohko = await lohkonOttelut(h, ev);
+    if (lohko && lohko.length) {
+      // Pelatuille kellonaika säilytetään ohjelmasta (tulossivulla ei ole aikaa)
+      for (const m of lohko) if (!m.time) { const v = (ev.lohko || []).find(x => x.date === m.date && x.home === m.home && x.away === m.away); if (v && v.time) m.time = v.time; }
+      ev.lohko = lohko;
+    }
+    return true;
+  } catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko/lohko: ${e.message}`); return false; }
+}
 async function paivitaHuuhkajaliiga(hh) {
   const d = lue('eerikkila/data.json');
   for (const h of cfg.huuhkajaliiga) {
@@ -148,8 +173,8 @@ async function paivitaHuuhkajaliiga(hh) {
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
     tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
-    try { const rows = await palloliittoTaulukko(h.taulukko); tila.huuhkajaliiga[h.id].taulukko = rows ? rows.length : 0; if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows }; }
-    catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko: ${e.message}`); }
+    await paivitaLohko(h, ev);
+    tila.huuhkajaliiga[h.id].taulukko = (ev.table && ev.table.rows || []).length; tila.huuhkajaliiga[h.id].lohko = (ev.lohko || []).length;
   }
   d.updated = tanaan;
   kirjoita('eerikkila/data.json', d);
@@ -368,10 +393,10 @@ async function paivitaLive() {
       if (JSON.stringify([m.score, m.live && 1]) !== JSON.stringify([JSON.parse(ennen)[0], JSON.parse(ennen)[1] && 1])) muuttui = true;
     }
     // Sarjataulukko: päivitetään pelien aikana ja kun tulos muuttui
-    if (aktiiviset.length || muuttui) {
-      try { const rows = await palloliittoTaulukko(h.taulukko); if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows }; }
-      catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko: ${e.message}`); }
-    }
+    // Sarjataulukko ja lohkon muut ottelut: tulosmuutoksen jälkeen ja muuten 15 min välein päiväsaikaan
+    let edellinen = 0; try { edellinen = fs.statSync('/tmp/p2015-lohko-haettu').mtimeMs; } catch { }
+    if (muuttui || Date.now() - edellinen > 14 * 60000) { if (await paivitaLohko(h, ev)) try { fs.writeFileSync('/tmp/p2015-lohko-haettu', nyt.klo); } catch { } }
+    if (nyt.min >= 8 * 60 && nyt.min < 22 * 60) { seuraava = Math.min(seuraava, 15); jatkuu = true; }
   }
   // Veo-linkki: etsitään 5 min ennen alkua – 15 min alun jälkeen (lähetys tai tallenne kanavalla). Myöhemmin ilmestyvät tallenteet liittää 15 min välein ajettava GitHub-tarkistus.
   if (cfg.veo) {
