@@ -50,7 +50,7 @@ if ! GIT_TERMINAL_PROMPT=0 git -C "$KANSIO" push --dry-run -q >/dev/null 2>&1; t
 fi
 echo "GitHub-yhteys kunnossa."
 
-# 5. Ajastus: kahden tunnin välein ja heti kun kone herää
+# 5. Ajastus: kahden tunnin välein ja heti kun kone herää. Huuhkajaliigan pelipäivinä haku käynnistää lisäksi live-haun taustalle.
 mkdir -p "$HOME/Library/LaunchAgents" "$HOME/Library/Logs"
 cat > "$PLIST" <<PL
 <?xml version="1.0" encoding="UTF-8"?>
@@ -61,6 +61,7 @@ cat > "$PLIST" <<PL
   <key>EnvironmentVariables</key><dict><key>PATH</key><string>$NODEBIN:/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string></dict>
   <key>StartInterval</key><integer>7200</integer>
   <key>RunAtLoad</key><true/>
+  <key>AbandonProcessGroup</key><true/>
   <key>StandardOutPath</key><string>$LOKI</string>
   <key>StandardErrorPath</key><string>$LOKI</string>
 </dict></plist>
