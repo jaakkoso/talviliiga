@@ -4,7 +4,7 @@
  "turnaukset": {},
  "live": {
   "4349275": {
-   "klo": "19.32",
+   "klo": "19.34",
    "status": "Live",
    "fs": [
     "0",
@@ -13,7 +13,7 @@
    "tulokset": [
     [
      0,
-     2
+     3
     ],
     [
      0,
@@ -40,8 +40,8 @@
     "period_count_fixed": "0",
     "period_min": "20",
     "live_period": "1",
-    "live_time": "00:18:21",
-    "live_time_mmss": "18:21",
+    "live_time": "00:19:21",
+    "live_time_mmss": "19:21",
     "live_minutes": 0,
     "live_A": "0",
     "live_B": "2",
@@ -63,8 +63,8 @@
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "SJK-j/musta -15",
-    "18:25",
-    "0 – 2",
+    "00:00",
+    "0 – 3",
     "0 – 0",
     "Hercules -j",
     "SPL Huuhkaja-Helmariliiga 2026",
@@ -74,13 +74,14 @@
     "P11 HUUHKAJALIIGA",
     "ALALOPPUSARJA",
     "TUPLAPELI",
-    "1. PELI",
+    "TAUKO",
     "SJK-j/musta -15",
-    "18:25",
-    "0 – 2",
+    "00:00",
+    "0 – 3",
     "0 – 0",
     "Hercules -j",
     "Vladimirov   16' 19'",
+    "Menéndez Sancho   20'",
     "Ennuste",
     "7°C"
    ]
