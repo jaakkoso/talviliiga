@@ -24,9 +24,15 @@
       ]
      ],
      "pid": "4349251",
-     "live": "15.38",
+     "live": "15.47",
      "veo": "https://live.veo.co/matches/4690ff27-761b-44a3-93d4-941e7e471680@1793539613096",
-     "liveInfo": "1. peli 7'"
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 474,
+      "at": 1793540835944,
+      "on": true,
+      "max": 1200
+     }
     },
     {
      "date": "2026-11-01",
