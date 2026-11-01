@@ -87,7 +87,7 @@
     if (liveHH.length || liveT.length) {
       const x = liveHH[0] ? liveHH[0].m : liveT[0], sc = (x.score || [[0, 0]]).map(([h, a]) => `${h}–${a}`).join(' · ');
       bar.href = liveHH.length ? 'eerikkila/' : 'turnaukset/';
-      bar.innerHTML = `<span class="lb-top"><i class="live-dot"></i><b>Live</b>${x.liveInfo ? `<small>${P15.esc(x.liveInfo)}</small>` : ''}</span><span class="lb-m"><span class="lb-t">${P15.esc(x.home)} – ${P15.esc(x.away)}</span><em>${sc}</em></span>`;
+      bar.innerHTML = `<span class="lb-top"><i class="live-dot"></i><b>Live</b>${P15.liveText(x) ? `<small>${P15.esc(P15.liveText(x))}</small>` : ''}</span><span class="lb-m"><span class="lb-t">${P15.esc(x.home)} – ${P15.esc(x.away)}</span><em>${sc}</em></span>`;
       bar.hidden = false;
       document.querySelectorAll(`.menu a[href="${liveHH.length ? 'eerikkila/' : 'turnaukset/'}"]`).forEach(a => a.insertAdjacentHTML('beforeend', '<i class="live-dot" aria-label="käynnissä"></i>'));
     } }

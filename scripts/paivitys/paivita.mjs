@@ -144,7 +144,7 @@ async function paivitaHuuhkajaliiga(hh) {
       // Nimet voivat olla ohjelmassa lyhyempiä (esim. "P-Iirot" vs "P-Iirot/kelt"), joten verrataan nimien alkuja
       const ydin = n => String(n).toLowerCase().replace(/[^a-zäöå]/g, '').slice(0, 4);
       const vanha = ev.matches.find(x => x.date === m.date && ydin(x.home) === ydin(m.home) && ydin(x.away) === ydin(m.away));
-      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) { vanha.score = m.score; delete vanha.live; delete vanha.liveInfo; } if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
+      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) { vanha.score = m.score; delete vanha.live; delete vanha.liveInfo; delete vanha.liveClock; } if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
     tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
@@ -353,14 +353,16 @@ async function paivitaLive() {
       diag[m.pid] = { klo: nyt.klo, status: j.status || null, fs: [j.fs_A ?? null, j.fs_B ?? null], tulokset, ohi, alkanut,
         kentat: Object.fromEntries(Object.entries(j).filter(([k, v]) => typeof v !== 'object' && v !== '' && /status|fs_|ps_|p\d_|minute|period|live|winner|elapsed/i.test(k))), yla: yla.slice(0, 30) };
       const ennen = JSON.stringify([m.score, m.live]);
-      if (ohi && tulokset.length) { m.score = tulokset; delete m.live; delete m.liveInfo; }
+      if (ohi && tulokset.length) { m.score = tulokset; delete m.live; delete m.liveInfo; delete m.liveClock; }
       else if (alkanut) {
         // Pelin aikana näytetään vain alkaneet pelit (tuplapelin 1. pelin aikana sivulla näkyy jo 0–0 toiselle pelille)
         const alkaneet = Math.max(1, +j.live_period || 1);
         m.score = tulokset.length ? tulokset.slice(0, alkaneet) : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
         // Tuplapelissä jakso = peli (2 × 20 min). Näytetään meneillään oleva peli ja minuutti, kun kello käy.
-        const jakso = +j.live_period || 0, mm = /^(\d+):\d{2}$/.exec(j.live_time_mmss || ''), minu = j.live_timer_on === '1' && mm ? +mm[1] + 1 : null;
-        m.liveInfo = [jakso && +j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : jakso ? `${jakso}. jakso` : '', minu != null ? `${minu}'` : ''].filter(Boolean).join(' ') || undefined;
+        const jakso = +j.live_period || 0, mm = /^(\d+):(\d{2})$/.exec(j.live_time_mmss || '');
+        m.liveInfo = jakso ? (+j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : `${jakso}. jakso`) : undefined;
+        // Pelikello: sivu laskee minuutin itse tästä (ei tarvitse julkaista joka minuutti)
+        m.liveClock = mm ? { s: +mm[1] * 60 + +mm[2], at: Date.now(), on: j.live_timer_on === '1', max: (+j.period_min || 0) * 60 || undefined } : undefined;
       }
       if (JSON.stringify([m.score, m.live && 1]) !== JSON.stringify([JSON.parse(ennen)[0], JSON.parse(ennen)[1] && 1])) muuttui = true;
     }
@@ -399,7 +401,7 @@ async function paivitaLive() {
   }
   d.updated = tanaan;
   // Julkaistaan heti, kun tulos, tila tai aikataulu muuttuu; pelkkä kello/minuutti enintään 8 min välein (GitHub Pagesin julkaisuraja n. 10/h)
-  const ilmanKelloa = o => JSON.stringify(o, (k, v) => (k === 'live' && typeof v === 'string') || k === 'liveInfo' || k === 'updated' ? (k === 'live' ? !!v : undefined) : v);
+  const ilmanKelloa = o => JSON.stringify(o, (k, v) => k === 'updated' ? undefined : k === 'live' && typeof v === 'string' ? true : k === 'liveClock' && v ? { on: v.on } : v);
   let vanha = null; try { vanha = lue('eerikkila/data.json'); } catch { }
   let julkaistu = 0; try { julkaistu = fs.statSync('/tmp/p2015-live-julkaistu').mtimeMs; } catch { }
   const julkaise = !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 8 * 60000;

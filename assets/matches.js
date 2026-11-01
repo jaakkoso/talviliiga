@@ -28,11 +28,17 @@ const P15 = (() => {
     </div>
     ${s.form.length ? `<div class="form"><span class="lbl">Viimeisimmät</span>${s.form.map(x => `<span class="pip ${x.r}" title="${x.f}–${x.g}">${LETTER[x.r]}</span>`).join('')}</div>` : ''}`;
   }
+  // Live-teksti: peli ja minuutti. Minuutti lasketaan pelikellosta haun jälkeen kuluneen ajan mukaan.
+  function liveText(m) {
+    const c = m.liveClock; let t = m.liveInfo || '';
+    if (c) { let s = c.s + (c.on ? Math.max(0, (Date.now() - c.at) / 1000) : 0); if (c.max) s = Math.min(s, c.max); t += (t ? ' ' : '') + (c.max && s >= c.max ? 'päättyi' : (Math.floor(s / 60) + 1) + "'"); }
+    return t;
+  }
   function matchHTML(m, opt = {}) {
     const d = parseDate(m.date);
     const rs = results(m, opt.own);
     const right = m.live
-      ? `<div class="sc">${(m.score || [[0, 0]]).map(([h, a]) => `<span>${h}–${a}</span>`).join('')}</div><span class="live-pill" title="Tilanne klo ${esc(m.live)}">LIVE${m.liveInfo ? ' · ' + esc(m.liveInfo) : ''}</span>`
+      ? `<div class="sc">${(m.score || [[0, 0]]).map(([h, a]) => `<span>${h}–${a}</span>`).join('')}</div><span class="live-pill" title="Tilanne klo ${esc(m.live)}">LIVE${liveText(m) ? ' · ' + esc(liveText(m)) : ''}</span>`
       : m.score
       ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}${m.note ? `<small class="rp">${esc(m.note)}</small>` : ''}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
       : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : 'tulossa'}</span>`;
@@ -62,7 +68,7 @@ const P15 = (() => {
     const { m, opt } = REG[mi]; const dlg = dialogEl();
     const d = parseDate(m.date), det = m.d || (m.pid ? (await loadDetails())[m.pid] : null);
     const rs = results(m, opt.own);
-    const verdict = m.live ? `Käynnissä${m.liveInfo ? ' · ' + esc(m.liveInfo) : ''} · tilanne klo ${esc(m.live)}` : rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
+    const verdict = m.live ? `Käynnissä${liveText(m) ? ' · ' + esc(liveText(m)) : ''} · tilanne klo ${esc(m.live)}` : rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
     const score = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join(' · ') : 'vs';
     const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
     let goals = '';
@@ -129,5 +135,5 @@ const P15 = (() => {
     </div>`;
   }
   async function load(url) { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status); return r.json(); }
-  return { esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
+  return { liveText, esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
 })();
