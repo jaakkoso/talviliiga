@@ -36,8 +36,21 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "SJK-j/musta -15",
      "away": "Hercules -j",
-     "score": null,
-     "pid": "4349275"
+     "score": [
+      [
+       0,
+       0
+      ]
+     ],
+     "pid": "4349275",
+     "live": "19.12",
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 0,
+      "at": 1793553168408,
+      "on": false,
+      "max": 1200
+     }
     },
     {
      "date": "2026-11-02",
