@@ -11,6 +11,8 @@ if ! mkdir "$LUKKO" 2>/dev/null; then
 fi
 echo $$ > "$LUKKO/pid"
 trap 'rm -rf "$LUKKO"' EXIT
+# Estetään koneen automaattinen lepotila silmukan ajaksi (kannen sulkeminen nukuttaa silti)
+command -v caffeinate >/dev/null && caffeinate -i -w $$ &
 [ -d "/Applications/Google Chrome.app" ] && export SELAIN=chrome
 echo "== live alkaa $(date '+%-d.%-m. %H.%M') =="
 for kierros in $(seq 1 200); do
