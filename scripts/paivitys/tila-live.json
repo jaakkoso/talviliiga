@@ -4,13 +4,21 @@
  "turnaukset": {},
  "live": {
   "4349251": {
-   "klo": "15.28",
+   "klo": "15.32",
    "status": "Live",
    "fs": [
     "0",
     "0"
    ],
    "tulokset": [
+    [
+     0,
+     0
+    ],
+    [
+     0,
+     0
+    ],
     [
      0,
      0
@@ -35,11 +43,13 @@
     "period_count_fixed": "0",
     "period_min": "20",
     "live_period": "1",
-    "live_time": "00:00:00",
-    "live_time_mmss": "00:00",
+    "live_time": "00:01:36",
+    "live_time_mmss": "01:36",
     "live_minutes": 0,
     "live_A": "0",
     "live_B": "0",
+    "live_ps_A": "0",
+    "live_ps_B": "0",
     "live_timeouts_A": 0,
     "live_timeouts_B": 0,
     "live_timeout_skip_A": 0,
@@ -47,17 +57,17 @@
     "periods_played": 0,
     "live_fouls_A": 0,
     "live_fouls_B": 0,
-    "live_timer_start": "0000-00-00 00:00:00",
+    "live_timer_start": "2026-11-01 15:29:50",
     "live_timer_start_time": "00:00:00",
-    "live_timer_on": "0",
+    "live_timer_on": "1",
     "lineups_public": 1,
     "lineups_published": 1
    },
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "P-Iirot/kelt",
-    "00:00",
-    "–",
+    "02:57",
+    "0 – 0",
     "–",
     "SJK-j/musta -15",
     "SPL Huuhkaja-Helmariliiga 2026",
@@ -65,88 +75,16 @@
     "15:30 | su 1.11.",
     "Eerikkilä-halli TN A, Eerikkilän Urheiluopisto",
     "P11 HUUHKAJALIIGA",
-    "ALALOPPUSARJA",
     "TUPLAPELI",
     "1. PELI",
     "P-Iirot/kelt",
-    "00:00",
-    "–",
+    "02:57",
+    "0 – 0",
     "0 – 0",
     "SJK-j/musta -15",
     "Ennuste",
     "8°C"
    ]
-  },
-  "veo": {
-   "etsitaan": [
-    "15.30 P-Iirot/kelt–SJK-j/musta -15"
-   ],
-   "kanava": {
-    "url": "https://app.veo.co/clubs/sjk-juniorit-ry-2/teams/sjk-p2015/recordings/",
-    "linkit": [
-     {
-      "href": "https://app.veo.co/matches/20260928-sjk-p2015-vs-apv-v3f187dd/",
-      "t": "01:15:09 SEP 28, 2026 SJK P2015 vs. APV SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260920-sjk-p2015-vs-gbk-v2a65c74/",
-      "t": "00:46:18 SEP 20, 2026 SJK P2015 vs. GBK SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-yilves-v15c50be/",
-      "t": "00:38:42 SEP 19, 2026 SJK P2015 vs. Yilves SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-hody-vd434e28/",
-      "t": "00:39:17 SEP 19, 2026 SJK P2015 vs. HoDy SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-yilves-punainen-vc4a0257/",
-      "t": "00:38:34 SEP 19, 2026 SJK P2015 vs. Yilves punainen SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-jjk-vcc6e667/",
-      "t": "00:38:27 SEP 19, 2026 SJK P2015 vs. JJK SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-fc-lahti4-v9434649/",
-      "t": "00:37:00 SEP 19, 2026 SJK P2015 vs. Fc Lahti/4 SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260919-sjk-p2015-vs-kups-musta-v59bba6b/",
-      "t": "00:37:14 SEP 19, 2026 SJK P2015 vs. Kups Musta SJK P2015 VEOCAM2-21204 Highlights Match Report"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260111-sjk-p2015-vs-wfa-6c3fefba/",
-      "t": "00:35:56 JAN 11, 2026 SJK P2015 vs. WFA SJK P2015 VEOCAM2-21204 Highlights"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260104-sjk-p2015-vs-jippo-j-punamusta-91d88aba/",
-      "t": "00:19:47 JAN 4, 2026 SJK P2015 vs. Jippo j-punamusta SJK P2015 VEOCAM2-21204 Highlights"
-     },
-     {
-      "href": "https://app.veo.co/matches/20260104-sjk-p2015-vs-jippo-j-punamusta-797a4abd/",
-      "t": "00:20:06 JAN 4, 2026 SJK P2015 vs. Jippo j-punamusta SJK P2015 VEOCAM2-21204 Highlights"
-     },
-     {
-      "href": "https://app.veo.co/matches/20250821-sjk-p-10-vs-ilves-d8661a65/",
-      "t": "CLIPS ONLY AUG 21, 2025 SJK P-10 vs. Ilves SJK P2015 VEOCAM2-27D1D"
-     },
-     {
-      "href": "https://app.veo.co/matches/20250821-sjk-p-10-vs-kapy-20e5a2bb/",
-      "t": "CLIPS ONLY AUG 21, 2025 SJK P-10 vs. KaPy SJK P2015 VEOCAM2-27D1D"
-     },
-     {
-      "href": "https://app.veo.co/matches/20250820-sjk-p-10-vs-tups-tuplapeli-d4d83b7d/",
-      "t": "CLIPS ONLY AUG 20, 2025 SJK P-10 vs. TUPS tuplapeli SJK P2015 VEOCAM2-27D1D"
-     },
-     {
-      "href": "https://app.veo.co/matches/20250820-sjk-p-10-vs-tps-tuplapeli-1da9e287/",
-      "t": "CLIPS ONLY AUG 20, 2025 SJK P-10 vs. TPS tuplapeli SJK P2015 VEOCAM2-27D1D"
-     }
-    ]
-   },
-   "loydetty": []
   }
  },
  "varoitukset": [],
