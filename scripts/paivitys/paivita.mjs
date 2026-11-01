@@ -359,7 +359,8 @@ async function paivitaLive() {
         const alkaneet = Math.max(1, +j.live_period || 1);
         m.score = tulokset.length ? tulokset.slice(0, alkaneet) : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
         // Tuplapelissä jakso = peli (2 × 20 min). Näytetään meneillään oleva peli ja minuutti, kun kello käy.
-        const jakso = +j.live_period || 0, mm = /^(\d+):(\d{2})$/.exec(j.live_time_mmss || '');
+        // Pelikello sivun otsikosta (sivu laskee sen itse aloitushetkestä); taustadatan live_time on viimeisimmän tapahtuman aika
+        const jakso = +j.live_period || 0, mm = /^(\d+):(\d{2})$/.exec(otsake.find(x => /^\d{1,3}:\d{2}$/.test(x)) || j.live_time_mmss || '');
         m.liveInfo = jakso ? (+j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : `${jakso}. jakso`) : undefined;
         // Pelikello: sivu laskee minuutin itse tästä (ei tarvitse julkaista joka minuutti)
         m.liveClock = mm ? { s: +mm[1] * 60 + +mm[2], at: Date.now(), on: j.live_timer_on === '1', max: (+j.period_min || 0) * 60 || undefined } : undefined;
