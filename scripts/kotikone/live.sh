@@ -1,5 +1,5 @@
 #!/bin/bash
-# Huuhkajaliigan pelipäivän live-silmukka: hakee käynnissä olevien otteluiden tilanteen n. 4 min välein
+# Huuhkajaliigan pelipäivän live-silmukka: tarkistaa aikataulun tulospalvelusta ja hakee tilanteen 4 min välein vain otteluiden aikana
 # ja vie sen sivustolle. Loppuu itsestään, kun päivän pelit ovat ohi (paivita.mjs palauttaa koodin 3).
 # Käynnistyy automaattisesti paivita-kotona.sh:sta pelipäivinä. Käsin: scripts/kotikone/live.sh
 cd "$(dirname "$0")/../.." || exit 1
@@ -25,5 +25,10 @@ for kierros in $(seq 1 200); do
     for i in 1 2 3; do git push -q && break; git pull -q --rebase -X theirs || { git rebase --abort; git pull -q --rebase; }; sleep 5; done
   fi
   [ "$koodi" = "3" ] && { echo "== päivän pelit ohi $(date '+%H.%M') =="; break; }
-  sleep 240
+  # Nukutaan seuraavaan otteluun asti (pelien aikana 4 min, muuten enintään tunti, jotta aikataulumuutokset huomataan)
+  SEURAAVA=$(cat /tmp/p2015-live-seuraava 2>/dev/null || echo 4)
+  case "$SEURAAVA" in ''|*[!0-9]*) SEURAAVA=4;; esac
+  [ "$SEURAAVA" -gt 60 ] && SEURAAVA=60
+  echo "seuraava haku $SEURAAVA min päästä"
+  sleep $((SEURAAVA * 60))
 done

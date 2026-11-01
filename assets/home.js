@@ -81,6 +81,16 @@
   const upcoming = all.filter(x => !x.m.score).sort((a, b) => a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '')).slice(0, 6);
   $('upcoming').innerHTML = upcoming.length ? upcoming.map(x => P15.matchHTML(x.m, { own: x.own, link: x.link })).join('') : '<p class="note">Ei tulevia pelejä tiedossa.</p>';
 
+  // Käynnissä oleva ottelu: punainen palkki etusivun ylälaitaan ja pallo valikkoon
+  { const liveHH = eer.events.flatMap(ev => ev.matches.filter(m => m.live).map(m => ({ m, own: ev.team }))), liveT = turn.events.flatMap(ev => ev.teams.flatMap(t => t.matches.filter(m => m.live)));
+    const bar = $('liveBar');
+    if (liveHH.length || liveT.length) {
+      const x = liveHH[0] ? liveHH[0].m : liveT[0], sc = (x.score || [[0, 0]]).map(([h, a]) => `${h}–${a}`).join(' · ');
+      bar.href = liveHH.length ? 'eerikkila/' : 'turnaukset/';
+      bar.innerHTML = `<i class="live-dot"></i><b>Live</b><span>${P15.esc(x.home)} – ${P15.esc(x.away)}</span><em>${sc}</em>`;
+      bar.hidden = false;
+      document.querySelectorAll(`.menu a[href="${liveHH.length ? 'eerikkila/' : 'turnaukset/'}"]`).forEach(a => a.insertAdjacentHTML('beforeend', '<i class="live-dot" aria-label="käynnissä"></i>'));
+    } }
   // Huuhkajaliigan pelipäivänä etusivu päivittyy itsestään 3 min välein
   { const n = new Date(), t = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
     if (eer.events.some(ev => ev.matches.some(m => m.live || m.date === t))) setTimeout(() => { if (!document.querySelector('dialog[open]')) location.reload(); }, 180000); }

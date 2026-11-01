@@ -312,19 +312,30 @@ async function ottelukortit(id) {
 }
 async function paivitaLive() {
   const d = lue('eerikkila/data.json'), nyt = helsinki(), diag = {};
-  let jatkuu = false;
+  let jatkuu = false, seuraava = 60; // minuutteja seuraavaan hakuun (silmukka nukkuu tämän ajan)
   for (const h of cfg.huuhkajaliiga.filter(h => nyt.pvm >= h.alku && nyt.pvm <= h.loppu)) {
     const ev = d.events.find(e => e.id === h.id), joukkue = cfg.piirisarjat.find(j => j.nimi === h.joukkue);
     if (!ev || !joukkue) continue;
     const valmis = m => m.score && !m.live;
-    const tanaan = ev.matches.filter(m => m.date === nyt.pvm && minuutit(m.time) != null);
-    jatkuu = jatkuu || tanaan.some(m => !valmis(m) && nyt.min <= minuutit(m.time) + 150);
-    const aktiiviset = tanaan.filter(m => !valmis(m) && nyt.min >= minuutit(m.time) - 5 && nyt.min <= minuutit(m.time) + 150);
-    if (!aktiiviset.length) continue;
-    if (aktiiviset.some(m => !m.pid)) {
+    const ikkuna = m => nyt.min >= minuutit(m.time) - 5 && nyt.min <= minuutit(m.time) + 150; // tuplapeli 2 × 20 min + mahdollinen viive
+    let tanaan = ev.matches.filter(m => m.date === nyt.pvm && minuutit(m.time) != null);
+    let aktiiviset = tanaan.filter(m => !valmis(m) && ikkuna(m));
+    // Aikataulu tarkistetaan tulospalvelusta aina hiljaisella hetkellä (ja kun ottelun tunniste puuttuu): myöhästyneet tai siirretyt ajat päivittyvät
+    if (!aktiiviset.length || aktiiviset.some(m => !m.pid)) {
       const kortit = await ottelukortit(joukkue.id);
-      for (const m of aktiiviset.filter(m => !m.pid)) { const k = kortit.find(k => k.id && k.L.includes(m.home) && k.L.includes(m.away)); if (k) m.pid = k.id; }
+      for (const m of tanaan) {
+        const k = kortit.find(k => k.id && k.L.includes(m.home) && k.L.includes(m.away));
+        if (!k) continue;
+        if (!m.pid) m.pid = k.id;
+        const t = k.L.find(x => /^\d{1,2}:\d{2}$/.test(x));
+        if (t && !m.score) m.time = t.replace(':', '.').padStart(5, '0');
+      }
+      aktiiviset = tanaan.filter(m => !valmis(m) && ikkuna(m));
     }
+    const tulevat = tanaan.filter(m => !valmis(m) && nyt.min < minuutit(m.time) - 5).map(m => minuutit(m.time) - 5 - nyt.min);
+    if (aktiiviset.length) seuraava = 4; else if (tulevat.length) seuraava = Math.min(seuraava, Math.max(2, Math.min(...tulevat)));
+    jatkuu = jatkuu || aktiiviset.length > 0 || tulevat.length > 0;
+    let muuttui = false;
     for (const m of aktiiviset.filter(m => m.pid)) {
       viimeisinOttelu = null;
       const L = (await palloliittoTeksti(`https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap`, m.away)).map(x => x.trim()).filter(Boolean);
@@ -337,13 +348,21 @@ async function paivitaLive() {
       const alkanut = ohi || tulokset.length > 0 || /live|playing|started|ongoing|progress/i.test(j.status || '') || !!j.p1_start_time;
       diag[m.pid] = { klo: nyt.klo, status: j.status || null, fs: [j.fs_A ?? null, j.fs_B ?? null], tulokset, ohi, alkanut,
         kentat: Object.fromEntries(Object.entries(j).filter(([k, v]) => typeof v !== 'object' && v !== '' && /status|fs_|ps_|p\d_|minute|period|live|winner|elapsed/i.test(k))), yla: yla.slice(0, 30) };
+      const ennen = JSON.stringify([m.score, m.live]);
       if (ohi && tulokset.length) { m.score = tulokset; delete m.live; }
       else if (alkanut) { m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo; }
+      if (JSON.stringify([m.score, m.live && 1]) !== JSON.stringify([JSON.parse(ennen)[0], JSON.parse(ennen)[1] && 1])) muuttui = true;
+    }
+    // Sarjataulukko: päivitetään pelien aikana ja kun tulos muuttui
+    if (aktiiviset.length || muuttui) {
+      try { const rows = await palloliittoTaulukko(h.taulukko); if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows }; }
+      catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko: ${e.message}`); }
     }
   }
   d.updated = tanaan;
   kirjoita('eerikkila/data.json', d);
   tila.live = diag;
+  try { fs.writeFileSync('/tmp/p2015-live-seuraava', String(seuraava)); } catch { }
   return jatkuu;
 }
 

@@ -21,7 +21,7 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="assets/site.css?v=20261101b">
+<link rel="stylesheet" href="assets/site.css?v=20261101c">
 </head>
 <body>
 <header class="top">
@@ -38,17 +38,18 @@
 <script>(function(){var a=document.querySelector(".menu [aria-current]");if(a&&a.offsetLeft+a.offsetWidth>a.parentNode.clientWidth)a.parentNode.scrollLeft=a.offsetLeft-12;})();</script>
 
 <main class="wrap">
+  <a class="live-bar" id="liveBar" href="eerikkila/" hidden></a>
   <section class="sec" aria-labelledby="h-next">
     <h2 id="h-next">Seuraavat tapahtumat</h2>
     <div class="cards">
-      <a class="card next" href="eerikkila/" data-loppu="2026-11-03">
+      <a class="card next" href="eerikkila/" data-alku="2026-11-01" data-loppu="2026-11-03">
         <span class="badge">1.–3.11.</span>
         <span class="k">Huuhkajaliiga · Eerikkilä</span>
         <span class="n">P11 alaloppusarja</span>
         <span class="d">7 tuplapeliä kolmessa päivässä</span>
         <span class="go">Otteluohjelma →</span>
       </a>
-      <a class="card" href="turnaukset/" data-loppu="2026-11-07">
+      <a class="card" href="turnaukset/" data-alku="2026-11-07" data-loppu="2026-11-07">
         <span class="badge">La 7.11.</span>
         <span class="k">Turnaus · Huhtahalli, Jyväskylä</span>
         <span class="n">JJK talviliiga</span>
@@ -58,7 +59,7 @@
     </div>
     <script>/* Ohi menneet tapahtumat piiloon itsestään (data-loppu = viimeinen päivä). Korostus siirtyy seuraavalle. */
     (function(){var n=new Date(),d=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0'),s=document.getElementById('h-next').parentNode,c=[].slice.call(s.querySelectorAll('.card'));
-    c.forEach(function(e){if(e.dataset.loppu&&e.dataset.loppu<d)e.hidden=true;e.classList.remove('next');});var v=c.filter(function(e){return!e.hidden;});if(v.length)v[0].classList.add('next');else s.hidden=true;})();</script>
+    c.forEach(function(e){if(e.dataset.loppu&&e.dataset.loppu<d)e.hidden=true;e.classList.remove('next');if(!e.hidden&&e.dataset.alku&&e.dataset.alku<=d){e.classList.add('now');var b=e.querySelector('.badge');if(b)b.insertAdjacentHTML('afterend','<span class="now-tag"><i class="live-dot"></i>Käynnissä</span>');}});var v=c.filter(function(e){return!e.hidden;});if(v.length)v[0].classList.add('next');else s.hidden=true;})();</script>
   </section>
 
   <div class="cols">
@@ -91,7 +92,7 @@
 
 <footer><span id="updated">Tulokset Palloliiton tulospalvelusta.</span> Sivustolla ei ole pelaajien nimiä, evästeitä eikä seurantaa. <a href="ohje/">Lisää tulokset puhelimen kotinäytölle →</a></footer>
 <script src="assets/matches.js?v=20261101b"></script>
-<script src="assets/home.js?v=20261101a"></script>
+<script src="assets/home.js?v=20261101c"></script>
 <script src="assets/takaisin.js?v=20261022a"></script>
 </body>
 </html>
