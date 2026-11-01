@@ -144,7 +144,7 @@ async function paivitaHuuhkajaliiga(hh) {
       // Nimet voivat olla ohjelmassa lyhyempiä (esim. "P-Iirot" vs "P-Iirot/kelt"), joten verrataan nimien alkuja
       const ydin = n => String(n).toLowerCase().replace(/[^a-zäöå]/g, '').slice(0, 4);
       const vanha = ev.matches.find(x => x.date === m.date && ydin(x.home) === ydin(m.home) && ydin(x.away) === ydin(m.away));
-      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) { vanha.score = m.score; delete vanha.live; } if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
+      if (vanha) { vanha.home = m.home; vanha.away = m.away; if (m.score) { vanha.score = m.score; delete vanha.live; delete vanha.liveInfo; } if (m.time && !vanha.time) vanha.time = m.time; if (m.pid && !vanha.pid) vanha.pid = m.pid; }
       else ev.matches.push({ ...m, series: 'P11 HUUHKAJALIIGA' });
     }
     tila.huuhkajaliiga[h.id] = { haetut: haetut.length, pelatut: haetut.filter(m => m.score).length };
@@ -350,8 +350,13 @@ async function paivitaLive() {
       diag[m.pid] = { klo: nyt.klo, status: j.status || null, fs: [j.fs_A ?? null, j.fs_B ?? null], tulokset, ohi, alkanut,
         kentat: Object.fromEntries(Object.entries(j).filter(([k, v]) => typeof v !== 'object' && v !== '' && /status|fs_|ps_|p\d_|minute|period|live|winner|elapsed/i.test(k))), yla: yla.slice(0, 30) };
       const ennen = JSON.stringify([m.score, m.live]);
-      if (ohi && tulokset.length) { m.score = tulokset; delete m.live; }
-      else if (alkanut) { m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo; }
+      if (ohi && tulokset.length) { m.score = tulokset; delete m.live; delete m.liveInfo; }
+      else if (alkanut) {
+        m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
+        // Tuplapelissä jakso = peli (2 × 20 min). Näytetään meneillään oleva peli ja minuutti, kun kello käy.
+        const jakso = +j.live_period || 0, minu = j.live_timer_on === '1' || +j.live_minutes > 0 ? +j.live_minutes : null;
+        m.liveInfo = [jakso && +j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : jakso ? `${jakso}. jakso` : '', minu != null ? `${minu}'` : ''].filter(Boolean).join(' ') || undefined;
+      }
       if (JSON.stringify([m.score, m.live && 1]) !== JSON.stringify([JSON.parse(ennen)[0], JSON.parse(ennen)[1] && 1])) muuttui = true;
     }
     // Sarjataulukko: päivitetään pelien aikana ja kun tulos muuttui
