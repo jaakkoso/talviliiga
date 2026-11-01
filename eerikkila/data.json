@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20",
+ "updated": "2026-11-01",
  "events": [
   {
    "id": "syksy-2026",
@@ -74,18 +74,18 @@
     "rows": [
      {
       "pos": 1,
-      "team": "EPS",
-      "o": 0,
-      "v": 0,
+      "team": "HPS",
+      "o": 2,
+      "v": 2,
       "t": 0,
       "h": 0,
-      "gf": 0,
+      "gf": 3,
       "ga": 0,
-      "p": 0
+      "p": 6
      },
      {
       "pos": 2,
-      "team": "FF Jaro/-15",
+      "team": "MuSa/Black",
       "o": 0,
       "v": 0,
       "t": 0,
@@ -96,7 +96,7 @@
      },
      {
       "pos": 3,
-      "team": "HPS",
+      "team": "P-Iirot/kelt",
       "o": 0,
       "v": 0,
       "t": 0,
@@ -129,7 +129,7 @@
      },
      {
       "pos": 6,
-      "team": "MuSa/Black",
+      "team": "SJK-j/musta -15",
       "o": 0,
       "v": 0,
       "t": 0,
@@ -140,7 +140,7 @@
      },
      {
       "pos": 7,
-      "team": "P-Iirot/kelt",
+      "team": "EPS",
       "o": 0,
       "v": 0,
       "t": 0,
@@ -151,13 +151,13 @@
      },
      {
       "pos": 8,
-      "team": "SJK-j/musta -15",
-      "o": 0,
+      "team": "FF Jaro/-15",
+      "o": 2,
       "v": 0,
       "t": 0,
-      "h": 0,
+      "h": 2,
       "gf": 0,
-      "ga": 0,
+      "ga": 3,
       "p": 0
      }
     ]
