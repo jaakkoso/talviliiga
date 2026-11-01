@@ -344,7 +344,10 @@ async function paivitaLive() {
       const j = (viimeisinOttelu && viimeisinOttelu.match) || {};
       const loppu = L.findIndex(x => /KOKOONPANOT|LINEUPS|^1 PUOLIAIKA$/i.test(x));
       const yla = L.slice(0, loppu > 0 ? loppu : 40);
-      const tulokset = yla.filter(x => /^\d+\s*[–-]\s*\d+$/.test(x)).map(x => x.split(/\s*[–-]\s*/).map(Number));
+      // Yläosan otsikko: koti, kello, pelien tulokset ("–" = peli ei vielä alkanut), vieras. Tuplapelissä kaksi tulosta.
+      const iH = yla.indexOf(m.home), iA = iH >= 0 ? yla.indexOf(m.away, iH + 1) : -1;
+      const otsake = iH >= 0 && iA > iH ? yla.slice(iH + 1, iA) : yla;
+      const tulokset = otsake.filter(x => /^\d+\s*[–-]\s*\d+$/.test(x)).map(x => x.split(/\s*[–-]\s*/).map(Number)).slice(0, 2);
       const ohi = /^(played|finished|ended|final)/i.test(j.status || '') || yla.some(x => /^(PÄÄTTYNYT|ENDED|FINISHED|FULL TIME)$/i.test(x));
       const alkanut = ohi || tulokset.length > 0 || /live|playing|started|ongoing|progress/i.test(j.status || '') || !!j.p1_start_time;
       diag[m.pid] = { klo: nyt.klo, status: j.status || null, fs: [j.fs_A ?? null, j.fs_B ?? null], tulokset, ohi, alkanut,
@@ -354,7 +357,7 @@ async function paivitaLive() {
       else if (alkanut) {
         m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
         // Tuplapelissä jakso = peli (2 × 20 min). Näytetään meneillään oleva peli ja minuutti, kun kello käy.
-        const jakso = +j.live_period || 0, minu = j.live_timer_on === '1' || +j.live_minutes > 0 ? +j.live_minutes : null;
+        const jakso = +j.live_period || 0, mm = /^(\d+):\d{2}$/.exec(j.live_time_mmss || ''), minu = j.live_timer_on === '1' && mm ? +mm[1] + 1 : null;
         m.liveInfo = [jakso && +j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : jakso ? `${jakso}. jakso` : '', minu != null ? `${minu}'` : ''].filter(Boolean).join(' ') || undefined;
       }
       if (JSON.stringify([m.score, m.live && 1]) !== JSON.stringify([JSON.parse(ennen)[0], JSON.parse(ennen)[1] && 1])) muuttui = true;
