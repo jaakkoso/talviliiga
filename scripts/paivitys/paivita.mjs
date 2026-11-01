@@ -355,7 +355,9 @@ async function paivitaLive() {
       const ennen = JSON.stringify([m.score, m.live]);
       if (ohi && tulokset.length) { m.score = tulokset; delete m.live; delete m.liveInfo; }
       else if (alkanut) {
-        m.score = tulokset.length ? tulokset : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
+        // Pelin aikana näytetään vain alkaneet pelit (tuplapelin 1. pelin aikana sivulla näkyy jo 0–0 toiselle pelille)
+        const alkaneet = Math.max(1, +j.live_period || 1);
+        m.score = tulokset.length ? tulokset.slice(0, alkaneet) : [[+j.fs_A || 0, +j.fs_B || 0]]; m.live = nyt.klo;
         // Tuplapelissä jakso = peli (2 × 20 min). Näytetään meneillään oleva peli ja minuutti, kun kello käy.
         const jakso = +j.live_period || 0, mm = /^(\d+):\d{2}$/.exec(j.live_time_mmss || ''), minu = j.live_timer_on === '1' && mm ? +mm[1] + 1 : null;
         m.liveInfo = [jakso && +j.period_count === 2 && +j.period_min <= 25 ? `${jakso}. peli` : jakso ? `${jakso}. jakso` : '', minu != null ? `${minu}'` : ''].filter(Boolean).join(' ') || undefined;
