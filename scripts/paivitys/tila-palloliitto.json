@@ -25,18 +25,20 @@
   "syksy-2026": {
    "haetut": 7,
    "pelatut": 1,
-   "taulukko": 8
+   "taulukko": 8,
+   "lohko": 28
   },
   "kevat-2026": {
    "haetut": 7,
    "pelatut": 7,
-   "taulukko": 8
+   "taulukko": 8,
+   "lohko": 0
   }
  },
  "turnaukset": {},
  "ottelutiedot": {
-  "haettu": 1,
-  "puuttui": 1
+  "haettu": 0,
+  "puuttui": 0
  },
  "veo": {
   "tallenteet": 20,
