@@ -233,3 +233,18 @@ export function fudisTurnaus(t, { seura = /^SJK/ } = {}) {
     };
   });
 }
+
+/* ---------- Veo-tallenteet (julkinen lista: app.veo.co/api/app/clubs/<seura>/recordings/?team=<joukkue>) ----------
+   Tallenne yhdistetään otteluun päivän, alkuajan (±75 min) ja vastustajan nimen alun perusteella. Vain julkiset tallenteet. */
+const ydin4 = n => String(n || '').toLowerCase().replace(/^(fc|ff|fk|ac|if)\s+/, '').replace(/[^a-zäöå0-9]/g, '').slice(0, 4);
+const hkiAika = iso => { const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Helsinki', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(iso)).map(x => [x.type, x.value])); return { pvm: `${p.year}-${p.month}-${p.day}`, min: +p.hour * 60 + +p.minute }; };
+export function veoOsuma(tallenteet, m, oma = /^SJK/) {
+  const vast = oma.test(m.home) ? m.away : m.home;
+  const mm = (String(m.time || '').match(/(\d{1,2})[.:](\d{2})/) || []).slice(1).map(Number);
+  const aika = mm.length ? mm[0] * 60 + mm[1] : null;
+  const ehd = (tallenteet || []).filter(r => r.privacy === 'public' && r.start && r.slug).map(r => ({ r, a: hkiAika(r.start), vs: String(r.title || '').split(/\bvs\.?\s*/i)[1] || '' }))
+    .filter(x => x.a.pvm === m.date && (aika == null || Math.abs(x.a.min - aika) <= 75))
+    .filter(x => ydin4(x.vs) && ydin4(x.vs) === ydin4(vast))
+    .sort((x, y) => Math.abs(x.a.min - (aika ?? x.a.min)) - Math.abs(y.a.min - (aika ?? y.a.min)));
+  return ehd.length ? `https://app.veo.co/matches/${ehd[0].r.slug}/` : null;
+}

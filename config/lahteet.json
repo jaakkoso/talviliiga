@@ -106,5 +106,10 @@
    "suodatin": "P11|2015",
    "valmis": true
   }
- ]
+ ],
+ "veo": {
+  "seura": "sjk-juniorit-ry-2",
+  "joukkue": "sjk-p2015",
+  "kanava": "https://live.veo.co/web-app/clubs/sjk-juniorit-ry-2/teams/sjk-p2015/"
+ }
 }

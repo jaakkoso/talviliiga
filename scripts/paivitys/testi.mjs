@@ -72,3 +72,10 @@ assert.deepEqual(ft[0].matches[0].score, [[1, 3]]); assert.equal(ft[0].matches[1
 FT.groupStageMatches[1].homeGoals = 2; FT.groupStageMatches[1].awayGoals = 0;
 assert.deepEqual(fudisTurnaus(FT)[0].place, { pos: 1, of: 2 });
 console.log('Fudisturnaus-testi OK');
+
+import { veoOsuma } from './jasennys.mjs';
+const VR = [{ slug: 'a', title: 'SJK P2015 vs. APV', start: '2026-09-28T17:30:16+02:00', privacy: 'public' }, { slug: 'b', title: 'SJK P2015 vs. Fc Lahti/4', start: '2026-09-19T12:05:00+03:00', privacy: 'public' }, { slug: 'c', title: 'SJK P2015 vs. APV', start: '2026-09-28T17:30:16+02:00', privacy: 'private' }];
+assert.equal(veoOsuma(VR, { date: '2026-09-28', time: '18.30', home: 'SJK-j/musta -15', away: 'APV' }), 'https://app.veo.co/matches/a/');
+assert.equal(veoOsuma(VR, { date: '2026-09-19', time: '12.10', home: 'FC Lahti', away: 'SJK' }), 'https://app.veo.co/matches/b/');
+assert.equal(veoOsuma(VR, { date: '2026-09-28', time: '12.00', home: 'SJK', away: 'APV' }), null, 'aika liian kaukana');
+console.log('Veo-testi OK');

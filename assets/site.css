@@ -273,3 +273,7 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .live-pill{display:inline-block;margin-top:4px;padding:2px 7px;border-radius:999px;background:#c62828;color:#fff;font:700 11px/1.3 Figtree,system-ui,sans-serif;letter-spacing:.08em;animation:livepulse 1.6s ease-in-out infinite}
 @keyframes livepulse{50%{opacity:.55}}
 @media (prefers-reduced-motion:reduce){.live-pill{animation:none}}
+
+/* Veo-video otteluun */
+.veo-tag{display:inline-block;margin-top:3px;font:600 11px/1.3 Figtree,system-ui,sans-serif;color:var(--muted,#5f5a50);letter-spacing:.04em}
+.mdlg .btns{display:flex;flex-wrap:wrap;gap:8px}

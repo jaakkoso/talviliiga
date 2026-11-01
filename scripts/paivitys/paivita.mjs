@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus, veoOsuma } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -347,6 +347,24 @@ async function paivitaLive() {
   return jatkuu;
 }
 
+/* Veo-tallenteiden linkit otteluihin (julkinen lista, ei kirjautumista). Kotikone päivittää sarjat ja Huuhkajaliigan, GitHub turnaukset. */
+async function paivitaVeo(tiedostot) {
+  if (!cfg.veo) return;
+  let lista;
+  try {
+    const r = await fetch(`https://app.veo.co/api/app/clubs/${cfg.veo.seura}/recordings/?team=${cfg.veo.joukkue}`, { headers: { accept: 'application/json' } });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    lista = await r.json();
+  } catch (e) { varoita(`Veo: ${e.message}`); return; }
+  tila.veo = { tallenteet: lista.length, liitetty: 0 };
+  for (const p of tiedostot) {
+    const d = lue(p);
+    const ottelut = p.startsWith('piirisarja') ? d.teams.flatMap(t => t.matches) : p.startsWith('eerikkila') ? d.events.flatMap(e => e.matches) : d.events.flatMap(e => e.teams.flatMap(t => t.matches));
+    for (const m of ottelut) { if (m.veo) continue; const u = veoOsuma(lista, m); if (u) { m.veo = u; tila.veo.liitetty++; } }
+    kirjoita(p, d);
+  }
+}
+
 let liveJatkuu = true;
 try {
   if (MITA === 'live') liveJatkuu = await paivitaLive();
@@ -356,6 +374,7 @@ try {
     await paivitaOttelutiedot();
   }
   if (MITA !== 'palloliitto' && MITA !== 'live') await paivitaTurnaukset();
+  await paivitaVeo(MITA === 'turnaukset' ? ['turnaukset/data.json'] : MITA === 'live' ? ['eerikkila/data.json'] : MITA === 'palloliitto' ? ['eerikkila/data.json', 'piirisarja/data.json'] : ['eerikkila/data.json', 'piirisarja/data.json', 'turnaukset/data.json']);
 } finally { await selain.close(); }
 
 // Ajon tila talteen (ei aikaleimaa, joten tiedosto muuttuu vain kun tilanne muuttuu)
