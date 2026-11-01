@@ -40,15 +40,19 @@
       [
        0,
        3
+      ],
+      [
+       0,
+       0
       ]
      ],
      "pid": "4349275",
-     "live": "19.34",
-     "liveInfo": "1. peli",
+     "live": "19.36",
+     "liveInfo": "2. peli",
      "liveClock": {
       "s": 0,
-      "at": 1793554492493,
-      "on": true,
+      "at": 1793554562331,
+      "on": false,
       "max": 1200
      },
      "veo": "https://live.veo.co/matches/1c3f7320-63d0-448c-82f0-0c66c9695bd2@1793553207029"
