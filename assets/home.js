@@ -91,8 +91,8 @@
       bar.hidden = false;
       document.querySelectorAll(`.menu a[href="${liveHH.length ? 'eerikkila/' : 'turnaukset/'}"]`).forEach(a => a.insertAdjacentHTML('beforeend', '<i class="live-dot" aria-label="käynnissä"></i>'));
     } }
-  // Huuhkajaliigan pelipäivänä etusivu päivittyy itsestään 3 min välein
+  // Huuhkajaliigan pelipäivänä etusivu päivittyy itsestään 2 min välein
   { const n = new Date(), t = n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0');
-    if (eer.events.some(ev => ev.matches.some(m => m.live || m.date === t))) setTimeout(() => { if (!document.querySelector('dialog[open]')) location.reload(); }, 180000); }
+    if (eer.events.some(ev => ev.matches.some(m => m.live || m.date === t))) setTimeout(() => { if (!document.querySelector('dialog[open]')) location.reload(); }, 120000); }
   $('updated').textContent = `Tulokset Palloliiton ja turnausten tulospalveluista, päivitetty ${piiri.updated.split('-').reverse().map(Number).join('.')}.`;
 })();

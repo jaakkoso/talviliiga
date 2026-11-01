@@ -53,13 +53,13 @@
   let start = P15.store.get('eerikkila-tab', data.events[0].id);
   if (!data.events.some(e => e.id === start)) start = data.events[0].id;
   render(start);
-  // Pelipäivänä tilanne päivittyy itsestään 2 min välein (sivua ei tarvitse ladata uudelleen)
+  // Pelipäivänä tilanne päivittyy itsestään minuutin välein (sivua ei tarvitse ladata uudelleen)
   const tanaan = () => { const n = new Date(); return n.getFullYear() + '-' + String(n.getMonth() + 1).padStart(2, '0') + '-' + String(n.getDate()).padStart(2, '0'); };
   const pelipaiva = () => data.events.some(ev => ev.matches.some(m => m.live || m.date === tanaan()));
   setInterval(async () => {
     if (!pelipaiva() || document.hidden) return;
     try { const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) { data = await r.json(); render(tabs.querySelector('[aria-pressed="true"]')?.dataset.id || start); } } catch (e) {}
-  }, 120000);
+  }, 60000);
 })();
 </script>
 <script src="../assets/takaisin.js?v=20261022a"></script>

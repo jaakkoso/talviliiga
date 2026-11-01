@@ -334,7 +334,7 @@ async function paivitaLive() {
       aktiiviset = tanaan.filter(m => !valmis(m) && ikkuna(m));
     }
     const tulevat = tanaan.filter(m => !valmis(m) && nyt.min < minuutit(m.time) - 5).map(m => minuutit(m.time) - 5 - nyt.min);
-    if (aktiiviset.length) seuraava = 4; else if (tulevat.length) seuraava = Math.min(seuraava, Math.max(2, Math.min(...tulevat)));
+    if (aktiiviset.length) seuraava = 1; else if (tulevat.length) seuraava = Math.min(seuraava, Math.max(2, Math.min(...tulevat)));
     jatkuu = jatkuu || aktiiviset.length > 0 || tulevat.length > 0;
     let muuttui = false;
     for (const m of aktiiviset.filter(m => m.pid)) {
@@ -396,9 +396,14 @@ async function paivitaLive() {
     }
   }
   d.updated = tanaan;
+  // Julkaistaan heti, kun tulos, tila tai aikataulu muuttuu; pelkkä kello/minuutti enintään 8 min välein (GitHub Pagesin julkaisuraja n. 10/h)
+  const ilmanKelloa = o => JSON.stringify(o, (k, v) => (k === 'live' && typeof v === 'string') || k === 'liveInfo' || k === 'updated' ? (k === 'live' ? !!v : undefined) : v);
+  let vanha = null; try { vanha = lue('eerikkila/data.json'); } catch { }
+  let julkaistu = 0; try { julkaistu = fs.statSync('/tmp/p2015-live-julkaistu').mtimeMs; } catch { }
+  const julkaise = !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 8 * 60000;
   kirjoita('eerikkila/data.json', d);
   tila.live = diag;
-  try { fs.writeFileSync('/tmp/p2015-live-seuraava', String(seuraava)); } catch { }
+  try { fs.writeFileSync('/tmp/p2015-live-seuraava', String(seuraava)); fs.writeFileSync('/tmp/p2015-live-julkaise', julkaise ? '1' : '0'); } catch { }
   return jatkuu;
 }
 
@@ -419,6 +424,16 @@ async function paivitaVeo(tiedostot, vainTuoreet = false) {
     for (const m of ottelut) { if (m.veo || (vainTuoreet && (m.date < raja || m.date > tanaan))) continue; const u = veoOsuma(lista, m); if (u) { m.veo = u; tila.veo.liitetty++; } }
     kirjoita(p, d);
   }
+}
+
+/* Vanha live-silmukka (käynnistetty ennen päivitystä) vaihdetaan uuteen: käynnistetään uusi erillisenä prosessina ja pyydetään vanhaa lopettamaan. */
+if (MITA === 'live' && process.env.LIVE_VERSIO !== '2') {
+  const { spawn } = await import('node:child_process');
+  const loki = path.join(process.env.HOME || '/tmp', 'Library/Logs/p2015-live.log');
+  spawn('/bin/bash', ['-c', `sleep 20; cd "${JUURI}" && exec perl -MPOSIX -e 'POSIX::setsid(); exec @ARGV' scripts/kotikone/live.sh >> "${loki}" 2>&1`], { detached: true, stdio: 'ignore' }).unref();
+  console.log('Live-silmukka päivitetty: uusi käynnistyy 20 s kuluttua.');
+  await selain?.close();
+  process.exit(3);
 }
 
 let liveJatkuu = true;
