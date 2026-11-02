@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261102b">
+<link rel="stylesheet" href="../assets/site.css?v=20261102c">
 </head>
 <body>
 <header class="top">
@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261102b"></script>
+<script src="../assets/matches.js?v=20261102c"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -47,7 +47,7 @@
     const rivi = m => {
       const oma = P15.isOwn(m.home) || P15.isOwn(m.away);
       const tulos = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join('<br>') : '<span class="aika">–</span>';
-      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${P15.esc(m.time || '')}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.esc(m.home)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.esc(m.away)}</span></li>`;
+      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${P15.esc(m.time || '')}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.nimi(m.home)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.nimi(m.away)}</span></li>`;
     };
     return `<div class="lohko"><button type="button" class="btn lohko-btn" data-lohko aria-expanded="${auki}">${auki ? 'Piilota' : 'Näytä'} lohkon kaikki ottelut (${ev.lohko.length})</button>
       <div class="lohko-list" ${auki ? '' : 'hidden'}>${paivat.map(d => { const p = P15.parseDate(d); return `<h3>${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.</h3><ol>${lista.filter(m => m.date === d).map(rivi).join('')}</ol>`; }).join('')}
@@ -89,7 +89,7 @@
     const body = `<ol class="jk-list">${ms.map(m => {
       const p = P15.parseDate(m.date), koti = m.home === nimi, vast = koti ? m.away : m.home;
       const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${h}–${a} ${rivi(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${P15.esc(m.time || '')}</span>`;
-      return `<li class="${P15.isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${P15.esc(m.time || '')}</span><span class="jk-v">${koti ? 'vs' : '@'} ${P15.esc(vast)}</span><span class="jk-r">${tul}</span></li>`;
+      return `<li class="${P15.isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${P15.esc(m.time || '')}</span><span class="jk-v">${koti ? 'vs' : '@'} ${P15.nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
     }).join('')}</ol><p class="note">Tulokset kotijoukkue ensin. Tuplapeleissä molemmat pelit.</p>`;
     P15.openDialog("Joukkueen ottelut", `<h2 class="jk-h">${P15.esc(nimi)}</h2>` + body);
   }

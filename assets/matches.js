@@ -5,6 +5,9 @@ const P15 = (() => {
   const WD = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
   const LETTER = { W: 'V', D: 'T', L: 'H' };
   const isOwn = name => /^SJK(-j)?(\/|$)/.test(name);
+  // SJK-logo oman joukkueen nimen eteen, jotta omat pelit erottuvat listoista
+  const LOGO = new URL('logo-180.png', (document.currentScript && document.currentScript.src) || location.href).href;
+  const nimi = n => isOwn(n) ? `<img class="tlogo" src="${LOGO}" alt="" width="18" height="18">${esc(n)}` : esc(n);
   const parseDate = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 
   // Tulos oman joukkueen näkökulmasta. own = oman joukkueen nimi; tyhjä = kumpi tahansa SJK-j.
@@ -48,8 +51,8 @@ const P15 = (() => {
     return `<button type="button" class="match" data-mi="${mi}" aria-label="Ottelun tiedot: ${esc(m.home)} – ${esc(m.away)}">
       <span class="date">${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b></span>
       <span class="tm">${sub ? `<span class="ser">${esc(sub)}</span>` : ''}
-        <span class="${isOwn(m.home) ? 'me' : ''}">${esc(m.home)}</span>
-        <span class="${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>${m.veo ? '<span class="veo-tag"><b>▶</b> Video</span>' : ''}</span>
+        <span class="${isOwn(m.home) ? 'me' : ''}">${nimi(m.home)}</span>
+        <span class="${isOwn(m.away) ? 'me' : ''}">${nimi(m.away)}</span>${m.veo ? '<span class="veo-tag"><b>▶</b> Video</span>' : ''}</span>
       <span class="res">${right}</span></button>`;
   }
 
@@ -88,9 +91,9 @@ const P15 = (() => {
       <div class="mdlg-ser">${esc(m.series || '')}</div>
       <div class="mdlg-meta">${meta}</div>
       <div class="mdlg-score">
-        <span class="t h ${isOwn(m.home) ? 'me' : ''}">${esc(m.home)}</span>
+        <span class="t h ${isOwn(m.home) ? 'me' : ''}">${nimi(m.home)}</span>
         <span class="s">${score}</span>
-        <span class="t a ${isOwn(m.away) ? 'me' : ''}">${esc(m.away)}</span>
+        <span class="t a ${isOwn(m.away) ? 'me' : ''}">${nimi(m.away)}</span>
       </div>
       <div class="mdlg-sub">${[det && det.ht ? 'Puoliaika ' + esc(det.ht) : '', m.note ? esc(m.note) : '', verdict].filter(Boolean).join(' · ')}</div>
       ${m.veo ? `<a class="veo-big" href="${esc(m.veo)}" target="_blank" rel="noopener"><span>▶</span>Katso ottelu Veosta</a>` : ''}
@@ -130,11 +133,11 @@ const P15 = (() => {
       <div class="tbl-head"><b>${esc(t.name)}</b>${t.url ? `<a href="${t.url}" target="_blank" rel="noopener">Palloliitto ↗</a>` : ''}</div>
       <div class="tbl-scroll"><table>
         <thead><tr><th class="pos">#</th><th class="tn">Joukkue</th><th>O</th><th>V</th><th>T</th><th>H</th><th>Maalit</th><th>ME</th><th>P</th></tr></thead>
-        <tbody>${t.rows.map(r => `<tr class="${isOwn(r.team) ? 'own' : ''}${opt.teamClick ? ' clickable' : ''}" ${opt.teamClick ? `data-team="${esc(r.team)}" tabindex="0" role="button" aria-label="Näytä joukkueen ${esc(r.team)} ottelut"` : ''}><td class="pos">${r.pos}</td><td class="tn">${esc(r.team)}${opt.teamClick ? ' <span class="tn-more" aria-hidden="true">›</span>' : ''}</td><td>${r.o}</td><td>${r.v}</td><td>${r.t}</td><td>${r.h}</td><td>${r.gf}–${r.ga}</td><td>${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="pts">${r.p}</td></tr>`).join('')}</tbody>
+        <tbody>${t.rows.map(r => `<tr class="${isOwn(r.team) ? 'own' : ''}${opt.teamClick ? ' clickable' : ''}" ${opt.teamClick ? `data-team="${esc(r.team)}" tabindex="0" role="button" aria-label="Näytä joukkueen ${esc(r.team)} ottelut"` : ''}><td class="pos">${r.pos}</td><td class="tn">${nimi(r.team)}${opt.teamClick ? ' <span class="tn-more" aria-hidden="true">›</span>' : ''}</td><td>${r.o}</td><td>${r.v}</td><td>${r.t}</td><td>${r.h}</td><td>${r.gf}–${r.ga}</td><td>${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="pts">${r.p}</td></tr>`).join('')}</tbody>
       </table></div>
       ${empty ? '<p class="note">Sarja ei ole vielä alkanut.</p>' : ''}
     </div>`;
   }
   async function load(url) { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status); return r.json(); }
-  return { liveText, esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
+  return { nimi, liveText, esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
 })();
