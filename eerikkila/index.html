@@ -46,8 +46,8 @@
     const paivat = [...new Set(lista.map(m => m.date))];
     const rivi = m => {
       const oma = P15.isOwn(m.home) || P15.isOwn(m.away);
-      const tulos = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join('<br>') : `<span class="aika">${P15.esc(m.time || '')}</span>`;
-      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${m.score ? P15.esc(m.time || '') : ''}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.esc(m.home)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.esc(m.away)}</span></li>`;
+      const tulos = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join('<br>') : '<span class="aika">–</span>';
+      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${P15.esc(m.time || '')}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.esc(m.home)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.esc(m.away)}</span></li>`;
     };
     return `<div class="lohko"><button type="button" class="btn lohko-btn" data-lohko aria-expanded="${auki}">${auki ? 'Piilota' : 'Näytä'} lohkon kaikki ottelut (${ev.lohko.length})</button>
       <div class="lohko-list" ${auki ? '' : 'hidden'}>${paivat.map(d => { const p = P15.parseDate(d); return `<h3>${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.</h3><ol>${lista.filter(m => m.date === d).map(rivi).join('')}</ol>`; }).join('')}
