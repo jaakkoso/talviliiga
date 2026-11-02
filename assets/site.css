@@ -344,3 +344,5 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .jk-s{font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .jk-s.tuleva{font-weight:600;color:var(--muted)}
 .jk-s .pip{width:20px;height:20px;font-size:.7rem}
+
+.form .lbl small{display:block;font-size:.7rem;letter-spacing:.02em;text-transform:none;opacity:.8}

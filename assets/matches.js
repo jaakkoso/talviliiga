@@ -14,7 +14,8 @@ const P15 = (() => {
     return m.score.map(([h, a]) => { const f = home ? h : a, g = home ? a : h; return { f, g, r: f > g ? 'W' : f < g ? 'L' : 'D' }; });
   }
   function summary(matches, own) {
-    const rs = matches.filter(m => m.score).sort((a, b) => b.date.localeCompare(a.date)).flatMap(m => results(m, own));
+    // Uusin ensin: päivä ja kellonaika laskevasti, tuplapelissä 2. peli ennen 1. peliä
+    const rs = matches.filter(m => m.score).sort((a, b) => b.date.localeCompare(a.date) || (b.time || '').localeCompare(a.time || '')).flatMap(m => results(m, own).reverse());
     const c = r => rs.filter(x => x.r === r).length;
     return { p: rs.length, w: c('W'), d: c('D'), l: c('L'), gf: rs.reduce((s, x) => s + x.f, 0), ga: rs.reduce((s, x) => s + x.g, 0), form: rs.slice(0, 5) };
   }
@@ -26,7 +27,7 @@ const P15 = (() => {
       <div class="stat l"><b>${s.l}</b><small>Tappiot</small></div>
       <div class="stat"><b>${s.gf}–${s.ga}</b><small>Maalit</small></div>
     </div>
-    ${s.form.length ? `<div class="form"><span class="lbl">Viimeisimmät</span>${s.form.map(x => `<span class="pip ${x.r}" title="${x.f}–${x.g}">${LETTER[x.r]}</span>`).join('')}</div>` : ''}`;
+    ${s.form.length ? `<div class="form"><span class="lbl">Viimeisimmät <small>uusin vasemmalla</small></span>${s.form.map(x => `<span class="pip ${x.r}" title="${x.f}–${x.g}">${LETTER[x.r]}</span>`).join('')}</div>` : ''}`;
   }
   // Live-teksti: peli ja minuutti. Minuutti lasketaan pelikellosta haun jälkeen kuluneen ajan mukaan.
   function liveText(m) {
