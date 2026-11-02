@@ -92,8 +92,21 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "MuSa/Black",
      "away": "SJK-j/musta -15",
-     "score": null,
-     "pid": "4349254"
+     "score": [
+      [
+       0,
+       0
+      ]
+     ],
+     "pid": "4349254",
+     "live": "19.25",
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 0,
+      "at": 1793640337935,
+      "on": false,
+      "max": 1200
+     }
     },
     {
      "date": "2026-11-03",
