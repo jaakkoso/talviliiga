@@ -4,13 +4,18 @@
  "turnaukset": {},
  "live": {
   "4349254": {
-   "klo": "19.25",
+   "klo": "19.27",
    "status": "Live",
    "fs": [
     "0",
     "0"
    ],
-   "tulokset": [],
+   "tulokset": [
+    [
+     0,
+     0
+    ]
+   ],
    "ohi": false,
    "alkanut": true,
    "kentat": {
@@ -35,6 +40,8 @@
     "live_minutes": 0,
     "live_A": "0",
     "live_B": "0",
+    "live_ps_A": "0",
+    "live_ps_B": "0",
     "live_timeouts_A": 0,
     "live_timeouts_B": 0,
     "live_timeout_skip_A": 0,
@@ -42,17 +49,17 @@
     "periods_played": 0,
     "live_fouls_A": 0,
     "live_fouls_B": 0,
-    "live_timer_start": "0000-00-00 00:00:00",
+    "live_timer_start": "2026-11-02 19:27:34",
     "live_timer_start_time": "00:00:00",
-    "live_timer_on": "0",
+    "live_timer_on": "1",
     "lineups_public": 1,
     "lineups_published": 1
    },
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "MuSa/Black",
-    "00:00",
-    "–",
+    "00:25",
+    "0 – 0",
     "–",
     "SJK-j/musta -15",
     "SPL Huuhkaja-Helmariliiga 2026",
@@ -64,8 +71,8 @@
     "TUPLAPELI",
     "1. PELI",
     "MuSa/Black",
-    "00:00",
-    "–",
+    "00:25",
+    "0 – 0",
     "0 – 0",
     "SJK-j/musta -15",
     "Ennuste",
