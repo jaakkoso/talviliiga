@@ -99,17 +99,28 @@
     "rows": [
      {
       "pos": 1,
-      "team": "HPS",
-      "o": 4,
-      "v": 4,
+      "team": "EPS",
+      "o": 6,
+      "v": 5,
       "t": 0,
-      "h": 0,
-      "gf": 9,
-      "ga": 2,
-      "p": 12
+      "h": 1,
+      "gf": 18,
+      "ga": 7,
+      "p": 15
      },
      {
       "pos": 2,
+      "team": "HPS",
+      "o": 6,
+      "v": 4,
+      "t": 0,
+      "h": 2,
+      "gf": 13,
+      "ga": 9,
+      "p": 12
+     },
+     {
+      "pos": 3,
       "team": "JJK/YJ",
       "o": 4,
       "v": 3,
@@ -118,17 +129,6 @@
       "gf": 12,
       "ga": 5,
       "p": 10
-     },
-     {
-      "pos": 3,
-      "team": "EPS",
-      "o": 4,
-      "v": 3,
-      "t": 0,
-      "h": 1,
-      "gf": 11,
-      "ga": 3,
-      "p": 9
      },
      {
       "pos": 4,
@@ -315,13 +315,6 @@
     },
     {
      "date": "2026-11-02",
-     "time": "09.45",
-     "home": "P-Iirot/kelt",
-     "away": "Hercules -j",
-     "score": null
-    },
-    {
-     "date": "2026-11-02",
      "time": "10.45",
      "home": "JJK/YJ",
      "away": "SJK-j/musta -15",
@@ -389,6 +382,21 @@
      "home": "MuSa/Black",
      "away": "SJK-j/musta -15",
      "score": null
+    },
+    {
+     "date": "2026-11-02",
+     "home": "EPS",
+     "away": "HPS",
+     "score": [
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ]
+     ]
     },
     {
      "date": "2026-11-03",
