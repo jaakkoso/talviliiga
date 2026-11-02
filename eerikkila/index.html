@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261101l">
+<link rel="stylesheet" href="../assets/site.css?v=20261102a">
 </head>
 <body>
 <header class="top">
@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261101i"></script>
+<script src="../assets/matches.js?v=20261102a"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -67,7 +67,7 @@
         ${paivita}
         <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
         ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
-      </div>` + P15.tableHTML(ev.table) + lohkoHTML(ev) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
+      </div>` + P15.tableHTML(ev.table, { teamClick: !!(ev.lohko && ev.lohko.length) }) + lohkoHTML(ev) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
     P15.store.set('eerikkila-tab', id);
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });
@@ -81,6 +81,20 @@
     try { const r = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) { data = await r.json(); render(tabs.querySelector('[aria-pressed="true"]')?.dataset.id || start); } } catch (e) {}
   }
   setInterval(() => { if (pelipaiva() && !document.hidden) hae(); }, 60000);
+  // Joukkueen ottelut sarjataulukosta
+  function joukkueenOttelut(nimi) {
+    const ev = data.events.find(e => e.id === (tabs.querySelector('[aria-pressed="true"]')?.dataset.id || start));
+    const ms = [...(ev.lohko || [])].filter(m => m.home === nimi || m.away === nimi).sort((a, b) => a.date.localeCompare(b.date) || (a.time || '99').localeCompare(b.time || '99'));
+    const rivi = r => r === 'W' ? '<span class="pip W">V</span>' : r === 'D' ? '<span class="pip D">T</span>' : '<span class="pip L">H</span>';
+    const body = `<ol class="jk-list">${ms.map(m => {
+      const p = P15.parseDate(m.date), koti = m.home === nimi, vast = koti ? m.away : m.home;
+      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${h}–${a} ${rivi(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${P15.esc(m.time || '')}</span>`;
+      return `<li class="${P15.isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${P15.esc(m.time || '')}</span><span class="jk-v">${koti ? 'vs' : '@'} ${P15.esc(vast)}</span><span class="jk-r">${tul}</span></li>`;
+    }).join('')}</ol><p class="note">Tulokset kotijoukkue ensin. Tuplapeleissä molemmat pelit.</p>`;
+    P15.openDialog("Joukkueen ottelut", `<h2 class="jk-h">${P15.esc(nimi)}</h2>` + body);
+  }
+  view.addEventListener('click', e => { const r = e.target.closest('tr[data-team]'); if (r) joukkueenOttelut(r.dataset.team); });
+  view.addEventListener('keydown', e => { const r = e.target.closest('tr[data-team]'); if (r && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); joukkueenOttelut(r.dataset.team); } });
   view.addEventListener('click', e => { const b = e.target.closest('[data-lohko]'); if (!b) return; const auki = b.getAttribute('aria-expanded') !== 'true'; P15.store.set('lohko-auki', auki ? '1' : '0'); b.setAttribute('aria-expanded', auki); b.textContent = b.textContent.replace(/^(Näytä|Piilota)/, auki ? 'Piilota' : 'Näytä'); b.nextElementSibling.hidden = !auki; });
   view.addEventListener('click', async e => { const b = e.target.closest('[data-refresh]'); if (!b) return; b.classList.add('pyorii'); b.disabled = true; await hae(); });
   document.addEventListener('visibilitychange', () => { if (!document.hidden && pelipaiva()) hae(); });

@@ -129,7 +129,7 @@ const P15 = (() => {
       <div class="tbl-head"><b>${esc(t.name)}</b>${t.url ? `<a href="${t.url}" target="_blank" rel="noopener">Palloliitto ↗</a>` : ''}</div>
       <div class="tbl-scroll"><table>
         <thead><tr><th class="pos">#</th><th class="tn">Joukkue</th><th>O</th><th>V</th><th>T</th><th>H</th><th>Maalit</th><th>ME</th><th>P</th></tr></thead>
-        <tbody>${t.rows.map(r => `<tr class="${isOwn(r.team) ? 'own' : ''}"><td class="pos">${r.pos}</td><td class="tn">${esc(r.team)}</td><td>${r.o}</td><td>${r.v}</td><td>${r.t}</td><td>${r.h}</td><td>${r.gf}–${r.ga}</td><td>${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="pts">${r.p}</td></tr>`).join('')}</tbody>
+        <tbody>${t.rows.map(r => `<tr class="${isOwn(r.team) ? 'own' : ''}${opt.teamClick ? ' clickable' : ''}" ${opt.teamClick ? `data-team="${esc(r.team)}" tabindex="0" role="button" aria-label="Näytä joukkueen ${esc(r.team)} ottelut"` : ''}><td class="pos">${r.pos}</td><td class="tn">${esc(r.team)}${opt.teamClick ? ' <span class="tn-more" aria-hidden="true">›</span>' : ''}</td><td>${r.o}</td><td>${r.v}</td><td>${r.t}</td><td>${r.h}</td><td>${r.gf}–${r.ga}</td><td>${r.gf - r.ga > 0 ? '+' : ''}${r.gf - r.ga}</td><td class="pts">${r.p}</td></tr>`).join('')}</tbody>
       </table></div>
       ${empty ? '<p class="note">Sarja ei ole vielä alkanut.</p>' : ''}
     </div>`;
