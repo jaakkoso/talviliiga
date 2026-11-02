@@ -132,6 +132,17 @@
      },
      {
       "pos": 4,
+      "team": "Hercules -j",
+      "o": 6,
+      "v": 2,
+      "t": 2,
+      "h": 2,
+      "gf": 9,
+      "ga": 9,
+      "p": 8
+     },
+     {
+      "pos": 5,
       "team": "SJK-j/musta -15",
       "o": 4,
       "v": 2,
@@ -140,17 +151,6 @@
       "gf": 6,
       "ga": 5,
       "p": 7
-     },
-     {
-      "pos": 5,
-      "team": "Hercules -j",
-      "o": 4,
-      "v": 1,
-      "t": 2,
-      "h": 1,
-      "gf": 6,
-      "ga": 6,
-      "p": 5
      },
      {
       "pos": 6,
@@ -166,13 +166,13 @@
      {
       "pos": 7,
       "team": "P-Iirot/kelt",
-      "o": 4,
-      "v": 0,
+      "o": 6,
+      "v": 1,
       "t": 0,
-      "h": 4,
-      "gf": 4,
-      "ga": 12,
-      "p": 0
+      "h": 5,
+      "gf": 7,
+      "ga": 15,
+      "p": 3
      },
      {
       "pos": 8,
@@ -315,13 +315,6 @@
     },
     {
      "date": "2026-11-02",
-     "time": "09.45",
-     "home": "P-Iirot/kelt",
-     "away": "Hercules -j",
-     "score": null
-    },
-    {
-     "date": "2026-11-02",
      "time": "10.45",
      "home": "JJK/YJ",
      "away": "SJK-j/musta -15",
@@ -389,6 +382,22 @@
      "home": "MuSa/Black",
      "away": "SJK-j/musta -15",
      "score": null
+    },
+    {
+     "date": "2026-11-02",
+     "time": "09.45",
+     "home": "P-Iirot/kelt",
+     "away": "Hercules -j",
+     "score": [
+      [
+       2,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ]
     },
     {
      "date": "2026-11-02",
