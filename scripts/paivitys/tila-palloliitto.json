@@ -1,8 +1,8 @@
 {
  "piirisarjat": {
   "SJK-j/musta -15": {
-   "ottelut": 36,
-   "pelatut": 34,
+   "ottelut": 37,
+   "pelatut": 35,
    "taulukot": 3
   },
   "SJK-j/kulta": {
@@ -23,8 +23,8 @@
  },
  "huuhkajaliiga": {
   "syksy-2026": {
-   "haetut": 6,
-   "pelatut": 4,
+   "haetut": 7,
+   "pelatut": 5,
    "taulukko": 8,
    "lohko": 28
   },
@@ -37,15 +37,13 @@
  },
  "turnaukset": {},
  "ottelutiedot": {
-  "haettu": 0,
+  "haettu": 1,
   "puuttui": 1
  },
  "veo": {
   "tallenteet": 20,
-  "liitetty": 0
+  "liitetty": 1
  },
- "varoitukset": [
-  "Ottelutiedot 4349254: page.waitForFunction: Timeout 20000ms exceeded."
- ],
+ "varoitukset": [],
  "diagnoosi": {}
 }
