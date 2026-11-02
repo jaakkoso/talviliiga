@@ -38,12 +38,14 @@
  "turnaukset": {},
  "ottelutiedot": {
   "haettu": 0,
-  "puuttui": 0
+  "puuttui": 1
  },
  "veo": {
   "tallenteet": 20,
   "liitetty": 1
  },
- "varoitukset": [],
+ "varoitukset": [
+  "Ottelutiedot 4349272: page.waitForFunction: Timeout 20000ms exceeded."
+ ],
  "diagnoosi": {}
 }
