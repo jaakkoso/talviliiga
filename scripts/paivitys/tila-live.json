@@ -4,7 +4,7 @@
  "turnaukset": {},
  "live": {
   "4349254": {
-   "klo": "19.41",
+   "klo": "19.42",
    "status": "Live",
    "fs": [
     "0",
@@ -13,7 +13,7 @@
    "tulokset": [
     [
      0,
-     3
+     4
     ],
     [
      0,
@@ -40,9 +40,9 @@
     "period_count_fixed": "0",
     "period_min": "20",
     "live_period": "1",
-    "live_time": "00:11:37",
-    "live_time_mmss": "11:37",
-    "live_minutes": 11,
+    "live_time": "00:13:37",
+    "live_time_mmss": "13:37",
+    "live_minutes": 13,
     "live_A": "0",
     "live_B": "3",
     "live_ps_A": "0",
@@ -63,8 +63,8 @@
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "MuSa/Black",
-    "13:27",
-    "0 – 3",
+    "14:37",
+    "0 – 4",
     "0 – 0",
     "SJK-j/musta -15",
     "SPL Huuhkaja-Helmariliiga 2026",
@@ -76,12 +76,13 @@
     "TUPLAPELI",
     "1. PELI",
     "MuSa/Black",
-    "13:27",
-    "0 – 3",
+    "14:37",
+    "0 – 4",
     "0 – 0",
     "SJK-j/musta -15",
     "Hattula   1' 7'",
     "Makkonen   8'",
+    "Esala   14'",
     "Ennuste",
     "5°C"
    ]
