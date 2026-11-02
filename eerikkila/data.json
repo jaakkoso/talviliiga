@@ -110,7 +110,8 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "EPS",
      "away": "SJK-j/musta -15",
-     "score": null
+     "score": null,
+     "pid": "4349264"
     },
     {
      "date": "2026-11-03",
@@ -118,7 +119,8 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "SJK-j/musta -15",
      "away": "HPS",
-     "score": null
+     "score": null,
+     "pid": "4349268"
     }
    ],
    "table": {
