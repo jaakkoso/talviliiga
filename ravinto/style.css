@@ -1,0 +1,119 @@
+/* Pelipäivän eväät. Värit ja fontit lainattu assets/site.css-tiedostosta, lisäksi tumma teema. */
+:root{
+  --bg:#f5f3ec; --surface:#fff; --surface2:#efece2; --ink:#211e1e; --muted:#5b5650; --line:#d9d3bf;
+  --gold:#bdb03a; --gold-ink:#6a6210; --head:#211e1e; --head-ink:#fff;
+  --ok:#17804a; --ok-bg:#dff3e7; --tip-bg:#f4efd2; --tip-ink:#5c5310; --band:#211e1e; --band-ink:#fff;
+  --display:"Saira Condensed","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="vaalea"]){
+    --bg:#151413; --surface:#211f1d; --surface2:#2c2a27; --ink:#f3f0e6; --muted:#b5afa3; --line:#3d3a35;
+    --gold:#d6c84a; --gold-ink:#e0d35c; --head:#000; --ok:#57c88c; --ok-bg:#17352a; --tip-bg:#37331a; --tip-ink:#ece29a; --band:#37342f; --band-ink:#f3f0e6;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="tumma"]{
+  --bg:#151413; --surface:#211f1d; --surface2:#2c2a27; --ink:#f3f0e6; --muted:#b5afa3; --line:#3d3a35;
+  --gold:#d6c84a; --gold-ink:#e0d35c; --head:#000; --ok:#57c88c; --ok-bg:#17352a; --tip-bg:#37331a; --tip-ink:#ece29a; --band:#37342f; --band-ink:#f3f0e6;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 18px/1.45 var(--body);-webkit-text-size-adjust:100%;padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main:focus{outline:none}
+a{color:inherit}
+h2,h3{font-family:var(--display);font-weight:800;text-transform:uppercase;line-height:1.05;margin:0}
+h2{font-size:1.7rem} h3{font-size:1.25rem}
+p{margin:0}
+svg{width:24px;height:24px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.top{background:var(--head);color:var(--head-ink);padding-top:env(safe-area-inset-top,0px)}
+.top-in{max-width:640px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.top img{flex:none}
+.eyebrow{font:600 .72rem var(--display);letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+.top h1{font:800 1.55rem/1 var(--display);text-transform:uppercase;margin:1px 0 0}
+.wrap{max-width:640px;margin:0 auto;padding:16px;display:grid;gap:18px;min-width:0}
+.wrap>*{min-width:0}
+.pino{display:grid;gap:12px;min-width:0}
+.pieni{font-size:.86rem;color:var(--muted)}
+
+.nav{position:fixed;inset:auto 0 0 0;z-index:5;display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;text-decoration:none;font-size:.78rem;font-weight:600;color:var(--muted)}
+.nav a[aria-current="page"]{color:var(--ink);box-shadow:inset 0 3px 0 var(--gold)}
+
+.nappi{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:10px 18px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font:600 1rem var(--body);cursor:pointer;text-decoration:none;text-align:center}
+.nappi.paa{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.nappi.leve{width:100%}
+.nappi.pieni-nappi{min-height:44px;padding:6px 12px;font-size:.92rem}
+.napit{display:flex;gap:10px;flex-wrap:wrap}
+
+.pvmt{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-inline:-16px;padding:2px 16px}
+.pvmt a{flex:none;min-height:44px;display:flex;align-items:center;padding:6px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);text-decoration:none;font-weight:600;font-size:.95rem}
+.pvmt a[aria-current="date"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+
+.kortti{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+.taso h2{font-size:2.1rem}
+.taso .perustelu{font-size:1.02rem}
+.vinkit{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:.95rem}
+.vinkit li{display:flex;gap:8px;align-items:flex-start}
+.vinkit svg{width:20px;height:20px;margin-top:3px;color:var(--gold-ink)}
+.ilmoitus{background:var(--tip-bg);color:var(--tip-ink);border-radius:12px;padding:10px 14px;font-size:.95rem}
+
+.jana{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.jana li{display:grid;grid-template-columns:58px minmax(0,1fr);gap:10px;align-items:start}
+.klo{font:800 1.2rem/1 var(--display);padding-top:15px;font-variant-numeric:tabular-nums}
+.tapahtuma{display:grid;gap:5px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;text-decoration:none;min-width:0;min-height:56px}
+.tapahtuma.juoma{background:var(--band);color:var(--band-ink);border-color:var(--band)}
+.tapahtuma.juoma .pieni{color:inherit;opacity:.8}
+.rivi{display:flex;gap:8px;align-items:center;min-width:0}
+.rivi>svg{color:var(--gold-ink)}
+.tapahtuma.juoma .rivi>svg{color:var(--gold)}
+.otsikko{font-weight:700;font-size:1.05rem;min-width:0;overflow-wrap:anywhere}
+.kasvu{flex:1;min-width:0}
+.chevron{width:18px;height:18px;opacity:.5}
+.merkki{display:inline-block;font-size:.8rem;font-weight:600;border-radius:999px;padding:2px 10px;background:var(--surface2);color:var(--ink);white-space:nowrap}
+.merkki.tankissa,.merkki.reilusti{background:var(--ok-bg);color:var(--ok)}
+.merkki.lisaa{background:var(--tip-bg);color:var(--tip-ink)}
+.huomio{font-size:.88rem;color:var(--tip-ink);background:var(--tip-bg);border-radius:8px;padding:3px 9px;justify-self:start}
+.tapahtuma.juoma .huomio{color:var(--tip-ink)}
+
+.takaisin{display:inline-flex;align-items:center;gap:6px;min-height:44px;text-decoration:none;font-weight:600}
+.mittari{display:grid;gap:4px}
+.mittari .otsake{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:baseline}
+.mittari b{font-weight:700}
+.palkki{position:relative;height:14px;border-radius:7px;background:var(--surface2);overflow:hidden}
+.palkki i{position:absolute;inset:0 auto 0 0;background:var(--gold);border-radius:7px}
+.palkki.tankissa i,.palkki.reilusti i{background:var(--ok)}
+.palkki u{position:absolute;top:0;bottom:0;width:2px;background:var(--ink);opacity:.45}
+
+.ryhma{display:grid;gap:8px}
+.ryhma h3{color:var(--muted);font-size:1.05rem;margin-top:6px}
+.tuote{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}
+.tuote.valittu{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.tuote .nimi{font-weight:600;overflow-wrap:anywhere}
+.askel{display:flex;align-items:center;gap:4px;flex:none}
+.askel button{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface2);color:var(--ink);display:grid;place-items:center;cursor:pointer;padding:0}
+.askel output{min-width:30px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+
+.osio{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line);min-width:0}
+.osio:first-of-type{border-top:0}
+.osio .klo{padding:0;flex:none;width:52px}
+.ikoninappi{width:46px;height:46px;flex:none;border:0;background:none;color:var(--muted);display:grid;place-items:center;border-radius:50%;cursor:pointer}
+.ostos{display:flex;gap:12px;align-items:center;min-height:56px;padding:6px 0;border-top:1px solid var(--line);cursor:pointer}
+.ostos input{width:26px;height:26px;flex:none;accent-color:var(--ok)}
+.ostos.ostettu .nimi{text-decoration:line-through;color:var(--muted)}
+
+label.kentta{display:grid;gap:4px;font-weight:600;font-size:.95rem}
+input,select,textarea{font:400 1.05rem var(--body);min-height:50px;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);width:100%;min-width:0}
+input[type=checkbox],input[type=radio]{min-height:0;width:24px;height:24px}
+textarea{min-height:110px}
+.valinta{display:flex;gap:10px;align-items:center;min-height:44px}
+.valinnat{border:0;margin:0;padding:0}
+.valinnat legend{font-weight:600;font-size:.95rem;padding:0}
+dialog{border:0;border-radius:16px;padding:18px;width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 32px);background:var(--surface);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog form,dialog .pino{display:grid;gap:12px}
+form[data-tyyppi="ateria"] .vain-liike,form:not([data-tyyppi="ateria"]) .vain-ateria{display:none}

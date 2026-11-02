@@ -1,0 +1,43 @@
+{
+  "versio": 1,
+  "id": "eerikkila-2026-11",
+  "nimi": "Huuhkajaliiga P11, Eerikkilä",
+  "paikka": "Eerikkilän Urheiluopisto",
+  "joukkue": "SJK-j/musta -15",
+  "lahde": { "tyyppi": "kasin", "huom": "Ohjelma joukkueenjohtajalta. Ottelut vastaavat tiedostoa eerikkila/data.json." },
+  "paivat": [
+    {
+      "pvm": "2026-11-01",
+      "osiot": [
+        { "id": "su-lounas", "tyyppi": "ateria", "ateria": "lounas", "alku": "11.30", "kesto": null, "nimi": "Lounas" },
+        { "id": "su-testit", "tyyppi": "testi", "alku": "13.00", "kesto": 30, "nimi": "Nopeus- ja hyppytestit", "huom": "Kesto päätelty seuraavan osion alusta." },
+        { "id": "su-juoksu", "tyyppi": "testi", "alku": "13.30", "kesto": null, "nimi": "Juoksu/pallo", "huom": "Kesto ei ole tiedossa." },
+        { "id": "su-peli1", "tyyppi": "peli", "alku": "15.30", "kesto": 45, "nimi": "P-Iirot/kelt - SJK-j/musta -15", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "su-paivallinen", "tyyppi": "ateria", "ateria": "paivallinen", "alku": "17.00", "kesto": null, "nimi": "Päivällinen" },
+        { "id": "su-peli2", "tyyppi": "peli", "alku": "19.15", "kesto": 45, "nimi": "SJK-j/musta -15 - Hercules -j", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "su-iltapala", "tyyppi": "ateria", "ateria": "iltapala", "alku": "20.30", "kesto": null, "nimi": "Iltapala" }
+      ]
+    },
+    {
+      "pvm": "2026-11-02",
+      "osiot": [
+        { "id": "ma-aamiainen", "tyyppi": "ateria", "ateria": "aamiainen", "alku": "08.15", "kesto": null, "nimi": "Aamiainen" },
+        { "id": "ma-peli1", "tyyppi": "peli", "alku": "10.45", "kesto": 45, "nimi": "JJK/YJ - SJK-j/musta -15", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "ma-lounas", "tyyppi": "ateria", "ateria": "lounas", "alku": "12.15", "kesto": null, "nimi": "Lounas" },
+        { "id": "ma-peli2", "tyyppi": "peli", "alku": "14.45", "kesto": 45, "nimi": "SJK-j/musta -15 - FF Jaro/-15", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "ma-paivallinen", "tyyppi": "ateria", "ateria": "paivallinen", "alku": "16.45", "kesto": null, "nimi": "Päivällinen" },
+        { "id": "ma-peli3", "tyyppi": "peli", "alku": "19.30", "kesto": 45, "nimi": "MuSa/Black - SJK-j/musta -15", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "ma-iltapala", "tyyppi": "ateria", "ateria": "iltapala", "alku": "20.45", "kesto": null, "nimi": "Iltapala" }
+      ]
+    },
+    {
+      "pvm": "2026-11-03",
+      "osiot": [
+        { "id": "ti-aamiainen", "tyyppi": "ateria", "ateria": "aamiainen", "alku": "07.45", "kesto": null, "nimi": "Aamiainen" },
+        { "id": "ti-peli1", "tyyppi": "peli", "alku": "09.45", "kesto": 45, "nimi": "EPS - SJK-j/musta -15", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } },
+        { "id": "ti-lounas", "tyyppi": "ateria", "ateria": "lounas", "alku": "11.00", "kesto": null, "nimi": "Lounas" },
+        { "id": "ti-peli2", "tyyppi": "peli", "alku": "12.45", "kesto": 45, "nimi": "SJK-j/musta -15 - HPS", "pelimuoto": "7v7", "jaksot": { "maara": 2, "pituus": 20 } }
+      ]
+    }
+  ]
+}

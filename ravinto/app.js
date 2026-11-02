@@ -1,0 +1,645 @@
+// Käyttöliittymä: näkymät, reititys ja tallennus. Logiikka on js/-kansion puhtaissa funktioissa.
+import { IKKUNAT, SAANNOT } from "./js/saannot.js";
+import { kello, minuutit } from "./js/aika.js";
+import { ohjelmanPaivat } from "./js/aikajana.js";
+import { ikkunanTila, ostoslista, paivanYhteenveto, tuotteetIkkunaan } from "./js/tavoitteet.js";
+import { tuoOhjelma } from "./js/tuonti.js";
+import { lataa, tallenna, tyhjenna } from "./js/tallennus.js";
+import { luoOmaTuote, omaHuomio, tuoOmatTuotteet } from "./js/omat-tuotteet.js";
+
+const sisalto = document.getElementById("sisalto");
+const valikko = document.getElementById("valikko");
+const dialogi = document.getElementById("dialogi");
+
+const varasto = (() => {
+  try { return window.localStorage; } catch { return { getItem: () => null, setItem() {}, removeItem() {} }; }
+})();
+
+let tila = lataa(varasto);
+let tuotteet = [];
+let tuoteVirhe = false;
+const ui = { kaikkiTuotteet: false, lahteet: null, viesti: null };
+
+const TASOT = { lepo: "Lepopäivä", kevyt: "Kevyt päivä", peli: "Pelipäivä", kova: "Kova pelipäivä", turnaus: "Turnauspäivä" };
+const RYHMAT = { hedelma: "Hedelmät ja marjat", vilja: "Viljat", leipa: "Leivät", maito: "Maitotuotteet", juoma: "Juomat", ateria: "Ateriat", patukka: "Patukat", makeinen: "Makeiset", keksi: "Keksit ja leivonnaiset", pahkina: "Pähkinät", valmisruoka: "Valmisruoat", oma: "Omat tuotteet" };
+const ATERIAT = { aamiainen: "Aamiainen", lounas: "Lounas", paivallinen: "Päivällinen", iltapala: "Iltapala", valipala: "Välipala" };
+const OSIOT = { peli: "Peli", harjoitus: "Harjoitus", testi: "Testi", ateria: "Ateria" };
+const TILAT = { lisaa: "Lisää tankkausta", tankissa: "Tankki täynnä", reilusti: "Reilusti tankissa" };
+
+const POLUT = {
+  kalenteri: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  lista: '<path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/>',
+  kassi: '<path d="M5 8h14l-1 13H6L5 8z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
+  asetus: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  ruoka: '<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 3c-2 1-3 4-3 7s1 4 3 4v7"/>',
+  pisara: '<path d="M12 3s6 7 6 11a6 6 0 0 1-12 0c0-4 6-11 6-11z"/>',
+  pallo: '<circle cx="12" cy="12" r="9"/><path d="M12 8l3.8 2.8-1.5 4.4H9.7l-1.5-4.4L12 8zM12 3v5M21 10l-5.2.8M18 19.5l-3.7-4.3M6 19.5l3.7-4.3M3 10l5.2.8"/>',
+  juoksu: '<circle cx="15" cy="5" r="2"/><path d="M6 21l4-5 1-5 4 3 3 1M11 11l-3 1-2 3M11 11l1-3 3 1"/>',
+  vinkki: '<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+  oikea: '<path d="M9 5l7 7-7 7"/>',
+  vasen: '<path d="M15 5l-7 7 7 7"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  miinus: '<path d="M5 12h14"/>',
+  kyna: '<path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/>',
+  roska: '<path d="M4 7h16M9 7V4h6v3M6 7l1 14h10l1-14"/>',
+};
+const ikoni = (n) => `<svg viewBox="0 0 24 24" aria-hidden="true">${POLUT[n]}</svg>`;
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const luku = (x) => String(Math.round(x * 10) / 10).replace(".", ",");
+const haarukka = (h, y) => `${h[0]}–${h[1]} ${y}`;
+
+function pvmTeksti(pvm) {
+  const [v, k, p] = pvm.split("-").map(Number);
+  const vk = ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"][new Date(Date.UTC(v, k - 1, p)).getUTCDay()];
+  return `${vk} ${p}.${k}.`;
+}
+function tanaan() {
+  const n = new Date();
+  return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, "0")}-${String(n.getDate()).padStart(2, "0")}`;
+}
+
+// Tila
+const aktiivinen = () => tila.ohjelmat.find((o) => o.id === tila.aktiivinenOhjelma) ?? null;
+const kaikkiTuotteet = () => [...tuotteet, ...tila.omatTuotteet];
+const tuoteKartta = () => new Map(kaikkiTuotteet().map((t) => [t.id, t]));
+function valinnatNyt() {
+  const o = aktiivinen();
+  return o ? (tila.valinnat[o.id] ??= {}) : {};
+}
+function talleta() {
+  if (!tallenna(varasto, tila)) ui.viesti = "Tallennus ei onnistunut tällä laitteella. Muutokset katoavat, kun sivu suljetaan.";
+}
+function laskePaivat(ohjelma) {
+  try { return ohjelmanPaivat(ohjelma); } catch { return null; }
+}
+
+function teema() {
+  const t = tila.asetukset.teema;
+  if (t === "auto") document.documentElement.removeAttribute("data-theme");
+  else document.documentElement.dataset.theme = t;
+}
+
+// Reititys
+function reitti() {
+  const osat = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
+  return { nakyma: osat[0] || "paiva", a: osat[1], b: osat[2] };
+}
+function piirra(sailytaVieritys = false) {
+  const y = window.scrollY;
+  const r = reitti();
+  const nakymat = { paiva: nakymaPaiva, ikkuna: nakymaIkkuna, ohjelma: nakymaOhjelma, ostos: nakymaOstos, asetukset: nakymaAsetukset };
+  const viesti = ui.viesti ? `<p class="ilmoitus" role="status">${esc(ui.viesti)}</p>` : "";
+  sisalto.innerHTML = viesti + (nakymat[r.nakyma] ?? nakymaPaiva)(r);
+  const nyt = r.nakyma === "ikkuna" ? "paiva" : r.nakyma;
+  const linkit = [["paiva", "Päivä", "kalenteri"], ["ohjelma", "Ohjelma", "lista"], ["ostos", "Ostokset", "kassi"], ["asetukset", "Asetukset", "asetus"]];
+  valikko.innerHTML = linkit.map(([id, nimi, kuva]) => `<a href="#/${id}"${id === nyt ? ' aria-current="page"' : ""}>${ikoni(kuva)}${nimi}</a>`).join("");
+  window.scrollTo(0, sailytaVieritys ? y : 0);
+}
+
+// Päivä
+function tyhjaTila() {
+  return `<section class="kortti pino">
+    <h2>Aloitetaan ohjelmasta</h2>
+    <p>Appi tarvitsee päivän pelit, harjoitukset ja ateriat. Niistä syntyy syömisen ja juomisen aikajana.</p>
+    <button class="nappi paa leve" data-toiminto="eerikkila">Ota Eerikkilän ohjelma</button>
+    <a class="nappi leve" href="#/ohjelma">Tee oma tai tuo ohjelma</a>
+  </section>`;
+}
+
+function valintaRivi(w) {
+  const valinnat = valinnatNyt()[w.id] ?? [];
+  if (!valinnat.length) return "";
+  const kartta = tuoteKartta();
+  const nimet = valinnat.map((v) => `${kartta.get(v.tuoteId)?.nimi ?? v.tuoteId}${v.annoksia !== 1 ? ` × ${luku(v.annoksia)}` : ""}`).join(", ");
+  const t = ikkunanTila(w, valinnat, kartta);
+  const pohja = w.tavoite.hh ? t.hh : t.neste;
+  const merkki = pohja.tavoite && !t.puuttuvat.length ? `<span class="merkki ${pohja.tila}">${TILAT[pohja.tila]}</span>` : "";
+  return `<div class="pieni">${esc(nimet)}</div>${merkki ? `<div>${merkki}</div>` : ""}`;
+}
+
+function tavoiteTeksti(w) {
+  const osat = [];
+  if (w.tavoite.hh) osat.push(`hiilihydraatti ${haarukka(w.tavoite.hh, "g")}`);
+  if (w.tavoite.prot) osat.push(`proteiini ${haarukka(w.tavoite.prot, "g")}`);
+  if (w.tavoite.neste) osat.push(`juomaa ${haarukka(w.tavoite.neste, "dl")}`);
+  const t = osat.join(", ");
+  return t ? t[0].toUpperCase() + t.slice(1) : "";
+}
+
+function rooliTeksti(w) {
+  if (w.tyyppi !== "kiintea" || !w.rooli || w.rooli === "normaali") return "";
+  return `Toimii näin: ${IKKUNAT[w.rooli]?.otsikko ?? w.rooli}`;
+}
+
+function janaRivi(pvm, w) {
+  const kuva = !w.syominen ? (w.tyyppi === "peli" ? "pallo" : "juoksu") : "ruoka";
+  const huom = w.huomautukset.map((h) => `<div class="huomio">${esc(h)}</div>`).join("");
+  const otsikko = w.tyyppi === "peli" || w.tyyppi === "liikunta" ? (ohjelmanOsionNimi(w) ?? w.otsikko) : w.otsikko;
+  return `<li><div class="klo">${kello(w.alku)}</div>
+    <a class="tapahtuma ${w.syominen ? "" : "juoma"}" href="#/ikkuna/${encodeURIComponent(pvm)}/${encodeURIComponent(w.id)}">
+      <div class="rivi">${ikoni(kuva)}<span class="otsikko kasvu">${esc(otsikko)}</span>${`<svg class="chevron" viewBox="0 0 24 24" aria-hidden="true">${POLUT.oikea}</svg>`}</div>
+      ${rooliTeksti(w) ? `<div class="pieni">${esc(rooliTeksti(w))}</div>` : ""}
+      <div class="pieni">${esc(tavoiteTeksti(w))}</div>
+      ${valintaRivi(w)}${huom}
+    </a></li>`;
+}
+
+function ohjelmanOsionNimi(w) {
+  const o = aktiivinen();
+  for (const p of o?.paivat ?? []) {
+    const osio = p.osiot.find((x) => x.id === w.osioId);
+    if (osio) return osio.nimi;
+  }
+  return null;
+}
+
+function valittuPaiva(paivat, toivottu) {
+  return paivat.find((p) => p.paiva.pvm === toivottu) ?? paivat.find((p) => p.paiva.pvm === tanaan()) ?? paivat[0];
+}
+
+function nakymaPaiva(r) {
+  const o = aktiivinen();
+  if (!o) return tyhjaTila();
+  const paivat = laskePaivat(o);
+  if (!paivat) return `<p class="ilmoitus">Ohjelmassa on virhe, eikä aikajanaa voi laskea. Tarkista kellonajat ohjelmasta.</p><a class="nappi leve" href="#/ohjelma">Avaa ohjelma</a>`;
+  if (!paivat.length) return `<section class="kortti pino"><h2>${esc(o.nimi)}</h2><p>Ohjelmassa ei ole vielä päiviä.</p><a class="nappi paa leve" href="#/ohjelma">Lisää päivä</a></section>`;
+  const nyt = valittuPaiva(paivat, r.a);
+  const y = paivanYhteenveto(nyt.ikkunat, valinnatNyt(), tuoteKartta());
+  const valittu = nyt.ikkunat.some((w) => (valinnatNyt()[w.id] ?? []).length);
+  const vinkit = nyt.vinkit.map((v) => `<li>${ikoni("vinkki")}<span>${esc(SAANNOT.vinkit[v])}</span></li>`).join("");
+  const varoitukset = nyt.varoitukset.map((v) => `<p class="ilmoitus">${esc(v)}</p>`).join("");
+  return `
+    <div class="pvmt">${paivat.map((p) => `<a href="#/paiva/${p.paiva.pvm}"${p === nyt ? ' aria-current="date"' : ""}>${pvmTeksti(p.paiva.pvm)}</a>`).join("")}</div>
+    <section class="kortti taso">
+      <div class="pieni">${esc(o.nimi)}</div>
+      <h2>${TASOT[nyt.rasitus.taso]}</h2>
+      <p class="perustelu">${esc(nyt.rasitus.perustelu)}</p>
+      ${valittu && y.hh.summa > 0 && y.hh.vahintaan ? `<p class="pieni">Päivän tankkaus nyt ${luku(y.hh.summa)} g hiilihydraattia, suunta vähintään ${y.hh.vahintaan} g.</p>` : ""}
+    </section>
+    ${varoitukset}
+    ${vinkit ? `<ul class="vinkit">${vinkit}</ul>` : ""}
+    ${nyt.ikkunat.length
+      ? `<ol class="jana">${nyt.ikkunat.map((w) => janaRivi(nyt.paiva.pvm, w)).join("")}</ol>`
+      : `<p class="pieni">Tälle päivälle ei ole syömisikkunoita. Syö tavalliseen tapaan.</p>`}`;
+}
+
+// Ikkuna
+function mittari(nimi, rivi, yksikko) {
+  if (!rivi.tavoite) return "";
+  const katto = Math.max(rivi.tavoite[1], rivi.summa) || 1;
+  return `<div class="mittari">
+    <div class="otsake"><b>${nimi}</b><span class="pieni">noin ${haarukka(rivi.tavoite, yksikko)}</span></div>
+    <div class="palkki ${rivi.tila}" role="img" aria-label="${nimi} ${luku(rivi.summa)} ${yksikko}, ${TILAT[rivi.tila]}">
+      <i style="width:${Math.min(100, (rivi.summa / katto) * 100)}%"></i><u style="left:${(rivi.tavoite[0] / katto) * 100}%"></u>
+    </div>
+    <div class="otsake"><span>${luku(rivi.summa)} ${yksikko}</span><span class="merkki ${rivi.tila}">${TILAT[rivi.tila]}</span></div>
+  </div>`;
+}
+
+function tuoteRivi(t, maara, ikkunaId) {
+  const arvot = t.tarkistettu && t.hiilihydraatti_g != null
+    ? `Hiilihydraatti ${luku(t.hiilihydraatti_g)} g${t.proteiini_g ? `, proteiini ${luku(t.proteiini_g)} g` : ""}`
+    : "Arvot puuttuvat";
+  const data = `data-tuote="${esc(t.id)}" data-ikkuna="${esc(ikkunaId)}"`;
+  return `<div class="tuote ${maara ? "valittu" : ""}">
+    <div class="kasvu"><div class="nimi">${esc(t.nimi)}</div><div class="pieni">${esc(t.annos?.kuvaus ?? "")}. ${arvot}</div></div>
+    <div class="askel">
+      ${maara ? `<button data-toiminto="vahemman" ${data} aria-label="Vähemmän: ${esc(t.nimi)}">${ikoni("miinus")}</button><output>${luku(maara)}</output>` : ""}
+      <button data-toiminto="enemman" ${data} aria-label="Lisää: ${esc(t.nimi)}">${ikoni("plus")}</button>
+    </div>
+  </div>`;
+}
+
+function nakymaIkkuna(r) {
+  const o = aktiivinen();
+  const paiva = o && laskePaivat(o)?.find((p) => p.paiva.pvm === r.a);
+  const w = paiva?.ikkunat.find((x) => x.id === r.b);
+  const takaisin = `<a class="takaisin" href="#/paiva/${esc(r.a ?? "")}">${ikoni("vasen")}Takaisin päivään</a>`;
+  if (!w) return `${takaisin}<p class="ilmoitus">Tätä ikkunaa ei enää ole. Ohjelma on ehkä muuttunut.</p>`;
+
+  const kartta = tuoteKartta();
+  const valinnat = valinnatNyt()[w.id] ?? [];
+  const t = ikkunanTila(w, valinnat, kartta);
+  const maarat = new Map(valinnat.map((v) => [v.tuoteId, v.annoksia]));
+  const ehdotetut = tuotteetIkkunaan(w, kaikkiTuotteet());
+  const ehdotetutIdt = new Set(ehdotetut.map((x) => x.id));
+  const naytettavat = (ui.kaikkiTuotteet ? kaikkiTuotteet().filter((x) => !x.kofeiini && !x.lisaravinne) : ehdotetut);
+  const lista = [...naytettavat, ...kaikkiTuotteet().filter((x) => maarat.has(x.id) && !naytettavat.includes(x))];
+  const ryhmat = Object.keys(RYHMAT).map((id) => {
+    const rivit = lista.filter((x) => x.ryhma === id);
+    return rivit.length ? `<div class="ryhma"><h3>${RYHMAT[id]}</h3>${rivit.map((x) => tuoteRivi(x, maarat.get(x.id), w.id)).join("")}</div>` : "";
+  }).join("");
+  const nimi = w.syominen ? w.otsikko : (ohjelmanOsionNimi(w) ?? w.otsikko);
+  const puuttuu = t.puuttuvat.length
+    ? `<p class="ilmoitus">Arvot puuttuvat tuotteilta: ${esc(t.puuttuvat.map((id) => kartta.get(id)?.nimi ?? id).join(", "))}. Ne ovat suunnitelmassa ja ostoslistalla, mutta eivät vielä näy tankkauksessa.</p>`
+    : "";
+  return `${takaisin}
+    <section class="kortti pino">
+      <div class="pieni">${pvmTeksti(w.pvm)} klo ${kello(w.alku)}–${kello(w.loppu)}</div>
+      <h2>${esc(nimi)}</h2>
+      ${rooliTeksti(w) ? `<p class="pieni">${esc(rooliTeksti(w))}</p>` : ""}
+      ${mittari("Hiilihydraatti", t.hh, "g")}${mittari("Proteiini", t.prot, "g")}${mittari("Juoma", t.neste, "dl")}
+      ${w.huomautukset.map((h) => `<div class="huomio">${esc(h)}</div>`).join("")}
+      <p class="pieni">Haarukat ovat suuntaa-antavia. Syö sen verran, että olo on hyvä. Sääntö ${esc(w.saanto)}.</p>
+    </section>
+    ${puuttuu}
+    ${t.huomautukset.map((h) => `<p class="ilmoitus">${esc(h)}</p>`).join("")}
+    <section class="pino">
+      <h2>Mikä maistuu?</h2>
+      ${ryhmat || `<p class="pieni">Ei ehdotuksia tähän ikkunaan.</p>`}
+      ${tuotteet.length && ehdotetutIdt.size < kaikkiTuotteet().length ? `<button class="nappi leve" data-toiminto="kaikki-tuotteet">${ui.kaikkiTuotteet ? "Näytä vain tähän sopivat" : "Näytä muutkin tuotteet"}</button>` : ""}
+      ${tuoteVirhe ? `<p class="ilmoitus">Tuotelistaa ei saatu ladattua. Tarkista verkkoyhteys ja avaa sivu uudelleen.</p>` : ""}
+    </section>`;
+}
+
+function muutaAnnosta(ikkunaId, tuoteId, muutos) {
+  const kaikki = valinnatNyt();
+  const lista = kaikki[ikkunaId] ?? [];
+  const rivi = lista.find((v) => v.tuoteId === tuoteId);
+  const uusi = (rivi?.annoksia ?? 0) + muutos;
+  if (uusi <= 0) kaikki[ikkunaId] = lista.filter((v) => v.tuoteId !== tuoteId);
+  else if (rivi) rivi.annoksia = uusi;
+  else kaikki[ikkunaId] = [...lista, { tuoteId, annoksia: uusi }];
+  if (!kaikki[ikkunaId].length) delete kaikki[ikkunaId];
+  talleta();
+  piirra(true);
+}
+
+// Ohjelma
+function osioRivi(o) {
+  const laji = o.tyyppi === "ateria" ? ATERIAT[o.ateria] ?? "Ateria" : OSIOT[o.tyyppi];
+  const lisa = [laji === o.nimi ? "" : laji, o.kesto ? `${o.kesto} min` : ""].filter(Boolean).join(", ");
+  return `<div class="osio">
+    <span class="klo">${esc(o.alku)}</span>
+    <div class="kasvu"><div class="otsikko">${esc(o.nimi)}</div>${lisa ? `<div class="pieni">${esc(lisa)}</div>` : ""}</div>
+    <button class="ikoninappi" data-toiminto="muokkaa-osio" data-osio="${esc(o.id)}" aria-label="Muokkaa: ${esc(o.nimi)}">${ikoni("kyna")}</button>
+    <button class="ikoninappi" data-toiminto="poista-osio" data-osio="${esc(o.id)}" aria-label="Poista: ${esc(o.nimi)}">${ikoni("roska")}</button>
+  </div>`;
+}
+
+function lahdeLista() {
+  if (ui.lahteet === null) return "";
+  if (!ui.lahteet.length) return `<p class="ilmoitus">Otteluohjelmia ei saatu haettua. Tarkista verkkoyhteys.</p>`;
+  return ui.lahteet.map((l, i) => `<button class="nappi leve" data-toiminto="tuo-lahde" data-i="${i}">${esc(l.nimi)}</button>`).join("");
+}
+
+function nakymaOhjelma() {
+  const o = aktiivinen();
+  const valinta = tila.ohjelmat.length > 1
+    ? `<label class="kentta">Aktiivinen ohjelma<select data-muutos="vaihda-ohjelma">${tila.ohjelmat.map((p) => `<option value="${esc(p.id)}"${p.id === o?.id ? " selected" : ""}>${esc(p.nimi)}</option>`).join("")}</select></label>`
+    : "";
+  const paivat = o ? o.paivat.map((p) => `<section class="kortti">
+      <div class="rivi"><h3 class="kasvu">${pvmTeksti(p.pvm)}</h3>
+        <button class="ikoninappi" data-toiminto="poista-paiva" data-pvm="${p.pvm}" aria-label="Poista päivä ${pvmTeksti(p.pvm)}">${ikoni("roska")}</button></div>
+      <label class="kentta">Herätys (valinnainen)<input type="time" value="${p.herays ? esc(p.herays.replace(".", ":")) : ""}" data-muutos="herays" data-pvm="${p.pvm}"></label>
+      <div>${p.osiot.map(osioRivi).join("") || `<p class="pieni">Ei vielä osioita.</p>`}</div>
+      <button class="nappi leve" data-toiminto="uusi-osio" data-pvm="${p.pvm}">${ikoni("plus")}Lisää peli, harjoitus tai ateria</button>
+    </section>`).join("") : "";
+  return `<h2>${o ? esc(o.nimi) : "Ohjelma"}</h2>
+    ${valinta}
+    ${o ? `<div class="pino">${paivat}<button class="nappi leve" data-toiminto="uusi-paiva">${ikoni("plus")}Lisää päivä</button></div>` : ""}
+    <section class="kortti pino">
+      <h3>Uusi ohjelma</h3>
+      <button class="nappi leve" data-toiminto="uusi-ohjelma">Tee oma ohjelma</button>
+      <button class="nappi leve" data-toiminto="eerikkila">Ota Eerikkilän ohjelma</button>
+      <button class="nappi leve" data-toiminto="hae-lahteet">Hae joukkueen otteluohjelmat</button>
+      ${lahdeLista()}
+      <label class="kentta">Tuo tiedostosta<input type="file" accept=".json,application/json" data-muutos="tuo-tiedosto"></label>
+      <p class="pieni">Otteluohjelmasta tulevat vain pelit. Lisää ateriat ja testit tuonnin jälkeen.</p>
+    </section>
+    ${o ? `<button class="nappi leve" data-toiminto="poista-ohjelma">${ikoni("roska")}Poista tämä ohjelma</button>` : ""}`;
+}
+
+function etsiPaiva(pvm) { return aktiivinen()?.paivat.find((p) => p.pvm === pvm); }
+function etsiOsio(id) {
+  for (const p of aktiivinen()?.paivat ?? []) {
+    const o = p.osiot.find((x) => x.id === id);
+    if (o) return { paiva: p, osio: o };
+  }
+  return null;
+}
+function jarjestaOsiot(p) { p.osiot.sort((a, b) => minuutit(a.alku) - minuutit(b.alku)); }
+
+async function otaOhjelma(uusi, varoitukset = []) {
+  if (tila.ohjelmat.some((o) => o.id === uusi.id)) {
+    const ok = await kysy(`Ohjelma "${uusi.nimi}" on jo laitteella. Korvataanko se? Tuotevalinnat säilyvät.`, "Korvaa");
+    if (!ok) return;
+    tila.ohjelmat = tila.ohjelmat.filter((o) => o.id !== uusi.id);
+  }
+  tila.ohjelmat.push(uusi);
+  tila.aktiivinenOhjelma = uusi.id;
+  ui.viesti = varoitukset.length ? varoitukset.join(". ") : null;
+  ui.lahteet = null;
+  talleta();
+  if (location.hash === "#/paiva") piirra(); else location.hash = "#/paiva";
+}
+
+async function tuoJson(json, valinnat) {
+  try {
+    const { ohjelma, varoitukset } = tuoOhjelma(json, valinnat);
+    await otaOhjelma(ohjelma, varoitukset);
+  } catch {
+    ui.viesti = "Ohjelmaa ei voitu lukea. Tarkista, että tiedosto on oikeaa muotoa.";
+    piirra();
+  }
+}
+
+async function haeLahteet() {
+  const lista = [];
+  for (const polku of ["../eerikkila/data.json", "../turnaukset/data.json"]) {
+    try {
+      const vastaus = await fetch(polku);
+      if (!vastaus.ok) continue;
+      const json = await vastaus.json();
+      for (const e of json.events ?? []) {
+        if (Array.isArray(e.matches)) lista.push({ nimi: e.title ?? e.name, json, valinnat: { eventId: e.id } });
+        for (const j of e.teams ?? []) lista.push({ nimi: `${e.name}: ${j.label ?? j.name}`, json, valinnat: { eventId: e.id, teamName: j.name } });
+      }
+    } catch {
+      // Verkko ei toimi, ja tyhjä lista kerrotaan käyttäjälle.
+    }
+  }
+  ui.lahteet = lista;
+  piirra(true);
+}
+
+// Ostokset
+function nakymaOstos() {
+  const o = aktiivinen();
+  if (!o) return tyhjaTila();
+  let rivit = [];
+  try { rivit = ostoslista(o, valinnatNyt(), tuoteKartta()); } catch { rivit = []; }
+  const ostetut = new Set(tila.ostettu[o.id] ?? []);
+  if (!rivit.length) return `<h2>Ostokset</h2><section class="kortti pino"><p>Lista täyttyy, kun valitset tuotteita päivän ikkunoihin.</p><a class="nappi leve" href="#/paiva">Avaa päivä</a></section>`;
+  const ryhmat = Object.keys(RYHMAT).map((id) => {
+    const r = rivit.filter((x) => x.ryhma === id);
+    return r.length ? `<div class="ryhma"><h3>${RYHMAT[id]}</h3><div>${r.map((x) => `<label class="ostos ${ostetut.has(x.tuoteId) ? "ostettu" : ""}">
+        <input type="checkbox" data-muutos="ostettu" data-tuote="${esc(x.tuoteId)}"${ostetut.has(x.tuoteId) ? " checked" : ""}>
+        <span class="kasvu"><span class="nimi">${esc(x.nimi)}</span><br><span class="pieni">${luku(x.annoksia)} × ${esc(x.kuvaus ?? "annos")}</span></span></label>`).join("")}</div></div>` : "";
+  }).join("");
+  return `<h2>Ostokset</h2><p class="pieni">${esc(o.nimi)}. ${esc(SAANNOT.vinkit.valmistaudu)}</p><section class="kortti">${ryhmat}</section>`;
+}
+
+// Asetukset
+function nakymaAsetukset() {
+  const teemat = [["auto", "Puhelimen mukaan"], ["vaalea", "Vaalea"], ["tumma", "Tumma"]];
+  return `<h2>Asetukset</h2>
+    <section class="kortti"><h3>Teema</h3>${teemat.map(([v, n]) => `<label class="valinta"><input type="radio" name="teema" value="${v}" data-muutos="teema"${tila.asetukset.teema === v ? " checked" : ""}>${n}</label>`).join("")}</section>
+    <section class="kortti pino"><h3>Omat tuotteet</h3>
+      ${tila.omatTuotteet.map((t) => `<div class="osio"><div class="kasvu"><div class="otsikko">${esc(t.nimi)}</div>
+        <div class="pieni">${esc(t.annos.kuvaus)}. ${t.tarkistettu ? `Hiilihydraatti ${luku(t.hiilihydraatti_g)} g, proteiini ${luku(t.proteiini_g)} g` : "Arvot puuttuvat"}</div>
+        ${t.huomautus ? `<div class="pieni">${esc(t.huomautus)}</div>` : ""}
+        ${omaHuomio(t) ? `<div class="huomio">${esc(omaHuomio(t))}</div>` : ""}</div>
+        <button class="ikoninappi" data-toiminto="poista-oma" data-tuote="${esc(t.id)}" aria-label="Poista: ${esc(t.nimi)}">${ikoni("roska")}</button></div>`).join("") || `<p class="pieni">Lisää tuote pakkauksen tiedoilla.</p>`}
+      <button class="nappi leve" data-toiminto="uusi-oma">${ikoni("plus")}Lisää oma tuote</button>
+      <label class="kentta">Tuo tuotteet tiedostosta<input type="file" accept=".json,application/json" data-muutos="tuo-omat"></label></section>
+    <section class="kortti pino"><h3>Tiedot</h3>
+      <p>Kaikki tiedot ovat vain tässä laitteessa. Appi ei lähetä mitään palvelimelle.</p>
+      <button class="nappi leve" data-toiminto="tyhjenna">${ikoni("roska")}Poista kaikki tiedot</button></section>
+    <section class="kortti pino"><h3>Tietolähteet</h3>
+      <p class="pieni">Yleisten elintarvikkeiden ravintoarvot: Fineli, Terveyden ja hyvinvoinnin laitos, lisenssi CC BY 4.0. Arvot on laskettu annoksille. Appi ei ole THL:n tuottama tai suosittelema eikä osa Finelin verkkopalvelua. Merkkituotteiden arvot tulevat pakkauksista, ja puuttuvat arvot on merkitty tuotteisiin.</p>
+      <p class="pieni">Tankkausohjeet perustuvat suomalaisiin nuoren urheilijan suosituksiin ja UEFA:n jalkapalloravitsemuksen asiantuntijakannanottoon. Haarukat on sovitettu 10–12-vuotiaille, ja ne ovat suuntaa-antavia.</p></section>`;
+}
+
+// Dialogit
+function kysy(teksti, nappi) {
+  return new Promise((ratkaise) => {
+    dialogi.innerHTML = `<form method="dialog" class="pino"><p>${esc(teksti)}</p><div class="napit">
+      <button class="nappi paa" value="kylla">${esc(nappi)}</button><button class="nappi" value="ei">Peruuta</button></div></form>`;
+    dialogi.returnValue = "ei";
+    dialogi.addEventListener("close", () => ratkaise(dialogi.returnValue === "kylla"), { once: true });
+    dialogi.showModal();
+  });
+}
+
+function avaaOsioLomake(pvm, osio) {
+  const o = osio ?? { tyyppi: "peli", alku: "", kesto: 45, nimi: "" };
+  dialogi.innerHTML = `<form data-lomake="osio" data-pvm="${esc(pvm)}" data-id="${esc(osio?.id ?? "")}" data-tyyppi="${o.tyyppi}">
+    <h3>${osio ? "Muokkaa" : "Lisää"}</h3>
+    <label class="kentta">Laji<select name="tyyppi" data-muutos="lomake-tyyppi">${Object.entries(OSIOT).map(([k, n]) => `<option value="${k}"${o.tyyppi === k ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+    <label class="kentta vain-ateria">Ateria<select name="ateria">${Object.entries(ATERIAT).map(([k, n]) => `<option value="${k}"${o.ateria === k ? " selected" : ""}>${n}</option>`).join("")}</select></label>
+    <label class="kentta">Alkaa<input type="time" name="alku" required value="${esc(o.alku.replace(".", ":").padStart(5, "0"))}"></label>
+    <label class="kentta vain-liike">Kesto minuutteina<input type="number" name="kesto" min="1" max="300" inputmode="numeric" value="${o.kesto ?? ""}"></label>
+    <label class="kentta">Nimi (valinnainen)<input name="nimi" maxlength="80" value="${esc(o.nimi)}"></label>
+    <div class="napit"><button class="nappi paa" type="submit">Tallenna</button><button class="nappi" type="button" data-toiminto="sulje">Peruuta</button></div>
+  </form>`;
+  dialogi.showModal();
+}
+
+function tallennaOsio(lomake) {
+  const d = new FormData(lomake);
+  const p = etsiPaiva(lomake.dataset.pvm);
+  if (!p) return;
+  const tyyppi = d.get("tyyppi");
+  const vanha = lomake.dataset.id ? p.osiot.find((x) => x.id === lomake.dataset.id) : null;
+  const kesto = tyyppi === "ateria" ? null : (Number(d.get("kesto")) || (tyyppi === "peli" ? 45 : null));
+  const ateria = d.get("ateria");
+  const nimi = String(d.get("nimi")).trim() || (tyyppi === "ateria" ? ATERIAT[ateria] : OSIOT[tyyppi]);
+  const uusi = { id: vanha?.id ?? uusiId(p.pvm, tyyppi), tyyppi, alku: kello(minuutit(d.get("alku"))), kesto, nimi };
+  if (tyyppi === "ateria") uusi.ateria = ateria;
+  if (vanha) p.osiot[p.osiot.indexOf(vanha)] = uusi; else p.osiot.push(uusi);
+  jarjestaOsiot(p);
+  talleta();
+  dialogi.close();
+  piirra(true);
+}
+
+function uusiId(pvm, tyyppi) {
+  const kaikki = new Set(aktiivinen().paivat.flatMap((p) => p.osiot.map((o) => o.id)));
+  let n = 1;
+  while (kaikki.has(`${pvm}-${tyyppi}${n}`)) n++;
+  return `${pvm}-${tyyppi}${n}`;
+}
+
+function avaaPaivaLomake() {
+  dialogi.innerHTML = `<form data-lomake="paiva"><h3>Lisää päivä</h3>
+    <label class="kentta">Päivä<input type="date" name="pvm" required></label>
+    <div class="napit"><button class="nappi paa" type="submit">Lisää</button><button class="nappi" type="button" data-toiminto="sulje">Peruuta</button></div></form>`;
+  dialogi.showModal();
+}
+
+function avaaOhjelmaLomake() {
+  dialogi.innerHTML = `<form data-lomake="ohjelma"><h3>Uusi ohjelma</h3>
+    <label class="kentta">Nimi<input name="nimi" required maxlength="80" placeholder="Esim. Lauantain turnaus"></label>
+    <label class="kentta">Ensimmäinen päivä<input type="date" name="pvm" required></label>
+    <p class="pieni">Älä kirjoita ohjelmaan lasten nimiä.</p>
+    <div class="napit"><button class="nappi paa" type="submit">Luo</button><button class="nappi" type="button" data-toiminto="sulje">Peruuta</button></div></form>`;
+  dialogi.showModal();
+}
+
+function avaaOmaLomake() {
+  const sopii = [["ennen", "Ennen peliä"], ["peli", "Pelin aikana (juomat)"], ["valissa", "Pelien välissä"], ["palautus", "Palautukseen"]];
+  dialogi.innerHTML = `<form data-lomake="oma"><h3>Lisää oma tuote</h3>
+    <label class="kentta">Nimi<input name="nimi" required maxlength="80"></label>
+    <label class="kentta">Annos<input name="kuvaus" maxlength="60" placeholder="Esim. 1 patukka, 30 g"></label>
+    <label class="kentta">Hiilihydraatti annoksessa, g<input name="hiilihydraatti_g" inputmode="decimal"></label>
+    <label class="kentta">Proteiini annoksessa, g<input name="proteiini_g" inputmode="decimal"></label>
+    <label class="kentta">Juomaa annoksessa, dl (juomille)<input name="neste_dl" inputmode="decimal"></label>
+    <label class="kentta">Sulaminen<select name="sulavuus"><option value="nopea">Nopea</option><option value="keskitaso" selected>Keskitaso</option><option value="hidas">Hidas</option></select></label>
+    <fieldset class="valinnat"><legend>Sopii</legend>${sopii.map(([v, n]) => `<label class="valinta"><input type="checkbox" name="sopii" value="${v}">${n}</label>`).join("")}</fieldset>
+    <p class="pieni">Ota arvot pakkauksesta ja laske ne yhdelle annokselle. Jos arvoja ei ole, tuote näkyy merkinnällä "arvot puuttuvat".</p>
+    <div class="napit"><button class="nappi paa" type="submit">Tallenna</button><button class="nappi" type="button" data-toiminto="sulje">Peruuta</button></div></form>`;
+  dialogi.showModal();
+}
+
+function varatutIdt() { return new Set(kaikkiTuotteet().map((t) => t.id)); }
+
+// Tapahtumat
+const toiminnot = {
+  "uusi-oma": avaaOmaLomake,
+  "poista-oma": async (d) => {
+    const t = tila.omatTuotteet.find((x) => x.id === d.tuote);
+    if (!t || !await kysy(`Poistetaanko "${t.nimi}" ja sen valinnat?`, "Poista")) return;
+    tila.omatTuotteet = tila.omatTuotteet.filter((x) => x !== t);
+    for (const valinnat of Object.values(tila.valinnat)) {
+      for (const [id, lista] of Object.entries(valinnat)) {
+        const jaljella = lista.filter((v) => v.tuoteId !== t.id);
+        if (jaljella.length) valinnat[id] = jaljella; else delete valinnat[id];
+      }
+    }
+    talleta(); piirra(true);
+  },
+  enemman: (d) => muutaAnnosta(d.ikkuna, d.tuote, 1),
+  vahemman: (d) => muutaAnnosta(d.ikkuna, d.tuote, -1),
+  "kaikki-tuotteet": () => { ui.kaikkiTuotteet = !ui.kaikkiTuotteet; piirra(true); },
+  eerikkila: async () => {
+    try {
+      const v = await fetch("data/ohjelma-eerikkila-2026-11.json");
+      await tuoJson(await v.json());
+    } catch {
+      ui.viesti = "Ohjelmaa ei saatu ladattua. Tarkista verkkoyhteys.";
+      piirra();
+    }
+  },
+  "hae-lahteet": haeLahteet,
+  "tuo-lahde": (d) => { const l = ui.lahteet[Number(d.i)]; return tuoJson(l.json, l.valinnat); },
+  "uusi-ohjelma": avaaOhjelmaLomake,
+  "uusi-paiva": avaaPaivaLomake,
+  "uusi-osio": (d) => avaaOsioLomake(d.pvm),
+  "muokkaa-osio": (d) => { const l = etsiOsio(d.osio); if (l) avaaOsioLomake(l.paiva.pvm, l.osio); },
+  "poista-osio": async (d) => {
+    const l = etsiOsio(d.osio);
+    if (!l || !await kysy(`Poistetaanko "${l.osio.nimi}"?`, "Poista")) return;
+    l.paiva.osiot = l.paiva.osiot.filter((x) => x !== l.osio);
+    talleta(); piirra(true);
+  },
+  "poista-paiva": async (d) => {
+    if (!await kysy(`Poistetaanko ${pvmTeksti(d.pvm)} ohjelmasta?`, "Poista")) return;
+    const o = aktiivinen();
+    o.paivat = o.paivat.filter((p) => p.pvm !== d.pvm);
+    talleta(); piirra(true);
+  },
+  "poista-ohjelma": async () => {
+    const o = aktiivinen();
+    if (!await kysy(`Poistetaanko ohjelma "${o.nimi}" ja sen tuotevalinnat?`, "Poista")) return;
+    tila.ohjelmat = tila.ohjelmat.filter((x) => x !== o);
+    delete tila.valinnat[o.id];
+    delete tila.ostettu[o.id];
+    tila.aktiivinenOhjelma = tila.ohjelmat[0]?.id ?? null;
+    talleta(); piirra();
+  },
+  tyhjenna: async () => {
+    if (!await kysy("Poistetaanko kaikki ohjelmat ja valinnat tästä laitteesta?", "Poista kaikki")) return;
+    tyhjenna(varasto);
+    tila = lataa(varasto);
+    teema(); piirra();
+  },
+  sulje: () => dialogi.close(),
+};
+
+const muutokset = {
+  "tuo-omat": async (el) => {
+    const tiedosto = el.files?.[0];
+    if (!tiedosto) return;
+    try {
+      const { tuotteet: uudet, ohitetut } = tuoOmatTuotteet(JSON.parse(await tiedosto.text()), varatutIdt());
+      const idt = new Set(uudet.map((t) => t.id));
+      tila.omatTuotteet = [...tila.omatTuotteet.filter((t) => !idt.has(t.id)), ...uudet];
+      ui.viesti = `Tuotu ${uudet.length} tuotetta.${ohitetut ? ` ${ohitetut} riviä ohitettiin.` : ""}`;
+      talleta();
+    } catch {
+      ui.viesti = "Tuotteita ei voitu lukea. Tarkista tiedoston muoto.";
+    }
+    piirra();
+  },
+  "vaihda-ohjelma": (el) => { tila.aktiivinenOhjelma = el.value; talleta(); piirra(); },
+  herays: (el) => {
+    const p = etsiPaiva(el.dataset.pvm);
+    if (!p) return;
+    if (el.value) p.herays = kello(minuutit(el.value)); else delete p.herays;
+    talleta();
+  },
+  ostettu: (el) => {
+    const o = aktiivinen();
+    const s = new Set(tila.ostettu[o.id] ?? []);
+    if (el.checked) s.add(el.dataset.tuote); else s.delete(el.dataset.tuote);
+    tila.ostettu[o.id] = [...s];
+    talleta(); piirra(true);
+  },
+  teema: (el) => { tila.asetukset.teema = el.value; talleta(); teema(); },
+  "lomake-tyyppi": (el) => {
+    el.form.dataset.tyyppi = el.value;
+    if (el.value === "peli" && !el.form.kesto.value) el.form.kesto.value = 45;
+  },
+  "tuo-tiedosto": async (el) => {
+    const tiedosto = el.files?.[0];
+    if (!tiedosto) return;
+    try {
+      await tuoJson(JSON.parse(await tiedosto.text()));
+    } catch {
+      ui.viesti = "Tiedostoa ei voitu lukea. Sen pitää olla JSON-muodossa.";
+      piirra();
+    }
+  },
+};
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-toiminto]");
+  if (el) { ui.viesti = el.dataset.toiminto === "enemman" || el.dataset.toiminto === "vahemman" ? ui.viesti : null; toiminnot[el.dataset.toiminto]?.(el.dataset); }
+});
+document.addEventListener("change", (e) => {
+  const el = e.target.closest("[data-muutos]");
+  if (el) muutokset[el.dataset.muutos]?.(el);
+});
+document.addEventListener("submit", (e) => {
+  const lomake = e.target.closest("[data-lomake]");
+  if (!lomake) return;
+  e.preventDefault();
+  const d = new FormData(lomake);
+  if (lomake.dataset.lomake === "osio") tallennaOsio(lomake);
+  if (lomake.dataset.lomake === "oma") {
+    const t = luoOmaTuote({ ...Object.fromEntries(d), sopii: d.getAll("sopii") }, varatutIdt());
+    tila.omatTuotteet.push(t);
+    ui.viesti = omaHuomio(t);
+    talleta(); dialogi.close(); piirra(true);
+  }
+  if (lomake.dataset.lomake === "paiva") {
+    const o = aktiivinen();
+    if (!o.paivat.some((p) => p.pvm === d.get("pvm"))) {
+      o.paivat.push({ pvm: d.get("pvm"), osiot: [] });
+      o.paivat.sort((a, b) => a.pvm.localeCompare(b.pvm));
+      talleta();
+    }
+    dialogi.close(); piirra(true);
+  }
+  if (lomake.dataset.lomake === "ohjelma") {
+    const uusi = { versio: 1, id: `oma-${Date.now()}`, nimi: String(d.get("nimi")).trim(), lahde: { tyyppi: "kasin" }, paivat: [{ pvm: d.get("pvm"), osiot: [] }] };
+    tila.ohjelmat.push(uusi);
+    tila.aktiivinenOhjelma = uusi.id;
+    talleta(); dialogi.close(); piirra();
+  }
+});
+window.addEventListener("hashchange", () => { ui.viesti = null; piirra(); sisalto.focus({ preventScroll: true }); });
+
+// Käynnistys
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {}); // Appi toimii verkossa ilmankin.
+teema();
+piirra();
+try {
+  const v = await fetch("data/tuotteet.json");
+  tuotteet = (await v.json()).tuotteet;
+} catch {
+  tuoteVirhe = true;
+}
+piirra(true);

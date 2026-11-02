@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tuotetietokanta",
+  "type": "object",
+  "required": ["versio", "tuotteet"],
+  "additionalProperties": false,
+  "properties": {
+    "versio": { "const": 1 },
+    "lahdemaininta": { "type": "string" },
+    "tuotteet": { "type": "array", "items": { "$ref": "#/$defs/tuote" } }
+  },
+  "$defs": {
+    "arvo": { "type": ["number", "null"], "minimum": 0 },
+    "tuote": {
+      "type": "object",
+      "required": ["id", "nimi", "ryhma", "annos", "energia_kcal", "hiilihydraatti_g", "proteiini_g", "rasva_g", "kuitu_g", "sulavuus", "sopii", "lahde", "tarkistettu"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "nimi": { "type": "string", "minLength": 1 },
+        "merkki": { "type": ["string", "null"] },
+        "ryhma": { "enum": ["hedelma", "vilja", "leipa", "maito", "juoma", "ateria", "patukka", "makeinen", "keksi", "pahkina", "valmisruoka", "oma"] },
+        "annos": {
+          "type": "object",
+          "required": ["kuvaus", "maara", "yksikko"],
+          "additionalProperties": false,
+          "properties": {
+            "kuvaus": { "type": "string", "minLength": 1 },
+            "maara": { "$ref": "#/$defs/arvo" },
+            "yksikko": { "enum": ["g", "dl"] }
+          }
+        },
+        "neste_dl": { "type": "number", "exclusiveMinimum": 0 },
+        "energia_kcal": { "$ref": "#/$defs/arvo" },
+        "hiilihydraatti_g": { "$ref": "#/$defs/arvo" },
+        "proteiini_g": { "$ref": "#/$defs/arvo" },
+        "rasva_g": { "$ref": "#/$defs/arvo" },
+        "kuitu_g": { "$ref": "#/$defs/arvo" },
+        "sulavuus": { "enum": ["nopea", "keskitaso", "hidas"] },
+        "sopii": { "type": "array", "uniqueItems": true, "items": { "enum": ["ennen", "peli", "valissa", "palautus"] } },
+        "lahde": {
+          "type": "object",
+          "required": ["tyyppi"],
+          "additionalProperties": false,
+          "properties": {
+            "tyyppi": { "enum": ["fineli", "pakkaus", "oma"] },
+            "id": { "type": ["integer", "null"] },
+            "osat": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id", "g"],
+                "additionalProperties": false,
+                "properties": { "id": { "type": "integer" }, "g": { "type": "number", "exclusiveMinimum": 0 } }
+              }
+            },
+            "haettu": { "type": ["string", "null"] }
+          }
+        },
+        "tarkistettu": { "type": "boolean" },
+        "kofeiini": { "type": "boolean" },
+        "lisaravinne": { "type": "boolean" },
+        "huomautus": { "type": "string" }
+      }
+    }
+  }
+}

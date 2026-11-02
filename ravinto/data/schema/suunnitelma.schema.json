@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Suunnitelma (localStorage ravinto.v1)",
+  "type": "object",
+  "required": ["versio", "ohjelmat", "aktiivinenOhjelma", "valinnat", "omatTuotteet", "ostettu", "asetukset"],
+  "additionalProperties": false,
+  "properties": {
+    "versio": { "const": 1 },
+    "ohjelmat": { "type": "array", "items": { "type": "object", "required": ["id"] } },
+    "aktiivinenOhjelma": { "type": ["string", "null"] },
+    "valinnat": {
+      "description": "ohjelman id -> ikkunan id -> valitut tuotteet",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["tuoteId", "annoksia"],
+            "additionalProperties": false,
+            "properties": {
+              "tuoteId": { "type": "string" },
+              "annoksia": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "omatTuotteet": { "type": "array", "items": { "type": "object", "required": ["id", "nimi"] } },
+    "ostettu": { "description": "Ostoslistalla kuitatut tuote-id:t ohjelmittain", "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+    "asetukset": {
+      "type": "object",
+      "required": ["teema"],
+      "additionalProperties": false,
+      "properties": { "teema": { "enum": ["auto", "vaalea", "tumma"] } }
+    }
+  }
+}
