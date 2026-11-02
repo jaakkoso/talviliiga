@@ -55,8 +55,21 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "JJK/YJ",
      "away": "SJK-j/musta -15",
-     "score": null,
-     "pid": "4349272"
+     "score": [
+      [
+       0,
+       0
+      ]
+     ],
+     "pid": "4349272",
+     "live": "10.40",
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 0,
+      "at": 1793608821162,
+      "on": false,
+      "max": 1200
+     }
     },
     {
      "date": "2026-11-02",
