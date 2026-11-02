@@ -207,74 +207,29 @@
    "lohko": [
     {
      "date": "2026-11-01",
-     "home": "JJK/YJ",
-     "away": "P-Iirot/kelt",
+     "time": "13.30",
+     "home": "FF Jaro/-15",
+     "away": "HPS",
      "score": [
       [
-       4,
+       0,
        1
       ],
       [
-       3,
+       0,
        2
       ]
      ]
     },
     {
      "date": "2026-11-01",
-     "home": "SJK-j/musta -15",
-     "away": "Hercules -j",
-     "score": [
-      [
-       0,
-       3
-      ],
-      [
-       1,
-       1
-      ]
-     ]
-    },
-    {
-     "date": "2026-11-01",
-     "home": "EPS",
-     "away": "FF Jaro/-15",
-     "score": [
-      [
-       0,
-       1
-      ],
-      [
-       1,
-       0
-      ]
-     ]
-    },
-    {
-     "date": "2026-11-01",
-     "time": "17.30",
-     "home": "HPS",
-     "away": "MuSa/Black",
-     "score": [
-      [
-       3,
-       1
-      ],
-      [
-       3,
-       1
-      ]
-     ]
-    },
-    {
-     "date": "2026-11-01",
-     "time": "16.30",
-     "home": "Hercules -j",
-     "away": "JJK/YJ",
+     "time": "14.30",
+     "home": "MuSa/Black",
+     "away": "EPS",
      "score": [
       [
        1,
-       1
+       6
       ],
       [
        1,
@@ -300,13 +255,13 @@
     },
     {
      "date": "2026-11-01",
-     "time": "14.30",
-     "home": "MuSa/Black",
-     "away": "EPS",
+     "time": "16.30",
+     "home": "Hercules -j",
+     "away": "JJK/YJ",
      "score": [
       [
        1,
-       6
+       1
       ],
       [
        1,
@@ -316,19 +271,122 @@
     },
     {
      "date": "2026-11-01",
-     "time": "13.30",
-     "home": "FF Jaro/-15",
-     "away": "HPS",
+     "time": "17.30",
+     "home": "HPS",
+     "away": "MuSa/Black",
+     "score": [
+      [
+       3,
+       1
+      ],
+      [
+       3,
+       1
+      ]
+     ]
+    },
+    {
+     "date": "2026-11-01",
+     "home": "EPS",
+     "away": "FF Jaro/-15",
      "score": [
       [
        0,
        1
       ],
       [
+       1,
+       0
+      ]
+     ],
+     "time": "18.15"
+    },
+    {
+     "date": "2026-11-01",
+     "home": "JJK/YJ",
+     "away": "P-Iirot/kelt",
+     "score": [
+      [
+       4,
+       1
+      ],
+      [
+       3,
+       2
+      ]
+     ],
+     "time": "19.15"
+    },
+    {
+     "date": "2026-11-01",
+     "home": "SJK-j/musta -15",
+     "away": "Hercules -j",
+     "score": [
+      [
        0,
+       3
+      ],
+      [
+       1,
+       1
+      ]
+     ],
+     "time": "19.15"
+    },
+    {
+     "date": "2026-11-02",
+     "home": "EPS",
+     "away": "HPS",
+     "score": [
+      [
+       3,
+       2
+      ],
+      [
+       4,
+       2
+      ]
+     ],
+     "time": "09.00"
+    },
+    {
+     "date": "2026-11-02",
+     "time": "09.45",
+     "home": "P-Iirot/kelt",
+     "away": "Hercules -j",
+     "score": [
+      [
+       2,
+       1
+      ],
+      [
+       1,
        2
       ]
      ]
+    },
+    {
+     "date": "2026-11-02",
+     "home": "JJK/YJ",
+     "away": "SJK-j/musta -15",
+     "score": [
+      [
+       0,
+       1
+      ],
+      [
+       1,
+       2
+      ]
+     ],
+     "time": "10.45"
+    },
+    {
+     "date": "2026-11-02",
+     "time": "11.45",
+     "home": "MuSa/Black",
+     "away": "FF Jaro/-15",
+     "score": null
     },
     {
      "date": "2026-11-02",
@@ -387,52 +445,6 @@
      "score": null
     },
     {
-     "date": "2026-11-02",
-     "home": "JJK/YJ",
-     "away": "SJK-j/musta -15",
-     "score": [
-      [
-       0,
-       1
-      ],
-      [
-       1,
-       2
-      ]
-     ]
-    },
-    {
-     "date": "2026-11-02",
-     "time": "09.45",
-     "home": "P-Iirot/kelt",
-     "away": "Hercules -j",
-     "score": [
-      [
-       2,
-       1
-      ],
-      [
-       1,
-       2
-      ]
-     ]
-    },
-    {
-     "date": "2026-11-02",
-     "home": "EPS",
-     "away": "HPS",
-     "score": [
-      [
-       3,
-       2
-      ],
-      [
-       4,
-       2
-      ]
-     ]
-    },
-    {
      "date": "2026-11-03",
      "time": "09.00",
      "home": "HPS",
@@ -488,7 +500,37 @@
      "away": "FF Jaro/-15",
      "score": null
     }
-   ]
+   ],
+   "lohkoAjat": {
+    "2026-11-01|FF Jaro/-15|HPS": "13.30",
+    "2026-11-01|MuSa/Black|EPS": "14.30",
+    "2026-11-01|P-Iirot/kelt|SJK-j/musta -15": "15.30",
+    "2026-11-01|Hercules -j|JJK/YJ": "16.30",
+    "2026-11-01|HPS|MuSa/Black": "17.30",
+    "2026-11-01|EPS|FF Jaro/-15": "18.15",
+    "2026-11-01|JJK/YJ|P-Iirot/kelt": "19.15",
+    "2026-11-01|SJK-j/musta -15|Hercules -j": "19.15",
+    "2026-11-02|EPS|HPS": "09.00",
+    "2026-11-02|P-Iirot/kelt|Hercules -j": "09.45",
+    "2026-11-02|JJK/YJ|SJK-j/musta -15": "10.45",
+    "2026-11-02|MuSa/Black|FF Jaro/-15": "11.45",
+    "2026-11-02|Hercules -j|EPS": "12.45",
+    "2026-11-02|HPS|P-Iirot/kelt": "13.45",
+    "2026-11-02|SJK-j/musta -15|FF Jaro/-15": "14.45",
+    "2026-11-02|JJK/YJ|MuSa/Black": "15.45",
+    "2026-11-02|Hercules -j|HPS": "16.45",
+    "2026-11-02|P-Iirot/kelt|EPS": "17.45",
+    "2026-11-02|FF Jaro/-15|JJK/YJ": "18.30",
+    "2026-11-02|MuSa/Black|SJK-j/musta -15": "19.30",
+    "2026-11-03|HPS|JJK/YJ": "09.00",
+    "2026-11-03|EPS|SJK-j/musta -15": "09.45",
+    "2026-11-03|FF Jaro/-15|Hercules -j": "10.45",
+    "2026-11-03|MuSa/Black|P-Iirot/kelt": "11.45",
+    "2026-11-03|SJK-j/musta -15|HPS": "12.45",
+    "2026-11-03|JJK/YJ|EPS": "13.45",
+    "2026-11-03|Hercules -j|MuSa/Black": "14.30",
+    "2026-11-03|P-Iirot/kelt|FF Jaro/-15": "14.30"
+   }
   },
   {
    "id": "kevat-2026",

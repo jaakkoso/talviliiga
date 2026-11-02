@@ -152,9 +152,15 @@ async function paivitaLohko(h, ev) {
     const rows = await palloliittoTaulukko(h.taulukko); if (rows) ev.table = { ...(ev.table || {}), url: h.taulukko, rows };
     const lohko = await lohkonOttelut(h, ev);
     if (lohko && lohko.length) {
-      // Pelatuille kellonaika säilytetään ohjelmasta (tulossivulla ei ole aikaa)
-      for (const m of lohko) if (!m.time) { const v = (ev.lohko || []).find(x => x.date === m.date && x.home === m.home && x.away === m.away); if (v && v.time) m.time = v.time; }
-      ev.lohko = lohko;
+      // Kellonajat muistiin ohjelmasta (pelattujen tulossivulla ei ole aikaa) ja käynnissä olevat (puuttuvat molemmilta sivuilta) säilytetään
+      const avain = m => m.date + '|' + m.home + '|' + m.away;
+      const ajat = ev.lohkoAjat || {};
+      for (const m of [...(ev.lohko || []), ...lohko]) if (m.time) ajat[avain(m)] = m.time;
+      const uudet = new Map(lohko.map(m => [avain(m), m]));
+      for (const v of ev.lohko || []) if (!uudet.has(avain(v))) uudet.set(avain(v), v);
+      ev.lohko = [...uudet.values()].map(m => ({ ...m, time: m.time || ajat[avain(m)] }))
+        .sort((a, b) => a.date.localeCompare(b.date) || (a.time || '99').localeCompare(b.time || '99'));
+      ev.lohkoAjat = ajat;
     }
     return true;
   } catch (e) { varoita(`Huuhkajaliiga ${h.id} taulukko/lohko: ${e.message}`); return false; }
