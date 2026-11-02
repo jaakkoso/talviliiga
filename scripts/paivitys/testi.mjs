@@ -79,3 +79,6 @@ assert.equal(veoOsuma(VR, { date: '2026-09-28', time: '18.30', home: 'SJK-j/must
 assert.equal(veoOsuma(VR, { date: '2026-09-19', time: '12.10', home: 'FC Lahti', away: 'SJK' }), 'https://app.veo.co/matches/b/');
 assert.equal(veoOsuma(VR, { date: '2026-09-28', time: '12.00', home: 'SJK', away: 'APV' }), null, 'aika liian kaukana');
 console.log('Veo-testi OK');
+
+assert.equal(palloliittoOttelut(['MA 2.11.', 'MATCH DETAILS', 'P11 HUUHKAJALIIGA', 'JJK/YJ', "17'"], 2026).length, 0, 'käynnissä olevan ottelun minuutti ei ole joukkue');
+console.log('Live-kortti -testi OK');

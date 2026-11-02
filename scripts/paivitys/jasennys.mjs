@@ -32,7 +32,9 @@ export function palloliittoOttelut(rivit, kausi) {
     while (onTulos(L[j])) { sc.push(tulos(L[j]).score[0]); j++; }
     if (sc.length) m.score = sc; else if (onKello(L[j])) { m.time = L[j].replace(':', '.'); j++; }
     m.away = L[j] || '';
-    if (m.away && m.away !== 'MATCH DETAILS') out.push(m);
+    // Käynnissä olevan ottelun kortissa on minuutti (esim. 17') tai kello joukkueen paikalla: ei kelpaa joukkueeksi
+    const eiJoukkue = t => !t || t === 'MATCH DETAILS' || /^\d+(\+\d+)?'?$/.test(t) || /^\d{1,2}:\d{2}$/.test(t) || /^\d+\s*[–-]\s*\d+$/.test(t);
+    if (!eiJoukkue(m.away) && !eiJoukkue(m.home)) out.push(m);
   }
   return out;
 }
