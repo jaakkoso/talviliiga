@@ -4,13 +4,17 @@
  "turnaukset": {},
  "live": {
   "4349254": {
-   "klo": "19.27",
+   "klo": "19.29",
    "status": "Live",
    "fs": [
     "0",
     "0"
    ],
    "tulokset": [
+    [
+     0,
+     1
+    ],
     [
      0,
      0
@@ -58,23 +62,23 @@
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "MuSa/Black",
-    "00:25",
+    "01:35",
+    "0 – 1",
     "0 – 0",
-    "–",
     "SJK-j/musta -15",
     "SPL Huuhkaja-Helmariliiga 2026",
     "Ottelu 4650",
     "19:30 | ma 2.11.",
     "Eerikkilä-halli TN A, Eerikkilän Urheiluopisto",
     "P11 HUUHKAJALIIGA",
-    "ALALOPPUSARJA",
     "TUPLAPELI",
     "1. PELI",
     "MuSa/Black",
-    "00:25",
-    "0 – 0",
+    "01:35",
+    "0 – 1",
     "0 – 0",
     "SJK-j/musta -15",
+    "Hattula   1'",
     "Ennuste",
     "5°C"
    ]
