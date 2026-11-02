@@ -432,11 +432,11 @@ async function paivitaLive() {
     }
   }
   d.updated = tanaan;
-  // Julkaistaan heti, kun tulos, tila tai aikataulu muuttuu; pelkkä kello/minuutti enintään 8 min välein (GitHub Pagesin julkaisuraja n. 10/h)
+  // Julkaistaan heti, kun tulos, tila tai aikataulu muuttuu; muuten 2 min välein (julkaisu GitHub Actionsilla, ei Pagesin tuntirajaa)
   const ilmanKelloa = o => JSON.stringify(o, (k, v) => k === 'updated' ? undefined : k === 'live' && typeof v === 'string' ? true : k === 'liveClock' && v ? { on: v.on, alku: Math.round((v.at / 1000 - v.s) / 120) } : v);
   let vanha = null; try { vanha = lue('eerikkila/data.json'); } catch { }
   let julkaistu = 0; try { julkaistu = fs.statSync('/tmp/p2015-live-julkaistu').mtimeMs; } catch { }
-  const julkaise = !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 8 * 60000;
+  const julkaise = !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 2 * 60000;
   kirjoita('eerikkila/data.json', d);
   tila.live = diag;
   try { fs.writeFileSync('/tmp/p2015-live-seuraava', String(seuraava)); fs.writeFileSync('/tmp/p2015-live-julkaise', julkaise ? '1' : '0'); } catch { }

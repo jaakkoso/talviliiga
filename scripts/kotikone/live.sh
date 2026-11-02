@@ -1,6 +1,6 @@
 #!/bin/bash
 # Huuhkajaliigan pelipäivän live-silmukka: tarkistaa aikataulun tulospalvelusta ja hakee tilanteen minuutin välein vain otteluiden aikana.
-# Tulosmuutokset julkaistaan heti, pelkkä kello enintään 8 min välein.
+# Tulosmuutokset julkaistaan heti, muuten 2 min välein.
 # ja vie sen sivustolle. Loppuu itsestään, kun päivän pelit ovat ohi (paivita.mjs palauttaa koodin 3).
 # Käynnistyy automaattisesti paivita-kotona.sh:sta pelipäivinä. Käsin: scripts/kotikone/live.sh
 cd "$(dirname "$0")/../.." || exit 1
