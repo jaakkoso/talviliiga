@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pages: write
+  actions: write
 
 concurrency:
   group: paivita-tulokset
@@ -41,6 +42,8 @@ jobs:
           git add piirisarja/data.json eerikkila/data.json turnaukset/data.json
           git commit -m "Veo-video liitetty otteluun $(TZ=Europe/Helsinki date '+%-d.%-m.%Y klo %H.%M')"
           for i in 1 2 3; do git push && break; git pull --rebase -X theirs origin main || { git rebase --abort; git pull --rebase origin main; }; sleep 5; done
-          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || true
+          # Julkaisu: Actions-julkaisu (julkaise.yml) tai vanha Pagesin oma julkaisu
+          gh workflow run julkaise.yml --ref main >/dev/null 2>&1 || true
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null 2>&1 || true
         env:
           GH_TOKEN: ${{ github.token }}

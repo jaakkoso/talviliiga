@@ -10,6 +10,7 @@ on:
 permissions:
   contents: write
   pages: write
+  actions: write
 
 concurrency:
   group: paivita-tulokset
@@ -65,6 +66,8 @@ jobs:
             sleep 5
           done
           # GitHub Actionsin omat pushit eivät aina käynnistä sivuston julkaisua, joten pyydetään se erikseen
-          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || echo "Sivuston julkaisupyyntö epäonnistui, julkaisu tapahtuu seuraavan muutoksen yhteydessä."
+          # Julkaisu: Actions-julkaisu (julkaise.yml) tai vanha Pagesin oma julkaisu
+          gh workflow run julkaise.yml --ref main >/dev/null 2>&1 || true
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null 2>&1 || true
         env:
           GH_TOKEN: ${{ github.token }}

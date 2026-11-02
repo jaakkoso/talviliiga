@@ -1,0 +1,56 @@
+# Julkaisee sivuston GitHub Pagesiin GitHub Actionsilla (ei Pagesin oman julkaisun n. 10 julkaisua/tunti -rajaa).
+# Käynnistyy jokaisesta muutoksesta main-haaraan. Tulospäivitysten omat ajot pyytävät julkaisun erikseen (workflow_dispatch),
+# koska GitHub Actionsin omat muutokset eivät käynnistä muita ajoja.
+# Käyttöönotto kerran: Settings › Pages › Build and deployment › Source: GitHub Actions.
+name: Julkaise sivusto
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uusin muutos voittaa: kesken oleva julkaisu perutaan, kun uudempi tulee
+concurrency:
+  group: pages-julkaisu
+  cancel-in-progress: true
+
+jobs:
+  julkaise:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment:
+      name: github-pages
+      url: ${{ steps.julkaisu.outputs.page_url }}
+    steps:
+      - name: Onko Actions-julkaisu käytössä?
+        id: tila
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tyyppi=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo "")
+          echo "tyyppi=$tyyppi" >> "$GITHUB_OUTPUT"
+          if [ "$tyyppi" != "workflow" ]; then
+            echo "::notice::Sivusto julkaistaan vielä Pagesin omalla julkaisulla ($tyyppi). Vaihda Settings › Pages › Source: GitHub Actions."
+          fi
+      - uses: actions/checkout@v4
+        if: steps.tila.outputs.tyyppi == 'workflow'
+      - name: Kokoa julkaistavat tiedostot
+        if: steps.tila.outputs.tyyppi == 'workflow'
+        run: |
+          mkdir -p _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude '_site' --exclude 'node_modules' ./ _site/
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+        if: steps.tila.outputs.tyyppi == 'workflow'
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.tila.outputs.tyyppi == 'workflow'
+        with:
+          path: _site
+      - id: julkaisu
+        if: steps.tila.outputs.tyyppi == 'workflow'
+        uses: actions/deploy-pages@v4
