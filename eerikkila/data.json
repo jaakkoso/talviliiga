@@ -74,8 +74,21 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "SJK-j/musta -15",
      "away": "FF Jaro/-15",
-     "score": null,
-     "pid": "4349257"
+     "score": [
+      [
+       0,
+       0
+      ]
+     ],
+     "pid": "4349257",
+     "live": "14.42",
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 0,
+      "at": 1793623363958,
+      "on": false,
+      "max": 1200
+     }
     },
     {
      "date": "2026-11-02",
