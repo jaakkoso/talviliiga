@@ -4,8 +4,8 @@
  "turnaukset": {},
  "live": {
   "4349254": {
-   "klo": "20.09",
-   "status": "Live",
+   "klo": "20.12",
+   "status": "Played",
    "fs": [
     "0",
     "4"
@@ -20,16 +20,18 @@
      0
     ]
    ],
-   "ohi": false,
+   "ohi": true,
    "alkanut": true,
    "kentat": {
     "competition_status": "published",
     "category_live": "1",
-    "status": "Live",
+    "status": "Played",
     "matchcard_status": "Locked",
+    "winner": "Away",
+    "winner_id": "35138118",
     "fs_A": "0",
     "fs_B": "4",
-    "can_start_live": 1,
+    "can_start_live": 0,
     "lineups_filled": 1,
     "lineups_confirmed": 1,
     "lineups_confirmed_A": 1,
@@ -39,31 +41,23 @@
     "win_period_count": "2",
     "period_count_fixed": "0",
     "period_min": "20",
-    "live_period": "2",
-    "live_time": "00:19:05",
-    "live_time_mmss": "19:05",
-    "live_minutes": 39,
     "live_A": "0",
     "live_B": "4",
-    "live_ps_A": "0",
-    "live_ps_B": "0",
     "live_timeouts_A": 0,
     "live_timeouts_B": 0,
     "live_timeout_skip_A": 0,
     "live_timeout_skip_B": 0,
-    "periods_played": 1,
+    "periods_played": 2,
     "live_fouls_A": 0,
     "live_fouls_B": 0,
-    "live_timer_start": "2026-11-02 19:50:06",
-    "live_timer_start_time": "00:00:00",
-    "live_timer_on": "1",
+    "live_timer_on": 0,
     "lineups_public": 1,
     "lineups_published": 1
    },
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "MuSa/Black",
-    "19:46",
+    "20:13",
     "0 – 4",
     "0 – 0",
     "SJK-j/musta -15",
@@ -76,15 +70,13 @@
     "TUPLAPELI",
     "2. PELI",
     "MuSa/Black",
-    "19:46",
+    "20:13",
     "0 – 4",
     "0 – 0",
     "SJK-j/musta -15",
     "Hattula   1' 7'",
     "Makkonen   8'",
-    "Esala   14'",
-    "Ennuste",
-    "5°C"
+    "Esala   14'"
    ]
   }
  },
