@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261102c">
+<link rel="stylesheet" href="../assets/site.css?v=20261102d">
 </head>
 <body>
 <header class="top">
@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261102c"></script>
+<script src="../assets/matches.js?v=20261102d"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -47,7 +47,7 @@
     const rivi = m => {
       const oma = P15.isOwn(m.home) || P15.isOwn(m.away);
       const tulos = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join('<br>') : '<span class="aika">–</span>';
-      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${P15.esc(m.time || '')}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.nimi(m.home)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.nimi(m.away)}</span></li>`;
+      return `<li class="${oma ? 'oma' : ''}"><span class="lk-t">${P15.esc(m.time || '')}</span><span class="lk-h ${P15.isOwn(m.home) ? 'me' : ''}">${P15.nimi(m.home, true)}</span><span class="lk-s">${tulos}</span><span class="lk-a ${P15.isOwn(m.away) ? 'me' : ''}">${P15.nimi(m.away, true)}</span></li>`;
     };
     return `<div class="lohko"><button type="button" class="btn lohko-btn" data-lohko aria-expanded="${auki}">${auki ? 'Piilota' : 'Näytä'} lohkon kaikki ottelut (${ev.lohko.length})</button>
       <div class="lohko-list" ${auki ? '' : 'hidden'}>${paivat.map(d => { const p = P15.parseDate(d); return `<h3>${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.</h3><ol>${lista.filter(m => m.date === d).map(rivi).join('')}</ol>`; }).join('')}
@@ -67,7 +67,7 @@
         ${paivita}
         <div class="lvl">${P15.esc(ev.dates)} · ${P15.esc(ev.team)} · ${P15.esc(ev.format)}</div>
         ${played ? P15.summaryHTML(P15.summary(ev.matches, ev.team)) : `<p class="note">Kotijoukkue kirjaa tulokset Palloliiton tulospalveluun ottelun aikana. Seuraa live-tuloksia yllä olevasta linkistä.</p>`}
-      </div>` + P15.tableHTML(ev.table, { teamClick: !!(ev.lohko && ev.lohko.length) }) + lohkoHTML(ev) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
+      </div>` + P15.tableHTML(ev.table, { teamClick: !!(ev.lohko && ev.lohko.length), lyhyt: true }) + lohkoHTML(ev) + P15.listHTML(ev.matches.map(m => ({ m, opt: { own: ev.team, showSeries: false } })), true);
     P15.store.set('eerikkila-tab', id);
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });

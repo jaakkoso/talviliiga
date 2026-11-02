@@ -350,3 +350,14 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 /* SJK-logo omien joukkueiden nimen edessä */
 .tlogo{width:18px;height:18px;object-fit:contain;vertical-align:-3px;margin-right:6px;flex:none}
 .mdlg-score .tlogo{width:22px;height:22px}
+
+/* Sarjataulukko kapealla näytöllä: kaikki sarakkeet pisteisiin asti mahtuvat */
+@media (max-width:520px){
+  .tbl table{font-size:.82rem}
+  .tbl th{padding:4px 4px;font-size:.62rem;letter-spacing:.03em}
+  .tbl td{padding:6px 4px}
+  .tbl .pos{width:1.6em;padding-left:10px}
+  .tbl td:last-child,.tbl th:last-child{padding-right:12px}
+  .tbl .tlogo{width:15px;height:15px;margin-right:4px}
+  .tn-more{display:none}
+}
