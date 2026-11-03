@@ -140,12 +140,12 @@
      ],
      "pid": "4349268",
      "veo": "https://live.veo.co/matches/a0a13d1a-c11b-4692-9750-a54f5d545735@1793702034151",
-     "live": "13.07",
+     "live": "13.08",
      "liveInfo": "2. peli",
      "liveClock": {
-      "s": 0,
-      "at": 1793704050153,
-      "on": false,
+      "s": 29,
+      "at": 1793704115401,
+      "on": true,
       "max": 1200
      }
     }
