@@ -2,7 +2,7 @@
  "piirisarjat": {
   "SJK-j/musta -15": {
    "ottelut": 37,
-   "pelatut": 35,
+   "pelatut": 36,
    "taulukot": 3
   },
   "SJK-j/kulta": {
@@ -24,7 +24,7 @@
  "huuhkajaliiga": {
   "syksy-2026": {
    "haetut": 7,
-   "pelatut": 5,
+   "pelatut": 6,
    "taulukko": 8,
    "lohko": 28
   },
@@ -37,8 +37,8 @@
  },
  "turnaukset": {},
  "ottelutiedot": {
-  "haettu": 0,
-  "puuttui": 0
+  "haettu": 1,
+  "puuttui": 1
  },
  "veo": {
   "tallenteet": 20,
