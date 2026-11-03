@@ -128,9 +128,22 @@
      "series": "P11 HUUHKAJALIIGA",
      "home": "SJK-j/musta -15",
      "away": "HPS",
-     "score": null,
+     "score": [
+      [
+       0,
+       0
+      ]
+     ],
      "pid": "4349268",
-     "veo": "https://live.veo.co/matches/a0a13d1a-c11b-4692-9750-a54f5d545735@1793702034151"
+     "veo": "https://live.veo.co/matches/a0a13d1a-c11b-4692-9750-a54f5d545735@1793702034151",
+     "live": "12.40",
+     "liveInfo": "1. peli",
+     "liveClock": {
+      "s": 0,
+      "at": 1793702430204,
+      "on": false,
+      "max": 1200
+     }
     }
    ],
    "table": {
