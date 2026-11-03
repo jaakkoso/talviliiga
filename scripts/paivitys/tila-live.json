@@ -4,7 +4,7 @@
  "turnaukset": {},
  "live": {
   "4349268": {
-   "klo": "13.08",
+   "klo": "13.09",
    "status": "Live",
    "fs": [
     "1",
@@ -17,7 +17,7 @@
     ],
     [
      0,
-     0
+     1
     ]
    ],
    "ohi": false,
@@ -63,9 +63,9 @@
    "yla": [
     "Sukupolvien unelman vuosipäivä! Huuhkajien Nations League -syksy huipentuu SU 15.11. Bolt Arenalla – OSTA LIPUT! >>",
     "SJK-j/musta -15",
-    "00:29",
+    "01:35",
     "1 – 0",
-    "0 – 0",
+    "0 – 1",
     "HPS",
     "SPL Huuhkaja-Helmariliiga 2026",
     "Ottelu 4664",
@@ -77,10 +77,11 @@
     "2. PELI",
     "SJK-j/musta -15",
     "Esala   18'",
-    "00:29",
+    "01:35",
     "1 – 0",
-    "0 – 0",
+    "0 – 1",
     "HPS",
+    "Hajredinaj   21'",
     "Ennuste",
     "6°C"
    ]
