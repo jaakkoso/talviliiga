@@ -250,3 +250,17 @@ export function veoOsuma(tallenteet, m, oma = /^SJK/) {
     .sort((x, y) => Math.abs(x.a.min - (aika ?? x.a.min)) - Math.abs(y.a.min - (aika ?? y.a.min)));
   return ehd.length ? `https://app.veo.co/matches/${ehd[0].r.slug}/` : null;
 }
+
+/* fudisturnaus.com: oman seuran lohkojen sarjataulukot ja kaikki lohkon ottelut (myös muiden keskinäiset) */
+export function fudisLohkot(t, { seura = /^SJK/ } = {}) {
+  const omaSeura = new Set((t.clubs || []).filter(c => seura.test(c.name)).map(c => c.id));
+  const ottelut = [...(t.groupStageMatches || [])];
+  return (t.groups || []).filter(g => (g.results || []).some(r => omaSeura.has(r.clubId))).map(g => ({
+    name: g.ageGroup?.name && g.ageGroup.name !== g.name ? `${g.ageGroup.name} · ${g.name}` : g.name,
+    rows: [...g.results].sort((a, b) => a.ranking - b.ranking).map(r => ({ pos: r.ranking, team: r.teamName, o: r.matches, v: r.wins, t: r.draws, h: r.losses, gf: r.goalsFor, ga: r.goalsAgainst, p: r.points })),
+    matches: ottelut.filter(m => m.groupId === g.id).sort((a, b) => String(a.startTime).localeCompare(String(b.startTime))).map(m => ({
+      date: m.date, time: hkiKello(m.startTime), home: m.homeTeam?.name || '?', away: m.awayTeam?.name || '?', field: m.field?.name || undefined,
+      score: m.homeGoals != null && m.awayGoals != null ? [[m.homeGoals, m.awayGoals]] : null
+    }))
+  }));
+}

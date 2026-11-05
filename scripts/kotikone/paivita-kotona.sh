@@ -19,9 +19,9 @@ else
   echo "Ei muutoksia."
 fi
 
-# Huuhkajaliigan pelipäivinä käynnistetään live-haku taustalle (se lopettaa itse, kun päivän pelit ovat ohi)
+# Huuhkajaliigan ja fudisturnaus-turnausten pelipäivinä käynnistetään live-haku taustalle (se lopettaa itse, kun päivän pelit ovat ohi)
 TANAAN=$(date +%Y-%m-%d)
-if python3 -c "import json,sys;c=json.load(open('config/lahteet.json'));sys.exit(0 if any(h['alku']<=sys.argv[1]<=h['loppu'] for h in c.get('huuhkajaliiga',[])) else 1)" "$TANAAN"; then
+if python3 -c "import json,sys;c=json.load(open('config/lahteet.json'));sys.exit(0 if any(h['alku']<=sys.argv[1]<=h['loppu'] for h in c.get('huuhkajaliiga',[])) or any(t.get('paiva')==sys.argv[1] and t.get('tyyppi')=='fudisturnaus' and not t.get('valmis') for t in c.get('turnaukset',[])) else 1)" "$TANAAN"; then
   nohup perl -MPOSIX -e 'POSIX::setsid(); exec @ARGV' scripts/kotikone/live.sh >> "$HOME/Library/Logs/p2015-live.log" 2>&1 &
   echo "Live-haku käynnistetty taustalle (loki ~/Library/Logs/p2015-live.log)."
 fi

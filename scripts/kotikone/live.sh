@@ -21,11 +21,11 @@ for kierros in $(seq 1 2000); do
   git pull -q --rebase -X theirs 2>/dev/null || { git rebase --abort 2>/dev/null; git fetch -q && git reset -q --hard origin/main; }
   ( cd scripts/paivitys && PAIVITA=live node paivita.mjs ); koodi=$?
   if [ "$(cat /tmp/p2015-live-julkaise 2>/dev/null || echo 1)" != "1" ]; then
-    git checkout -q -- eerikkila scripts/paivitys/tila-live.json 2>/dev/null   # vain kello muuttui: odotetaan seuraavaa julkaisua
-  elif [ -n "$(git status --porcelain eerikkila scripts/paivitys/tila-live.json)" ]; then
-    git add eerikkila scripts/paivitys/tila-live.json
+    git checkout -q -- eerikkila turnaukset scripts/paivitys/tila-live.json 2>/dev/null   # vain kello muuttui: odotetaan seuraavaa julkaisua
+  elif [ -n "$(git status --porcelain eerikkila turnaukset scripts/paivitys/tila-live.json)" ]; then
+    git add eerikkila turnaukset scripts/paivitys/tila-live.json
     git -c user.name="Tulospäivitys (kotikone)" -c user.email="tulospaivitys@users.noreply.github.com" \
-      commit -q -m "Huuhkajaliiga live $(date '+%-d.%-m. klo %H.%M')"
+      commit -q -m "Live-tulokset $(date '+%-d.%-m. klo %H.%M')"
     for i in 1 2 3; do git push -q && break; git pull -q --rebase -X theirs || { git rebase --abort; git pull -q --rebase; }; sleep 5; done
     touch /tmp/p2015-live-julkaistu
   fi

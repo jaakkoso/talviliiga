@@ -361,3 +361,7 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
   .tbl .tlogo{width:15px;height:15px;margin-right:4px}
   .tn-more{display:none}
 }
+
+/* Turnauksen lohkotaulukot */
+.event-tables{display:grid;gap:12px;margin-top:14px}
+.event-tables .note{margin:0}

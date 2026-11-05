@@ -105,6 +105,18 @@ const P15 = (() => {
   }
   document.addEventListener('click', e => { const b = e.target.closest('.match[data-mi]'); if (b) openMatch(+b.dataset.mi); });
   // Yleinen ikkuna muille sisällöille (esim. turnausmitalit)
+  // Joukkueen kaikki ottelut (sarjataulukon rivistä): tuplapeleissä molemmat pelit, V/T/H joukkueen näkökulmasta
+  const WDS = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
+  function teamDialog(team, matches, note) {
+    const ms = [...matches].filter(m => m.home === team || m.away === team).sort((a, b) => a.date.localeCompare(b.date) || (a.time || '99').localeCompare(b.time || '99'));
+    const pip = r => r === 'W' ? '<span class="pip W">V</span>' : r === 'D' ? '<span class="pip D">T</span>' : '<span class="pip L">H</span>';
+    const body = `<h2 class="jk-h">${nimi(team)}</h2><ol class="jk-list">${ms.map(m => {
+      const p = parseDate(m.date), koti = m.home === team, vast = koti ? m.away : m.home;
+      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${h}–${a} ${pip(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${esc(m.time || '')}</span>`;
+      return `<li class="${isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WDS[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${esc(m.time || '')}${m.field ? '<br>' + esc(m.field) : ''}</span><span class="jk-v">${koti ? 'vs' : '@'} ${nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
+    }).join('')}</ol><p class="note">${esc(note || 'Tulokset kotijoukkue ensin.')}</p>`;
+    openDialog('Joukkueen ottelut', body);
+  }
   function openDialog(title, body) {
     const dlg = dialogEl();
     dlg.innerHTML = `<div class="mdlg-in"><button type="button" class="mdlg-x" data-close aria-label="Sulje">×</button><div class="mdlg-ser">${esc(title)}</div>${body}</div>`;
@@ -140,5 +152,5 @@ const P15 = (() => {
     </div>`;
   }
   async function load(url) { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(r.status); return r.json(); }
-  return { nimi, liveText, esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
+  return { teamDialog, nimi, liveText, esc, results, summary, summaryHTML, matchHTML, listHTML, tableHTML, store, load, isOwn, parseDate, openDialog };
 })();

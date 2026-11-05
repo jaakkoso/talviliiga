@@ -82,3 +82,9 @@ console.log('Veo-testi OK');
 
 assert.equal(palloliittoOttelut(['MA 2.11.', 'MATCH DETAILS', 'P11 HUUHKAJALIIGA', 'JJK/YJ', "17'"], 2026).length, 0, 'käynnissä olevan ottelun minuutti ei ole joukkue');
 console.log('Live-kortti -testi OK');
+
+import { fudisLohkot } from './jasennys.mjs';
+const FL = fudisLohkot({ clubs: [{ id: 192, name: 'SJK-j' }], groupStageMatches: [{ groupId: 9, startTime: '2026-11-07T08:35:00.000Z', date: '2026-11-07', homeGoals: 2, awayGoals: 1, field: { name: 'Kenttä B' }, homeTeam: { name: 'FC Lahti' }, awayTeam: { name: 'SJK' } }],
+  groups: [{ id: 9, name: 'Haaste', ageGroup: { name: 'Haaste' }, results: [{ ranking: 2, teamName: 'SJK', clubId: 192, matches: 1, wins: 0, draws: 0, losses: 1, goalsFor: 1, goalsAgainst: 2, points: 0 }, { ranking: 1, teamName: 'FC Lahti', clubId: 447, matches: 1, wins: 1, draws: 0, losses: 0, goalsFor: 2, goalsAgainst: 1, points: 3 }] }, { id: 10, name: 'Muu', results: [{ clubId: 5 }] }] });
+assert.equal(FL.length, 1); assert.equal(FL[0].rows[0].team, 'FC Lahti'); assert.equal(FL[0].matches[0].time, '10.35'); assert.deepEqual(FL[0].matches[0].score, [[2, 1]]);
+console.log('Fudis-lohkot -testi OK');

@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus, veoOsuma } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus, fudisLohkot, veoOsuma } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -292,7 +292,16 @@ async function fudisHaku(url) {
   if (!slug) throw new Error('osoitteesta ei löytynyt turnauksen tunnusta');
   const r = await fetch(`https://www.fudisturnaus.com/api/v1/public/tournaments/${slug}`, { headers: { accept: 'application/json' } });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  return fudisTurnaus(await r.json());
+  const t = await r.json();
+  return { teams: fudisTurnaus(t), groups: fudisLohkot(t) };
+}
+// fudisturnaus-tulokset tapahtumaan: joukkueiden ottelut (nimikkeet säilytetään) ja lohkojen taulukot kaikkine otteluineen
+function fudisPaivita(ev, tulos) {
+  const vanhat = ev.teams || [];
+  const uudet = tulos.teams.map(t => { const v = vanhat.find(x => x.label.toLowerCase() === t.label.toLowerCase()); return { ...t, label: v?.label || t.label, level: v?.level || t.level, place: t.place || v?.place, matches: t.matches.map(m => { const vm = (v?.matches || []).find(x => x.date === m.date && x.home === m.home && x.away === m.away); return vm && vm.veo ? { ...m, veo: vm.veo } : m; }) }; });
+  if (!turvallinen(vanhat.flatMap(t => t.matches), uudet.flatMap(t => t.matches))) { varoita(`Turnaus ${ev.id}: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty`); return false; }
+  ev.teams = uudet; if (tulos.groups.length) ev.groups = tulos.groups;
+  return true;
 }
 
 async function paivitaTurnaukset() {
@@ -311,7 +320,13 @@ async function paivitaTurnaukset() {
         else varoita(`Turnaus ${tc.id}: taulukossa vähemmän pelattuja otteluita kuin sivulla, vanhat säilytetty`);
         continue;
       }
-      const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : tc.tyyppi === 'fudisturnaus' ? await fudisHaku(tc.url) : null;
+      if (tc.tyyppi === 'fudisturnaus') {
+        const tulos = await fudisHaku(tc.url);
+        tila.turnaukset[tc.id] = { joukkueet: tulos.teams.length, ottelut: tulos.teams.reduce((n, t) => n + t.matches.length, 0), lohkot: tulos.groups.length };
+        if (tulos.teams.length) { fudisPaivita(ev, tulos); ev.link = ev.link || tc.url; }
+        continue;
+      }
+      const teams = tc.tyyppi === 'torneopal' ? await torneopal(tc.url, tc.suodatin) : tc.tyyppi === 'gameresultsonline' ? await gameResultsOnline(tc.url, tc.paiva) : null;
       if (!teams) { varoita(`Turnaus ${tc.id}: tuntematon tyyppi ${tc.tyyppi}`); continue; }
       tila.turnaukset[tc.id] = { joukkueet: teams.length, ottelut: teams.reduce((n, t) => n + t.matches.length, 0) };
       if (!teams.length) { varoita(`Turnaus ${tc.id}: SJK:n joukkueita ei löytynyt`); continue; }
@@ -404,6 +419,24 @@ async function paivitaLive() {
     if (muuttui || Date.now() - edellinen > 14 * 60000) { if (await paivitaLohko(h, ev)) try { fs.writeFileSync('/tmp/p2015-lohko-haettu', nyt.klo); } catch { } }
     if (nyt.min >= 8 * 60 && nyt.min < 22 * 60) { seuraava = Math.min(seuraava, 15); jatkuu = true; }
   }
+  // Turnaukset (fudisturnaus) pelipäivänä: tulokset ja taulukot minuutin välein otteluiden aikana
+  let turnausMuuttui = false;
+  try {
+    const td = lue('turnaukset/data.json'), ennen = JSON.stringify(td.events);
+    for (const tc of cfg.turnaukset.filter(t => t.tyyppi === 'fudisturnaus' && t.paiva === nyt.pvm && !t.valmis)) {
+      const ev = td.events.find(e => e.id === tc.id); if (!ev) continue;
+      const ajat = (ev.teams || []).flatMap(t => t.matches).map(m => minuutit(m.time)).filter(x => x != null);
+      if (!ajat.length) continue;
+      const alku = Math.min(...ajat) - 15, loppu = Math.max(...ajat) + 90;
+      if (nyt.min < alku) { seuraava = Math.min(seuraava, Math.max(2, alku - nyt.min)); jatkuu = true; continue; }
+      if (nyt.min > loppu) continue;
+      jatkuu = true; seuraava = 1;
+      try { fudisPaivita(ev, await fudisHaku(tc.url)); diag['turnaus:' + tc.id] = { klo: nyt.klo, pelatut: ev.teams.flatMap(t => t.matches).filter(m => m.score).length }; }
+      catch (e) { varoita(`Turnaus ${tc.id} live: ${e.message}`); }
+    }
+    if (JSON.stringify(td.events) !== ennen) { td.updated = tanaan; kirjoita('turnaukset/data.json', td); turnausMuuttui = true; }
+  } catch (e) { varoita(`Turnausten live: ${e.message}`); }
+
   // Veo-linkki: etsitään 5 min ennen alkua – 15 min alun jälkeen (lähetys tai tallenne kanavalla). Myöhemmin ilmestyvät tallenteet liittää 15 min välein ajettava GitHub-tarkistus.
   if (cfg.veo) {
     const etsittavat = d.events.flatMap(e => e.matches).filter(m => m.date === nyt.pvm && !m.veo && minuutit(m.time) != null && nyt.min >= minuutit(m.time) - 5 && nyt.min <= minuutit(m.time) + 15);
@@ -436,7 +469,7 @@ async function paivitaLive() {
   const ilmanKelloa = o => JSON.stringify(o, (k, v) => k === 'updated' ? undefined : k === 'live' && typeof v === 'string' ? true : k === 'liveClock' && v ? { on: v.on, alku: Math.round((v.at / 1000 - v.s) / 120) } : v);
   let vanha = null; try { vanha = lue('eerikkila/data.json'); } catch { }
   let julkaistu = 0; try { julkaistu = fs.statSync('/tmp/p2015-live-julkaistu').mtimeMs; } catch { }
-  const julkaise = !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 2 * 60000;
+  const julkaise = turnausMuuttui || !vanha || ilmanKelloa(vanha) !== ilmanKelloa(d) || Date.now() - julkaistu > 2 * 60000;
   kirjoita('eerikkila/data.json', d);
   tila.live = diag;
   try { fs.writeFileSync('/tmp/p2015-live-seuraava', String(seuraava)); fs.writeFileSync('/tmp/p2015-live-julkaise', julkaise ? '1' : '0'); } catch { }
