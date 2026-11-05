@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18",
+ "updated": "2026-11-05",
  "events": [
   {
    "id": "jjk-talviliiga-2026",
@@ -129,6 +129,394 @@
        "d": {
         "venue": "Kenttä B"
        }
+      }
+     ]
+    }
+   ],
+   "groups": [
+    {
+     "name": "Haaste",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "FC Lahti",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "JJK",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "KuPS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "OLS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "SJK",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "VPS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ],
+     "matches": [
+      {
+       "date": "2026-11-07",
+       "time": "10.00",
+       "home": "JJK",
+       "away": "KuPS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "10.35",
+       "home": "FC Lahti",
+       "away": "SJK",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "11.10",
+       "home": "OLS",
+       "away": "VPS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "11.45",
+       "home": "JJK",
+       "away": "FC Lahti",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.20",
+       "home": "KuPS",
+       "away": "SJK",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.55",
+       "home": "OLS",
+       "away": "JJK",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "13.30",
+       "home": "VPS",
+       "away": "FC Lahti",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.05",
+       "home": "KuPS",
+       "away": "OLS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.40",
+       "home": "SJK",
+       "away": "VPS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.15",
+       "home": "FC Lahti",
+       "away": "KuPS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.50",
+       "home": "SJK",
+       "away": "OLS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "16.25",
+       "home": "VPS",
+       "away": "JJK",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "17.00",
+       "home": "FC Lahti",
+       "away": "OLS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "17.35",
+       "home": "KuPS",
+       "away": "VPS",
+       "field": "Kenttä B",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "18.10",
+       "home": "JJK",
+       "away": "SJK",
+       "field": "Kenttä B",
+       "score": null
+      }
+     ]
+    },
+    {
+     "name": "Kilpa",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "HoDy",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "JJK",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "KuPS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "OLS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "SJK-j",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 1,
+       "team": "VPS",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ],
+     "matches": [
+      {
+       "date": "2026-11-07",
+       "time": "10.00",
+       "home": "JJK",
+       "away": "KuPS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "10.35",
+       "home": "HoDy",
+       "away": "SJK-j",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "11.10",
+       "home": "OLS",
+       "away": "VPS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "11.45",
+       "home": "JJK",
+       "away": "HoDy",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.20",
+       "home": "KuPS",
+       "away": "SJK-j",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "12.55",
+       "home": "OLS",
+       "away": "JJK",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "13.30",
+       "home": "VPS",
+       "away": "HoDy",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.05",
+       "home": "KuPS",
+       "away": "OLS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "14.40",
+       "home": "SJK-j",
+       "away": "VPS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.15",
+       "home": "HoDy",
+       "away": "KuPS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "15.50",
+       "home": "SJK-j",
+       "away": "OLS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "16.25",
+       "home": "VPS",
+       "away": "JJK",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "17.00",
+       "home": "HoDy",
+       "away": "OLS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "17.35",
+       "home": "KuPS",
+       "away": "VPS",
+       "field": "Kenttä A",
+       "score": null
+      },
+      {
+       "date": "2026-11-07",
+       "time": "18.10",
+       "home": "JJK",
+       "away": "SJK-j",
+       "field": "Kenttä A",
+       "score": null
       }
      ]
     }
