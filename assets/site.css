@@ -365,3 +365,34 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 /* Turnauksen lohkotaulukot */
 .event-tables{display:grid;gap:12px;margin-top:14px}
 .event-tables .note{margin:0}
+
+/* ---------- Puhelinoptimointi ---------- */
+@media (max-width:560px){
+  /* Matalampi yläpalkki: enemmän tilaa tuloksille */
+  .top-in{padding-block:10px 10px;gap:12px}
+  .top img{width:40px;height:40px}
+  .top .eyebrow{display:none}
+  .top h1{font-size:1.55rem;line-height:1;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top .sub{font-size:.78rem}
+  /* Valikko mahtuu kokonaan, ei piilossa olevia kohtia */
+  .menu-in{justify-content:space-between;gap:0;padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:max(6px,env(safe-area-inset-right,0px))}
+  .menu a{font-size:.86rem;padding:12px 6px 10px;letter-spacing:-.005em}
+  /* Tiiviimpi sisältö */
+  .wrap{gap:20px;padding-block:12px 40px}
+  h2{font-size:1.3rem}
+  .match{grid-template-columns:44px minmax(0,1fr) auto;gap:10px;padding:10px}
+  .match .date b{font-size:.95rem}
+  .card{padding:14px}
+  .cards{gap:10px}
+  /* Pienet linkit helpommin osuttaviksi */
+  .tbl-head a{padding:8px 0;display:inline-block}
+  .btn{min-height:40px}
+}
+@media (max-width:360px){
+  .menu a{font-size:.8rem;padding-inline:4px}
+}
+@media (max-width:560px){
+  /* Linkkinapit rinnakkain, ei allekkain */
+  .summary .btns,.event-head .btns{display:flex;flex-wrap:wrap;gap:8px}
+  .summary .btns .btn{padding:8px 12px;font-size:.88rem}
+}
