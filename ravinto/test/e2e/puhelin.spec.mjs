@@ -67,6 +67,26 @@ test("välimuistilista kattaa kaikki sivun tarvitsemat omat tiedostot", async ()
   for (const k of manifesti.icons) assert.ok(lista.includes(k.src), k.src);
 });
 
+test("aloitus: tuleva Jyväskylän turnaus yhdellä napautuksella", async () => {
+  await sivu.clock.setFixedTime(new Date(2026, 10, 7, 9, 0));
+  await sivu.goto(URLI);
+  await sivu.evaluate(() => localStorage.clear());
+  await sivu.reload();
+  try {
+    const kortti = sivu.locator(".valmis");
+    assert.match(await kortti.innerText(), /JJK talviliiga/i);
+    assert.match(await kortti.innerText(), /Tänään/);
+    await kortti.locator('button:has-text("Ota tämä turnaus")').click();
+    await sivu.waitForSelector(".jana");
+    assert.match(await sivu.locator(".taso").innerText(), /turnauspäivä/i);
+    assert.match(await sivu.locator(".nyt").innerText(), /Nyt, klo 08.35/);
+    assert.equal(await sivu.locator(".jana .tapahtuma.juoma").count(), 5);
+    assert.ok(await sivu.locator('.jana .tapahtuma:has-text("Ruokailu (järjestäjä)")').isVisible());
+  } finally {
+    await sivu.evaluate(() => localStorage.clear());
+  }
+});
+
 test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista", async () => {
   await sivu.clock.setFixedTime(new Date(2026, 10, 14, 7, 5)); // Turnauspäivän aamu, jotta seuraavaksi-kortti näkyy.
   await sivu.goto(URLI);
@@ -114,7 +134,7 @@ test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista"
 
 test("Eerikkilän ohjelma löytyy Ohjelma-välilehdeltä", async () => {
   await sivu.goto(URLI + "#/ohjelma");
-  await sivu.click('button:has-text("Ota Eerikkilän")');
+  await sivu.click('button:has-text("Ota Huuhkajaliiga")');
   await sivu.waitForSelector(".jana");
   assert.equal(await sivu.locator(".pvmt a").count(), 3);
   await sivu.goto(URLI + "#/ohjelma");
@@ -151,7 +171,7 @@ test("offline myös Chromiumissa selaimen omalla verkkokatkaisulla", async () =>
     await s.evaluate(() => navigator.serviceWorker.ready);
     await s.waitForFunction(() => navigator.serviceWorker.controller !== null);
     await s.goto(URLI + "#/ohjelma");
-    await s.click('button:has-text("Ota Eerikkilän")');
+    await s.click('button:has-text("Ota Huuhkajaliiga")');
     await s.waitForSelector(".jana");
     await k.setOffline(true);
     await s.reload();

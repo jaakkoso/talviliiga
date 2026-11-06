@@ -157,6 +157,7 @@ form[data-tyyppi="ateria"] .vain-liike,form:not([data-tyyppi="ateria"]) .vain-at
 
 /* Seuraavaksi-kortti */
 .nyt{background:var(--surface);gap:10px}
+.valmis{border-left:6px solid var(--gold)}
 .nyt h2{font-size:2rem}
 .nyt .valitut{font-weight:600}
 .nyt .napit .nappi{flex:1 1 auto}

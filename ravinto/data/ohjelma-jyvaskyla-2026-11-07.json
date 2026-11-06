@@ -1,0 +1,21 @@
+{
+  "versio": 1,
+  "id": "jyvaskyla-2026-11-07",
+  "nimi": "JJK talviliiga, Jyväskylä",
+  "paikka": "Huhtahalli, Kangasvuorentie 18, Jyväskylä",
+  "joukkue": "SJK-j (Kilpa) ja SJK (Haaste)",
+  "lahde": { "tyyppi": "kasin", "huom": "Ottelut tiedostosta turnaukset/data.json (fudisturnaus.com). Molempien SJK-joukkueiden pelit ovat samaan aikaan. Pelin kesto 30 min on arvio 35 min ottelurytmistä. Järjestäjän ruokailun aika 13.00 (heti toisen pelin jälkeen) on arvio, korjaa kun aika tiedetään." },
+  "paivat": [
+    {
+      "pvm": "2026-11-07",
+      "osiot": [
+        { "id": "jkl-peli1", "tyyppi": "peli", "alku": "10.35", "kesto": 30, "nimi": "Peli 1: HoDy / FC Lahti" },
+        { "id": "jkl-peli2", "tyyppi": "peli", "alku": "12.20", "kesto": 30, "nimi": "Peli 2: KuPS" },
+        { "id": "jkl-ruokailu", "tyyppi": "ateria", "ateria": "lounas", "alku": "13.00", "kesto": null, "nimi": "Ruokailu (järjestäjä)", "huom": "Aika on arvio: heti toisen pelin jälkeen." },
+        { "id": "jkl-peli3", "tyyppi": "peli", "alku": "14.40", "kesto": 30, "nimi": "Peli 3: VPS" },
+        { "id": "jkl-peli4", "tyyppi": "peli", "alku": "15.50", "kesto": 30, "nimi": "Peli 4: OLS" },
+        { "id": "jkl-peli5", "tyyppi": "peli", "alku": "18.10", "kesto": 30, "nimi": "Peli 5: JJK" }
+      ]
+    }
+  ]
+}

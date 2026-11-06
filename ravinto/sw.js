@@ -1,6 +1,6 @@
 // Offline-tuki. Koskee vain omaan kansioon kuuluviin pyyntöihin; muut polut ja fontit menevät suoraan verkkoon.
 // Kun jokin tiedosto muuttuu, nosta VERSIO, niin puhelimet hakevat uudet tiedostot.
-const VERSIO = "2026-11-06-3";
+const VERSIO = "2026-11-06-5";
 const ETULIITE = "ravinto-";
 const VALIMUISTI = ETULIITE + VERSIO;
 const KANSIO = new URL("./", self.location).pathname;
@@ -9,7 +9,7 @@ const SIVU = KANSIO + "index.html";
 const TIEDOSTOT = [
   "./", "index.html", "style.css", "app.js", "manifest.webmanifest", "icon-192.png", "icon-512.png",
   "js/aika.js", "js/aikajana.js", "js/omat-tuotteet.js", "js/rasitus.js", "js/saannot.js", "js/tallennus.js", "js/tavoitteet.js", "js/tuonti.js", "js/turnaus.js",
-  "data/tuotteet.json", "data/ohjelma-eerikkila-2026-11.json",
+  "data/tuotteet.json", "data/ohjelma-eerikkila-2026-11.json", "data/ohjelma-jyvaskyla-2026-11-07.json",
 ];
 
 self.addEventListener("install", (e) => {

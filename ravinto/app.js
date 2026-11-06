@@ -25,6 +25,11 @@ const TASOT = { lepo: "Lepopäivä", kevyt: "Kevyt päivä", peli: "Pelipäivä"
 const RYHMAT = { hedelma: "Hedelmät ja marjat", vilja: "Viljat", leipa: "Leivät", maito: "Maitotuotteet", juoma: "Juomat", ateria: "Ateriat", patukka: "Patukat", makeinen: "Makeiset", keksi: "Keksit ja leivonnaiset", pahkina: "Pähkinät", valmisruoka: "Valmisruoat", oma: "Omat tuotteet" };
 const ATERIAT = { aamiainen: "Aamiainen", lounas: "Lounas", paivallinen: "Päivällinen", iltapala: "Iltapala", valipala: "Välipala" };
 const OSIOT = { peli: "Peli", harjoitus: "Harjoitus", testi: "Testi", ateria: "Ateria" };
+// Valmiit ohjelmat. Tuleva turnaus näkyy aloituksessa päiväänsä asti.
+const VALMIIT = [
+  { id: "jyvaskyla", tiedosto: "data/ohjelma-jyvaskyla-2026-11-07.json", pvm: "2026-11-07", nimi: "JJK talviliiga, Jyväskylä", kuvaus: "La 7.11. Huhtahalli. 5 peliä ja järjestäjän ruokailu." },
+  { id: "eerikkila", tiedosto: "data/ohjelma-eerikkila-2026-11.json", pvm: "2026-11-01", nimi: "Huuhkajaliiga, Eerikkilä", kuvaus: "1.–3.11. Kolme päivää, pelit, testit ja ateriat." },
+];
 const TILAT = { lisaa: "Lisää tankkausta", tankissa: "Tankki täynnä", reilusti: "Reilusti tankissa" };
 const KOOT = { pieni: "Pieni tankkaus", perus: "Perustankkaus", iso: "Iso tankkaus", juoma: "Juominen" }; // A10
 
@@ -140,8 +145,15 @@ function piirra(sailytaVieritys = false) {
 
 // Päivä
 function tyhjaTila() {
-  return `<section class="kortti pino">
-    <h2>Milloin pelataan?</h2>
+  const tulevat = VALMIIT.filter((v) => v.pvm >= tanaan());
+  const valmis = tulevat.map((v) => `<section class="kortti pino valmis">
+    <div class="pieni">${v.pvm === tanaan() ? "Tänään" : "Seuraava turnaus"}</div>
+    <h2>${esc(v.nimi)}</h2>
+    <p class="pieni">${esc(v.kuvaus)}</p>
+    <button class="nappi paa leve" data-toiminto="valmis-ohjelma" data-id="${v.id}">Ota tämä turnaus</button>
+  </section>`).join("");
+  return `${valmis}<section class="kortti pino">
+    <h2>${tulevat.length ? "Tai kerro oma turnaus" : "Milloin pelataan?"}</h2>
     <p class="pieni">Kerro turnauksen pelit, niin appi laskee päivän tankkauksen ja syömisen ajat.</p>
     ${turnausLomake()}
   </section>
@@ -452,7 +464,7 @@ function nakymaOhjelma() {
       <h3>Uusi ohjelma</h3>
       <button class="nappi paa leve" data-toiminto="uusi-turnaus">Uusi turnaus</button>
       <button class="nappi leve" data-toiminto="uusi-ohjelma">Tee oma ohjelma</button>
-      <button class="nappi leve" data-toiminto="eerikkila">Ota Eerikkilän ohjelma</button>
+      ${VALMIIT.map((v) => `<button class="nappi leve" data-toiminto="valmis-ohjelma" data-id="${v.id}">Ota ${esc(v.nimi)}</button>`).join("")}
       <button class="nappi leve" data-toiminto="hae-lahteet">Hae joukkueen otteluohjelmat</button>
       ${lahdeLista()}
       <label class="kentta">Tuo tiedostosta<input type="file" accept=".json,application/json" data-muutos="tuo-tiedosto"></label>
@@ -688,9 +700,9 @@ const toiminnot = {
   },
   "toinen-ehdotus": (d) => { ui.kierros[d.ikkuna] = (ui.kierros[d.ikkuna] ?? 0) + 1; piirra(true); },
   ryhma: (d) => { ui.ryhma = d.ryhma || null; suodata(); },
-  eerikkila: async () => {
+  "valmis-ohjelma": async (d) => {
     try {
-      const v = await fetch("data/ohjelma-eerikkila-2026-11.json");
+      const v = await fetch(VALMIIT.find((x) => x.id === d.id).tiedosto);
       await tuoJson(await v.json());
     } catch {
       ui.viesti = "Ohjelmaa ei saatu ladattua. Tarkista verkkoyhteys.";

@@ -8,6 +8,17 @@ const ohjelma = lue("../data/ohjelma-eerikkila-2026-11.json");
 const { tuotteet } = lue("../data/tuotteet.json");
 const osiot = ohjelma.paivat.flatMap((p) => p.osiot.map((o) => ({ ...o, pvm: p.pvm })));
 
+test("Jyväskylän turnauksen pelit vastaavat tiedostoa turnaukset/data.json", () => {
+  const jkl = lue("../data/ohjelma-jyvaskyla-2026-11-07.json");
+  const tapahtuma = lue("../../turnaukset/data.json").events.find((e) => e.id === "jjk-talviliiga-2026");
+  const pelit = jkl.paivat[0].osiot.filter((o) => o.tyyppi === "peli");
+  for (const joukkue of tapahtuma.teams.filter((t) => /SJK/.test(t.name))) {
+    assert.deepEqual(joukkue.matches.map((m) => m.time), pelit.map((p) => p.alku), joukkue.name);
+    assert.ok(joukkue.matches.every((m) => m.date === jkl.paivat[0].pvm));
+  }
+  assert.equal(jkl.paivat[0].osiot.filter((o) => o.tyyppi === "ateria").length, 1);
+});
+
 test("pelit vastaavat tiedostoa eerikkila/data.json", () => {
   const data = lue("../../eerikkila/data.json").events.find((e) => e.id === "syksy-2026");
   const odotettu = data.matches.map((m) => `${m.date} ${m.time} ${m.home} - ${m.away}`);
