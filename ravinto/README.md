@@ -4,11 +4,11 @@ Puhelimella käytettävä appi, joka auttaa SJK P2015 -pelaajia ja vanhempia suu
 
 ## Käyttö
 
-1. Avaa osoite puhelimessa ja kerro turnauksen päivä, pelien määrä, alkuaika, kesto, tauko ja yhteinen ruokailu. Muut ohjelmat (Eerikkilä, harjoitus, tuonti) löytyvät Ohjelma-välilehdeltä.
-2. Katso päivän energiatarve ja aikajana. Syömiskerrat on värikoodattu koon mukaan: pieni, perus tai iso tankkaus.
-3. Valitse tuotteet: ota pikavalinta yhdellä napautuksella tai etsi ja valitse itse. Mittari pysyy näkyvissä vierittäessä.
-4. Pelipäivänä ylimpänä näkyy käynnissä oleva tai seuraava syömiskerta. Kuittaa syödyt.
-5. Avaa ostoslista.
+1. Avaa osoite puhelimessa ja kerro pelien kellonajat, pelin kesto ja mahdollinen yhteinen ruokailu. Valmiin turnauksen saa yhdellä napautuksella.
+2. Pelipäivä-näkymä kertoo selkokielellä, mitä kannattaa syödä ja milloin: edellinen ilta, aamu, pelien välit, vaihtopenkki, pelin jälkeen ja pakkauslista.
+3. Määrät-näkymässä ovat tarkat hiilihydraattihaarukat ja tuotevalinta. Syömiskerrat on värikoodattu koon mukaan: pieni, perus tai iso tankkaus.
+4. Pelipäivänä ylimpänä näkyy käynnissä oleva tai seuraava syömiskerta.
+5. Ohjelma-välilehdellä voi muuttaa pelejä ja ruokailuja, ja siellä ovat myös monipäiväiset ohjelmat (Eerikkilä) ja tuonti.
 
 Kotivalikkoon: iPhonessa Safari > Jaa > Lisää Koti-valikkoon. Androidissa Chrome > valikko > Asenna sovellus. Kun appi on avattu kerran verkossa, se toimii myös ilman verkkoa.
 

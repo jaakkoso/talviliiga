@@ -61,7 +61,7 @@ test("service worker ottaa sivun hallintaan ja pysyy omassa kansiossaan", async 
 
 test("välimuistilista kattaa kaikki sivun tarvitsemat omat tiedostot", async () => {
   const lista = await readFile(path.join(JUURI, "ravinto/sw.js"), "utf8");
-  for (const f of ["aika", "aikajana", "omat-tuotteet", "rasitus", "saannot", "tallennus", "tavoitteet", "tuonti"]) assert.ok(lista.includes(`js/${f}.js`), f);
+  for (const f of ["aika", "aikajana", "ohje", "omat-tuotteet", "rasitus", "saannot", "tallennus", "tavoitteet", "tuonti", "turnaus"]) assert.ok(lista.includes(`js/${f}.js`), f);
   const manifesti = JSON.parse(await readFile(path.join(JUURI, "ravinto/manifest.webmanifest"), "utf8"));
   assert.equal(manifesti.start_url, "./");
   for (const k of manifesti.icons) assert.ok(lista.includes(k.src), k.src);
@@ -77,6 +77,13 @@ test("aloitus: tuleva Jyväskylän turnaus yhdellä napautuksella", async () => 
     assert.match(await kortti.innerText(), /JJK talviliiga/i);
     assert.match(await kortti.innerText(), /Tänään/);
     await kortti.locator('button:has-text("Ota tämä turnaus")').click();
+    await sivu.waitForSelector(".ohje");
+    assert.match(await sivu.locator(".ohjekortti").innerText(), /5 peliä/i);
+    assert.equal(await sivu.locator(".ohje li.o-peli .vaihto").count(), 5);
+    assert.match(await sivu.locator(".ohje li.korostus").innerText(), /välipala/i);
+    assert.match(await sivu.locator(".ohje").innerText(), /Ruokailu \(järjestäjä\)[\s\S]*kevyesti/i);
+    assert.doesNotMatch(await sivu.locator("main").innerText(), /\d+\s*g\b|kcal/);
+    await sivu.click('a:has-text("Tarkat määrät")');
     await sivu.waitForSelector(".jana");
     assert.match(await sivu.locator(".taso").innerText(), /turnauspäivä/i);
     assert.match(await sivu.locator(".nyt").innerText(), /Nyt, klo 08.35/);
@@ -94,11 +101,11 @@ test("mennyt ohjelma ei peitä tulevaa turnausta", async () => {
   await sivu.reload();
   try {
     await sivu.click('button:has-text("Ota Huuhkajaliiga")');
-    await sivu.waitForSelector(".jana");
+    await sivu.waitForSelector(".ohje");
     const kortti = sivu.locator(".valmis");
     assert.match(await kortti.innerText(), /Seuraava turnaus/);
     await kortti.locator('button:has-text("Ota tämä turnaus")').click();
-    await sivu.waitForSelector('.taso:has-text("JJK talviliiga")');
+    await sivu.waitForSelector('.ohjekortti:has-text("JJK talviliiga")');
     assert.equal(await sivu.locator(".valmis").count(), 0);
   } finally {
     await sivu.evaluate(() => localStorage.clear());
@@ -109,9 +116,20 @@ test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista"
   await sivu.clock.setFixedTime(new Date(2026, 10, 14, 7, 5)); // Turnauspäivän aamu, jotta seuraavaksi-kortti näkyy.
   await sivu.goto(URLI);
   await sivu.fill('input[name="pvm"]', "2026-11-14");
-  assert.equal(await sivu.locator('input[name="peleja"]:checked').inputValue(), "5");
-  await sivu.fill('input[name="ruokailu"]', "12:30");
-  await sivu.click('button:has-text("Laske päivän tarve")');
+  assert.equal(await sivu.locator('input[name="kesto"]:checked').inputValue(), "30");
+  await sivu.click('button:has-text("Lisää peli")');
+  await sivu.click('button:has-text("Lisää peli")');
+  const ajat = sivu.locator('input[name="aika"]');
+  assert.equal(await ajat.count(), 5);
+  for (const [i, a] of ["09:00", "10:00", "11:00", "13:30", "14:30"].entries()) await ajat.nth(i).fill(a);
+  await sivu.fill('input[name="ruokailu"]', "12:00");
+  await sivu.click('button:has-text("Näytä pelipäivän ohje")');
+  await sivu.waitForSelector(".ohje");
+  assert.match(await sivu.locator(".ohjekortti").innerText(), /09\.00, 10\.00, 11\.00, 13\.30, 14\.30/);
+  assert.match(await sivu.locator(".ohje li.korostus").innerText(), /kevyt aamiainen/i);
+  assert.ok((await sivu.locator(".vinkit li").allInnerTexts()).some((t) => /Vesipullo/.test(t)));
+  assert.ok(await eiVaakavieritysta());
+  await sivu.click('.nav a:has-text("Määrät")');
   await sivu.waitForSelector(".jana");
   assert.match(await sivu.locator(".tarve").innerText(), /vähintään noin \d+ g/);
   assert.equal(await sivu.locator(".jana .koko").count(), await sivu.locator(".jana li").count());
@@ -153,7 +171,7 @@ test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista"
 test("Eerikkilän ohjelma löytyy Ohjelma-välilehdeltä", async () => {
   await sivu.goto(URLI + "#/ohjelma");
   await sivu.click('button:has-text("Ota Huuhkajaliiga")');
-  await sivu.waitForSelector(".jana");
+  await sivu.waitForSelector(".ohje");
   assert.equal(await sivu.locator(".pvmt a").count(), 3);
   await sivu.goto(URLI + "#/ohjelma");
   await sivu.selectOption('select[data-muutos="vaihda-ohjelma"]', "turnaus-2026-11-14");
@@ -190,9 +208,11 @@ test("offline myös Chromiumissa selaimen omalla verkkokatkaisulla", async () =>
     await s.waitForFunction(() => navigator.serviceWorker.controller !== null);
     await s.goto(URLI + "#/ohjelma");
     await s.click('button:has-text("Ota Huuhkajaliiga")');
-    await s.waitForSelector(".jana");
+    await s.waitForSelector(".ohje");
     await k.setOffline(true);
     await s.reload();
+    await s.waitForSelector(".ohje");
+    await s.goto(URLI + "#/paiva");
     await s.waitForSelector(".jana");
     await s.click('.tapahtuma:has-text("Palautus") >> nth=0');
     await s.waitForSelector(".tuote");

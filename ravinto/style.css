@@ -194,3 +194,22 @@ form[data-tyyppi="ateria"] .vain-liike,form:not([data-tyyppi="ateria"]) .vain-at
 .kaksi{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end}
 input[type=date],input[type=time]{-webkit-appearance:none;appearance:none;display:block}
 select{-webkit-appearance:none;appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+
+/* Pelipäivän ohje (A13): selkokielinen aikajana */
+.nav{grid-template-columns:repeat(5,1fr)}
+.nav a{font-size:.72rem}
+.sirut:has(input[name="kesto"]){grid-template-columns:repeat(4,1fr)}
+.ohje{display:grid;gap:10px;list-style:none;margin:0;padding:0}
+.ohje li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:8px;align-items:start}
+.ohje .klo{font:800 1.15rem var(--display);padding-top:14px}
+.ohje h3{font-size:1.15rem}
+.ohje p{margin:0}
+.ohje .pieni{display:flex;gap:6px;align-items:flex-start}
+.ohje .pieni svg{width:18px;height:18px;flex:none;color:var(--gold-ink)}
+.ohje li.o-syo .kortti{border-left:6px solid var(--gold)}
+.ohje li.o-peli .kortti{background:var(--surface2)}
+.ohje li.korostus .kortti{box-shadow:0 0 0 2px var(--gold)}
+.ohje li.korostus .klo{color:var(--gold-ink)}
+.vaihto{display:flex;gap:8px;align-items:flex-start;margin:0;background:var(--tip-bg);color:var(--tip-ink);border-radius:10px;padding:8px 10px;font-size:.95rem}
+.vaihto svg{width:20px;height:20px;flex:none;margin-top:2px}
+.ohjekortti p{margin:0;font-size:1.05rem;font-weight:600}

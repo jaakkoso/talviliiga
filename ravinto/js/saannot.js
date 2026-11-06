@@ -104,3 +104,31 @@ export const IKKUNAT = Object.freeze({
   iltapala:         { otsikko: "Iltapala",                saanto: "S23" },
   aukko:            { otsikko: "Välipala",                saanto: "S1" },
 });
+
+// Selkokielinen pelipäivän ohje (A13): esimerkkiruoat lähteiden omista esimerkeistä, ei grammoja.
+// pakkaa: yksittäiset tavarat pakkauslistaan, kun syömiskerta osuu pelipaikalle.
+export const OHJE = Object.freeze({
+  aamiainen:        { otsikko: "Kunnon aamiainen", teksti: "Hiilihydraattia: puuroa, leipää, maitoa ja hedelmä.", esimerkit: ["puuro ja marjat", "leipä ja leikkele", "maito tai jogurtti", "hedelmä"] },   // S1, S6
+  kevytAamiainen:   { otsikko: "Kevyt aamiainen", teksti: "Peli on pian, joten syö kevyesti.", esimerkit: ["juotava jogurtti", "banaani", "paahtoleipä"] },   // S11
+  taydentavaAamiainen: { otsikko: "Täydentävä aamiainen", teksti: "Syö pelin jälkeen loput aamiaisesta.", esimerkit: ["puuro", "leipä", "maito", "hedelmä"] },   // S11
+  paaateria:        { otsikko: "Pääateria", teksti: "Viimeinen kunnon ateria ennen peliä.", esimerkit: ["pasta, riisi tai peruna", "vähän kastiketta", "leipä", "maito"] },   // S6, S19
+  valipala:         { otsikko: "Välipala", teksti: "Kevyempi kuin ateria.", esimerkit: ["täytetty sämpylä", "jogurtti", "banaani"], pakkaa: ["täytetty sämpylä", "jogurtti", "banaani"] },   // S7, L12
+  aukko:            { otsikko: "Välipala", teksti: "Pidä tankki täynnä.", esimerkit: ["täytetty sämpylä", "jogurtti", "banaani"], pakkaa: ["täytetty sämpylä", "jogurtti", "banaani"] },   // S1
+  kevyt:            { otsikko: "Kevyt välipala", teksti: "Viimeistään puoli tuntia ennen peliä. Nopeasti sulavaa.", esimerkit: ["banaani", "juotava jogurtti", "laimea mehu"], pakkaa: ["banaani", "juotava jogurtti"] },   // S8, L12
+  pikatankkaus:     { otsikko: "Pelien välissä: kevyesti", teksti: "Vähän ja nopeasti sulavaa, vatsa edellä.", esimerkit: ["banaani", "rusinat", "juotava jogurtti", "laimea mehu"], pakkaa: ["banaani", "rusinat", "laimea mehu"] },   // S18
+  tankkaus:         { otsikko: "Pelien välissä: syö heti", teksti: "Syö heti pelin jälkeen, niin ruoka ehtii sulaa.", esimerkit: ["täytetty sämpylä", "jogurtti ja banaani", "kaakao"], pakkaa: ["täytetty sämpylä", "jogurtti", "banaani", "kaakao"] },   // S17, S20
+  palautus:         { otsikko: "Heti pelin jälkeen", teksti: "Hiilihydraattia ja vähän proteiinia puolen tunnin sisällä.", esimerkit: ["jogurtti ja hedelmä", "kaakao ja sämpylä", "rahka ja banaani"], pakkaa: ["jogurtti", "kaakao", "banaani", "täytetty sämpylä"] },   // S20
+  kiintea:          { otsikko: "Ateria", teksti: "Syö kunnolla.", esimerkit: [] },   // S19
+  kiinteaKevyt:     "Syö kevyesti, peli on pian: pastaa, riisiä tai perunaa ja leipää, vähän kastiketta. Loput pelin jälkeen.",   // S19
+  lamminAteria:     { otsikko: "Lämmin ateria", teksti: "Kunnon ateria päivän päätteeksi.", esimerkit: ["pasta ja jauheliha", "kana ja riisi", "makaronilaatikko"] },   // S21
+  iltapala:         { otsikko: "Iltapala", teksti: "Tukee palautumista ja unta.", esimerkit: ["puuro", "leipä", "maito tai jogurtti"] },   // S23
+  puoliaika:        { otsikko: "Puoliaika", teksti: "Pieni pala nopeaa energiaa ja juomaa.", esimerkit: ["banaani", "urheilujuoma"], pakkaa: ["banaani"] },   // S14
+  peli:             "Vesipullo vaihtopenkille. Kulaus vettä lämmittelyssä, aina vaihdossa ja heti pelin jälkeen.",   // S13
+  vaihdossa:        "Vaihdossa voi ottaa pienen palan nopeaa energiaa: pala banaania, muutama rusina tai kulaus laimeaa mehua.",   // A12
+  liikunta:         "Ota vesipullo mukaan ja juo tauoilla.",   // S13
+  edellinenPaiva: [
+    "Syö kunnolla jo edellisenä päivänä ja pakkaa eväät illalla.",   // S4
+    "Nuku noin 10 tuntia. Uni on osa tankkausta.",   // S23
+    "Pelipäivänä ei kokeilla uusia ruokia.",   // S10
+  ],
+});

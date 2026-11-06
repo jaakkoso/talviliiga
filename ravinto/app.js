@@ -4,6 +4,7 @@ import { kello, minuutit } from "./js/aika.js";
 import { ohjelmanPaivat } from "./js/aikajana.js";
 import { ehdotus, ikkunanTila, ostoslista, paivanYhteenveto, seuraavaIkkuna, tankkausTaso, tuotteetIkkunaan } from "./js/tavoitteet.js";
 import { luoTurnaus } from "./js/turnaus.js";
+import { pelipaivanOhje } from "./js/ohje.js";
 import { tuoOhjelma } from "./js/tuonti.js";
 import { lataa, tallenna, tyhjenna } from "./js/tallennus.js";
 import { luoOmaTuote, omaHuomio, tuoOmatTuotteet } from "./js/omat-tuotteet.js";
@@ -127,18 +128,18 @@ function teema() {
 // Reititys
 function reitti() {
   const osat = location.hash.replace(/^#\/?/, "").split("/").map(decodeURIComponent);
-  return { nakyma: osat[0] || "paiva", a: osat[1], b: osat[2] };
+  return { nakyma: osat[0] || "ohje", a: osat[1], b: osat[2] };
 }
 function piirra(sailytaVieritys = false) {
   const y = window.scrollY;
   const r = reitti();
-  const nakymat = { paiva: nakymaPaiva, ikkuna: nakymaIkkuna, ohjelma: nakymaOhjelma, ostos: nakymaOstos, asetukset: nakymaAsetukset };
+  const nakymat = { ohje: nakymaOhje, paiva: nakymaPaiva, ikkuna: nakymaIkkuna, ohjelma: nakymaOhjelma, ostos: nakymaOstos, asetukset: nakymaAsetukset };
   const viesti = ui.viesti ? `<p class="ilmoitus" role="status">${esc(ui.viesti)}</p>` : "";
-  sisalto.innerHTML = viesti + (nakymat[r.nakyma] ?? nakymaPaiva)(r);
+  sisalto.innerHTML = viesti + (nakymat[r.nakyma] ?? nakymaOhje)(r);
   sisalto.dataset.nakyma = r.nakyma;
   if (r.nakyma === "ikkuna") suodata();
   const nyt = r.nakyma === "ikkuna" ? "paiva" : r.nakyma;
-  const linkit = [["paiva", "Päivä", "kalenteri"], ["ohjelma", "Ohjelma", "lista"], ["ostos", "Ostokset", "kassi"], ["asetukset", "Asetukset", "asetus"]];
+  const linkit = [["ohje", "Pelipäivä", "kalenteri"], ["paiva", "Määrät", "ruoka"], ["ohjelma", "Ohjelma", "lista"], ["ostos", "Ostokset", "kassi"], ["asetukset", "Asetukset", "asetus"]];
   valikko.innerHTML = linkit.map(([id, nimi, kuva]) => `<a href="#/${id}"${id === nyt ? ' aria-current="page"' : ""}>${ikoni(kuva)}${nimi}</a>`).join("");
   window.scrollTo(0, sailytaVieritys ? y : 0);
 }
@@ -158,28 +159,24 @@ function valmiitKortit(tulevat) {
 function tyhjaTila() {
   const tulevat = tulevatValmiit();
   return `${valmiitKortit(tulevat)}<section class="kortti pino">
-    <h2>${tulevat.length ? "Tai kerro oma turnaus" : "Milloin pelataan?"}</h2>
-    <p class="pieni">Kerro turnauksen pelit, niin appi laskee päivän tankkauksen ja syömisen ajat.</p>
+    <h2>${tulevat.length ? "Tai kerro omat pelit" : "Milloin pelataan?"}</h2>
+    <p class="pieni">Kerro pelien kellonajat, niin appi kertoo, mitä kannattaa syödä ja milloin.</p>
     ${turnausLomake()}
   </section>
   <a class="nappi leve" href="#/ohjelma">Muu ohjelma: harjoitus, leiri tai tuonti</a>`;
 }
 
+const peliAika = (n, arvo = "") => `<label class="kentta">Peli ${n}<input type="time" name="aika" value="${arvo}"${n === 1 ? " required" : ""}></label>`;
+
 function turnausLomake() {
-  const sirut = [1, 2, 3, 4, 5, 6].map((n) => `<label class="siru"><input type="radio" name="peleja" value="${n}"${n === 5 ? " checked" : ""}><span>${n}</span></label>`).join("");
+  const kestot = [20, 30, 40, 50].map((n) => `<label class="siru"><input type="radio" name="kesto" value="${n}"${n === 30 ? " checked" : ""}><span>${n} min</span></label>`).join("");
   return `<form data-lomake="turnaus" class="pino">
     <label class="kentta">Päivä<input type="date" name="pvm" required value="${seuraavaLauantai()}"></label>
-    <fieldset class="valinnat"><legend>Pelejä</legend><div class="sirut">${sirut}</div></fieldset>
-    <div class="kaksi">
-      <label class="kentta">Ensimmäinen peli<input type="time" name="alku" required value="09:00"></label>
-      <label class="kentta">Pelin kesto, min<input type="number" name="kesto" min="10" max="120" inputmode="numeric" required value="30"></label>
-    </div>
-    <div class="kaksi">
-      <label class="kentta">Tauko pelien välissä, min<input type="number" name="tauko" min="0" max="300" inputmode="numeric" required value="30"></label>
-      <label class="kentta">Yhteinen ruokailu<input type="time" name="ruokailu"></label>
-    </div>
-    <p class="pieni">Ruokailun voi jättää tyhjäksi. Jos pelien välit vaihtelevat, korjaa ajat ohjelmasta.</p>
-    <button class="nappi paa leve" type="submit">Laske päivän tarve</button>
+    <fieldset class="valinnat"><legend>Pelin kesto</legend><div class="sirut">${kestot}</div></fieldset>
+    <fieldset class="valinnat"><legend>Pelien alkuajat</legend><div class="ajat kaksi">${peliAika(1, "09:00")}${peliAika(2)}${peliAika(3)}</div></fieldset>
+    <button class="nappi leve" type="button" data-toiminto="lisaa-peli">${ikoni("plus")}Lisää peli</button>
+    <label class="kentta">Yhteinen ruokailu (jos on)<input type="time" name="ruokailu"></label>
+    <button class="nappi paa leve" type="submit">Näytä pelipäivän ohje</button>
   </form>`;
 }
 
@@ -242,6 +239,45 @@ function ohjelmanOsionNimi(w) {
 
 function valittuPaiva(paivat, toivottu) {
   return paivat.find((p) => p.paiva.pvm === toivottu) ?? paivat.find((p) => p.paiva.pvm === tanaan()) ?? paivat[0];
+}
+
+// Pelipäivän ohje (A13): selkokielinen aikajana ilman grammoja ja tuotevalintaa.
+function ohjeRivi(r, korostus) {
+  const peli = r.laji !== "syo";
+  return `<li class="${peli ? "o-peli" : "o-syo"}${korostus ? " korostus" : ""}"><div class="klo">${kello(r.alku)}</div>
+    <div class="kortti">
+      <div class="rivi">${ikoni(peli ? (r.laji === "peli" ? "pallo" : "juoksu") : "ruoka")}<h3 class="kasvu">${esc(r.otsikko)}</h3></div>
+      <p>${esc(r.teksti)}</p>
+      ${r.vaihdossa ? `<p class="vaihto">${ikoni("salama")}<span>${esc(r.vaihdossa)}</span></p>` : ""}
+      ${r.esimerkit.length ? `<p class="pieni">Esimerkiksi ${esc(r.esimerkit.join(", "))}.</p>` : ""}
+      ${r.juo ? `<p class="pieni">${ikoni("pisara")}${esc(r.juo)}</p>` : ""}
+    </div></li>`;
+}
+
+function nakymaOhje(r) {
+  const o = aktiivinen();
+  if (!o) return tyhjaTila();
+  const paivat = laskePaivat(o);
+  if (!paivat?.length) return nakymaPaiva(r);
+  const nyt = valittuPaiva(paivat, r.a);
+  const ohje = pelipaivanOhje(nyt);
+  const mennyt = paivat.every((p) => p.paiva.pvm < tanaan());
+  const onTanaan = nyt.paiva.pvm === tanaan();
+  const seuraava = onTanaan ? ohje.rivit.find((x) => x.loppu > kelloNyt()) : null;
+  const pelit = ohje.pelit.map((p) => p.alku).join(", ");
+  return `${mennyt ? valmiitKortit(tulevatValmiit()) : ""}
+    ${paivat.length > 1 ? `<div class="pvmt">${paivat.map((p) => `<a href="#/ohje/${p.paiva.pvm}"${p === nyt ? ' aria-current="date"' : ""}>${pvmTeksti(p.paiva.pvm)}</a>`).join("")}</div>` : ""}
+    <section class="kortti pino ohjekortti">
+      <div class="pieni">${pvmTeksti(nyt.paiva.pvm)} · ${esc(o.nimi)}</div>
+      <h2>${ohje.pelit.length ? `${ohje.pelit.length} ${ohje.pelit.length === 1 ? "peli" : "peliä"}` : TASOT[nyt.rasitus.taso]}</h2>
+      ${pelit ? `<p>Pelit klo ${esc(pelit)}</p>` : ""}
+      <a class="nappi leve" href="#/ohjelma">${ikoni("kyna")}Muuta pelejä tai ruokailua</a>
+    </section>
+    ${onTanaan ? "" : `<section class="kortti pino"><h3>Edellisenä iltana</h3><ul class="vinkit">${ohje.edellinenPaiva.map((v) => `<li>${ikoni("vinkki")}<span>${esc(v)}</span></li>`).join("")}</ul></section>`}
+    ${ohje.vaihdossa ? `<p class="vaihto">${ikoni("salama")}<span>Pelaaja on usein osan pelistä vaihdossa. Silloin ehtii juoda ja ottaa pienen palan nopeaa energiaa.</span></p>` : ""}
+    <ol class="ohje">${ohje.rivit.map((x) => ohjeRivi(x, x === seuraava)).join("")}</ol>
+    <section class="kortti pino"><h3>Pakkaa mukaan</h3><ul class="vinkit">${ohje.mukaan.map((m) => `<li>${ikoni("kassi")}<span>${esc(m[0].toUpperCase() + m.slice(1))}</span></li>`).join("")}</ul></section>
+    <a class="nappi leve" href="#/paiva/${esc(nyt.paiva.pvm)}">Tarkat määrät ja omat eväät</a>`;
 }
 
 function nakymaPaiva(r) {
@@ -501,7 +537,7 @@ async function otaOhjelma(uusi, varoitukset = []) {
   ui.viesti = varoitukset.length ? varoitukset.join(". ") : null;
   ui.lahteet = null;
   talleta();
-  if (location.hash === "#/paiva") piirra(); else location.hash = "#/paiva";
+  if (location.hash === "#/ohje") piirra(); else location.hash = "#/ohje";
 }
 
 async function tuoJson(json, valinnat) {
@@ -689,6 +725,10 @@ const toiminnot = {
   vahemman: (d) => muutaAnnosta(d.ikkuna, d.tuote, -1),
   "kaikki-tuotteet": () => { ui.kaikkiTuotteet = !ui.kaikkiTuotteet; piirra(true); },
   "uusi-turnaus": avaaTurnausLomake,
+  "lisaa-peli": () => {
+    const ajat = document.querySelector("form[data-lomake=turnaus] .ajat");
+    if (ajat && ajat.children.length < 8) ajat.insertAdjacentHTML("beforeend", peliAika(ajat.children.length + 1));
+  },
   syoty: (d) => {
     const o = aktiivinen();
     if (!o) return;
@@ -840,13 +880,13 @@ document.addEventListener("submit", (e) => {
     try {
       const pvm = d.get("pvm");
       const uusi = luoTurnaus({
-        id: `turnaus-${pvm}`, pvm, alku: kello(minuutit(d.get("alku"))), peleja: Number(d.get("peleja")),
-        kesto: Number(d.get("kesto")), tauko: Number(d.get("tauko")), ruokailu: d.get("ruokailu") ? kello(minuutit(d.get("ruokailu"))) : null,
+        id: `turnaus-${pvm}`, pvm, ajat: d.getAll("aika").filter(Boolean), kesto: Number(d.get("kesto")),
+        ruokailu: d.get("ruokailu") ? kello(minuutit(d.get("ruokailu"))) : null,
       });
       if (dialogi.open) dialogi.close();
       otaOhjelma(uusi);
     } catch {
-      ui.viesti = "Pelit eivät mahdu päivään. Tarkista alkuaika, kesto ja tauot.";
+      ui.viesti = "Pelien ajat menevät päällekkäin tai yli puolenyön. Tarkista kellonajat ja pelin kesto.";
       if (dialogi.open) dialogi.close();
       piirra();
     }
@@ -877,7 +917,7 @@ window.addEventListener("hashchange", () => { ui.viesti = null; ui.haku = ""; ui
 // Seuraavaksi-kortti pysyy ajan tasalla, kun appi on auki pelipäivänä.
 setInterval(() => {
   const kirjoittaa = document.activeElement?.matches?.("input, select, textarea");
-  if (reitti().nakyma === "paiva" && !dialogi.open && !kirjoittaa && !document.hidden) piirra(true);
+  if (["ohje", "paiva"].includes(reitti().nakyma) && !dialogi.open && !kirjoittaa && !document.hidden) piirra(true);
 }, 60000);
 
 // Käynnistys
