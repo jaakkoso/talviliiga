@@ -396,3 +396,15 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
   .summary .btns,.event-head .btns{display:flex;flex-wrap:wrap;gap:8px}
   .summary .btns .btn{padding:8px 12px;font-size:.88rem}
 }
+
+/* Seuraava SJK-peli -kortti etusivun ylälaidassa */
+.next-game{background:var(--head);color:#fff;border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.ng-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+.ng-label{font-family:var(--display);font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:var(--gold)}
+.ng-when{font-size:.9rem;color:#e9e5da;font-variant-numeric:tabular-nums}
+.ng-when b{color:#fff}
+.ng-row{display:grid;gap:2px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.07);color:#fff;text-decoration:none}
+.ng-teams{font-weight:800;font-size:1.08rem;display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px}
+.ng-teams .tlogo{width:20px;height:20px;margin-right:2px}
+.ng-vs{font-weight:500;opacity:.7;font-size:.9rem}
+.ng-meta{font-size:.82rem;color:#cfc9bb}

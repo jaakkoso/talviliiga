@@ -78,6 +78,27 @@
   /* --- Viimeisimmät tulokset ja tulevat pelit --- */
   const latest = [...played].sort((a, b) => b.m.date.localeCompare(a.m.date) || (b.m.time || '').localeCompare(a.m.time || '')).slice(0, 6);
   $('latest').innerHTML = latest.map(x => P15.matchHTML(x.m, { own: x.own, link: x.link })).join('') + `<div class="btns"><a class="btn" href="piirisarja/">Sarjatulokset →</a><a class="btn" href="turnaukset/">Turnaukset →</a></div>`;
+  /* --- Seuraava SJK-peli: näkyy, kun seuraava ottelu alkaa 36 tunnin sisällä. Samaan aikaan alkavat (esim. kilpa ja haaste) yhdessä. --- */
+  {
+    const box = $('nextGame');
+    const alkaa = m => { const [h, mi] = (m.time || '').split('.').map(Number); const [y, mo, d] = m.date.split('-').map(Number); return Number.isFinite(h) ? new Date(y, mo - 1, d, h, mi || 0) : null; };
+    const tulevat = all.filter(x => !x.m.score && !x.m.live && alkaa(x.m) && alkaa(x.m) > Date.now() - 5 * 60000).sort((a, b) => alkaa(a.m) - alkaa(b.m));
+    const eka = tulevat[0];
+    if (eka && alkaa(eka.m) - Date.now() < 36 * 3600000) {
+      const samaan = tulevat.filter(x => +alkaa(x.m) === +alkaa(eka.m));
+      const kentta = m => (m.d && m.d.venue) || m.field || '';
+      const piirra = () => {
+        const ms = alkaa(eka.m) - Date.now(), min = Math.max(0, Math.round(ms / 60000));
+        const kello = min < 1 ? 'alkaa nyt' : min < 60 ? `alkuun ${min} min` : `alkuun ${Math.floor(min / 60)} h ${min % 60} min`;
+        const paiva = new Date().toDateString() === alkaa(eka.m).toDateString() ? 'Tänään' : 'Huomenna';
+        box.innerHTML = `<div class="ng-head"><span class="ng-label">Seuraava SJK-peli</span><span class="ng-when">${paiva} klo ${P15.esc(eka.m.time)} · <b>${kello}</b></span></div>
+          ${samaan.map(x => { const vast = P15.isOwn(x.m.home) ? x.m.away : x.m.home, oma = P15.isOwn(x.m.home) ? x.m.home : x.m.away;
+            return `<a class="ng-row" href="${x.link && x.link.startsWith('http') ? 'turnaukset/' : x.kind === 'hh' ? 'eerikkila/' : x.kind === 'turnaus' ? 'turnaukset/' : 'piirisarja/'}"><span class="ng-teams">${P15.nimi(oma)} <span class="ng-vs">vs</span> ${P15.esc(vast)}</span><span class="ng-meta">${P15.esc(x.kind === "sarja" ? x.level : x.m.series)}${kentta(x.m) ? ' · ' + P15.esc(kentta(x.m)) : ''}</span></a>`; }).join('')}`;
+      };
+      piirra(); box.hidden = false; setInterval(piirra, 30000);
+    }
+  }
+
   const upcoming = all.filter(x => !x.m.score).sort((a, b) => a.m.date.localeCompare(b.m.date) || (a.m.time || '').localeCompare(b.m.time || '')).slice(0, 6);
   $('upcoming').innerHTML = upcoming.length ? upcoming.map(x => P15.matchHTML(x.m, { own: x.own, link: x.link })).join('') : '<p class="note">Ei tulevia pelejä tiedossa.</p>';
 
