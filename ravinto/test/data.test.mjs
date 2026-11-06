@@ -28,8 +28,9 @@ test("tuotteita on 40–80 ja id:t ovat yksilöllisiä", () => {
   assert.equal(new Set(tuotteet.map((t) => t.id)).size, tuotteet.length);
 });
 
+// Kuitu on pakkausmerkinnässä vapaaehtoinen, joten sen puuttuminen ei estä tarkistusta. Sitä ei arvata.
 test("tuote, jolta puuttuu arvoja, ei ole tarkistettu", () => {
-  const kentat = ["energia_kcal", "hiilihydraatti_g", "proteiini_g", "rasva_g", "kuitu_g"];
+  const kentat = ["energia_kcal", "hiilihydraatti_g", "proteiini_g", "rasva_g"];
   for (const t of tuotteet) {
     if (kentat.some((k) => t[k] === null)) assert.equal(t.tarkistettu, false, t.id);
   }

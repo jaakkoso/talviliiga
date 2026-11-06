@@ -2,7 +2,7 @@
 export const AVAIN = "ravinto.v1";
 
 export function oletusTila() {
-  return { versio: 1, ohjelmat: [], aktiivinenOhjelma: null, valinnat: {}, omatTuotteet: [], ostettu: {}, asetukset: { teema: "auto" } };
+  return { versio: 1, ohjelmat: [], aktiivinenOhjelma: null, valinnat: {}, omatTuotteet: [], ostettu: {}, syoty: {}, asetukset: { teema: "auto" } };
 }
 
 export function lataa(varasto) {

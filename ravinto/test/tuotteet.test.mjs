@@ -1,18 +1,23 @@
 // Vaiheen 4 tuotekanta ja omat tuotteet.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { luoOmaTuote, omaHuomio, tuoOmatTuotteet } from "../js/omat-tuotteet.js";
 import { tuotteetIkkunaan } from "../js/tavoitteet.js";
 
 const lue = (p) => JSON.parse(readFileSync(new URL(p, import.meta.url), "utf8"));
 const { tuotteet } = lue("../data/tuotteet.json");
 const raaka = new Map(lue("../tyokalut/fineli-raaka.json").elintarvikkeet.map((e) => [e.id, e]));
+const off = lue("../tyokalut/off-raaka.json").tuotteet;
 
 test("Fineli-rivit ovat täynnä ja pakkausrivit tyhjiä", () => {
   for (const t of tuotteet) {
     const kentat = [t.energia_kcal, t.hiilihydraatti_g, t.proteiini_g, t.rasva_g, t.kuitu_g];
-    if (t.lahde.tyyppi === "fineli") {
+    if (t.lahde.tyyppi === "openfoodfacts") {
+      assert.equal(t.tarkistettu, true, t.id);
+      assert.ok([t.energia_kcal, t.hiilihydraatti_g, t.proteiini_g, t.rasva_g].every((x) => typeof x === "number"), t.id);
+      assert.ok(t.lahde.koodi && t.lahde.haettu, t.id);
+    } else if (t.lahde.tyyppi === "fineli") {
       assert.equal(t.tarkistettu, true, t.id);
       assert.ok(kentat.every((x) => typeof x === "number"), t.id);
       assert.ok(t.lahde.haettu, t.id);
@@ -23,9 +28,10 @@ test("Fineli-rivit ovat täynnä ja pakkausrivit tyhjiä", () => {
   }
 });
 
-test("Finelistä puuttuvat tuotteet odottavat pakkauksen arvoja", () => {
-  const odottavat = tuotteet.filter((t) => t.lahde.tyyppi === "pakkaus").map((t) => t.id).sort();
-  assert.deepEqual(odottavat, ["hedelmapatukka", "kaurapatukka", "maitopatukka", "salaatti-pasta"]);
+test("pakatuilla välipaloilla on merkki ja malli (A9)", () => {
+  const leivonnaiset = ["mokkapala"]; // kotona tai kahvilassa leivottu, ei merkkiä
+  for (const t of tuotteet.filter((x) => ["patukka", "makeinen", "keksi"].includes(x.ryhma) && !leivonnaiset.includes(x.id))) assert.ok(t.merkki && t.nimi.includes(t.merkki) || t.merkki === "Kellogg's", t.id);
+  assert.equal(tuotteet.filter((t) => t.lahde.tyyppi === "pakkaus").length, 0);
 });
 
 test("annosarvo vastaa Finelin arvoa 100 g kohti", () => {
@@ -34,6 +40,33 @@ test("annosarvo vastaa Finelin arvoa 100 g kohti", () => {
     const hh = osat.reduce((s, o) => s + (raaka.get(o.id).hh * o.g) / 100, 0);
     assert.ok(Math.abs(hh - t.hiilihydraatti_g) < 0.06, `${t.id}: ${hh} / ${t.hiilihydraatti_g}`);
   }
+});
+
+test("Open Food Facts -rivit vastaavat pakkauksen arvoja 100 g tai 100 ml kohti", () => {
+  for (const t of tuotteet.filter((x) => x.lahde.tyyppi === "openfoodfacts")) {
+    const r = off[t.id];
+    assert.equal(r.koodi, t.lahde.koodi, t.id);
+    const maara = t.annos.yksikko === "dl" ? t.annos.maara * 100 : t.annos.maara;
+    assert.ok(Math.abs((r.hh * maara) / 100 - t.hiilihydraatti_g) < 0.06, t.id);
+    assert.ok(Math.abs((r.prot * maara) / 100 - t.proteiini_g) < 0.06, t.id);
+  }
+  const snickers = tuotteet.find((t) => t.id === "snickers"); // 60,5 g / 100 g × 50 g
+  assert.equal(snickers.hiilihydraatti_g, 30.3);
+});
+
+// Joukkueenjohtajan linjaus: tuote ilman kuvaa ei ole hyvä vaihtoehto, joten jokaisella tuotteella on kuva.
+test("jokaisella tuotteella on kuva, lähde, tekijä ja vapaa lisenssi", () => {
+  for (const t of tuotteet) {
+    assert.match(t.kuva ?? "", /^kuvat\/[a-z0-9-]+\.jpg$/, t.id);
+    assert.ok(existsSync(new URL(`../${t.kuva}`, import.meta.url)), t.id);
+    assert.match(t.kuvaLahde, /^https:\/\/(world\.openfoodfacts\.org\/product\/\d+|commons\.wikimedia\.org\/wiki\/File:.+)$/, t.id);
+    assert.ok(t.kuvaTekija, t.id);
+    assert.match(t.kuvaLisenssi, /^(CC0|Public domain|CC BY(-SA)? [1-4]\.0)$/, t.id);
+  }
+});
+
+test("kofeiinipitoisia juomia ei ole tuotelistalla (S25)", () => {
+  for (const t of tuotteet) assert.doesNotMatch(t.nimi, /\bcola\b|coca|energiajuoma|red bull|kahvi/i, t.id);
 });
 
 test("käsin laskettu tarkistus: banaani 125 g", () => {
@@ -45,10 +78,10 @@ test("käsin laskettu tarkistus: banaani 125 g", () => {
 
 test("makeiset näkyvät välipaloilla mutta eivät aterioilla (A9)", () => {
   const nimet = (i) => tuotteetIkkunaan(i, tuotteet).map((t) => t.id);
-  assert.ok(nimet({ tyyppi: "kevyt", sulavuus: ["nopea"] }).includes("marmeladikarkit"));
-  assert.ok(nimet({ tyyppi: "pikatankkaus", sulavuus: ["nopea"] }).includes("muropatukka"));
-  assert.ok(nimet({ tyyppi: "tankkaus", sulavuus: ["nopea", "keskitaso"] }).includes("suklaapatukka"));
-  assert.ok(!nimet({ tyyppi: "kevyt", sulavuus: ["nopea"] }).includes("suklaapatukka"));
+  assert.ok(nimet({ tyyppi: "kevyt", sulavuus: ["nopea"] }).includes("haribo-kultakarhut"));
+  assert.ok(nimet({ tyyppi: "pikatankkaus", sulavuus: ["nopea"] }).includes("haribo-kultakarhut"));
+  assert.ok(nimet({ tyyppi: "tankkaus", sulavuus: ["nopea", "keskitaso"] }).includes("twix"));
+  assert.ok(!nimet({ tyyppi: "kevyt", sulavuus: ["nopea"] }).includes("twix"));
   for (const tyyppi of ["aamiainen", "paaateria", "lamminAteria"]) {
     const ryhmat = tuotteetIkkunaan({ tyyppi, sulavuus: null }, tuotteet).map((t) => t.ryhma);
     assert.ok(!ryhmat.some((r) => ["makeinen", "patukka", "keksi"].includes(r)), tyyppi);

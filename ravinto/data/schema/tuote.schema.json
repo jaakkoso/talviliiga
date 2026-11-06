@@ -43,7 +43,8 @@
           "required": ["tyyppi"],
           "additionalProperties": false,
           "properties": {
-            "tyyppi": { "enum": ["fineli", "pakkaus", "oma"] },
+            "tyyppi": { "enum": ["fineli", "openfoodfacts", "pakkaus", "oma"] },
+            "koodi": { "type": "string", "pattern": "^[0-9]{8,14}$" },
             "id": { "type": ["integer", "null"] },
             "osat": {
               "type": "array",
@@ -60,7 +61,11 @@
         "tarkistettu": { "type": "boolean" },
         "kofeiini": { "type": "boolean" },
         "lisaravinne": { "type": "boolean" },
-        "huomautus": { "type": "string" }
+        "huomautus": { "type": "string" },
+        "kuva": { "type": "string", "pattern": "^kuvat/[a-z0-9-]+\\.jpg$" },
+        "kuvaLahde": { "type": "string", "format": "uri" },
+        "kuvaTekija": { "type": "string" },
+        "kuvaLisenssi": { "type": "string" }
       }
     }
   }

@@ -66,6 +66,70 @@ export function tuotteetIkkunaan(ikkuna, tuotteet) {
   });
 }
 
+// Syömiskerran koko värikoodina (A10): pieni, perus tai iso tankkaus hiilihydraattihaarukan alarajasta.
+// Juomaikkunat ovat oma luokkansa. Värit kertovat koon, eivät hyvää tai huonoa (S24).
+export function tankkausTaso(ikkuna) {
+  const hh = ikkuna.tavoite?.hh;
+  if (!hh) return ikkuna.tavoite?.neste ? "juoma" : null;
+  if (hh[0] < 20) return "pieni";
+  return hh[0] < 40 ? "perus" : "iso";
+}
+
+// Käynnissä oleva tai seuraava ikkuna kellonajasta (minuutteina). Päivän jälkeen null.
+export function seuraavaIkkuna(ikkunat, nyt) {
+  const kaynnissa = ikkunat.find((w) => w.alku <= nyt && nyt < w.loppu);
+  if (kaynnissa) return { ikkuna: kaynnissa, tila: "nyt", minuutteja: 0 };
+  const tuleva = ikkunat.find((w) => w.alku > nyt);
+  return tuleva ? { ikkuna: tuleva, tila: "tulossa", minuutteja: tuleva.alku - nyt } : null;
+}
+
+// Yhden napautuksen ehdotus (A10): tuote, jonka hiilihydraatti on lähimpänä haarukan keskikohtaa,
+// ja tarvittaessa toinen, joka nostaa summan haarukkaan tai tuo proteiinin palautukseen. Kierros vaihtaa päätuotetta.
+// Ryhmät mieluisuusjärjestyksessä: aiempi ryhmä voittaa, kun hiilihydraatit ovat lähellä toisiaan.
+const AAMU = ["vilja", "maito", "leipa", "hedelma", "juoma"];
+const RUOKA = ["ateria", "valmisruoka", "leipa"];
+const VALIPALA = ["hedelma", "maito", "leipa", "vilja", "juoma", "patukka", "keksi", "pahkina", "makeinen", "oma"];
+const EHDOTUSRYHMAT = { aamiainen: AAMU, kevytAamiainen: AAMU, taydentavaAamiainen: AAMU, iltapala: AAMU, paaateria: RUOKA, lamminAteria: RUOKA };
+
+function ehdotusRyhmat(ikkuna) {
+  const tehtava = ikkuna.tyyppi === "kiintea" ? ikkuna.rooli : ikkuna.tyyppi;
+  if (tehtava === "normaali" || !tehtava) return ikkuna.alku < 630 || ikkuna.alku >= 1200 ? AAMU : RUOKA; // klo 10.30 ja 20.00
+  return EHDOTUSRYHMAT[tehtava] ?? VALIPALA;
+}
+
+export function ehdotus(ikkuna, tuotteet, kierros = 0) {
+  const kaikki = tuotteetIkkunaan(ikkuna, tuotteet).filter((t) => t.tarkistettu === true && t.hiilihydraatti_g != null && t.proteiini_g != null);
+  const ryhmat = ehdotusRyhmat(ikkuna);
+  const rajatut = kaikki.filter((t) => ryhmat.includes(t.ryhma));
+  const sopivat = rajatut.length ? rajatut : kaikki;
+  const sakko = (t) => Math.max(0, ryhmat.indexOf(t.ryhma)) * 4;
+  const { hh, prot, neste } = ikkuna.tavoite;
+  if (!hh) {
+    const juomat = sopivat.filter((t) => t.neste_dl).sort((a, b) => a.hiilihydraatti_g - b.hiilihydraatti_g);
+    if (!neste || !juomat.length) return [];
+    const j = juomat[kierros % juomat.length];
+    return [{ tuoteId: j.id, annoksia: Math.max(1, Math.ceil(neste[0] / j.neste_dl)) }];
+  }
+  const keski = (hh[0] + hh[1]) / 2;
+  const ero = (t, pohja = 0) => Math.abs(pohja + t.hiilihydraatti_g - keski) + sakko(t);
+  const jarjestys = [...sopivat].sort((a, b) => ero(a) - ero(b) || a.nimi.localeCompare(b.nimi, "fi"));
+  if (!jarjestys.length) return [];
+  const paa = jarjestys[kierros % jarjestys.length];
+  const tulos = [{ tuoteId: paa.id, annoksia: 1 }];
+  const protPuuttuu = prot && paa.proteiini_g < prot[0];
+  if (paa.hiilihydraatti_g >= hh[0] && !protPuuttuu) return tulos;
+  // Toinen tuote on lisuke tai juoma, ei toinen ateria eikä pelijuoma.
+  const ehdokkaat = kaikki
+    .filter((t) => t !== paa && !["ateria", "valmisruoka"].includes(t.ryhma) && !(t.sopii ?? []).includes("peli") && paa.hiilihydraatti_g + t.hiilihydraatti_g <= hh[1])
+    .filter((t) => !protPuuttuu || paa.proteiini_g + t.proteiini_g >= prot[0]);
+  const juomaEnsin = neste && !paa.neste_dl;
+  const vajaa = (t) => Number(paa.hiilihydraatti_g + t.hiilihydraatti_g < hh[0]);
+  const toinen = [...ehdokkaat].sort((a, b) => vajaa(a) - vajaa(b)
+    || (juomaEnsin ? Number(!a.neste_dl) - Number(!b.neste_dl) : 0) || ero(a, paa.hiilihydraatti_g) - ero(b, paa.hiilihydraatti_g))[0];
+  if (toinen) tulos.push({ tuoteId: toinen.id, annoksia: 1 });
+  return tulos;
+}
+
 // S2, S24: vain alaraja, ei ylärajaa.
 export function paivanYhteenveto(ikkunat, valinnatIkkunoittain, tuotteet) {
   let summa = 0, vahintaan = 0;

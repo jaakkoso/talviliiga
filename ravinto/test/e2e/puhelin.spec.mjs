@@ -67,21 +67,58 @@ test("välimuistilista kattaa kaikki sivun tarvitsemat omat tiedostot", async ()
   for (const k of manifesti.icons) assert.ok(lista.includes(k.src), k.src);
 });
 
-test("ohjelmasta syntyy aikajana, tuotevalinta ja ostoslista", async () => {
+test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista", async () => {
+  await sivu.clock.setFixedTime(new Date(2026, 10, 14, 7, 5)); // Turnauspäivän aamu, jotta seuraavaksi-kortti näkyy.
   await sivu.goto(URLI);
-  await sivu.click('button:has-text("Ota Eerikkilän")');
+  await sivu.fill('input[name="pvm"]', "2026-11-14");
+  assert.equal(await sivu.locator('input[name="peleja"]:checked').inputValue(), "5");
+  await sivu.fill('input[name="ruokailu"]', "12:30");
+  await sivu.click('button:has-text("Laske päivän tarve")');
   await sivu.waitForSelector(".jana");
-  assert.ok(await sivu.locator(".taso .perustelu").first().innerText());
+  assert.match(await sivu.locator(".tarve").innerText(), /vähintään noin \d+ g/);
+  assert.equal(await sivu.locator(".jana .koko").count(), await sivu.locator(".jana li").count());
+
+  const nyt = sivu.locator(".nyt");
+  assert.match(await nyt.innerText(), /kevyt aamiainen/i);
+  await nyt.locator('button:has-text("Ota ehdotus")').click();
+  assert.ok(await nyt.locator(".valitut").innerText());
+  await nyt.locator('button:has-text("Merkitse syödyksi")').click();
+  assert.match(await sivu.locator(".tarve").innerText(), /Syöty 1\/\d+ kertaa/);
+  assert.equal(await sivu.locator(".jana .kuittaus.tehty").count(), 1);
+
+  await sivu.click('.tarve a:has-text("Jatka tuotteiden valintaa")');
+  await sivu.waitForSelector(".pika");
+  const ensin = await sivu.locator(".pika b").innerText();
+  await sivu.click('button:has-text("Toinen vaihtoehto")');
+  assert.notEqual(await sivu.locator(".pika b").innerText(), ensin);
+  assert.ok(await sivu.locator(".alapalkki a:has-text(\"Seuraava:\")").isVisible());
+
+  await sivu.goto(URLI + "#/paiva");
   await sivu.click('.tapahtuma:has-text("Palautus") >> nth=0');
   await sivu.waitForSelector(".tuote");
+  await sivu.fill('input[data-syote="haku"]', "dumle");
+  assert.equal(await sivu.locator(".tuote:visible").count(), 1);
+  await sivu.fill('input[data-syote="haku"]', "");
+  await sivu.click('.siru-nappi:has-text("Hedelmät")');
+  assert.ok((await sivu.locator(".tuote:visible .nimi").allInnerTexts()).includes("Banaani"));
+  await sivu.click('.siru-nappi:has-text("Kaikki")');
   await sivu.click('button[aria-label="Lisää: Banaani"]');
-  await sivu.click('button[aria-label="Lisää: Marmeladikarkit"]');
-  assert.match(await sivu.locator(".mittari").first().innerText(), /45,4 g/);
+  await sivu.click('button[aria-label="Lisää: Fazer Dumle"]');
+  assert.match(await sivu.locator(".tankki .tankkirivi").first().innerText(), /42,8/);
   assert.ok(await eiVaakavieritysta());
   assert.doesNotMatch(await sivu.locator("body").innerText(), /kcal|kalori|paino/i);
   await sivu.goto(URLI + "#/ostos");
   await sivu.waitForSelector(".ostos");
-  assert.equal(await sivu.locator(".ostos").count(), 2);
+  assert.ok((await sivu.locator(".ostos").count()) >= 3);
+});
+
+test("Eerikkilän ohjelma löytyy Ohjelma-välilehdeltä", async () => {
+  await sivu.goto(URLI + "#/ohjelma");
+  await sivu.click('button:has-text("Ota Eerikkilän")');
+  await sivu.waitForSelector(".jana");
+  assert.equal(await sivu.locator(".pvmt a").count(), 3);
+  await sivu.goto(URLI + "#/ohjelma");
+  await sivu.selectOption('select[data-muutos="vaihda-ohjelma"]', "turnaus-2026-11-14");
 });
 
 test("offline: sivu aukeaa uudelleen, suunnitelma säilyy ja tuotteet toimivat", async () => {
@@ -95,6 +132,10 @@ test("offline: sivu aukeaa uudelleen, suunnitelma säilyy ja tuotteet toimivat",
     await sivu.waitForSelector(".tuote");
     assert.ok((await sivu.locator(".tuote").count()) > 20);
     assert.equal(await sivu.locator(".tuote.valittu").count(), 2);
+    await sivu.click('.siru-nappi:has-text("Patukat")');
+    const kuva = sivu.locator('.tuote:visible img[src="kuvat/snickers.jpg"]');
+    await kuva.scrollIntoViewIfNeeded();
+    assert.ok(await kuva.evaluate((i) => i.decode().then(() => i.naturalWidth > 0)), "tuotekuva näkyy ilman verkkoa");
   } finally {
     verkkoPoissa = false;
   }
@@ -109,6 +150,7 @@ test("offline myös Chromiumissa selaimen omalla verkkokatkaisulla", async () =>
     await s.goto(URLI);
     await s.evaluate(() => navigator.serviceWorker.ready);
     await s.waitForFunction(() => navigator.serviceWorker.controller !== null);
+    await s.goto(URLI + "#/ohjelma");
     await s.click('button:has-text("Ota Eerikkilän")');
     await s.waitForSelector(".jana");
     await k.setOffline(true);

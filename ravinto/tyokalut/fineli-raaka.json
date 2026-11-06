@@ -68,6 +68,24 @@
   {"id":31252,"nimi":"Riisikakku, riisikeksi","kcal":360.9,"hh":71.136,"prot":7.916,"rasva":2.911,"kuitu":7.4},
   {"id":31559,"nimi":"Kuivakakku, banaanikakku","kcal":341.4,"hh":36.87,"prot":4.76,"rasva":19.15,"kuitu":1.4},
   {"id":4410,"nimi":"Kiisseli, marjakeitto","kcal":54.2,"hh":12.087,"prot":0.197,"rasva":0.139,"kuitu":0.9},
-  {"id":33113,"nimi":"Mehu, mehujuoma, mehukatti pillijuoma, täydennetty","kcal":41.6,"hh":10.03,"prot":0.05,"rasva":0.03,"kuitu":0.1}
+  {"id":33113,"nimi":"Mehu, mehujuoma, mehukatti pillijuoma, täydennetty","kcal":41.6,"hh":10.03,"prot":0.05,"rasva":0.03,"kuitu":0.1},
+  {"id":32502,"nimi":"Makeinen, dumle, fazer, maitosuklaalla kuorrutettu toffee","kcal":471.1,"hh":66.32,"prot":2.09,"rasva":21.83,"kuitu":0.2},
+  {"id":32695,"nimi":"Makeinen, marianne, fazer, piparminttusuklaakaramelli","kcal":433.3,"hh":80.38,"prot":1.33,"rasva":11.04,"kuitu":2},
+  {"id":33432,"nimi":"Makeinen, vohvelia ja suklaata, suffeli, fazer","kcal":507.7,"hh":59.87,"prot":5.6,"rasva":27.04,"kuitu":1.4},
+  {"id":32699,"nimi":"Makeinen, suffeli puffi snacks, fazer","kcal":530.7,"hh":58.12,"prot":6.12,"rasva":30.29,"kuitu":1.1},
+  {"id":31613,"nimi":"Keksi, lastenkeksi, carneval, fazer, perinteinen","kcal":445.2,"hh":71.71,"prot":5.27,"rasva":14.63,"kuitu":1.7},
+  {"id":31622,"nimi":"Keksi, lastenkeksi, muumi kuviokeksi, lu","kcal":435.6,"hh":67.25,"prot":6.12,"rasva":15.15,"kuitu":2},
+  {"id":31646,"nimi":"Keksi, leivoskeksi, jaffa appelsiini, lu","kcal":403.2,"hh":71.04,"prot":4.99,"rasva":10.23,"kuitu":2.1},
+  {"id":32542,"nimi":"Keksi, suklaapisara, jyväshyvä, lu","kcal":464.3,"hh":64.79,"prot":6.84,"rasva":19.14,"kuitu":2.2},
+  {"id":32532,"nimi":"Keksi, hyväset, kauranen vanilja, jyväshyvä, lu","kcal":482.5,"hh":64.4,"prot":5.66,"rasva":21.94,"kuitu":2.1},
+  {"id":31623,"nimi":"Keksi, välipalakeksi, elovena","kcal":386.2,"hh":51.72,"prot":7.35,"rasva":14.53,"kuitu":9.3},
+  {"id":30194,"nimi":"Urheilujuoma, hiilihydraattijuoma, powerade","kcal":27.3,"hh":6.65,"prot":0.06,"rasva":0,"kuitu":0},
+  {"id":32481,"nimi":"Välipalajuoma, mehukatti hedelmävälipala, hedelmämix","kcal":58.7,"hh":12.12,"prot":0.62,"rasva":0.35,"kuitu":1.3},
+  {"id":33163,"nimi":"Kaurajuoma, elovena välipalajuoma hedelmäinen, 0,5 %","kcal":63.3,"hh":12,"prot":1.04,"rasva":0.4,"kuitu":3.3},
+  {"id":34606,"nimi":"Jogurtti, juotava, rasvaa 1,7 %, valio play, laktoositon","kcal":74.4,"hh":11.49,"prot":2.93,"rasva":1.7,"kuitu":0.2},
+  {"id":34984,"nimi":"Kaakaojuoma, valio play maitokaakaojuoma, laktoositon","kcal":61.5,"hh":9.49,"prot":3.2,"rasva":1.01,"kuitu":0.2},
+  {"id":33342,"nimi":"Rahka, maustettu, rasvaa 4,5 %, valio rahkavaahto, laktoositon","kcal":140.6,"hh":18.41,"prot":5.28,"rasva":4.79,"kuitu":0.1},
+  {"id":34621,"nimi":"Jogurtti, maustettu, rasvaa 3,3%, valio hedelmäinen, laktoositon","kcal":98.4,"hh":13.98,"prot":2.32,"rasva":3.32,"kuitu":0.8},
+  {"id":32274,"nimi":"Kakku, mokkapalat","kcal":381.3,"hh":55.439,"prot":5.237,"rasva":14.978,"kuitu":0}
  ]
 }

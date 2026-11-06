@@ -1,0 +1,170 @@
+{
+ "lahde": "Open Food Facts, ODbL",
+ "tuotteet": {
+  "oshee-isotonic": {
+   "koodi": "5908260254506",
+   "nimi": "Isotonic Drink",
+   "per": "100ml",
+   "kcal": 18,
+   "hh": 4.1,
+   "prot": 0,
+   "rasva": 0,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "oshee-zero": {
+   "koodi": "5908260251574",
+   "nimi": "Vitamins +Electrolytes",
+   "per": "100g",
+   "kcal": 8,
+   "hh": 0,
+   "prot": 0,
+   "rasva": 0,
+   "kuitu": 0,
+   "haettu": "2026-11-06"
+  },
+  "snickers": {
+   "koodi": "5000159461122",
+   "nimi": "Snickers",
+   "per": "100g",
+   "kcal": 481,
+   "hh": 60.5,
+   "prot": 8.6,
+   "rasva": 22.5,
+   "kuitu": 4.3,
+   "haettu": "2026-11-06"
+  },
+  "mars": {
+   "koodi": "5000159407236",
+   "nimi": "Mars",
+   "per": "100g",
+   "kcal": 450,
+   "hh": 70,
+   "prot": 4.04,
+   "rasva": 16.8,
+   "kuitu": 1.24,
+   "haettu": "2026-11-06"
+  },
+  "haribo-kultakarhut": {
+   "koodi": "3103220009802",
+   "nimi": "Goldbears 300g",
+   "per": "100g",
+   "kcal": 343,
+   "hh": 77,
+   "prot": 6.9,
+   "rasva": 0.5,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "corny-suklaa": {
+   "koodi": "4011800420215",
+   "nimi": "Chocolate",
+   "per": "100g",
+   "kcal": 456,
+   "hh": 67,
+   "prot": 6.2,
+   "rasva": 17,
+   "kuitu": 3.4,
+   "haettu": "2026-11-06"
+  },
+  "corny-big-suklaa": {
+   "koodi": "4011800563516",
+   "nimi": "Corny Big Chocolate",
+   "per": "100g",
+   "kcal": 439,
+   "hh": 65,
+   "prot": 6.2,
+   "rasva": 17,
+   "kuitu": 3.2,
+   "haettu": "2026-11-06"
+  },
+  "greendeli-kolmioleipa": {
+   "koodi": "6430025526133",
+   "nimi": "Broileri kolmioleipä",
+   "per": "100g",
+   "kcal": 248,
+   "hh": 29.6,
+   "prot": 8.7,
+   "rasva": 10.4,
+   "kuitu": 1.7,
+   "haettu": "2026-11-06"
+  },
+  "valio-appelsiinimehu": {
+   "koodi": "6408430006151",
+   "nimi": "Perinteinen appelsiini täysmehu",
+   "per": "100ml",
+   "kcal": 39,
+   "hh": 9.1,
+   "prot": 0.7,
+   "rasva": 0,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "froosh-smoothie": {
+   "koodi": "7350020720734",
+   "nimi": "Froosh Smoothie",
+   "per": "100ml",
+   "kcal": 51,
+   "hh": 11.3,
+   "prot": 0.4,
+   "rasva": 0.1,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "sunmaid-rusinat": {
+   "koodi": "0041143025123",
+   "nimi": "SUN-MAID Raisins",
+   "per": "100g",
+   "kcal": 312,
+   "hh": 76.9,
+   "prot": 3,
+   "rasva": 0.7,
+   "kuitu": 5.8,
+   "haettu": "2026-11-06"
+  },
+  "valio-juotava-jogurtti": {
+   "koodi": "6408430408665",
+   "nimi": "Juotava Jogurtti Mansikka",
+   "per": "100g",
+   "kcal": 61,
+   "hh": 9,
+   "prot": 2.9,
+   "rasva": 1.3,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "valio-rahkavaahto": {
+   "koodi": "6408430408092",
+   "nimi": "Valio Herkku mousse mansikka rahkavaahto",
+   "per": "100g",
+   "kcal": 148,
+   "hh": 16,
+   "prot": 6.3,
+   "rasva": 6.3,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  },
+  "elovena-hedelmakeksi": {
+   "koodi": "6411200211143",
+   "nimi": "Hedelmä välipalakeksi",
+   "per": "100g",
+   "kcal": 418,
+   "hh": 56,
+   "prot": 9.1,
+   "rasva": 15,
+   "kuitu": 11,
+   "haettu": "2026-11-06"
+  },
+  "mehukatti-trip": {
+   "koodi": "6415131402342",
+   "nimi": "Trip Vadelma",
+   "per": "100ml",
+   "kcal": 30,
+   "hh": 7.3,
+   "prot": 0,
+   "rasva": 0.1,
+   "kuitu": null,
+   "haettu": "2026-11-06"
+  }
+ }
+}
