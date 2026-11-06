@@ -87,6 +87,24 @@ test("aloitus: tuleva Jyväskylän turnaus yhdellä napautuksella", async () => 
   }
 });
 
+test("mennyt ohjelma ei peitä tulevaa turnausta", async () => {
+  await sivu.clock.setFixedTime(new Date(2026, 10, 6, 14, 0));
+  await sivu.goto(`${URLI}#/ohjelma`);
+  await sivu.evaluate(() => localStorage.clear());
+  await sivu.reload();
+  try {
+    await sivu.click('button:has-text("Ota Huuhkajaliiga")');
+    await sivu.waitForSelector(".jana");
+    const kortti = sivu.locator(".valmis");
+    assert.match(await kortti.innerText(), /Seuraava turnaus/);
+    await kortti.locator('button:has-text("Ota tämä turnaus")').click();
+    await sivu.waitForSelector('.taso:has-text("JJK talviliiga")');
+    assert.equal(await sivu.locator(".valmis").count(), 0);
+  } finally {
+    await sivu.evaluate(() => localStorage.clear());
+  }
+});
+
 test("aloitus: turnaus, seuraavaksi-kortti, pikavalinta, kuittaus ja ostoslista", async () => {
   await sivu.clock.setFixedTime(new Date(2026, 10, 14, 7, 5)); // Turnauspäivän aamu, jotta seuraavaksi-kortti näkyy.
   await sivu.goto(URLI);

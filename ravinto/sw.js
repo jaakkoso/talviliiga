@@ -1,6 +1,6 @@
 // Offline-tuki. Koskee vain omaan kansioon kuuluviin pyyntöihin; muut polut ja fontit menevät suoraan verkkoon.
 // Kun jokin tiedosto muuttuu, nosta VERSIO, niin puhelimet hakevat uudet tiedostot.
-const VERSIO = "2026-11-06-5";
+const VERSIO = "2026-11-06-6";
 const ETULIITE = "ravinto-";
 const VALIMUISTI = ETULIITE + VERSIO;
 const KANSIO = new URL("./", self.location).pathname;

@@ -144,15 +144,20 @@ function piirra(sailytaVieritys = false) {
 }
 
 // Päivä
-function tyhjaTila() {
-  const tulevat = VALMIIT.filter((v) => v.pvm >= tanaan());
-  const valmis = tulevat.map((v) => `<section class="kortti pino valmis">
+const tulevatValmiit = () => VALMIIT.filter((v) => v.pvm >= tanaan());
+
+function valmiitKortit(tulevat) {
+  return tulevat.map((v) => `<section class="kortti pino valmis">
     <div class="pieni">${v.pvm === tanaan() ? "Tänään" : "Seuraava turnaus"}</div>
     <h2>${esc(v.nimi)}</h2>
     <p class="pieni">${esc(v.kuvaus)}</p>
     <button class="nappi paa leve" data-toiminto="valmis-ohjelma" data-id="${v.id}">Ota tämä turnaus</button>
   </section>`).join("");
-  return `${valmis}<section class="kortti pino">
+}
+
+function tyhjaTila() {
+  const tulevat = tulevatValmiit();
+  return `${valmiitKortit(tulevat)}<section class="kortti pino">
     <h2>${tulevat.length ? "Tai kerro oma turnaus" : "Milloin pelataan?"}</h2>
     <p class="pieni">Kerro turnauksen pelit, niin appi laskee päivän tankkauksen ja syömisen ajat.</p>
     ${turnausLomake()}
@@ -252,7 +257,9 @@ function nakymaPaiva(r) {
   const syoty = syodyt();
   const vinkit = nyt.vinkit.map((v) => `<li>${ikoni("vinkki")}<span>${esc(SAANNOT.vinkit[v])}</span></li>`).join("");
   const varoitukset = nyt.varoitukset.map((v) => `<p class="ilmoitus">${esc(v)}</p>`).join("");
-  return `
+  // Mennyt ohjelma ei peitä tulevaa valmista turnausta.
+  const mennyt = paivat.every((p) => p.paiva.pvm < tanaan());
+  return `${mennyt ? valmiitKortit(tulevatValmiit()) : ""}
     <div class="pvmt">${paivat.map((p) => `<a href="#/paiva/${p.paiva.pvm}"${p === nyt ? ' aria-current="date"' : ""}>${pvmTeksti(p.paiva.pvm)}</a>`).join("")}</div>
     ${seuraava ? nytKortti(nyt.paiva.pvm, seuraava, syoty) : ""}
     <section class="kortti taso">
