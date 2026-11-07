@@ -130,7 +130,12 @@
        "series": "Haaste",
        "home": "SJK",
        "away": "VPS",
-       "score": null,
+       "score": [
+        [
+         4,
+         2
+        ]
+       ],
        "d": {
         "venue": "Kenttä B"
        }
@@ -200,23 +205,23 @@
       {
        "pos": 4,
        "team": "SJK",
-       "o": 2,
-       "v": 0,
+       "o": 3,
+       "v": 1,
        "t": 0,
        "h": 2,
-       "gf": 1,
-       "ga": 6,
-       "p": 0
+       "gf": 5,
+       "ga": 8,
+       "p": 3
       },
       {
        "pos": 5,
        "team": "VPS",
-       "o": 2,
+       "o": 3,
        "v": 0,
        "t": 0,
-       "h": 2,
-       "gf": 0,
-       "ga": 7,
+       "h": 3,
+       "gf": 2,
+       "ga": 11,
        "p": 0
       },
       {
@@ -342,7 +347,12 @@
        "home": "SJK",
        "away": "VPS",
        "field": "Kenttä B",
-       "score": null
+       "score": [
+        [
+         4,
+         2
+        ]
+       ]
       },
       {
        "date": "2026-11-07",
