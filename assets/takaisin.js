@@ -34,5 +34,23 @@
   // Uusi osoite ohittaa puhelimen välimuistin, joten myös sivun uusin versio latautuu
   r.addEventListener('click', function () { r.classList.add('pyorii'); location.replace(p + '?p=' + Date.now() + location.hash); });
   napit.push(r);
-  (document.body ? Promise.resolve() : new Promise(function (res) { document.addEventListener('DOMContentLoaded', res); })).then(function () { napit.forEach(function (n) { document.body.appendChild(n); }); });
+  // iOS:n uudemmissa versioissa alareunaan kiinnitetyt napit voivat jäädä keskelle näyttöä vierityksen tai sovellukseen palaamisen
+  // jälkeen. Sijoitetaan napit siksi näkyvän alueen (visualViewport) alareunaan aina, kun näkymä muuttuu.
+  function kiinnita() {
+    var vv = window.visualViewport; if (!vv) return;
+    var turva = parseFloat(getComputedStyle(koetin).paddingBottom) || 0;
+    napit.forEach(function (n) { n.style.bottom = 'auto'; n.style.top = Math.round(vv.offsetTop + vv.height - n.offsetHeight - 14 - turva) + 'px'; });
+  }
+  var koetin = document.createElement('div');
+  koetin.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding-bottom:env(safe-area-inset-bottom,0px)';
+  (document.body ? Promise.resolve() : new Promise(function (res) { document.addEventListener('DOMContentLoaded', res); })).then(function () {
+    document.body.appendChild(koetin);
+    napit.forEach(function (n) { document.body.appendChild(n); });
+    kiinnita();
+    if (window.visualViewport) { visualViewport.addEventListener('resize', kiinnita); visualViewport.addEventListener('scroll', kiinnita); }
+    window.addEventListener('scroll', kiinnita, { passive: true });
+    window.addEventListener('resize', kiinnita);
+    window.addEventListener('pageshow', kiinnita);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) setTimeout(kiinnita, 50); });
+  });
 })();
