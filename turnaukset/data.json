@@ -12,6 +12,10 @@
      "name": "SJK-j",
      "label": "Kilpa",
      "level": "Kilpa",
+     "place": {
+      "pos": 4,
+      "of": 6
+     },
      "matches": [
       {
        "date": "2026-11-07",
@@ -86,7 +90,12 @@
        "series": "Kilpa",
        "home": "JJK",
        "away": "SJK-j",
-       "score": null,
+       "score": [
+        [
+         2,
+         2
+        ]
+       ],
        "d": {
         "venue": "Kenttä A"
        },
@@ -481,13 +490,13 @@
       {
        "pos": 4,
        "team": "SJK-j",
-       "o": 4,
+       "o": 5,
        "v": 1,
-       "t": 0,
+       "t": 1,
        "h": 3,
-       "gf": 7,
-       "ga": 17,
-       "p": 3
+       "gf": 9,
+       "ga": 19,
+       "p": 4
       },
       {
        "pos": 5,
@@ -503,13 +512,13 @@
       {
        "pos": 6,
        "team": "JJK",
-       "o": 4,
+       "o": 5,
        "v": 0,
-       "t": 0,
+       "t": 1,
        "h": 4,
-       "gf": 7,
-       "ga": 13,
-       "p": 0
+       "gf": 9,
+       "ga": 15,
+       "p": 1
       }
      ],
      "matches": [
@@ -701,7 +710,12 @@
        "home": "JJK",
        "away": "SJK-j",
        "field": "Kenttä A",
-       "score": null
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
       }
      ]
     }
