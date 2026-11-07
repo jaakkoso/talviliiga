@@ -29,7 +29,7 @@
   <div class="sec" id="view"><p class="note">Ladataan…</p></div>
 </main>
 <footer>Tulokset kirjataan Palloliiton tulospalveluun ottelun aikana. Sivustolla ei ole pelaajien nimiä.</footer>
-<script src="../assets/matches.js?v=20261105b"></script>
+<script src="../assets/matches.js?v=20261107b"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
@@ -88,9 +88,9 @@
     const rivi = r => r === 'W' ? '<span class="pip W">V</span>' : r === 'D' ? '<span class="pip D">T</span>' : '<span class="pip L">H</span>';
     const body = `<ol class="jk-list">${ms.map(m => {
       const p = P15.parseDate(m.date), koti = m.home === nimi, vast = koti ? m.away : m.home;
-      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${h}–${a} ${rivi(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${P15.esc(m.time || '')}</span>`;
-      return `<li class="${P15.isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${P15.esc(m.time || '')}</span><span class="jk-v">${koti ? 'vs' : '@'} ${P15.nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
-    }).join('')}</ol><p class="note">Tulokset kotijoukkue ensin. Tuplapeleissä molemmat pelit.</p>`;
+      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${f}–${g} ${rivi(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${P15.esc(m.time || '')}</span>`;
+      return `<li class="${P15.isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WD[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${P15.esc(m.time || '')}</span><span class="jk-v">vs ${P15.nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
+    }).join('')}</ol><p class="note">Tulos joukkueen näkökulmasta, sen omat maalit ensin. Tuplapeleissä molemmat pelit.</p>`;
     P15.openDialog("Joukkueen ottelut", `<h2 class="jk-h">${P15.esc(nimi)}</h2>` + body);
   }
   view.addEventListener('click', e => { const r = e.target.closest('tr[data-team]'); if (r) joukkueenOttelut(r.dataset.team); });

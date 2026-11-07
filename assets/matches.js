@@ -112,9 +112,9 @@ const P15 = (() => {
     const pip = r => r === 'W' ? '<span class="pip W">V</span>' : r === 'D' ? '<span class="pip D">T</span>' : '<span class="pip L">H</span>';
     const body = `<h2 class="jk-h">${nimi(team)}</h2><ol class="jk-list">${ms.map(m => {
       const p = parseDate(m.date), koti = m.home === team, vast = koti ? m.away : m.home;
-      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${h}–${a} ${pip(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${esc(m.time || '')}</span>`;
-      return `<li class="${isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WDS[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${esc(m.time || '')}${m.field ? '<br>' + esc(m.field) : ''}</span><span class="jk-v">${koti ? 'vs' : '@'} ${nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
-    }).join('')}</ol><p class="note">${esc(note || 'Tulokset kotijoukkue ensin.')}</p>`;
+      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${f}–${g} ${pip(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${esc(m.time || '')}</span>`;
+      return `<li class="${isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WDS[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${esc(m.time || '')}${m.field ? '<br>' + esc(m.field) : ''}</span><span class="jk-v">vs ${nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
+    }).join('')}</ol><p class="note">${esc(note || 'Tulos joukkueen näkökulmasta, sen omat maalit ensin.')}</p>`;
     openDialog('Joukkueen ottelut', body);
   }
   function openDialog(title, body) {
