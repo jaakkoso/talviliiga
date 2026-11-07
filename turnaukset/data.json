@@ -172,13 +172,13 @@
      "rows": [
       {
        "pos": 1,
-       "team": "FC Lahti",
-       "o": 3,
+       "team": "KuPS",
+       "o": 4,
        "v": 3,
        "t": 0,
-       "h": 0,
-       "gf": 10,
-       "ga": 1,
+       "h": 1,
+       "gf": 19,
+       "ga": 6,
        "p": 9
       },
       {
@@ -194,14 +194,14 @@
       },
       {
        "pos": 3,
-       "team": "KuPS",
-       "o": 3,
-       "v": 2,
+       "team": "FC Lahti",
+       "o": 4,
+       "v": 3,
        "t": 0,
        "h": 1,
-       "gf": 14,
+       "gf": 10,
        "ga": 6,
-       "p": 6
+       "p": 9
       },
       {
        "pos": 4,
@@ -361,7 +361,12 @@
        "home": "FC Lahti",
        "away": "KuPS",
        "field": "Kenttä B",
-       "score": null
+       "score": [
+        [
+         0,
+         5
+        ]
+       ]
       },
       {
        "date": "2026-11-07",
