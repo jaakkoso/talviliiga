@@ -87,7 +87,12 @@
        "series": "Haaste",
        "home": "FC Lahti",
        "away": "SJK",
-       "score": null,
+       "score": [
+        [
+         2,
+         0
+        ]
+       ],
        "d": {
         "venue": "Kenttä B"
        }
@@ -157,16 +162,16 @@
       {
        "pos": 2,
        "team": "FC Lahti",
-       "o": 0,
-       "v": 0,
+       "o": 1,
+       "v": 1,
        "t": 0,
        "h": 0,
-       "gf": 0,
+       "gf": 2,
        "ga": 0,
-       "p": 0
+       "p": 3
       },
       {
-       "pos": 2,
+       "pos": 3,
        "team": "OLS",
        "o": 0,
        "v": 0,
@@ -177,8 +182,8 @@
        "p": 0
       },
       {
-       "pos": 2,
-       "team": "SJK",
+       "pos": 3,
+       "team": "VPS",
        "o": 0,
        "v": 0,
        "t": 0,
@@ -188,14 +193,14 @@
        "p": 0
       },
       {
-       "pos": 2,
-       "team": "VPS",
-       "o": 0,
+       "pos": 5,
+       "team": "SJK",
+       "o": 1,
        "v": 0,
        "t": 0,
-       "h": 0,
+       "h": 1,
        "gf": 0,
-       "ga": 0,
+       "ga": 2,
        "p": 0
       },
       {
@@ -230,7 +235,12 @@
        "home": "FC Lahti",
        "away": "SJK",
        "field": "Kenttä B",
-       "score": null
+       "score": [
+        [
+         2,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-11-07",
