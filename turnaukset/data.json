@@ -107,6 +107,10 @@
      "name": "SJK",
      "label": "Haaste",
      "level": "Haaste",
+     "place": {
+      "pos": 4,
+      "of": 6
+     },
      "matches": [
       {
        "date": "2026-11-07",
@@ -179,7 +183,12 @@
        "series": "Haaste",
        "home": "JJK",
        "away": "SJK",
-       "score": null,
+       "score": [
+        [
+         0,
+         1
+        ]
+       ],
        "d": {
         "venue": "Kenttä B"
        }
@@ -227,23 +236,23 @@
       {
        "pos": 4,
        "team": "SJK",
-       "o": 4,
-       "v": 1,
+       "o": 5,
+       "v": 2,
        "t": 0,
        "h": 3,
-       "gf": 7,
+       "gf": 8,
        "ga": 12,
-       "p": 3
+       "p": 6
       },
       {
        "pos": 5,
        "team": "JJK",
-       "o": 4,
+       "o": 5,
        "v": 1,
        "t": 0,
-       "h": 3,
+       "h": 4,
        "gf": 5,
-       "ga": 16,
+       "ga": 17,
        "p": 3
       },
       {
@@ -447,7 +456,12 @@
        "home": "JJK",
        "away": "SJK",
        "field": "Kenttä B",
-       "score": null
+       "score": [
+        [
+         0,
+         1
+        ]
+       ]
       }
      ]
     },
