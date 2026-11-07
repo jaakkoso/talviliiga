@@ -25,7 +25,7 @@ jobs:
     timeout-minutes: 5
     environment:
       name: github-pages
-      url: ${{ steps.julkaisu.outputs.page_url }}
+      url: ${{ steps.julkaisu.outputs.page_url || steps.julkaisu2.outputs.page_url }}
     steps:
       - name: Onko Actions-julkaisu käytössä?
         id: tila
@@ -53,4 +53,11 @@ jobs:
           path: _site
       - id: julkaisu
         if: steps.tila.outputs.tyyppi == 'workflow'
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      # GitHubin palvelussa on joskus hetkellisiä katkoja: yritetään kerran uudelleen ennen kuin ajo merkitään epäonnistuneeksi
+      - if: steps.tila.outputs.tyyppi == 'workflow' && steps.julkaisu.outcome == 'failure'
+        run: sleep 15
+      - id: julkaisu2
+        if: steps.tila.outputs.tyyppi == 'workflow' && steps.julkaisu.outcome == 'failure'
         uses: actions/deploy-pages@v4
