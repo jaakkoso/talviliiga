@@ -2,6 +2,279 @@
  "updated": "2026-11-07",
  "events": [
   {
+   "id": "talviliiga-2026-11",
+   "name": "Talviliiga P12",
+   "dates": "21.11.2026",
+   "venue": "Wallsport, Seinäjoki",
+   "host": true,
+   "team": "SJK",
+   "format": "Kilpa etukentällä, haaste samaan aikaan takakentällä",
+   "teams": [
+    {
+     "name": "SJK",
+     "label": "Kilpa",
+     "level": "P12 Kilpa",
+     "matches": [
+      {
+       "date": "2026-11-21",
+       "time": "09.15",
+       "series": "Kilpa",
+       "home": "Eula",
+       "away": "SJK",
+       "d": {
+        "venue": "Etukenttä"
+       }
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.00",
+       "series": "Kilpa",
+       "home": "SJK",
+       "away": "WFA",
+       "d": {
+        "venue": "Etukenttä"
+       }
+      },
+      {
+       "date": "2026-11-21",
+       "time": "12.10",
+       "series": "Kilpa",
+       "home": "SJK",
+       "away": "Kanu",
+       "d": {
+        "venue": "Etukenttä"
+       }
+      }
+     ]
+    },
+    {
+     "name": "SJK",
+     "label": "Haaste",
+     "level": "P12 Haaste",
+     "matches": [
+      {
+       "date": "2026-11-21",
+       "time": "09.15",
+       "series": "Haaste",
+       "home": "Sepsi",
+       "away": "SJK",
+       "d": {
+        "venue": "Takakenttä"
+       }
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.00",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "WFA",
+       "d": {
+        "venue": "Takakenttä"
+       }
+      },
+      {
+       "date": "2026-11-21",
+       "time": "12.10",
+       "series": "Haaste",
+       "home": "SJK",
+       "away": "APV",
+       "d": {
+        "venue": "Takakenttä"
+       }
+      }
+     ]
+    }
+   ],
+   "groups": [
+    {
+     "name": "Kilpa",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "SJK",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 2,
+       "team": "Eula",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 3,
+       "team": "Kanu",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 4,
+       "team": "WFA",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ],
+     "matches": [
+      {
+       "date": "2026-11-21",
+       "time": "09.15",
+       "home": "Eula",
+       "away": "SJK",
+       "field": "Etukenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "09.50",
+       "home": "Kanu",
+       "away": "WFA",
+       "field": "Etukenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "10.25",
+       "home": "Eula",
+       "away": "Kanu",
+       "field": "Etukenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.00",
+       "home": "SJK",
+       "away": "WFA",
+       "field": "Etukenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.35",
+       "home": "WFA",
+       "away": "Eula",
+       "field": "Etukenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "12.10",
+       "home": "SJK",
+       "away": "Kanu",
+       "field": "Etukenttä"
+      }
+     ]
+    },
+    {
+     "name": "Haaste",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "SJK",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 2,
+       "team": "APV",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 3,
+       "team": "Sepsi",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 4,
+       "team": "WFA",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ],
+     "matches": [
+      {
+       "date": "2026-11-21",
+       "time": "09.15",
+       "home": "Sepsi",
+       "away": "SJK",
+       "field": "Takakenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "09.50",
+       "home": "APV",
+       "away": "WFA",
+       "field": "Takakenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "10.25",
+       "home": "Sepsi",
+       "away": "APV",
+       "field": "Takakenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.00",
+       "home": "SJK",
+       "away": "WFA",
+       "field": "Takakenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "11.35",
+       "home": "WFA",
+       "away": "Sepsi",
+       "field": "Takakenttä"
+      },
+      {
+       "date": "2026-11-21",
+       "time": "12.10",
+       "home": "SJK",
+       "away": "APV",
+       "field": "Takakenttä"
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "jjk-talviliiga-2026",
    "name": "JJK talviliiga",
    "dates": "7.11.2026",

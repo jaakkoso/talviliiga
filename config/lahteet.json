@@ -58,6 +58,14 @@
  ],
  "turnaukset": [
   {
+   "id": "talviliiga-2026-11",
+   "tyyppi": "oma",
+   "sheet": "",
+   "paiva": "2026-11-21",
+   "joukkue": "SJK",
+   "taso": "P12"
+  },
+  {
    "id": "talviliiga-2026",
    "tyyppi": "oma",
    "sheet": "1clMT47Y5qaXw3C3qUfX-YllHxRXXs1JT_crahSrwZWY",
