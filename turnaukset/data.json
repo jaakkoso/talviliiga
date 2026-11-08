@@ -19,7 +19,7 @@
        "date": "2026-11-21",
        "time": "09.15",
        "series": "Kilpa",
-       "home": "Eula",
+       "home": "EULA",
        "away": "SJK",
        "d": {
         "venue": "Etukenttä"
@@ -40,7 +40,7 @@
        "time": "12.10",
        "series": "Kilpa",
        "home": "SJK",
-       "away": "Kanu",
+       "away": "Kanuunat",
        "d": {
         "venue": "Etukenttä"
        }
@@ -56,7 +56,7 @@
        "date": "2026-11-21",
        "time": "09.15",
        "series": "Haaste",
-       "home": "Sepsi",
+       "home": "Sepsi-78",
        "away": "SJK",
        "d": {
         "venue": "Takakenttä"
@@ -102,7 +102,7 @@
       },
       {
        "pos": 2,
-       "team": "Eula",
+       "team": "EULA",
        "o": 0,
        "v": 0,
        "t": 0,
@@ -113,7 +113,7 @@
       },
       {
        "pos": 3,
-       "team": "Kanu",
+       "team": "Kanuunat",
        "o": 0,
        "v": 0,
        "t": 0,
@@ -138,22 +138,22 @@
       {
        "date": "2026-11-21",
        "time": "09.15",
-       "home": "Eula",
+       "home": "EULA",
        "away": "SJK",
        "field": "Etukenttä"
       },
       {
        "date": "2026-11-21",
        "time": "09.50",
-       "home": "Kanu",
+       "home": "Kanuunat",
        "away": "WFA",
        "field": "Etukenttä"
       },
       {
        "date": "2026-11-21",
        "time": "10.25",
-       "home": "Eula",
-       "away": "Kanu",
+       "home": "EULA",
+       "away": "Kanuunat",
        "field": "Etukenttä"
       },
       {
@@ -167,14 +167,14 @@
        "date": "2026-11-21",
        "time": "11.35",
        "home": "WFA",
-       "away": "Eula",
+       "away": "EULA",
        "field": "Etukenttä"
       },
       {
        "date": "2026-11-21",
        "time": "12.10",
        "home": "SJK",
-       "away": "Kanu",
+       "away": "Kanuunat",
        "field": "Etukenttä"
       }
      ]
@@ -206,7 +206,7 @@
       },
       {
        "pos": 3,
-       "team": "Sepsi",
+       "team": "Sepsi-78",
        "o": 0,
        "v": 0,
        "t": 0,
@@ -231,7 +231,7 @@
       {
        "date": "2026-11-21",
        "time": "09.15",
-       "home": "Sepsi",
+       "home": "Sepsi-78",
        "away": "SJK",
        "field": "Takakenttä"
       },
@@ -245,7 +245,7 @@
       {
        "date": "2026-11-21",
        "time": "10.25",
-       "home": "Sepsi",
+       "home": "Sepsi-78",
        "away": "APV",
        "field": "Takakenttä"
       },
@@ -260,7 +260,7 @@
        "date": "2026-11-21",
        "time": "11.35",
        "home": "WFA",
-       "away": "Sepsi",
+       "away": "Sepsi-78",
        "field": "Takakenttä"
       },
       {
