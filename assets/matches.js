@@ -4,11 +4,11 @@ const P15 = (() => {
   const MONTHS = ['tammikuu', 'helmikuu', 'maaliskuu', 'huhtikuu', 'toukokuu', 'kesäkuu', 'heinäkuu', 'elokuu', 'syyskuu', 'lokakuu', 'marraskuu', 'joulukuu'];
   const WD = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
   const LETTER = { W: 'V', D: 'T', L: 'H' };
-  const isOwn = name => /^SJK(-j)?(\/|$)/.test(name);
+  const isOwn = name => /^SJK(-j|-15)?(\/|$)/.test(name);
   // SJK-logo oman joukkueen nimen eteen, jotta omat pelit erottuvat listoista
   const LOGO = new URL('logo-180.png', (document.currentScript && document.currentScript.src) || location.href).href;
   // lyhyt = näytetään oma joukkue pelkkänä "SJK" (sivuilla, joilla on vain yksi oma joukkue)
-  const nimi = (n, lyhyt) => isOwn(n) ? `<img class="tlogo" src="${LOGO}" alt="" width="18" height="18"><span title="${esc(n)}">${lyhyt ? 'SJK' : esc(n)}</span>` : esc(n);
+  const nimi = (n, lyhyt) => isOwn(n) ? `<img class="tlogo" src="${LOGO}" alt="" width="18" height="18"><span title="${esc(n)}">${lyhyt && n !== 'SJK-15' ? 'SJK' : esc(n)}</span>` : esc(n);
   const parseDate = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 
   // Tulos oman joukkueen näkökulmasta. own = oman joukkueen nimi; tyhjä = kumpi tahansa SJK-j.

@@ -275,6 +275,52 @@
    ]
   },
   {
+   "id": "p2016-talviliiga-2026",
+   "name": "P2016 talviliiga",
+   "dates": "14.11.2026",
+   "venue": "Wallsport, Seinäjoki",
+   "format": "P2016-ikäluokan tapahtuma, mukana yksi joukkue · 8v8 · 30 min · kokoontuminen klo 9.20",
+   "teams": [
+    {
+     "name": "SJK-15",
+     "label": "SJK-15",
+     "level": "8v8",
+     "matches": [
+      {
+       "date": "2026-11-14",
+       "time": "10.05",
+       "series": "P2016 talviliiga",
+       "home": "SJK-15",
+       "away": "VIFK Blå",
+       "d": {
+        "venue": "Kenttä 1 (kioskin puoli)"
+       }
+      },
+      {
+       "date": "2026-11-14",
+       "time": "10.40",
+       "series": "P2016 talviliiga",
+       "home": "SJK Kulta",
+       "away": "SJK-15",
+       "d": {
+        "venue": "Kenttä 1 (kioskin puoli)"
+       }
+      },
+      {
+       "date": "2026-11-14",
+       "time": "12.25",
+       "series": "P2016 talviliiga",
+       "home": "SJK Mustakulta",
+       "away": "SJK-15",
+       "d": {
+        "venue": "Kenttä 1 (kioskin puoli)"
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "jjk-talviliiga-2026",
    "name": "JJK talviliiga",
    "dates": "7.11.2026",
