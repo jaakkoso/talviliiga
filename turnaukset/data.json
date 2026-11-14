@@ -294,27 +294,45 @@
        "away": "VIFK Blå",
        "d": {
         "venue": "Kenttä 1 (kioskin puoli)"
-       }
+       },
+       "score": [
+        [
+         2,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-11-14",
        "time": "10.40",
        "series": "P2016 talviliiga",
-       "home": "SJK Kulta",
+       "home": "SJK-16 musta",
        "away": "SJK-15",
        "d": {
         "venue": "Kenttä 1 (kioskin puoli)"
-       }
+       },
+       "score": [
+        [
+         2,
+         2
+        ]
+       ]
       },
       {
        "date": "2026-11-14",
        "time": "12.25",
        "series": "P2016 talviliiga",
-       "home": "SJK Mustakulta",
+       "home": "SJK-16 valkoinen",
        "away": "SJK-15",
        "d": {
         "venue": "Kenttä 1 (kioskin puoli)"
-       }
+       },
+       "score": [
+        [
+         2,
+         3
+        ]
+       ]
       }
      ]
     }
