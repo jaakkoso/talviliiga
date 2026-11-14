@@ -5,7 +5,7 @@
 /* ===== ASETUKSET – täytä käyttöönotossa ===== */
 const CONFIG = {
   SHEET_ID: '1clMT47Y5qaXw3C3qUfX-YllHxRXXs1JT_crahSrwZWY',      // Google Sheetin tunnus (osoitteen /d/ ja /edit välissä). Tyhjä = demotila.
-  API_URL: 'https://script.google.com/macros/s/AKfycbwjoNUYYV5N5T2b-C_QWrWThrsePIe0OEesoTnvNzsCclJWRRhjU5QYPa-am6Ekw3Kh7w/exec',     // Apps Script -verkkosovelluksen osoite (…/exec)
+  API_URL: 'https://script.google.com/macros/s/AKfycbxserB-wj54uxYA_tJ-bsX1xs4bnGsIVe0aGLlPMtbWeTJqQLiwAdeIP8GJgetgg206qw/exec',     // Apps Script -verkkosovelluksen osoite (…/exec)
   POLL_MS: 30000,    // Päivitysväli julkisella sivulla; kirjausnäkymät 15 s
   PRODUCT: { name: '', url: '' },  // Palvelun oma nimi alalaitaan ("Tulospalvelu: nimi"). Tyhjä = ei näytetä.
 };
