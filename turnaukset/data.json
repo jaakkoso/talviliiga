@@ -77,7 +77,7 @@
        "time": "12.10",
        "series": "Haaste",
        "home": "SJK",
-       "away": "APV",
+       "away": "JPK",
        "d": {
         "venue": "Takakenttä"
        }
@@ -195,7 +195,7 @@
       },
       {
        "pos": 2,
-       "team": "APV",
+       "team": "JPK",
        "o": 0,
        "v": 0,
        "t": 0,
@@ -238,7 +238,7 @@
       {
        "date": "2026-11-21",
        "time": "09.50",
-       "home": "APV",
+       "home": "JPK",
        "away": "WFA",
        "field": "Takakenttä"
       },
@@ -246,7 +246,7 @@
        "date": "2026-11-21",
        "time": "10.25",
        "home": "Sepsi-78",
-       "away": "APV",
+       "away": "JPK",
        "field": "Takakenttä"
       },
       {
@@ -267,7 +267,7 @@
        "date": "2026-11-21",
        "time": "12.10",
        "home": "SJK",
-       "away": "APV",
+       "away": "JPK",
        "field": "Takakenttä"
       }
      ]
