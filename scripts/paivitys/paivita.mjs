@@ -4,7 +4,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
-import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus, fudisLohkot, veoOsuma } from './jasennys.mjs';
+import { palloliittoOttelut, taulukko, torneopalNimike, torneopalOttelu, turvallinen, ottelusivu, csv, omaTurnaus, asetusPaiva, fudisTurnaus, fudisLohkot, veoOsuma, kategorianOttelut } from './jasennys.mjs';
 
 const JUURI = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
 const lue = p => JSON.parse(fs.readFileSync(path.join(JUURI, p), 'utf8'));
@@ -93,6 +93,8 @@ async function paivitaPiirisarjat() {
       const sarja = kaikki.filter(m => !/HUUHKAJALIIGA/i.test(m.series));
       // Säilytetään ottelutietojen linkitys (pid) vanhoista otteluista
       for (const m of sarja) { const v = t.matches.find(x => x.date === m.date && x.home === m.home && x.away === m.away); if (v && v.pid) m.pid = v.pid; }
+      // Uuden kauden karsintaottelut näytetään karsinnan omassa osiossa (d.karsinta), ei arkistossa
+      if (cfg.karsinta) { const vanhat = new Set(t.matches.map(x => x.date + x.home + x.away)); for (let i = sarja.length - 1; i >= 0; i--) { const m = sarja[i]; if (/karsinta/i.test(m.series) && m.date >= cfg.karsinta.alku && !vanhat.has(m.date + m.home + m.away)) sarja.splice(i, 1); } }
       if (turvallinen(t.matches, sarja)) t.matches = sarja; else varoita(`${j.nimi}: haku palautti vähemmän pelattuja otteluita kuin ennen, vanhat säilytetty`);
       t._hh = kaikki.filter(m => /HUUHKAJALIIGA/i.test(m.series));
       tila.piirisarjat[j.nimi] = { ottelut: kaikki.length, pelatut: kaikki.filter(m => m.score).length };
@@ -105,11 +107,44 @@ async function paivitaPiirisarjat() {
     t.tables = uudet;
     if (tila.piirisarjat[j.nimi]) tila.piirisarjat[j.nimi].taulukot = uudet.filter(x => x.rows && x.rows.length).length;
   }
+  if (cfg.karsinta) await paivitaKarsinta(d);
   const hh = Object.fromEntries(d.teams.map(t => [t.name, t._hh || []]));
   d.teams.forEach(t => delete t._hh);
   d.updated = tanaan;
   kirjoita('piirisarja/data.json', d);
   return hh;
+}
+
+/* Karsinta: lohkotaulukot ja kaikki lohkon ottelut kategorian ottelu- ja tulossivuilta.
+   Sopimattomat ottelut (vain pelaamisväli) näytetään valmiiksi; päivä, aika ja tulos päivittyvät kun ne julkaistaan. */
+async function paivitaKarsinta(d) {
+  const k = cfg.karsinta, vanha = d.karsinta || {};
+  const kaikki = [];
+  for (const osa of ['results', 'fixture']) {
+    try { kaikki.push(...kategorianOttelut(await palloliittoTeksti(k.kategoria + osa, 'MATCH DETAILS'), k.alkuvuosi)); }
+    catch (e) { varoita(`Karsinta ${osa}: ${e.message}`); }
+  }
+  const groups = [];
+  for (const l of k.lohkot) {
+    const url = k.kategoria + `group/${l.ryhma}/`, ennen = (vanha.groups || []).find(g => g.url === url) || {};
+    let rows = ennen.rows || [];
+    try { const r = await palloliittoTaulukko(url); if (r && r.length) rows = r; } catch (e) { varoita(`Karsinta ${l.nimi}: ${e.message}`); }
+    const jj = new Set(rows.map(r => r.team));
+    const pari = m => [m.home, m.away].sort().join('|');
+    const uudet = new Map();
+    // Pelattu (tulossivu) ohittaa ohjelman; samaa paria ei toisteta (yksinkertainen sarja)
+    for (const m of kaikki) {
+      if (!jj.has(m.home) || !jj.has(m.away)) continue;
+      const v = uudet.get(pari(m));
+      if (!v || (m.score && !v.score) || (m.date && !v.date && !v.score)) uudet.set(pari(m), { date: m.date, time: m.time, home: m.home, away: m.away, score: m.score || null, ...(m.ikkuna ? { ikkuna: m.ikkuna } : {}) });
+    }
+    // Aiemmin tunnetut säilyvät, jos haku palautti vähemmän (esim. sivu ei latautunut); kellonaika muistetaan
+    for (const v of ennen.matches || []) { const u = uudet.get(pari(v)); if (!u) uudet.set(pari(v), v); else if (!u.time && v.time && u.date === v.date) u.time = v.time; }
+    const matches = [...uudet.values()].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999') || (a.time || '99').localeCompare(b.time || '99'));
+    groups.push({ name: l.nimi, team: l.joukkue, url, rows, matches });
+    tila.piirisarjat[`Karsinta ${l.nimi}`] = { ottelut: matches.length, pelatut: matches.filter(m => m.score).length, taulukko: rows.length };
+  }
+  d.karsinta = { name: k.nimi, season: k.kausi, url: k.kategoria + 'tables', groups };
 }
 
 /* Ottelutiedot (aika, kenttä, puoliaikatulos, maalit pelinumeroina) otteluille, joilta ne puuttuvat */

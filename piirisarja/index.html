@@ -29,43 +29,68 @@
   <div class="sec" id="view"><p class="note">Ladataan tuloksia…</p></div>
 </main>
 <footer id="foot">Lähde: Palloliiton tulospalvelu.</footer>
-<script src="../assets/matches.js?v=20261113a"></script>
+<script src="../assets/matches.js?v=20261117a"></script>
 <script>
 (async () => {
   const view = document.getElementById('view'), tabs = document.getElementById('tabs');
   let data;
   try { data = await P15.load('data.json'); }
   catch (e) { view.innerHTML = '<p class="note">Tuloksia ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
-  const short = n => n.replace('SJK-j/', '');
-  const karsinta = t => /karsinta/i.test(t.level.split('·')[0]);
-  // Karsinnassa olevat joukkueet: välilehti "Karsinta Ykköseen · musta", jotta kaksi joukkuetta erottuu ja karsinta näkyy heti
-  const lvl = t => karsinta(t) ? `${t.level.split('·')[0].trim().replace(/^P12\s*/, '').replace(/\s*\d{4}$/, '')} · ${short(t.name).replace(/\s*-15$/, '')}` : t.level.split('·')[0].replace(/\s*\(.*?\)/, '').trim();
-  document.getElementById('sub').textContent = `Kausi ${data.season} · ${data.teams.length} sarjatasoa`;
+  const short = n => n.replace('SJK-j/', '').replace(/\s*-15$/, '');
+  const lvl = t => t.level.split('·')[0].replace(/\s*\(.*?\)/, '').trim();
+  const K = data.karsinta && data.karsinta.groups && data.karsinta.groups.length ? data.karsinta : null;
   document.getElementById('foot').textContent = `Lähde: ${data.source}, päivitetty ${data.updated.split('-').reverse().map(Number).join('.')}. Sivustolla ei ole pelaajien nimiä.`;
-  const opts = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: lvl(t) }))];
-  tabs.innerHTML = opts.map(o => `<button type="button" id="tab-${o.id}" data-id="${o.id}" aria-pressed="false">${P15.esc(o.label)}</button>`).join('');
-  function render(id) {
-    tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
-    if (id === 'kaikki') {
+  // Välilehdet: karsinta (kultainen) ensin, sitten kauden 2026 arkisto
+  const ark = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: lvl(t) }))];
+  tabs.innerHTML = (K ? `<button type="button" class="kulta-tab" data-id="karsinta" aria-pressed="false">${P15.esc(K.name)}</button>` : '')
+    + `<button type="button" data-id="arkisto" aria-pressed="false">Arkisto ${P15.esc(data.season)}</button>`;
+  const ord = m => (m.date || '9999') + (m.time || '99');
+  function karsintaHTML() {
+    return `<div class="summary"><div class="sec-head"><h2>${P15.esc(K.name)}</h2><a class="btn" href="${K.url}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
+      <div class="lvl">Kausi ${P15.esc(K.season)} · ${K.groups.map(g => P15.esc(short(g.team))).join(' ja ')}</div></div>`
+      + K.groups.map(g => {
+        const omat = g.matches.filter(m => m.home === g.team || m.away === g.team).sort((a, b) => ord(a).localeCompare(ord(b)));
+        const muut = g.matches.filter(m => !omat.includes(m)).sort((a, b) => ord(a).localeCompare(ord(b)));
+        const avoimet = omat.filter(m => !m.date).length;
+        return `<div class="sec-head" style="margin-top:22px"><h2>${P15.esc(g.name)} · ${P15.esc(short(g.team))}</h2></div>`
+          + P15.tableHTML({ name: 'Sarjataulukko', url: g.url, rows: g.rows }, { teamClick: true, ryhma: g.name })
+          + `<h3 class="kars-h">Ottelut · ${P15.esc(short(g.team))}</h3>`
+          + omat.map(m => P15.matchHTML(m, { own: g.team, showSeries: false })).join('')
+          + (avoimet ? `<p class="note">Pelipäiviä ei ole vielä sovittu (${avoimet} ottelua). Päivä, aika ja tulokset päivittyvät tähän automaattisesti, kun ne julkaistaan.</p>` : '')
+          + (muut.length ? `<details class="kars-muut"><summary>Lohkon muut ottelut (${muut.length})</summary>${muut.map(m => P15.matchHTML(m, { own: g.team, showSeries: false })).join('')}</details>` : '');
+      }).join('');
+  }
+  let arkTab = P15.store.get('piirisarja-tab', 'kaikki');
+  if (!ark.some(o => o.id === arkTab)) arkTab = 'kaikki';
+  function arkistoHTML() {
+    const sub = `<nav class="tabs subtabs" aria-label="Kauden ${P15.esc(data.season)} sarjat">${ark.map(o => `<button type="button" data-sub="${o.id}" aria-pressed="${o.id === arkTab}">${P15.esc(o.label)}</button>`).join('')}</nav>`;
+    if (arkTab === 'kaikki') {
       const items = data.teams.flatMap(t => t.matches.map(m => ({ m, opt: { own: t.name, showSeries: true } })));
-      // Karsinta näytetään heti ensimmäisenä: molempien joukkueiden karsintalohkot
-      const kt = data.teams.filter(karsinta).map(t => ({ t, tb: (t.tables || []).find(x => /karsinta/i.test(x.name)) })).filter(x => x.tb);
-      const kars = kt.length ? `<div class="summary"><div class="sec-head"><h2>Karsinta P12 Ykköseen</h2></div><div class="lvl">${kt.map(x => P15.esc(short(x.t.name).replace(/\s*-15$/, ''))).join(' ja ')} mukana karsinnassa · kausi ${P15.esc((kt[0].t.level.match(/\d{4}/) || [''])[0])}</div></div>`
-        + `<div class="tables">${kt.map(x => P15.tableHTML({ ...x.tb, name: `${x.tb.name.replace(/^P12 Karsinta Ykköseen \d{4},?\s*/, '').replace(/^l/, 'L')} · ${short(x.t.name).replace(/\s*-15$/, '')}` })).join('')}</div>` : '';
-      view.innerHTML = kars + `<p class="note">Kaikki P2015-sarjaottelut, uusin ensin. Valitse sarjataso nähdäksesi sen yhteenvedon ja taulukot.</p>` + P15.listHTML(items);
-    } else {
-      const t = data.teams.find(t => t.id === id);
-      view.innerHTML = `<div class="summary"><div class="sec-head"><h2>${P15.esc(lvl(t))}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
-        <div class="lvl">${P15.esc(t.level)} · ${P15.esc(t.name)}</div>${P15.summaryHTML(P15.summary(t.matches, t.name))}</div>`
-        + (t.tables && t.tables.length ? `<div class="tables">${t.tables.map(x => P15.tableHTML(x)).join('')}</div>` : `<p class="note">${P15.esc(data.noTables || '')}</p>`)
-        + P15.listHTML(t.matches.map(m => ({ m, opt: { own: t.name } })));
+      return sub + `<p class="note">Kauden ${P15.esc(data.season)} sarjaottelut, uusin ensin. Valitse sarjataso nähdäksesi sen yhteenvedon ja taulukot.</p>` + P15.listHTML(items);
     }
-    P15.store.set('piirisarja-tab', id);
+    const t = data.teams.find(t => t.id === arkTab);
+    return sub + `<div class="summary"><div class="sec-head"><h2>${P15.esc(lvl(t))}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
+      <div class="lvl">${P15.esc(t.level)} · ${P15.esc(t.name)}</div>${P15.summaryHTML(P15.summary(t.matches, t.name))}</div>`
+      + (t.tables && t.tables.length ? `<div class="tables">${t.tables.map(x => P15.tableHTML(x)).join('')}</div>` : `<p class="note">${P15.esc(data.noTables || '')}</p>`)
+      + P15.listHTML(t.matches.map(m => ({ m, opt: { own: t.name } })));
+  }
+  let paa;
+  function render(id) {
+    paa = id;
+    tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
+    document.getElementById('sub').textContent = id === 'karsinta' ? `Kausi ${K.season} · ${K.name}` : `Arkisto · kausi ${data.season} · ${data.teams.length} sarjatasoa`;
+    view.innerHTML = id === 'karsinta' ? karsintaHTML() : arkistoHTML();
+    P15.store.set('piirisarja-paa', id);
   }
   tabs.addEventListener('click', e => { const b = e.target.closest('button'); if (b) render(b.dataset.id); });
-  let start = P15.store.get('piirisarja-tab', 'kaikki');
-  if (!opts.some(o => o.id === start)) start = 'kaikki';
-  render(start);
+  view.addEventListener('click', e => {
+    const s = e.target.closest('button[data-sub]'); if (s) { arkTab = s.dataset.sub; P15.store.set('piirisarja-tab', arkTab); render('arkisto'); return; }
+    const r = e.target.closest('tr[data-team]');
+    if (r && paa === 'karsinta') { const g = K.groups.find(g => g.rows.some(x => x.team === r.dataset.team)); if (g) P15.teamDialog(r.dataset.team, g.matches, 'Tulos joukkueen näkökulmasta. Pelipäivät päivittyvät, kun ne sovitaan.'); }
+  });
+  let alku = P15.store.get('piirisarja-paa', K ? 'karsinta' : 'arkisto');
+  if (alku === 'karsinta' && !K) alku = 'arkisto';
+  render(K ? 'karsinta' : alku);
 })();
 </script>
 <script src="../assets/takaisin.js?v=20261107a"></script>

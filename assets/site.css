@@ -408,3 +408,9 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .ng-teams .tlogo{width:20px;height:20px;margin-right:2px}
 .ng-vs{font-weight:500;opacity:.7;font-size:.9rem}
 .ng-meta{font-size:.82rem;color:#cfc9bb}
+/* Sarjat: karsinnan kultainen välilehti, arkiston alavälilehdet, lohkon muut ottelut */
+.tabs button.kulta-tab{background:linear-gradient(180deg,#d8cb52,var(--gold));border-color:#a99d2f;color:#211e1e;font-weight:700}
+.tabs button.kulta-tab[aria-pressed="true"]{background:linear-gradient(180deg,#cfc246,#a99d2f);border-color:#8f8426;color:#211e1e;box-shadow:0 0 0 2px rgba(189,176,58,.35),0 6px 16px rgba(33,30,30,.22)}
+.subtabs{margin:0 0 14px}.subtabs button{font-size:.84rem;padding:5px 12px}
+.kars-h{font:700 .78rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#6b665e);margin:16px 2px 8px}
+.kars-muut{margin:10px 0 4px}.kars-muut summary{cursor:pointer;font-weight:600;padding:8px 2px;color:var(--ink)}

@@ -8,7 +8,9 @@
 
   const title = s => String(s).toLowerCase().replace(/(^|\s)(\S)/g, (a, b, c) => b + c.toUpperCase()).replace(/\bP(\d+)/g, 'P$1');
   // Kaikki ottelut muodossa { m, own, level, kind }
-  const league = piiri.teams.flatMap(t => t.matches.map(m => ({ m, own: t.name, level: title(m.series), kind: 'sarja' })));
+  const league = piiri.teams.flatMap(t => t.matches.map(m => ({ m, own: t.name, level: title(m.series), kind: 'sarja' })))
+    // Karsinnan ottelut, joilla on jo pelipäivä (sopimattomat näkyvät vain Sarjat-sivulla)
+    .concat(((piiri.karsinta && piiri.karsinta.groups) || []).flatMap(g => g.matches.filter(m => m.date && (m.home === g.team || m.away === g.team)).map(m => ({ m: { ...m, series: piiri.karsinta.name }, own: g.team, level: piiri.karsinta.name, kind: 'sarja' }))));
   const hh = eer.events.flatMap(ev => ev.matches.map(m => ({ m: { ...m, series: `Huuhkajaliiga · ${ev.name}` }, own: ev.team, level: `Huuhkajaliiga ${ev.name.toLowerCase()}`, kind: 'hh' })));
   const tour = turn.events.flatMap(ev => ev.teams.flatMap(t => t.matches.map(m => ({ m: { ...m, series: `${ev.name} · ${t.level}` }, own: t.name, level: 'Turnaukset', kind: 'turnaus', link: ev.link }))));
   const all = [...league, ...hh, ...tour];

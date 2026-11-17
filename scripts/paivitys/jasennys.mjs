@@ -264,3 +264,25 @@ export function fudisLohkot(t, { seura = /^SJK/ } = {}) {
     }))
   }));
 }
+
+/* Sarjan (kategorian) ottelusivu: kortissa [päivä tai aikaväli, MATCH DETAILS, koti, (tulos/kello), vieras].
+   Aikaväli "16.11. – 24.1." = pelipäivää ei ole vielä sovittu → { date: null, ikkuna: '16.11.–24.1.' }.
+   Vuosi kauden alusta: heinä–joulukuu = alkuvuosi, tammi–kesäkuu = seuraava vuosi. */
+export function kategorianOttelut(rivit, alkuvuosi) {
+  const L = rivit.map(s => String(s).trim()).filter(Boolean), out = [];
+  const paiva = t => { const m = String(t).match(/(\d{1,2})\.(\d{1,2})\./); if (!m) return null; const kk = +m[2]; return `${kk >= 7 ? alkuvuosi : alkuvuosi + 1}-${pad(kk)}-${pad(m[1])}`; };
+  const eiJoukkue = t => !t || t === 'MATCH DETAILS' || /^\d+(\+\d+)?'?$/.test(t) || /^\d{1,2}:\d{2}$/.test(t) || /^\d+\s*[–-]\s*\d+$/.test(t);
+  for (let i = 1; i < L.length; i++) {
+    if (L[i] !== 'MATCH DETAILS') continue;
+    const d = L[i - 1], vali = d.match(/(\d{1,2}\.\d{1,2}\.)\s*[–-]\s*(\d{1,2}\.\d{1,2}\.)/);
+    const m = { date: vali ? null : paiva(d), home: L[i + 1], away: '', score: null };
+    if (vali) m.ikkuna = `${vali[1]}–${vali[2]}`;
+    else if (!m.date) continue;
+    let j = i + 2; const sc = [];
+    while (onTulos(L[j])) { sc.push(tulos(L[j]).score[0]); j++; }
+    if (sc.length) m.score = sc; else if (onKello(L[j])) { m.time = L[j].replace(':', '.'); j++; }
+    m.away = L[j] || '';
+    if (!eiJoukkue(m.home) && !eiJoukkue(m.away)) out.push(m);
+  }
+  return out;
+}

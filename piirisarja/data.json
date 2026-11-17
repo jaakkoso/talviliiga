@@ -6,7 +6,7 @@
   {
    "id": "35138118",
    "name": "SJK-j/musta -15",
-   "level": "P12 Karsinta Ykköseen 2027 · P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "level": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
    "taso": "https://tulospalvelu.palloliitto.fi/team/35138118/results",
    "matches": [
     {
@@ -312,67 +312,6 @@
    ],
    "tables": [
     {
-     "name": "P12 Karsinta Ykköseen 2027, lohko C3",
-     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/3/",
-     "rows": [
-      {
-       "pos": 1,
-       "team": "SJK-j/musta",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 2,
-       "team": "VIFK/Blå",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 3,
-       "team": "VPS J/Musta -16",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 4,
-       "team": "Virkiä/valkoinen",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 5,
-       "team": "WFA 2016 YJ3",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      }
-     ]
-    },
-    {
      "name": "P12 Kolmonen, syksy",
      "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/",
      "rows": [
@@ -583,7 +522,7 @@
      ]
     },
     {
-     "name": "P12 Karsinta Ykköseen 2026",
+     "name": "P12 Karsinta Ykköseen",
      "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/",
      "rows": [
       {
@@ -626,7 +565,7 @@
   {
    "id": "35138119",
    "name": "SJK-j/kulta",
-   "level": "P12 Karsinta Ykköseen 2027 · P11 Taso 1",
+   "level": "P11 Taso 1",
    "taso": "https://tulospalvelu.palloliitto.fi/team/35138119/results",
    "matches": [
     {
@@ -890,69 +829,7 @@
      "pid": "4136209"
     }
    ],
-   "tables": [
-    {
-     "name": "P12 Karsinta Ykköseen 2027, lohko C2",
-     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/2/",
-     "rows": [
-      {
-       "pos": 1,
-       "team": "KuRy/-16",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 2,
-       "team": "SJK-j/kulta",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 3,
-       "team": "Sepsi-78/Sininen",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 4,
-       "team": "VPS J/Musta",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 5,
-       "team": "WFA YJ",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
-      }
-     ]
-    }
-   ]
+   "tables": []
   },
   {
    "id": "35140758",
@@ -1493,5 +1370,280 @@
    "tables": []
   }
  ],
- "noTables": "P11-tasosarjoista Palloliitto ei julkaise sarjataulukoita."
+ "noTables": "P11-tasosarjoista Palloliitto ei julkaise sarjataulukoita.",
+ "karsinta": {
+  "name": "P12 Ykkönen karsinta",
+  "season": "2027",
+  "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/tables",
+  "groups": [
+   {
+    "name": "Lohko C2",
+    "team": "SJK-j/kulta",
+    "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/2/",
+    "rows": [
+     {
+      "pos": 1,
+      "team": "KuRy/-16",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 2,
+      "team": "SJK-j/kulta",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 3,
+      "team": "Sepsi-78/Sininen",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 4,
+      "team": "VPS J/Musta",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 5,
+      "team": "WFA YJ",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     }
+    ],
+    "matches": [
+     {
+      "date": null,
+      "home": "SJK-j/kulta",
+      "away": "VPS J/Musta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "Sepsi-78/Sininen",
+      "away": "WFA YJ",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA YJ",
+      "away": "SJK-j/kulta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "KuRy/-16",
+      "away": "Sepsi-78/Sininen",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/kulta",
+      "away": "KuRy/-16",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta",
+      "away": "WFA YJ",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "Sepsi-78/Sininen",
+      "away": "SJK-j/kulta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "KuRy/-16",
+      "away": "VPS J/Musta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta",
+      "away": "Sepsi-78/Sininen",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA YJ",
+      "away": "KuRy/-16",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     }
+    ]
+   },
+   {
+    "name": "Lohko C3",
+    "team": "SJK-j/musta",
+    "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/3/",
+    "rows": [
+     {
+      "pos": 1,
+      "team": "SJK-j/musta",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 2,
+      "team": "VIFK/Blå",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 3,
+      "team": "VPS J/Musta -16",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 4,
+      "team": "Virkiä/valkoinen",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     },
+     {
+      "pos": 5,
+      "team": "WFA 2016 YJ3",
+      "o": 0,
+      "v": 0,
+      "t": 0,
+      "h": 0,
+      "gf": 0,
+      "ga": 0,
+      "p": 0
+     }
+    ],
+    "matches": [
+     {
+      "date": null,
+      "home": "SJK-j/musta",
+      "away": "WFA 2016 YJ3",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta -16",
+      "away": "Virkiä/valkoinen",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "Virkiä/valkoinen",
+      "away": "SJK-j/musta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta -16",
+      "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VIFK/Blå",
+      "away": "SJK-j/musta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA 2016 YJ3",
+      "away": "Virkiä/valkoinen",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/musta",
+      "away": "VPS J/Musta -16",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VIFK/Blå",
+      "away": "WFA 2016 YJ3",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA 2016 YJ3",
+      "away": "VPS J/Musta -16",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "Virkiä/valkoinen",
+      "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     }
+    ]
+   }
+  ]
+ }
 }

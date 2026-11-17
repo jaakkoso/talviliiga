@@ -88,3 +88,9 @@ const FL = fudisLohkot({ clubs: [{ id: 192, name: 'SJK-j' }], groupStageMatches:
   groups: [{ id: 9, name: 'Haaste', ageGroup: { name: 'Haaste' }, results: [{ ranking: 2, teamName: 'SJK', clubId: 192, matches: 1, wins: 0, draws: 0, losses: 1, goalsFor: 1, goalsAgainst: 2, points: 0 }, { ranking: 1, teamName: 'FC Lahti', clubId: 447, matches: 1, wins: 1, draws: 0, losses: 0, goalsFor: 2, goalsAgainst: 1, points: 3 }] }, { id: 10, name: 'Muu', results: [{ clubId: 5 }] }] });
 assert.equal(FL.length, 1); assert.equal(FL[0].rows[0].team, 'FC Lahti'); assert.equal(FL[0].matches[0].time, '10.35'); assert.deepEqual(FL[0].matches[0].score, [[2, 1]]);
 console.log('Fudis-lohkot -testi OK');
+
+import { kategorianOttelut } from './jasennys.mjs';
+const KO = kategorianOttelut(['16.11. – 24.1.', 'MATCH DETAILS', 'SJK-j/kulta', 'VPS J/Musta', 'la 6.12.', 'MATCH DETAILS', 'WFA YJ', '10:30', 'SJK-j/kulta', 'su 18.1.', 'MATCH DETAILS', 'SJK-j/musta', '3–1', 'VIFK/Blå'], 2026);
+assert.equal(KO.length, 3); assert.equal(KO[0].date, null); assert.equal(KO[0].ikkuna, '16.11.–24.1.');
+assert.equal(KO[1].date, '2026-12-06'); assert.equal(KO[1].time, '10.30'); assert.equal(KO[2].date, '2027-01-18'); assert.deepEqual(KO[2].score, [[3, 1]]);
+console.log('Karsinta-ottelut -testi OK');

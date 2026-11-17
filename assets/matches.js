@@ -9,7 +9,7 @@ const P15 = (() => {
   const LOGO = new URL('logo-180.png', (document.currentScript && document.currentScript.src) || location.href).href;
   // lyhyt = näytetään oma joukkue pelkkänä "SJK" (sivuilla, joilla on vain yksi oma joukkue)
   const nimi = (n, lyhyt) => isOwn(n) ? `<img class="tlogo" src="${LOGO}" alt="" width="18" height="18"><span title="${esc(n)}">${lyhyt && n !== 'SJK-15' ? 'SJK' : esc(n)}</span>` : esc(n);
-  const parseDate = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const parseDate = s => { if (!s) return new Date(NaN); const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 
   // Tulos oman joukkueen näkökulmasta. own = oman joukkueen nimi; tyhjä = kumpi tahansa SJK-j.
   function results(m, own) {
@@ -46,11 +46,11 @@ const P15 = (() => {
       ? `<div class="sc">${(m.score || [[0, 0]]).map(([h, a]) => `<span>${h}–${a}</span>`).join('')}</div><span class="live-pill" title="Tilanne klo ${esc(m.live)}">LIVE${liveText(m) ? ' · ' + esc(liveText(m)) : ''}</span>`
       : m.score
       ? `<div class="sc">${m.score.map(([h, a]) => `<span>${h}–${a}</span>`).join('')}${m.note ? `<small class="rp">${esc(m.note)}</small>` : ''}</div><div class="pips">${rs.map(x => `<span class="pip ${x.r}">${LETTER[x.r]}</span>`).join('')}</div>`
-      : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : 'tulossa'}</span>`;
+      : `<span class="tbd">${m.time ? 'klo ' + esc(m.time) : !m.date && m.ikkuna ? 'pelataan<br>' + esc(m.ikkuna) : 'tulossa'}</span>`;
     const sub = [opt.showSeries !== false ? m.series : '', opt.showTeam ? (opt.teamLabel || '') : ''].filter(Boolean).join(' · ');
     const mi = REG.push({ m, opt }) - 1;
     return `<button type="button" class="match" data-mi="${mi}" aria-label="Ottelun tiedot: ${esc(m.home)} – ${esc(m.away)}">
-      <span class="date">${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b></span>
+      <span class="date">${m.date ? `${WD[d.getDay()]}<b>${d.getDate()}.${d.getMonth() + 1}.</b>` : 'päivä<b>avoin</b>'}</span>
       <span class="tm">${sub ? `<span class="ser">${esc(sub)}</span>` : ''}
         <span class="${isOwn(m.home) ? 'me' : ''}">${nimi(m.home)}</span>
         <span class="${isOwn(m.away) ? 'me' : ''}">${nimi(m.away)}</span>${m.veo ? '<span class="veo-tag"><b>▶</b> Video</span>' : ''}</span>
@@ -75,7 +75,7 @@ const P15 = (() => {
     const rs = results(m, opt.own);
     const verdict = m.live ? `Käynnissä${liveText(m) ? ' · ' + esc(liveText(m)) : ''} · tilanne klo ${esc(m.live)}` : rs.length ? rs.map(x => ({ W: 'Voitto', D: 'Tasapeli', L: 'Tappio' })[x.r]).join(' · ') : '';
     const score = m.score ? m.score.map(([h, a]) => `${h}–${a}`).join(' · ') : 'vs';
-    const meta = [`${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
+    const meta = [m.date ? `${WD[d.getDay()]} ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}` : `Pelipäivä sopimatta${m.ikkuna ? ' · pelataan ' + esc(m.ikkuna) : ''}`, (det && det.time) || m.time ? 'klo ' + esc((det && det.time) || m.time) : '', det && det.venue ? esc(det.venue) : ''].filter(Boolean).join(' · ');
     let goals = '';
     if (det && det.goals && det.goals.length) {
       let h = 0, a = 0; const nums = det.goals.some(g => g.no != null || g.og);
@@ -108,12 +108,12 @@ const P15 = (() => {
   // Joukkueen kaikki ottelut (sarjataulukon rivistä): tuplapeleissä molemmat pelit, V/T/H joukkueen näkökulmasta
   const WDS = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
   function teamDialog(team, matches, note) {
-    const ms = [...matches].filter(m => m.home === team || m.away === team).sort((a, b) => a.date.localeCompare(b.date) || (a.time || '99').localeCompare(b.time || '99'));
+    const ms = [...matches].filter(m => m.home === team || m.away === team).sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999') || (a.time || '99').localeCompare(b.time || '99'));
     const pip = r => r === 'W' ? '<span class="pip W">V</span>' : r === 'D' ? '<span class="pip D">T</span>' : '<span class="pip L">H</span>';
     const body = `<h2 class="jk-h">${nimi(team)}</h2><ol class="jk-list">${ms.map(m => {
       const p = parseDate(m.date), koti = m.home === team, vast = koti ? m.away : m.home;
-      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${f}–${g} ${pip(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">klo ${esc(m.time || '')}</span>`;
-      return `<li class="${isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${WDS[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.<br>${esc(m.time || '')}${m.field ? '<br>' + esc(m.field) : ''}</span><span class="jk-v">vs ${nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
+      const tul = m.score ? m.score.map(([h, a]) => { const f = koti ? h : a, g = koti ? a : h; return `<span class="jk-s">${f}–${g} ${pip(f > g ? 'W' : f < g ? 'L' : 'D')}</span>`; }).join('') : `<span class="jk-s tuleva">${m.time ? 'klo ' + esc(m.time) : m.date ? '' : 'tulossa'}</span>`;
+      return `<li class="${isOwn(vast) ? 'oma' : ''}"><span class="jk-d">${m.date ? `${WDS[p.getDay()]} ${p.getDate()}.${p.getMonth() + 1}.` : 'päivä avoin'}<br>${esc(m.time || '')}${m.field ? '<br>' + esc(m.field) : ''}</span><span class="jk-v">vs ${nimi(vast)}</span><span class="jk-r">${tul}</span></li>`;
     }).join('')}</ol><p class="note">${esc(note || 'Tulos joukkueen näkökulmasta, sen omat maalit ensin.')}</p>`;
     openDialog('Joukkueen ottelut', body);
   }

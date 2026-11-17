@@ -5,12 +5,8 @@
   {
    "id": "35138118",
    "nimi": "SJK-j/musta -15",
-   "taso": "P12 Karsinta Ykköseen 2027 · P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "taso": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
    "taulukot": [
-    {
-     "nimi": "P12 Karsinta Ykköseen 2027, lohko C3",
-     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/3/"
-    },
     {
      "nimi": "P12 Kolmonen, syksy",
      "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/"
@@ -20,7 +16,7 @@
      "url": "https://tulospalvelu.palloliitto.fi/category/P122!lanjp26/group/2/"
     },
     {
-     "nimi": "P12 Karsinta Ykköseen 2026",
+     "nimi": "P12 Karsinta Ykköseen",
      "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/"
     }
    ]
@@ -28,13 +24,8 @@
   {
    "id": "35138119",
    "nimi": "SJK-j/kulta",
-   "taso": "P12 Karsinta Ykköseen 2027 · P11 Taso 1",
-   "taulukot": [
-    {
-     "nimi": "P12 Karsinta Ykköseen 2027, lohko C2",
-     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/2/"
-    }
-   ]
+   "taso": "P11 Taso 1",
+   "taulukot": []
   },
   {
    "id": "35140758",
@@ -128,5 +119,25 @@
   "seura": "sjk-juniorit-ry-2",
   "joukkue": "sjk-p2015",
   "kanava": "https://live.veo.co/web-app/clubs/sjk-juniorit-ry-2/teams/sjk-p2015/"
+ },
+ "karsinta": {
+  "_ohje": "Uuden kauden karsinta: lohkojen taulukot ja ottelut kategorian sivuilta. Sivun ensimmäinen välilehti.",
+  "nimi": "P12 Ykkönen karsinta",
+  "kausi": "2027",
+  "alkuvuosi": 2026,
+  "alku": "2026-11-16",
+  "kategoria": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/",
+  "lohkot": [
+   {
+    "nimi": "Lohko C2",
+    "ryhma": 2,
+    "joukkue": "SJK-j/kulta"
+   },
+   {
+    "nimi": "Lohko C3",
+    "ryhma": 3,
+    "joukkue": "SJK-j/musta"
+   }
+  ]
  }
 }
