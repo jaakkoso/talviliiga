@@ -84,7 +84,7 @@ const P15 = (() => {
         const team = g.side === 'h' ? m.home : m.away;
         const who = g.og ? 'oma maali' : g.no != null ? '#' + g.no : '–';
         return `<li class="${isOwn(team) ? 'me' : ''}"><span class="mn">${g.min}'</span><span class="tm">${isOwn(team) ? 'SJK' : esc(team)}</span>${nums ? `<span class="no">${who}</span>` : '<span class="no"></span>'}<span class="st">${h}–${a}</span></li>`;
-      }).join('')}</ol>${nums ? '<p class="tl-note">Maalintekijät pelinumeroina. Nimiä ei näytetä.</p>' : ''}`;
+      }).join('')}</ol>${nums ? '<p class="tl-note">Maalintekijät pelinumeroina.</p>' : ''}`;
     } else if (m.score) goals = `<p class="note">Maalien tarkempia tietoja ei ole saatavilla tästä ottelusta.</p>`;
     const link = m.pid ? `https://tulospalvelu.palloliitto.fi/match/${m.pid}/shotmap` : opt.link;
     dlg.innerHTML = `<div class="mdlg-in">
@@ -99,8 +99,17 @@ const P15 = (() => {
       <div class="mdlg-sub">${[det && det.ht ? 'Puoliaika ' + esc(det.ht) : '', m.note ? esc(m.note) : '', verdict].filter(Boolean).join(' · ')}</div>
       ${m.veo ? `<a class="veo-big" href="${esc(m.veo)}" target="_blank" rel="noopener"><span>▶</span>Katso ottelu Veosta</a>` : ''}
       ${goals}
+      ${m.pid && (m.score || m.live) ? `<div class="pl-embed"><button type="button" class="btn pl-open" data-pid="${esc(m.pid)}">Maalintekijät ja kokoonpanot (Palloliitto)</button></div>` : ''}
       <div class="btns">${link ? `<a class="btn" href="${link}" target="_blank" rel="noopener">Lähde ↗</a>` : ''}</div>
     </div>`;
+    // Palloliiton ottelusivu upotetaan vasta pyynnöstä: sisältö tulee suoraan Palloliitolta, sivustolle ei tallenneta nimiä
+    const pb = dlg.querySelector('.pl-open');
+    if (pb) pb.addEventListener('click', () => {
+      const url = `https://tulospalvelu.palloliitto.fi/match/${encodeURIComponent(pb.dataset.pid)}`;
+      pb.parentElement.innerHTML = `<div class="pl-frame"><iframe src="${url}" title="Ottelu Palloliiton tulospalvelussa" loading="lazy" referrerpolicy="no-referrer"></iframe></div>
+        <p class="tl-note">Näkymä tulee suoraan Palloliiton tulospalvelusta. Jos se ei lataudu, <a href="${url}" target="_blank" rel="noopener">avaa ottelu Palloliiton sivulla ↗</a></p>`;
+      dlg.querySelector('.pl-frame').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
   }
   document.addEventListener('click', e => { const b = e.target.closest('.match[data-mi]'); if (b) openMatch(+b.dataset.mi); });
