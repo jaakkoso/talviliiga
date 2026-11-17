@@ -5,8 +5,12 @@
   {
    "id": "35138118",
    "nimi": "SJK-j/musta -15",
-   "taso": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "taso": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät) · P12 Karsinta Ykköseen",
    "taulukot": [
+    {
+     "nimi": "P12 Karsinta Ykköseen 2027, lohko C3",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/3/"
+    },
     {
      "nimi": "P12 Kolmonen, syksy",
      "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/"
@@ -16,7 +20,7 @@
      "url": "https://tulospalvelu.palloliitto.fi/category/P122!lanjp26/group/2/"
     },
     {
-     "nimi": "P12 Karsinta Ykköseen",
+     "nimi": "P12 Karsinta Ykköseen 2026",
      "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/"
     }
    ]
@@ -24,8 +28,13 @@
   {
    "id": "35138119",
    "nimi": "SJK-j/kulta",
-   "taso": "P11 Taso 1",
-   "taulukot": []
+   "taso": "P11 Taso 1 · P12 Karsinta Ykköseen",
+   "taulukot": [
+    {
+     "nimi": "P12 Karsinta Ykköseen 2027, lohko C2",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/2/"
+    }
+   ]
   },
   {
    "id": "35140758",

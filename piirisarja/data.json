@@ -6,7 +6,7 @@
   {
    "id": "35138118",
    "name": "SJK-j/musta -15",
-   "level": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät)",
+   "level": "P12 Kolmonen (syksy) · P12 Kakkonen (kevät) · P12 Karsinta Ykköseen",
    "taso": "https://tulospalvelu.palloliitto.fi/team/35138118/results",
    "matches": [
     {
@@ -312,6 +312,67 @@
    ],
    "tables": [
     {
+     "name": "P12 Karsinta Ykköseen 2027, lohko C3",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/3/",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "SJK-j/musta",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 2,
+       "team": "VIFK/Blå",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 3,
+       "team": "VPS J/Musta -16",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 4,
+       "team": "Virkiä/valkoinen",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 5,
+       "team": "WFA 2016 YJ3",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ]
+    },
+    {
      "name": "P12 Kolmonen, syksy",
      "url": "https://tulospalvelu.palloliitto.fi/category/P123!lanjp26/group/15/",
      "rows": [
@@ -522,7 +583,7 @@
      ]
     },
     {
-     "name": "P12 Karsinta Ykköseen",
+     "name": "P12 Karsinta Ykköseen 2026",
      "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp26/group/4/",
      "rows": [
       {
@@ -565,7 +626,7 @@
   {
    "id": "35138119",
    "name": "SJK-j/kulta",
-   "level": "P11 Taso 1",
+   "level": "P11 Taso 1 · P12 Karsinta Ykköseen",
    "taso": "https://tulospalvelu.palloliitto.fi/team/35138119/results",
    "matches": [
     {
@@ -829,7 +890,69 @@
      "pid": "4136209"
     }
    ],
-   "tables": []
+   "tables": [
+    {
+     "name": "P12 Karsinta Ykköseen 2027, lohko C2",
+     "url": "https://tulospalvelu.palloliitto.fi/category/P12K!lanjp27/group/2/",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "KuRy/-16",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 2,
+       "team": "SJK-j/kulta",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 3,
+       "team": "Sepsi-78/Sininen",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 4,
+       "team": "VPS J/Musta",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 5,
+       "team": "WFA YJ",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ]
+    }
+   ]
   },
   {
    "id": "35140758",
