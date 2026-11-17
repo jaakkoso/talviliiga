@@ -10,7 +10,7 @@
 <link rel="icon" href="../assets/logo-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;800&family=Figtree:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="../assets/site.css?v=20261106c">
+<link rel="stylesheet" href="../assets/site.css?v=20261117a">
 </head>
 <body>
 <header class="top">
@@ -49,13 +49,12 @@
   const ord = m => (m.date || '9999') + (m.time || '99');
   function karsintaHTML() {
     return `<nav class="tabs subtabs" aria-label="Kauden ${P15.esc(K.season)} sarjat"><button type="button" aria-pressed="true">${P15.esc(K.name)}</button></nav>`
-      + `<div class="summary"><div class="sec-head"><h2>${P15.esc(K.name)}</h2><a class="btn" href="${K.url}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
-      <div class="lvl">Kausi ${P15.esc(K.season)} · ${K.groups.map(g => P15.esc(short(g.team))).join(' ja ')}</div></div>`
+      + `<p class="kars-intro">Mukana kulta ja musta · <a href="${K.url}" target="_blank" rel="noopener">Palloliitto ↗</a></p>`
       + K.groups.map(g => {
         const omat = g.matches.filter(m => m.home === g.team || m.away === g.team).sort((a, b) => ord(a).localeCompare(ord(b)));
         const muut = g.matches.filter(m => !omat.includes(m)).sort((a, b) => ord(a).localeCompare(ord(b)));
         const avoimet = omat.filter(m => !m.date).length;
-        return `<div class="sec-head" style="margin-top:22px"><h2>${P15.esc(g.name)} · ${P15.esc(short(g.team))}</h2></div>`
+        return `<div class="sec-head" style="margin-top:18px"><h2>${P15.esc(g.name)} · ${P15.esc(short(g.team))}</h2></div>`
           + P15.tableHTML({ name: 'Sarjataulukko', url: g.url, rows: g.rows }, { teamClick: true, ryhma: g.name })
           + `<h3 class="kars-h">Ottelut · ${P15.esc(short(g.team))}</h3>`
           + omat.map(m => P15.matchHTML(m, { own: g.team, showSeries: false })).join('')

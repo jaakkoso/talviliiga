@@ -414,3 +414,4 @@ button.fact:hover{transform:translateY(-1px);box-shadow:0 1px 0 #fff inset,0 12p
 .subtabs{margin:0 0 14px}.subtabs button{font-size:.84rem;padding:5px 12px}
 .kars-h{font:700 .78rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted,#6b665e);margin:16px 2px 8px}
 .kars-muut{margin:10px 0 4px}.kars-muut summary{cursor:pointer;font-weight:600;padding:8px 2px;color:var(--ink)}
+.kars-intro{margin:2px 2px 0;font-size:.9rem;color:var(--muted,#6b665e)}.kars-intro a{color:inherit}
