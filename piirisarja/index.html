@@ -42,11 +42,14 @@
   document.getElementById('foot').textContent = `Lähde: ${data.source}, päivitetty ${data.updated.split('-').reverse().map(Number).join('.')}. Sivustolla ei ole pelaajien nimiä.`;
   // Välilehdet: karsinta (kultainen) ensin, sitten kauden 2026 arkisto
   const ark = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: lvl(t) }))];
-  tabs.innerHTML = (K ? `<button type="button" class="kulta-tab" data-id="karsinta" aria-pressed="false">${P15.esc(K.name)}</button>` : '')
-    + `<button type="button" data-id="arkisto" aria-pressed="false">Arkisto ${P15.esc(data.season)}</button>`;
+  // Ylhäällä kaudet (uusin ensin), alla kauden sarjat; 2027:ssä karsinta (kultainen)
+  // Ylhäällä kaudet (uusin ensin); kauden sisällä sarjat alavälilehtinä. Karsinta kultaisena.
+  tabs.innerHTML = (K ? `<button type="button" class="kulta-tab" data-id="karsinta" aria-pressed="false">${P15.esc(K.season)}</button>` : '')
+    + `<button type="button" data-id="arkisto" aria-pressed="false">${P15.esc(data.season)}</button>`;
   const ord = m => (m.date || '9999') + (m.time || '99');
   function karsintaHTML() {
-    return `<div class="summary"><div class="sec-head"><h2>${P15.esc(K.name)}</h2><a class="btn" href="${K.url}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
+    return `<nav class="tabs subtabs" aria-label="Kauden ${P15.esc(K.season)} sarjat"><button type="button" aria-pressed="true">${P15.esc(K.name)}</button></nav>`
+      + `<div class="summary"><div class="sec-head"><h2>${P15.esc(K.name)}</h2><a class="btn" href="${K.url}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
       <div class="lvl">Kausi ${P15.esc(K.season)} · ${K.groups.map(g => P15.esc(short(g.team))).join(' ja ')}</div></div>`
       + K.groups.map(g => {
         const omat = g.matches.filter(m => m.home === g.team || m.away === g.team).sort((a, b) => ord(a).localeCompare(ord(b)));
@@ -78,7 +81,7 @@
   function render(id) {
     paa = id;
     tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
-    document.getElementById('sub').textContent = id === 'karsinta' ? `Kausi ${K.season} · ${K.name}` : `Arkisto · kausi ${data.season} · ${data.teams.length} sarjatasoa`;
+    document.getElementById('sub').textContent = id === 'karsinta' ? `Kausi ${K.season} · ${K.name}` : `Kausi ${data.season} · ${data.teams.length} sarjatasoa`;
     view.innerHTML = id === 'karsinta' ? karsintaHTML() : arkistoHTML();
     P15.store.set('piirisarja-paa', id);
   }
