@@ -37,7 +37,9 @@
   try { data = await P15.load('data.json'); }
   catch (e) { view.innerHTML = '<p class="note">Tuloksia ei saatu ladattua. Tarkista verkkoyhteys ja päivitä sivu.</p>'; return; }
   const short = n => n.replace('SJK-j/', '');
-  const lvl = t => t.level.split('·')[0].replace(/\s*\(.*?\)/, '').trim();
+  const karsinta = t => /karsinta/i.test(t.level.split('·')[0]);
+  // Karsinnassa olevat joukkueet: välilehti "Karsinta Ykköseen · musta", jotta kaksi joukkuetta erottuu ja karsinta näkyy heti
+  const lvl = t => karsinta(t) ? `${t.level.split('·')[0].trim().replace(/^P12\s*/, '').replace(/\s*\d{4}$/, '')} · ${short(t.name).replace(/\s*-15$/, '')}` : t.level.split('·')[0].replace(/\s*\(.*?\)/, '').trim();
   document.getElementById('sub').textContent = `Kausi ${data.season} · ${data.teams.length} sarjatasoa`;
   document.getElementById('foot').textContent = `Lähde: ${data.source}, päivitetty ${data.updated.split('-').reverse().map(Number).join('.')}. Sivustolla ei ole pelaajien nimiä.`;
   const opts = [{ id: 'kaikki', label: 'Kaikki' }, ...data.teams.map(t => ({ id: t.id, label: lvl(t) }))];
@@ -46,7 +48,11 @@
     tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === id));
     if (id === 'kaikki') {
       const items = data.teams.flatMap(t => t.matches.map(m => ({ m, opt: { own: t.name, showSeries: true } })));
-      view.innerHTML = `<p class="note">Kaikki P2015-sarjaottelut, uusin ensin. Valitse sarjataso nähdäksesi sen yhteenvedon ja taulukot.</p>` + P15.listHTML(items);
+      // Karsinta näytetään heti ensimmäisenä: molempien joukkueiden karsintalohkot
+      const kt = data.teams.filter(karsinta).map(t => ({ t, tb: (t.tables || []).find(x => /karsinta/i.test(x.name)) })).filter(x => x.tb);
+      const kars = kt.length ? `<div class="summary"><div class="sec-head"><h2>Karsinta P12 Ykköseen</h2></div><div class="lvl">${kt.map(x => P15.esc(short(x.t.name).replace(/\s*-15$/, ''))).join(' ja ')} mukana karsinnassa · kausi ${P15.esc((kt[0].t.level.match(/\d{4}/) || [''])[0])}</div></div>`
+        + `<div class="tables">${kt.map(x => P15.tableHTML({ ...x.tb, name: `${x.tb.name.replace(/^P12 Karsinta Ykköseen \d{4},?\s*/, '').replace(/^l/, 'L')} · ${short(x.t.name).replace(/\s*-15$/, '')}` })).join('')}</div>` : '';
+      view.innerHTML = kars + `<p class="note">Kaikki P2015-sarjaottelut, uusin ensin. Valitse sarjataso nähdäksesi sen yhteenvedon ja taulukot.</p>` + P15.listHTML(items);
     } else {
       const t = data.teams.find(t => t.id === id);
       view.innerHTML = `<div class="summary"><div class="sec-head"><h2>${P15.esc(lvl(t))}</h2><a class="btn" href="${t.taso}" target="_blank" rel="noopener">Palloliiton sivu ↗</a></div>
