@@ -1623,22 +1623,8 @@
      },
      {
       "date": null,
-      "home": "VPS J/Musta -16",
-      "away": "VIFK/Blå",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
       "home": "VIFK/Blå",
       "away": "SJK-j/musta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA 2016 YJ3",
-      "away": "Virkiä/valkoinen",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
@@ -1660,6 +1646,20 @@
       "date": null,
       "home": "Virkiä/valkoinen",
       "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta -16",
+      "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA 2016 YJ3",
+      "away": "Virkiä/valkoinen",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
