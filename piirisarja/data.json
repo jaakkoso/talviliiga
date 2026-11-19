@@ -1,6 +1,6 @@
 {
  "season": 2026,
- "updated": "2026-11-18",
+ "updated": "2026-11-19",
  "source": "Palloliiton tulospalvelu",
  "teams": [
   {
@@ -1454,13 +1454,6 @@
      },
      {
       "date": null,
-      "home": "WFA YJ",
-      "away": "SJK-j/kulta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
       "home": "KuRy",
       "away": "Sepsi-78/Sininen",
       "score": null,
@@ -1505,6 +1498,13 @@
       "date": null,
       "home": "WFA YJ",
       "away": "KuRy",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "WFA YJ",
+      "away": "SJK-j/kulta",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
@@ -1609,13 +1609,6 @@
      },
      {
       "date": null,
-      "home": "VPS J/Musta -16",
-      "away": "Virkiä/valkoinen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
       "home": "Virkiä/valkoinen",
       "away": "SJK-j/musta",
       "score": null,
@@ -1646,6 +1639,13 @@
       "date": null,
       "home": "Virkiä/valkoinen",
       "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "VPS J/Musta -16",
+      "away": "Virkiä/valkoinen",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
