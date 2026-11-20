@@ -113,6 +113,15 @@
    "url": "https://paasiaisturnaus.torneopal.fi/",
    "suodatin": "P11|2015",
    "valmis": true
+  },
+  {
+   "id": "marrasturnaus-2026",
+   "tyyppi": "fudisturnaus",
+   "url": "https://www.fudisturnaus.com/t/marrasturnaus",
+   "paiva": "2026-11-22",
+   "joukkueet": [
+    "SJK-j P2015"
+   ]
   }
  ],
  "veo": {

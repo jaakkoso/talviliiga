@@ -2,6 +2,157 @@
  "updated": "2026-11-07",
  "events": [
   {
+   "id": "marrasturnaus-2026",
+   "name": "Marrasturnaus",
+   "dates": "22.11.2026",
+   "venue": "Ilkka Areena, Kuortane",
+   "link": "https://www.fudisturnaus.com/t/marrasturnaus",
+   "format": "P2014-sarjan haaste, mukana yksi joukkue",
+   "teams": [
+    {
+     "name": "SJK-j P2015",
+     "label": "Haaste",
+     "level": "P2014 · Haaste",
+     "matches": [
+      {
+       "date": "2026-11-22",
+       "time": "12.50",
+       "series": "Haaste",
+       "home": "SJK-j T2013",
+       "away": "SJK-j P2015",
+       "score": null,
+       "d": {
+        "venue": "Kenttä 2"
+       }
+      },
+      {
+       "date": "2026-11-22",
+       "time": "14.00",
+       "series": "Haaste",
+       "home": "WFA oranssi",
+       "away": "SJK-j P2015",
+       "score": null,
+       "d": {
+        "venue": "Kenttä 2"
+       }
+      },
+      {
+       "date": "2026-11-22",
+       "time": "15.10",
+       "series": "Haaste",
+       "home": "SJK-j musta",
+       "away": "SJK-j P2015",
+       "score": null,
+       "d": {
+        "venue": "Kenttä 1"
+       }
+      }
+     ]
+    }
+   ],
+   "groups": [
+    {
+     "name": "P2014 · Haaste",
+     "rows": [
+      {
+       "pos": 1,
+       "team": "SJK-j P2015",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 2,
+       "team": "SJK-j T2013",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 3,
+       "team": "SJK-j musta",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      },
+      {
+       "pos": 4,
+       "team": "WFA oranssi",
+       "o": 0,
+       "v": 0,
+       "t": 0,
+       "h": 0,
+       "gf": 0,
+       "ga": 0,
+       "p": 0
+      }
+     ],
+     "matches": [
+      {
+       "date": "2026-11-22",
+       "time": "12.50",
+       "home": "SJK-j musta",
+       "away": "WFA oranssi",
+       "field": "Kenttä 1",
+       "score": null
+      },
+      {
+       "date": "2026-11-22",
+       "time": "12.50",
+       "home": "SJK-j T2013",
+       "away": "SJK-j P2015",
+       "field": "Kenttä 2",
+       "score": null
+      },
+      {
+       "date": "2026-11-22",
+       "time": "14.00",
+       "home": "SJK-j musta",
+       "away": "SJK-j T2013",
+       "field": "Kenttä 1",
+       "score": null
+      },
+      {
+       "date": "2026-11-22",
+       "time": "14.00",
+       "home": "WFA oranssi",
+       "away": "SJK-j P2015",
+       "field": "Kenttä 2",
+       "score": null
+      },
+      {
+       "date": "2026-11-22",
+       "time": "15.10",
+       "home": "SJK-j musta",
+       "away": "SJK-j P2015",
+       "field": "Kenttä 1",
+       "score": null
+      },
+      {
+       "date": "2026-11-22",
+       "time": "15.10",
+       "home": "WFA oranssi",
+       "away": "SJK-j T2013",
+       "field": "Kenttä 2",
+       "score": null
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "talviliiga-2026-11",
    "name": "Talviliiga P12",
    "dates": "21.11.2026",

@@ -208,9 +208,10 @@ const hkiKello = iso => { if (!iso) return undefined; const p = new Intl.DateTim
 /* Seuran joukkueet (oletuksena SJK-j / SJK) sivuston muotoon. Sarjataso = ikäryhmän nimi (esim. Kilpa, Haaste).
    Sijoitus otetaan lohkotaulukosta, kun lohkon kaikki ottelut on pelattu ja jatkopelejä ei ole, tai jatkopelien jälkeen
    ei arvata: silloin sija jätetään tyhjäksi ja sen voi lisätä käsin. */
-export function fudisTurnaus(t, { seura = /^SJK/ } = {}) {
+export function fudisTurnaus(t, { seura = /^SJK/, joukkueet: valitut } = {}) {
   const omaSeura = new Set((t.clubs || []).filter(c => seura.test(c.name)).map(c => c.id));
-  const oma = team => team && omaSeura.has(team.clubId);
+  // joukkueet: valinnainen lista nimiä, kun turnauksessa on muitakin SJK-joukkueita (esim. ["SJK-j P2015"])
+  const oma = team => team && omaSeura.has(team.clubId) && (!valitut || valitut.includes(team.name));
   const kaikki = [...(t.groupStageMatches || []), ...(t.playoffMatches || [])];
   const joukkueet = new Map();
   for (const m of kaikki) for (const team of [m.homeTeam, m.awayTeam]) if (oma(team)) {
@@ -252,10 +253,10 @@ export function veoOsuma(tallenteet, m, oma = /^SJK/) {
 }
 
 /* fudisturnaus.com: oman seuran lohkojen sarjataulukot ja kaikki lohkon ottelut (myös muiden keskinäiset) */
-export function fudisLohkot(t, { seura = /^SJK/ } = {}) {
+export function fudisLohkot(t, { seura = /^SJK/, joukkueet } = {}) {
   const omaSeura = new Set((t.clubs || []).filter(c => seura.test(c.name)).map(c => c.id));
   const ottelut = [...(t.groupStageMatches || [])];
-  return (t.groups || []).filter(g => (g.results || []).some(r => omaSeura.has(r.clubId))).map(g => ({
+  return (t.groups || []).filter(g => (g.results || []).some(r => omaSeura.has(r.clubId) && (!joukkueet || joukkueet.includes(r.teamName)))).map(g => ({
     name: g.ageGroup?.name && g.ageGroup.name !== g.name ? `${g.ageGroup.name} · ${g.name}` : g.name,
     rows: [...g.results].sort((a, b) => a.ranking - b.ranking).map(r => ({ pos: r.ranking, team: r.teamName, o: r.matches, v: r.wins, t: r.draws, h: r.losses, gf: r.goalsFor, ga: r.goalsAgainst, p: r.points })),
     matches: ottelut.filter(m => m.groupId === g.id).sort((a, b) => String(a.startTime).localeCompare(String(b.startTime))).map(m => ({

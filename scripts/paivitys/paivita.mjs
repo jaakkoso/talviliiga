@@ -322,13 +322,13 @@ async function omaHaku(tc) {
 function tanaanISO() { const n = new Date(new Date().toLocaleString('en-US', { timeZone: 'Europe/Helsinki' })); return `${n.getFullYear()}-${String(n.getMonth() + 1).padStart(2, '0')}-${String(n.getDate()).padStart(2, '0')}`; }
 
 /* fudisturnaus.com: sivu on selainsovellus, data tulee julkisesta JSON-rajapinnasta */
-async function fudisHaku(url) {
+async function fudisHaku(url, joukkueet) {
   const slug = (url.match(/fudisturnaus\.com\/t\/([^/?#]+)/) || [])[1];
   if (!slug) throw new Error('osoitteesta ei löytynyt turnauksen tunnusta');
   const r = await fetch(`https://www.fudisturnaus.com/api/v1/public/tournaments/${slug}`, { headers: { accept: 'application/json' } });
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   const t = await r.json();
-  return { teams: fudisTurnaus(t), groups: fudisLohkot(t) };
+  return { teams: fudisTurnaus(t, { joukkueet }), groups: fudisLohkot(t, { joukkueet }) };
 }
 // fudisturnaus-tulokset tapahtumaan: joukkueiden ottelut (nimikkeet säilytetään) ja lohkojen taulukot kaikkine otteluineen
 function fudisPaivita(ev, tulos) {
@@ -356,7 +356,7 @@ async function paivitaTurnaukset() {
         continue;
       }
       if (tc.tyyppi === 'fudisturnaus') {
-        const tulos = await fudisHaku(tc.url);
+        const tulos = await fudisHaku(tc.url, tc.joukkueet);
         tila.turnaukset[tc.id] = { joukkueet: tulos.teams.length, ottelut: tulos.teams.reduce((n, t) => n + t.matches.length, 0), lohkot: tulos.groups.length };
         if (tulos.teams.length) { fudisPaivita(ev, tulos); ev.link = ev.link || tc.url; }
         continue;
@@ -466,7 +466,7 @@ async function paivitaLive() {
       if (nyt.min < alku) { seuraava = Math.min(seuraava, Math.max(2, alku - nyt.min)); jatkuu = true; continue; }
       if (nyt.min > loppu) continue;
       jatkuu = true; seuraava = 1;
-      try { fudisPaivita(ev, await fudisHaku(tc.url)); diag['turnaus:' + tc.id] = { klo: nyt.klo, pelatut: ev.teams.flatMap(t => t.matches).filter(m => m.score).length }; }
+      try { fudisPaivita(ev, await fudisHaku(tc.url, tc.joukkueet)); diag['turnaus:' + tc.id] = { klo: nyt.klo, pelatut: ev.teams.flatMap(t => t.matches).filter(m => m.score).length }; }
       catch (e) { varoita(`Turnaus ${tc.id} live: ${e.message}`); }
     }
     if (JSON.stringify(td.events) !== ennen) { td.updated = tanaan; kirjoita('turnaukset/data.json', td); turnausMuuttui = true; }
