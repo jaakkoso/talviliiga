@@ -1,6 +1,6 @@
 {
  "season": 2026,
- "updated": "2026-11-19",
+ "updated": "2026-11-20",
  "source": "Palloliiton tulospalvelu",
  "teams": [
   {
@@ -1440,13 +1440,6 @@
     "matches": [
      {
       "date": null,
-      "home": "SJK-j/kulta",
-      "away": "VPS J/Musta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
       "home": "Sepsi-78/Sininen",
       "away": "WFA YJ",
       "score": null,
@@ -1456,13 +1449,6 @@
       "date": null,
       "home": "KuRy",
       "away": "Sepsi-78/Sininen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/kulta",
-      "away": "KuRy",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
@@ -1491,6 +1477,20 @@
       "date": null,
       "home": "VPS J/Musta",
       "away": "Sepsi-78/Sininen",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/kulta",
+      "away": "VPS J/Musta",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/kulta",
+      "away": "KuRy",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
@@ -1602,13 +1602,6 @@
     "matches": [
      {
       "date": null,
-      "home": "SJK-j/musta",
-      "away": "WFA 2016 YJ3",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
       "home": "Virkiä/valkoinen",
       "away": "SJK-j/musta",
       "score": null,
@@ -1618,13 +1611,6 @@
       "date": null,
       "home": "VIFK/Blå",
       "away": "SJK-j/musta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/musta",
-      "away": "VPS J/Musta -16",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
@@ -1639,6 +1625,20 @@
       "date": null,
       "home": "Virkiä/valkoinen",
       "away": "VIFK/Blå",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/musta",
+      "away": "WFA 2016 YJ3",
+      "score": null,
+      "ikkuna": "16.11.–24.1."
+     },
+     {
+      "date": null,
+      "home": "SJK-j/musta",
+      "away": "VPS J/Musta -16",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
