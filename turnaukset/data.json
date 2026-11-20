@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-07",
+ "updated": "2026-11-20",
  "events": [
   {
    "id": "marrasturnaus-2026",
@@ -11,8 +11,8 @@
    "teams": [
     {
      "name": "SJK-j P2015",
-     "label": "Haaste",
-     "level": "P2014 · Haaste",
+     "label": "P2014",
+     "level": "P2014",
      "matches": [
       {
        "date": "2026-11-22",
@@ -66,7 +66,7 @@
        "p": 0
       },
       {
-       "pos": 2,
+       "pos": 1,
        "team": "SJK-j T2013",
        "o": 0,
        "v": 0,
@@ -77,7 +77,7 @@
        "p": 0
       },
       {
-       "pos": 3,
+       "pos": 1,
        "team": "SJK-j musta",
        "o": 0,
        "v": 0,
@@ -88,7 +88,7 @@
        "p": 0
       },
       {
-       "pos": 4,
+       "pos": 1,
        "team": "WFA oranssi",
        "o": 0,
        "v": 0,
