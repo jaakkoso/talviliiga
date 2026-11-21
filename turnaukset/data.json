@@ -206,7 +206,13 @@
        "away": "Kanuunat",
        "d": {
         "venue": "Etukenttä"
-       }
+       },
+       "score": [
+        [
+         3,
+         4
+        ]
+       ]
       }
      ]
     },
@@ -255,7 +261,13 @@
        "away": "JPK",
        "d": {
         "venue": "Takakenttä"
-       }
+       },
+       "score": [
+        [
+         1,
+         5
+        ]
+       ]
       }
      ]
     }
@@ -267,12 +279,12 @@
       {
        "pos": 1,
        "team": "SJK",
-       "o": 2,
+       "o": 3,
        "v": 1,
        "t": 0,
-       "h": 1,
-       "gf": 7,
-       "ga": 3,
+       "h": 2,
+       "gf": 10,
+       "ga": 7,
        "p": 3
       },
       {
@@ -289,13 +301,13 @@
       {
        "pos": 3,
        "team": "Kanuunat",
-       "o": 0,
-       "v": 0,
+       "o": 1,
+       "v": 1,
        "t": 0,
        "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
+       "gf": 4,
+       "ga": 3,
+       "p": 3
       },
       {
        "pos": 4,
@@ -362,7 +374,13 @@
        "time": "12.10",
        "home": "SJK",
        "away": "Kanuunat",
-       "field": "Etukenttä"
+       "field": "Etukenttä",
+       "score": [
+        [
+         3,
+         4
+        ]
+       ]
       }
      ]
     },
@@ -382,25 +400,25 @@
       },
       {
        "pos": 2,
-       "team": "SJK",
-       "o": 2,
+       "team": "JPK",
+       "o": 1,
        "v": 1,
        "t": 0,
-       "h": 1,
-       "gf": 4,
-       "ga": 6,
+       "h": 0,
+       "gf": 5,
+       "ga": 1,
        "p": 3
       },
       {
        "pos": 3,
-       "team": "JPK",
-       "o": 0,
-       "v": 0,
+       "team": "SJK",
+       "o": 3,
+       "v": 1,
        "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
-       "p": 0
+       "h": 2,
+       "gf": 5,
+       "ga": 11,
+       "p": 3
       },
       {
        "pos": 4,
@@ -467,7 +485,13 @@
        "time": "12.10",
        "home": "SJK",
        "away": "JPK",
-       "field": "Takakenttä"
+       "field": "Takakenttä",
+       "score": [
+        [
+         1,
+         5
+        ]
+       ]
       }
      ]
     }
