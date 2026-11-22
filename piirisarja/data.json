@@ -1,6 +1,6 @@
 {
  "season": 2026,
- "updated": "2026-11-20",
+ "updated": "2026-11-22",
  "source": "Palloliiton tulospalvelu",
  "teams": [
   {
@@ -1469,6 +1469,16 @@
       }
      },
      {
+      "date": "2026-12-20",
+      "time": "19.00",
+      "home": "Sepsi-78/Sininen",
+      "away": "SJK-j/kulta",
+      "score": null,
+      "d": {
+       "venue": "Elisa-Monitoimihalli TN"
+      }
+     },
+     {
       "date": "2027-01-03",
       "time": "13.00",
       "home": "SJK-j/kulta",
@@ -1479,11 +1489,14 @@
       }
      },
      {
-      "date": null,
+      "date": "2027-01-10",
+      "time": "19.00",
       "home": "Sepsi-78/Sininen",
       "away": "WFA YJ",
       "score": null,
-      "ikkuna": "16.11.–24.1."
+      "d": {
+       "venue": "Elisa-Monitoimihalli TN"
+      }
      },
      {
       "date": null,
@@ -1496,13 +1509,6 @@
       "date": null,
       "home": "VPS J/Musta",
       "away": "WFA YJ",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "Sepsi-78/Sininen",
-      "away": "SJK-j/kulta",
       "score": null,
       "ikkuna": "16.11.–24.1."
      },
