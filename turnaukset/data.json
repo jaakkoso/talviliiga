@@ -61,6 +61,17 @@
      "rows": [
       {
        "pos": 1,
+       "team": "WFA oranssi",
+       "o": 1,
+       "v": 1,
+       "t": 0,
+       "h": 0,
+       "gf": 2,
+       "ga": 0,
+       "p": 3
+      },
+      {
+       "pos": 2,
        "team": "SJK-j P2015",
        "o": 1,
        "v": 0,
@@ -71,7 +82,7 @@
        "p": 1
       },
       {
-       "pos": 1,
+       "pos": 2,
        "team": "SJK-j T2013",
        "o": 1,
        "v": 0,
@@ -82,25 +93,14 @@
        "p": 1
       },
       {
-       "pos": 3,
+       "pos": 4,
        "team": "SJK-j musta",
-       "o": 0,
+       "o": 1,
        "v": 0,
        "t": 0,
-       "h": 0,
+       "h": 1,
        "gf": 0,
-       "ga": 0,
-       "p": 0
-      },
-      {
-       "pos": 3,
-       "team": "WFA oranssi",
-       "o": 0,
-       "v": 0,
-       "t": 0,
-       "h": 0,
-       "gf": 0,
-       "ga": 0,
+       "ga": 2,
        "p": 0
       }
      ],
@@ -111,7 +111,12 @@
        "home": "SJK-j musta",
        "away": "WFA oranssi",
        "field": "Kenttä 1",
-       "score": null
+       "score": [
+        [
+         0,
+         2
+        ]
+       ]
       },
       {
        "date": "2026-11-22",
