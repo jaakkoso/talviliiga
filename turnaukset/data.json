@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-20",
+ "updated": "2026-11-22",
  "events": [
   {
    "id": "marrasturnaus-2026",
@@ -20,7 +20,12 @@
        "series": "Haaste",
        "home": "SJK-j T2013",
        "away": "SJK-j P2015",
-       "score": null,
+       "score": [
+        [
+         0,
+         0
+        ]
+       ],
        "d": {
         "venue": "Kenttä 2"
        }
@@ -57,27 +62,27 @@
       {
        "pos": 1,
        "team": "SJK-j P2015",
-       "o": 0,
+       "o": 1,
        "v": 0,
-       "t": 0,
+       "t": 1,
        "h": 0,
        "gf": 0,
        "ga": 0,
-       "p": 0
+       "p": 1
       },
       {
        "pos": 1,
        "team": "SJK-j T2013",
-       "o": 0,
+       "o": 1,
        "v": 0,
-       "t": 0,
+       "t": 1,
        "h": 0,
        "gf": 0,
        "ga": 0,
-       "p": 0
+       "p": 1
       },
       {
-       "pos": 1,
+       "pos": 3,
        "team": "SJK-j musta",
        "o": 0,
        "v": 0,
@@ -88,7 +93,7 @@
        "p": 0
       },
       {
-       "pos": 1,
+       "pos": 3,
        "team": "WFA oranssi",
        "o": 0,
        "v": 0,
@@ -114,7 +119,12 @@
        "home": "SJK-j T2013",
        "away": "SJK-j P2015",
        "field": "Kenttä 2",
-       "score": null
+       "score": [
+        [
+         0,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-11-22",
