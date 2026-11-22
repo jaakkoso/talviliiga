@@ -68,7 +68,12 @@
        "series": "P2014",
        "home": "SJK-j musta",
        "away": "SJK-j P2015",
-       "score": null,
+       "score": [
+        [
+         3,
+         0
+        ]
+       ],
        "d": {
         "venue": "Kenttä 2"
        }
