@@ -36,7 +36,12 @@
        "series": "Haaste",
        "home": "WFA oranssi",
        "away": "SJK-j P2015",
-       "score": null,
+       "score": [
+        [
+         4,
+         0
+        ]
+       ],
        "d": {
         "venue": "Kenttä 2"
        }
@@ -61,6 +66,17 @@
      "rows": [
       {
        "pos": 1,
+       "team": "WFA oranssi",
+       "o": 2,
+       "v": 2,
+       "t": 0,
+       "h": 0,
+       "gf": 6,
+       "ga": 0,
+       "p": 6
+      },
+      {
+       "pos": 2,
        "team": "SJK-j T2013",
        "o": 2,
        "v": 1,
@@ -71,25 +87,14 @@
        "p": 4
       },
       {
-       "pos": 2,
-       "team": "WFA oranssi",
-       "o": 1,
-       "v": 1,
-       "t": 0,
-       "h": 0,
-       "gf": 2,
-       "ga": 0,
-       "p": 3
-      },
-      {
        "pos": 3,
        "team": "SJK-j P2015",
-       "o": 1,
+       "o": 2,
        "v": 0,
        "t": 1,
-       "h": 0,
+       "h": 1,
        "gf": 0,
-       "ga": 0,
+       "ga": 4,
        "p": 1
       },
       {
@@ -150,7 +155,12 @@
        "home": "WFA oranssi",
        "away": "SJK-j P2015",
        "field": "Kenttä 2",
-       "score": null
+       "score": [
+        [
+         4,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-11-22",
