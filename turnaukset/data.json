@@ -52,9 +52,25 @@
        "series": "Haaste",
        "home": "SJK-j musta",
        "away": "SJK-j P2015",
-       "score": null,
+       "score": [
+        [
+         2,
+         0
+        ]
+       ],
        "d": {
         "venue": "Kenttä 1"
+       }
+      },
+      {
+       "date": "2026-11-22",
+       "time": "16.45",
+       "series": "P2014",
+       "home": "SJK-j musta",
+       "away": "SJK-j P2015",
+       "score": null,
+       "d": {
+        "venue": "Kenttä 2"
        }
       }
      ]
@@ -67,46 +83,46 @@
       {
        "pos": 1,
        "team": "WFA oranssi",
-       "o": 2,
-       "v": 2,
+       "o": 3,
+       "v": 3,
        "t": 0,
        "h": 0,
-       "gf": 6,
+       "gf": 11,
        "ga": 0,
-       "p": 6
+       "p": 9
       },
       {
        "pos": 2,
        "team": "SJK-j T2013",
-       "o": 2,
+       "o": 3,
        "v": 1,
        "t": 1,
-       "h": 0,
+       "h": 1,
        "gf": 1,
-       "ga": 0,
+       "ga": 5,
        "p": 4
       },
       {
        "pos": 3,
-       "team": "SJK-j P2015",
-       "o": 2,
-       "v": 0,
-       "t": 1,
-       "h": 1,
-       "gf": 0,
-       "ga": 4,
-       "p": 1
+       "team": "SJK-j musta",
+       "o": 3,
+       "v": 1,
+       "t": 0,
+       "h": 2,
+       "gf": 2,
+       "ga": 3,
+       "p": 3
       },
       {
        "pos": 4,
-       "team": "SJK-j musta",
-       "o": 2,
+       "team": "SJK-j P2015",
+       "o": 3,
        "v": 0,
-       "t": 0,
+       "t": 1,
        "h": 2,
        "gf": 0,
-       "ga": 3,
-       "p": 0
+       "ga": 6,
+       "p": 1
       }
      ],
      "matches": [
@@ -168,7 +184,12 @@
        "home": "SJK-j musta",
        "away": "SJK-j P2015",
        "field": "Kenttä 1",
-       "score": null
+       "score": [
+        [
+         2,
+         0
+        ]
+       ]
       },
       {
        "date": "2026-11-22",
@@ -176,7 +197,12 @@
        "home": "WFA oranssi",
        "away": "SJK-j T2013",
        "field": "Kenttä 2",
-       "score": null
+       "score": [
+        [
+         5,
+         0
+        ]
+       ]
       }
      ]
     }
