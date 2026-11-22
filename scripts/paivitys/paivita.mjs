@@ -136,10 +136,11 @@ async function paivitaKarsinta(d) {
     for (const m of kaikki) {
       if (!jj.has(m.home) || !jj.has(m.away)) continue;
       const v = uudet.get(pari(m));
-      if (!v || (m.score && !v.score) || (m.date && !v.date && !v.score)) uudet.set(pari(m), { date: m.date, time: m.time, home: m.home, away: m.away, score: m.score || null, ...(m.ikkuna ? { ikkuna: m.ikkuna } : {}) });
+      if (!v || (m.score && !v.score) || (m.date && !v.date && !v.score)) uudet.set(pari(m), { date: m.date, time: m.time, home: m.home, away: m.away, score: m.score || null, ...(m.venue ? { d: { venue: m.venue } } : {}), ...(m.ikkuna && !m.date ? { ikkuna: m.ikkuna } : {}) });
     }
     // Aiemmin tunnetut säilyvät, jos haku palautti vähemmän (esim. sivu ei latautunut); kellonaika muistetaan
-    for (const v of ennen.matches || []) { const u = uudet.get(pari(v)); if (!u) uudet.set(pari(v), v); else if (!u.time && v.time && u.date === v.date) u.time = v.time; }
+    // (joukkueen nimi voi muuttua, esim. KuRy/-16 → KuRy: vanhaa paria ei pidetä, jos se ei ole enää lohkossa)
+    for (const v of ennen.matches || []) { if (!jj.has(v.home) || !jj.has(v.away)) continue; const u = uudet.get(pari(v)); if (!u) uudet.set(pari(v), v); else if (!u.time && v.time && u.date === v.date) u.time = v.time; }
     const matches = [...uudet.values()].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999') || (a.time || '99').localeCompare(b.time || '99'));
     groups.push({ name: l.nimi, team: l.joukkue, url, rows, matches });
     tila.piirisarjat[`Karsinta ${l.nimi}`] = { ottelut: matches.length, pelatut: matches.filter(m => m.score).length, taulukko: rows.length };

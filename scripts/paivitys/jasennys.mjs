@@ -276,10 +276,14 @@ export function kategorianOttelut(rivit, alkuvuosi) {
   for (let i = 1; i < L.length; i++) {
     if (L[i] !== 'MATCH DETAILS') continue;
     const d = L[i - 1], vali = d.match(/(\d{1,2}\.\d{1,2}\.)\s*[–-]\s*(\d{1,2}\.\d{1,2}\.)/);
-    const m = { date: vali ? null : paiva(d), home: L[i + 1], away: '', score: null };
+    // Sovitussa ottelussa kortissa on ensin kenttä: [kenttä, koti, kello/tulos, vieras]
+    let k = i + 1, venue;
+    if (!onKello(L[k + 1]) && !onTulos(L[k + 1]) && (onKello(L[k + 2]) || onTulos(L[k + 2]))) { venue = L[k]; k++; }
+    const m = { date: vali ? null : paiva(d), home: L[k], away: '', score: null };
+    if (venue) m.venue = venue.replace(/\s+/g, ' ').trim().toLowerCase().replace(/(^|[\s-])\p{L}/gu, c => c.toUpperCase()).replace(/\bTn\b/g, 'TN');
     if (vali) m.ikkuna = `${vali[1]}–${vali[2]}`;
     else if (!m.date) continue;
-    let j = i + 2; const sc = [];
+    let j = k + 1; const sc = [];
     while (onTulos(L[j])) { sc.push(tulos(L[j]).score[0]); j++; }
     if (sc.length) m.score = sc; else if (onKello(L[j])) { m.time = L[j].replace(':', '.'); j++; }
     m.away = L[j] || '';

@@ -94,3 +94,7 @@ const KO = kategorianOttelut(['16.11. – 24.1.', 'MATCH DETAILS', 'SJK-j/kulta'
 assert.equal(KO.length, 3); assert.equal(KO[0].date, null); assert.equal(KO[0].ikkuna, '16.11.–24.1.');
 assert.equal(KO[1].date, '2026-12-06'); assert.equal(KO[1].time, '10.30'); assert.equal(KO[2].date, '2027-01-18'); assert.deepEqual(KO[2].score, [[3, 1]]);
 console.log('Karsinta-ottelut -testi OK');
+
+const KO2 = kategorianOttelut(['LA 12.12.', 'MATCH DETAILS', 'WALLSPORT-AREENA TN A ', 'SJK-j/kulta', '14:10', 'VPS J/Musta', '3.1.2027', 'MATCH DETAILS', 'WALLSPORT-AREENA TN A', 'SJK-j/kulta', '13:00', 'KuRy'], 2026);
+assert.equal(KO2.length, 2); assert.equal(KO2[0].home, 'SJK-j/kulta'); assert.equal(KO2[0].venue, 'Wallsport-Areena TN A'); assert.equal(KO2[0].date, '2026-12-12'); assert.equal(KO2[1].date, '2027-01-03'); assert.equal(KO2[1].time, '13.00');
+console.log('Karsinta-kenttä -testi OK');

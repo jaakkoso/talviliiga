@@ -1439,6 +1439,46 @@
     ],
     "matches": [
      {
+      "date": "2026-12-12",
+      "time": "14.10",
+      "home": "SJK-j/kulta",
+      "away": "VPS J/Musta",
+      "score": null,
+      "d": {
+       "venue": "Wallsport-Areena TN A"
+      }
+     },
+     {
+      "date": "2026-12-16",
+      "time": "16.45",
+      "home": "WFA YJ",
+      "away": "KuRy",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
+      "date": "2026-12-19",
+      "time": "12.45",
+      "home": "WFA YJ",
+      "away": "SJK-j/kulta",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
+      "date": "2027-01-03",
+      "time": "13.00",
+      "home": "SJK-j/kulta",
+      "away": "KuRy",
+      "score": null,
+      "d": {
+       "venue": "Wallsport-Areena TN A"
+      }
+     },
+     {
       "date": null,
       "home": "Sepsi-78/Sininen",
       "away": "WFA YJ",
@@ -1477,62 +1517,6 @@
       "date": null,
       "home": "VPS J/Musta",
       "away": "Sepsi-78/Sininen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/kulta",
-      "away": "VPS J/Musta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/kulta",
-      "away": "KuRy",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA YJ",
-      "away": "KuRy",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA YJ",
-      "away": "SJK-j/kulta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "KuRy/-16",
-      "away": "Sepsi-78/Sininen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/kulta",
-      "away": "KuRy/-16",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "KuRy/-16",
-      "away": "VPS J/Musta",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA YJ",
-      "away": "KuRy/-16",
       "score": null,
       "ikkuna": "16.11.–24.1."
      }
@@ -1601,6 +1585,66 @@
     ],
     "matches": [
      {
+      "date": "2026-12-06",
+      "time": "13.00",
+      "home": "SJK-j/musta",
+      "away": "WFA 2016 YJ3",
+      "score": null,
+      "d": {
+       "venue": "Wallsport-Areena TN A"
+      }
+     },
+     {
+      "date": "2026-12-09",
+      "time": "16.45",
+      "home": "WFA 2016 YJ3",
+      "away": "VPS J/Musta -16",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
+      "date": "2026-12-12",
+      "time": "14.10",
+      "home": "SJK-j/musta",
+      "away": "VPS J/Musta -16",
+      "score": null,
+      "d": {
+       "venue": "Wallsport-Areena TN B"
+      }
+     },
+     {
+      "date": "2026-12-19",
+      "time": "11.10",
+      "home": "VPS J/Musta -16",
+      "away": "Virkiä/valkoinen",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
+      "date": "2027-01-09",
+      "time": "11.10",
+      "home": "VPS J/Musta -16",
+      "away": "VIFK/Blå",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
+      "date": "2027-01-09",
+      "time": "12.45",
+      "home": "WFA 2016 YJ3",
+      "away": "Virkiä/valkoinen",
+      "score": null,
+      "d": {
+       "venue": "Veo Arena A"
+      }
+     },
+     {
       "date": null,
       "home": "Virkiä/valkoinen",
       "away": "SJK-j/musta",
@@ -1625,48 +1669,6 @@
       "date": null,
       "home": "Virkiä/valkoinen",
       "away": "VIFK/Blå",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/musta",
-      "away": "WFA 2016 YJ3",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "SJK-j/musta",
-      "away": "VPS J/Musta -16",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "VPS J/Musta -16",
-      "away": "Virkiä/valkoinen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "VPS J/Musta -16",
-      "away": "VIFK/Blå",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA 2016 YJ3",
-      "away": "Virkiä/valkoinen",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "WFA 2016 YJ3",
-      "away": "VPS J/Musta -16",
       "score": null,
       "ikkuna": "16.11.–24.1."
      }
