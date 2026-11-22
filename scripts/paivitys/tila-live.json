@@ -2,7 +2,12 @@
  "piirisarjat": {},
  "huuhkajaliiga": {},
  "turnaukset": {},
- "live": {},
+ "live": {
+  "turnaus:marrasturnaus-2026": {
+   "klo": "12.35",
+   "pelatut": 0
+  }
+ },
  "varoitukset": [],
  "diagnoosi": {}
 }
