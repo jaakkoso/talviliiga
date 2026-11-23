@@ -1660,11 +1660,24 @@
       }
      },
      {
-      "date": null,
+      "date": "2027-01-13",
+      "time": "18.00",
       "home": "Virkiä/valkoinen",
       "away": "SJK-j/musta",
       "score": null,
-      "ikkuna": "16.11.–24.1."
+      "d": {
+       "venue": "Patruuna Areena TN A"
+      }
+     },
+     {
+      "date": "2027-01-20",
+      "time": "18.00",
+      "home": "Virkiä/valkoinen",
+      "away": "VIFK/Blå",
+      "score": null,
+      "d": {
+       "venue": "Patruuna Areena TN A"
+      }
      },
      {
       "date": null,
@@ -1677,13 +1690,6 @@
       "date": null,
       "home": "VIFK/Blå",
       "away": "WFA 2016 YJ3",
-      "score": null,
-      "ikkuna": "16.11.–24.1."
-     },
-     {
-      "date": null,
-      "home": "Virkiä/valkoinen",
-      "away": "VIFK/Blå",
       "score": null,
       "ikkuna": "16.11.–24.1."
      }
