@@ -1519,11 +1519,14 @@
       }
      },
      {
-      "date": null,
+      "date": "2027-01-23",
+      "time": "19.15",
       "home": "VPS J/Musta",
       "away": "WFA YJ",
       "score": null,
-      "ikkuna": "16.11.–24.1."
+      "d": {
+       "venue": "Veo Arena A"
+      }
      },
      {
       "date": null,
