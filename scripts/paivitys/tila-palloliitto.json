@@ -66,52 +66,52 @@
    "teksti": "This website uses cookies We use cookies to personalise content and ads, to provide social media features and to analyse our traffic. We also share information about your use of our site with our social media, advertising and analytics partners who may combine it with other information that you’ve provided to them or that they’ve collected from your use of their services. Show details Allow all Customize Deny KAUPPA TULOSPALVELU OTTELUT SARJAT SEURAT KUNNAT KENTÄT KALENTERI TURNAUKSET KAUDET SUO",
    "rest": [
     {
+     "url": "https://spl.torneopal.net/taso/rest/getSite?hash=…",
+     "status": 200,
+     "koko": 20413,
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getSite\",\"status\":\"ok\",\"stamp\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiZXhwIjoxNzk1ODUwMzYyfQ.r6V_IcIu_T6xxTu6qtsoZh0VN_kDwuNHrd9g23oz5-w\",\"result_time\":0.212,\"apilevel\":\"1\",\"time_stamp\":1795763962},\"ads\":[{\"ad_id\":\"156430\",\"ad_place"
+    },
+    {
      "url": "https://spl.torneopal.net/taso/rest/getCities?hash=…",
      "status": 200,
      "koko": 49438,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getCities\",\"status\":\"ok\",\"result_time\":0.254,\"apilevel\":\"1\",\"time_stamp\":1795756379},\"cities\":[{\"city_id\":\"20\",\"name\":\"Akaa\",\"area\":\"spllansi\",\"area_name\":\"L\\u00e4ntinen\",\"pitch_count\":{\"grass\":\"3\",\"artificial\":\"2\",\"gravel\":\"1\",\"indoorvenue\":\"0\",\""
-    },
-    {
-     "url": "https://spl.torneopal.net/taso/rest/getSite?hash=…",
-     "status": 200,
-     "koko": 24432,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getSite\",\"status\":\"ok\",\"stamp\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiZXhwIjoxNzk1ODQyODIzfQ.iN3ekTfIrEmMieGEgX0WzYhyaEuKsV2uuj4_yWZWS9I\",\"result_time\":0.119,\"apilevel\":\"1\",\"time_stamp\":1795756423},\"ads\":[{\"ad_id\":\"156430\",\"ad_place"
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getCities\",\"status\":\"ok\",\"result_time\":0.259,\"apilevel\":\"1\",\"time_stamp\":1795763951},\"cities\":[{\"city_id\":\"20\",\"name\":\"Akaa\",\"area\":\"spllansi\",\"area_name\":\"L\\u00e4ntinen\",\"pitch_count\":{\"grass\":\"3\",\"artificial\":\"2\",\"gravel\":\"1\",\"indoorvenue\":\"0\",\""
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getNewsItem?news_id=flash&hash=…",
      "status": 200,
      "koko": 143,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getNewsItem\",\"status\":\"error\",\"result_time\":0.078,\"apilevel\":\"1\",\"time_stamp\":1795756628}}"
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getNewsItem\",\"status\":\"error\",\"result_time\":0.085,\"apilevel\":\"1\",\"time_stamp\":1795763984}}"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getClubs?hash=…",
      "status": 200,
      "koko": 1799033,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getClubs\",\"status\":\"ok\",\"result_count\":2434,\"result_time\":0.839,\"apilevel\":\"1\",\"time_stamp\":1795756617},\"clubs\":[{\"club_id\":\"5432\",\"club_sport_id\":\"Aallon Maalarit\",\"name\":\"Aallon Maalarit\",\"abbrevation\":\"Aallon Maalarit\",\"www\":\"\",\"club_country\":\""
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getClubs\",\"status\":\"ok\",\"result_count\":2434,\"result_time\":0.886,\"apilevel\":\"1\",\"time_stamp\":1795764007},\"clubs\":[{\"club_id\":\"5432\",\"club_sport_id\":\"Aallon Maalarit\",\"name\":\"Aallon Maalarit\",\"abbrevation\":\"Aallon Maalarit\",\"www\":\"\",\"club_country\":\""
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getCategories?season_id=2026-27,2027&hash=…",
      "status": 200,
-     "koko": 3426117,
-     "alku": "{\"call\":{\"parameters\":{\"season_id\":\"2026-27,2027\"},\"logged_in\":false,\"method\":\"getCategories\",\"status\":\"ok\",\"result_count\":1434,\"result_time\":0.379,\"apilevel\":\"1\",\"time_stamp\":1795756469},\"categories\":[{\"competition_id\":\"maafs2026-2027\",\"competition_name\":\"Maaottelut Futsal 2026-2027\",\"season_id\":\"2"
+     "koko": 3426053,
+     "alku": "{\"call\":{\"parameters\":{\"season_id\":\"2026-27,2027\"},\"logged_in\":false,\"method\":\"getCategories\",\"status\":\"ok\",\"result_count\":1434,\"result_time\":0.39,\"apilevel\":\"1\",\"time_stamp\":1795763979},\"categories\":[{\"competition_id\":\"maafs2026-2027\",\"competition_name\":\"Maaottelut Futsal 2026-2027\",\"season_id\":\"20"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getLocations?hash=…",
      "status": 200,
      "koko": 8214104,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getLocations\",\"status\":\"ok\",\"result_count\":1556,\"result_time\":1.104,\"apilevel\":\"1\",\"time_stamp\":1795756420},\"locations\":[{\"location_id\":\"3048\",\"location_name\":\"Aaltopuisto\",\"location_address\":\"Aaltopuisto\",\"location_zipcode\":\"65320\",\"location_city"
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getLocations\",\"status\":\"ok\",\"result_count\":1556,\"result_time\":1.229,\"apilevel\":\"1\",\"time_stamp\":1795763887},\"locations\":[{\"location_id\":\"3048\",\"location_name\":\"Aaltopuisto\",\"location_address\":\"Aaltopuisto\",\"location_zipcode\":\"65320\",\"location_city"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getTeam?team_id=35138118&hash=…",
      "status": 200,
      "koko": 63773,
-     "alku": "{\"call\":{\"method\":\"getTeam\",\"parameters\":{\"team_id\":\"35138118\"},\"my_team\":false,\"status\":\"ok\",\"result_time\":0.253,\"apilevel\":\"1\",\"time_stamp\":1795756663},\"team\":{\"team_id\":\"35138118\",\"sport_id\":\"football\",\"team_name\":\"SJK-j\\/musta\",\"team_officiality\":\"official\",\"ticket_url\":\"\",\"info\":[],\"club_id\":\"3"
+     "alku": "{\"call\":{\"method\":\"getTeam\",\"parameters\":{\"team_id\":\"35138118\"},\"my_team\":false,\"status\":\"ok\",\"result_time\":0.303,\"apilevel\":\"1\",\"time_stamp\":1795764041},\"team\":{\"team_id\":\"35138118\",\"sport_id\":\"football\",\"team_name\":\"SJK-j\\/musta\",\"team_officiality\":\"official\",\"ticket_url\":\"\",\"info\":[],\"club_id\":\"3"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getMatches?team_id=35138118&hash=…",
      "status": 200,
-     "koko": 624847,
-     "alku": "{\"call\":{\"parameters\":{\"team\":\"35138118\"},\"logged_in\":false,\"method\":\"getMatches\",\"status\":\"ok\",\"per_page\":0,\"page\":1,\"total_result_count\":91,\"result_count\":91,\"result_time\":0.266,\"apilevel\":\"1\",\"time_stamp\":1795756663},\"matches\":[{\"match_id\":\"4416485\",\"last_modified\":\"2026-11-17 14:11:52\",\"match_nu"
+     "koko": 624845,
+     "alku": "{\"call\":{\"parameters\":{\"team\":\"35138118\"},\"logged_in\":false,\"method\":\"getMatches\",\"status\":\"ok\",\"per_page\":0,\"page\":1,\"total_result_count\":91,\"result_count\":91,\"result_time\":0.3,\"apilevel\":\"1\",\"time_stamp\":1795764041},\"matches\":[{\"match_id\":\"4416485\",\"last_modified\":\"2026-11-17 14:11:52\",\"match_numb"
     }
    ]
   },
@@ -124,50 +124,50 @@
     {
      "url": "https://spl.torneopal.net/taso/rest/getSite?hash=…",
      "status": 200,
-     "koko": 24432,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getSite\",\"status\":\"ok\",\"stamp\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiZXhwIjoxNzk1ODQyODIzfQ.iN3ekTfIrEmMieGEgX0WzYhyaEuKsV2uuj4_yWZWS9I\",\"result_time\":0.119,\"apilevel\":\"1\",\"time_stamp\":1795756423},\"ads\":[{\"ad_id\":\"156430\",\"ad_place"
+     "koko": 20413,
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getSite\",\"status\":\"ok\",\"stamp\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwIiwiZXhwIjoxNzk1ODUwMzYyfQ.r6V_IcIu_T6xxTu6qtsoZh0VN_kDwuNHrd9g23oz5-w\",\"result_time\":0.212,\"apilevel\":\"1\",\"time_stamp\":1795763962},\"ads\":[{\"ad_id\":\"156430\",\"ad_place"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getCities?hash=…",
      "status": 200,
-     "koko": 49436,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getCities\",\"status\":\"ok\",\"result_time\":0.5,\"apilevel\":\"1\",\"time_stamp\":1795756434},\"cities\":[{\"city_id\":\"20\",\"name\":\"Akaa\",\"area\":\"spllansi\",\"area_name\":\"L\\u00e4ntinen\",\"pitch_count\":{\"grass\":\"3\",\"artificial\":\"2\",\"gravel\":\"1\",\"indoorvenue\":\"0\",\"fu"
+     "koko": 49438,
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getCities\",\"status\":\"ok\",\"result_time\":0.259,\"apilevel\":\"1\",\"time_stamp\":1795763951},\"cities\":[{\"city_id\":\"20\",\"name\":\"Akaa\",\"area\":\"spllansi\",\"area_name\":\"L\\u00e4ntinen\",\"pitch_count\":{\"grass\":\"3\",\"artificial\":\"2\",\"gravel\":\"1\",\"indoorvenue\":\"0\",\""
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getNewsItem?news_id=flash&hash=…",
      "status": 200,
      "koko": 143,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getNewsItem\",\"status\":\"error\",\"result_time\":0.043,\"apilevel\":\"1\",\"time_stamp\":1795756690}}"
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getNewsItem\",\"status\":\"error\",\"result_time\":0.043,\"apilevel\":\"1\",\"time_stamp\":1795764046}}"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getClubs?hash=…",
      "status": 200,
      "koko": 1799033,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getClubs\",\"status\":\"ok\",\"result_count\":2434,\"result_time\":0.839,\"apilevel\":\"1\",\"time_stamp\":1795756617},\"clubs\":[{\"club_id\":\"5432\",\"club_sport_id\":\"Aallon Maalarit\",\"name\":\"Aallon Maalarit\",\"abbrevation\":\"Aallon Maalarit\",\"www\":\"\",\"club_country\":\""
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getClubs\",\"status\":\"ok\",\"result_count\":2434,\"result_time\":0.886,\"apilevel\":\"1\",\"time_stamp\":1795764007},\"clubs\":[{\"club_id\":\"5432\",\"club_sport_id\":\"Aallon Maalarit\",\"name\":\"Aallon Maalarit\",\"abbrevation\":\"Aallon Maalarit\",\"www\":\"\",\"club_country\":\""
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getCategories?season_id=2026-27,2027&hash=…",
      "status": 200,
-     "koko": 3426117,
-     "alku": "{\"call\":{\"parameters\":{\"season_id\":\"2026-27,2027\"},\"logged_in\":false,\"method\":\"getCategories\",\"status\":\"ok\",\"result_count\":1434,\"result_time\":0.379,\"apilevel\":\"1\",\"time_stamp\":1795756469},\"categories\":[{\"competition_id\":\"maafs2026-2027\",\"competition_name\":\"Maaottelut Futsal 2026-2027\",\"season_id\":\"2"
+     "koko": 3426053,
+     "alku": "{\"call\":{\"parameters\":{\"season_id\":\"2026-27,2027\"},\"logged_in\":false,\"method\":\"getCategories\",\"status\":\"ok\",\"result_count\":1434,\"result_time\":0.39,\"apilevel\":\"1\",\"time_stamp\":1795763979},\"categories\":[{\"competition_id\":\"maafs2026-2027\",\"competition_name\":\"Maaottelut Futsal 2026-2027\",\"season_id\":\"20"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getLocations?hash=…",
      "status": 200,
      "koko": 8214104,
-     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getLocations\",\"status\":\"ok\",\"result_count\":1556,\"result_time\":1.104,\"apilevel\":\"1\",\"time_stamp\":1795756420},\"locations\":[{\"location_id\":\"3048\",\"location_name\":\"Aaltopuisto\",\"location_address\":\"Aaltopuisto\",\"location_zipcode\":\"65320\",\"location_city"
+     "alku": "{\"call\":{\"parameters\":{},\"logged_in\":false,\"method\":\"getLocations\",\"status\":\"ok\",\"result_count\":1556,\"result_time\":1.229,\"apilevel\":\"1\",\"time_stamp\":1795763887},\"locations\":[{\"location_id\":\"3048\",\"location_name\":\"Aaltopuisto\",\"location_address\":\"Aaltopuisto\",\"location_zipcode\":\"65320\",\"location_city"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getTeam?team_id=35138119&hash=…",
      "status": 200,
      "koko": 64710,
-     "alku": "{\"call\":{\"method\":\"getTeam\",\"parameters\":{\"team_id\":\"35138119\"},\"my_team\":false,\"status\":\"ok\",\"result_time\":0.211,\"apilevel\":\"1\",\"time_stamp\":1795756696},\"team\":{\"team_id\":\"35138119\",\"sport_id\":\"football\",\"team_name\":\"SJK-j\\/kulta\",\"team_officiality\":\"official\",\"ticket_url\":\"\",\"info\":[],\"club_id\":\"3"
+     "alku": "{\"call\":{\"method\":\"getTeam\",\"parameters\":{\"team_id\":\"35138119\"},\"my_team\":false,\"status\":\"ok\",\"result_time\":0.228,\"apilevel\":\"1\",\"time_stamp\":1795764074},\"team\":{\"team_id\":\"35138119\",\"sport_id\":\"football\",\"team_name\":\"SJK-j\\/kulta\",\"team_officiality\":\"official\",\"ticket_url\":\"\",\"info\":[],\"club_id\":\"3"
     },
     {
      "url": "https://spl.torneopal.net/taso/rest/getMatches?team_id=35138119&hash=…",
      "status": 200,
      "koko": 466024,
-     "alku": "{\"call\":{\"parameters\":{\"team\":\"35138119\"},\"logged_in\":false,\"method\":\"getMatches\",\"status\":\"ok\",\"per_page\":0,\"page\":1,\"total_result_count\":68,\"result_count\":68,\"result_time\":0.183,\"apilevel\":\"1\",\"time_stamp\":1795756696},\"matches\":[{\"match_id\":\"2975316\",\"last_modified\":\"2024-07-03 09:55:50\",\"match_nu"
+     "alku": "{\"call\":{\"parameters\":{\"team\":\"35138119\"},\"logged_in\":false,\"method\":\"getMatches\",\"status\":\"ok\",\"per_page\":0,\"page\":1,\"total_result_count\":68,\"result_count\":68,\"result_time\":0.217,\"apilevel\":\"1\",\"time_stamp\":1795764074},\"matches\":[{\"match_id\":\"2975316\",\"last_modified\":\"2024-07-03 09:55:50\",\"match_nu"
     }
    ]
   }
